@@ -127,7 +127,7 @@ goPerPage();
 <span class="icon-arrow-right5"></span> [[=admin:item:Links]]<br class="smallBr"/><textarea type="text" class="inputLine inputLarge textareaLine textareaMiddle" name="smt[externalLinks]" id="externalLinks" />[[::externalLinks]]</textarea>
 </p>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:URLRewrite]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst linkPrefix" data-reflect="index.php"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast linkPrefix" data-reflect="index"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::linkPrefixIndex]]" name="smt[linkPrefixIndex]" id="linkPrefixIndex"/><input type="hidden" value="[[::linkPrefixCategory]]" name="smt[linkPrefixCategory]" id="linkPrefixCategory"/><input type="hidden" value="[[::linkPrefixArticle]]" name="smt[linkPrefixArticle]" id="linkPrefixArticle"/>
+<span class="icon-arrow-right5"></span> [[=admin:item:URLRewrite]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst linkPrefix" data-reflect="index.php"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast linkPrefix" data-reflect="index"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::linkPrefixIndex]]" name="smt[linkPrefixIndex]" id="linkPrefixIndex"/><input type="hidden" value="[[::linkPrefixCategory]]" name="smt[linkPrefixCategory]" id="linkPrefixCategory"/><input type="hidden" value="[[::linkPrefixArticle]]" name="smt[linkPrefixArticle]" id="linkPrefixArticle"/><input type="hidden" value="[[::linkPrefixTag]]" name="smt[linkPrefixTag]" id="linkPrefixTag"/>
 <br/><span class="adminExplain">[[=admin:msg:URLRewrite]]</span>
 </p>
 <script type="text/javascript">
@@ -151,11 +151,13 @@ function syncPrefix() {
 	{
 		$("#linkPrefixCategory").val('category.php');
 		$("#linkPrefixArticle").val('read.php');
+		$("#linkPrefixTag").val('tag.php');
 	}
 	else
 	{
 		$("#linkPrefixCategory").val('category');
 		$("#linkPrefixArticle").val('post');
+		$("#linkPrefixTag").val('tag');
 	}
 }
 

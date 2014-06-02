@@ -53,6 +53,8 @@ $("#adminUploader").click(function() {
 });
 </script>
 
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:SetTag]]<br/><input type="text" id='eTags' class="inputLine inputLarge" name="smt[aTags]" value="[[::aTags]]" placeholder="[[=admin:msg:SetTag]]" /><div id="taghint"></div></p>
 
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:ACate]]<br/>
@@ -68,7 +70,6 @@ if ("[[::aCateURLName]]")
 </script>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" /></p>
-
 
 
 <p class="adminCommand"><br/>
@@ -150,12 +151,6 @@ function insertUpURLs (str)
 	$("#UI-loading").fadeOut(200);
 }
 
-/*
-$("#uploadPicFile").change(function(){
-	doPicUp();
-});
-*/
-
 function doPicUp() {
 	if($("#uploadPicFile").val() != '') {
 		$("#UI-loading").fadeIn(500);
@@ -182,6 +177,12 @@ function saveArticle(formID, smtURL) {
 	if (!stopSubmit)
 	{
 		$("#UI-loading").fadeIn(500);
+		var allTags=new Array();
+		$(".admSingleTag i").each(function(){
+			allTags.push ($(this).text());
+		});
+		$('#eTags').val(allTags.join(','));
+
 		var pURL=($("#originID").val()=='')  ? "store/" : "update/"
 		/*
 		$('#'+formID).attr("action", smtURL+pURL);
@@ -192,6 +193,7 @@ function saveArticle(formID, smtURL) {
 			if (data.error==1) {
 				$("#adminPromptError").text (data.returnMsg);
 				$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
+				$('#eTags').val('');
 			}
 			else {
 				if ($("#originID").val()=='')
@@ -219,6 +221,45 @@ function deleteArticle (smtURL)
 		window.location=smtURL+"?aID="+$("#originID").val();
 	}
 }
+
+$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/inc/script/autocomplete/jquery.autocomplete.css"}).appendTo("head");
+$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "[[::siteURL]]/inc/script/autocomplete/jquery.autocomplete.min.js"}).appendTo("head");
+
+if ($('#eTags').val())
+{
+	$.each ($('#eTags').val().split(','), function(index, value) {
+		$("#taghint").append('<span class="admSingleTag" onclick="$(this).remove();"><i>'+value+'</i><span class="icon-cross admSingleTagDel"></span></span>');
+	});
+	$('#eTags').val('');
+}
+
+$('#eTags').AutoComplete({
+'data': "[[::siteURL]]/admin.php/articles/getautocomplete/",
+'ajaxDataType': 'json',
+//'data': ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', '中文', '测试'],
+'afterSelectedHandler': function(data) {
+	$("#taghint").append('<span class="admSingleTag" onclick="$(this).remove();"><i>'+data.value+'</i><span class="icon-cross admSingleTagDel"></span></span>');
+	$('#eTags').val('');
+}
+});
+
+$('#eTags').keyup (function(event) {
+	if (event.keyCode==188)
+	{
+		$("#taghint").append('<span class="admSingleTag" onclick="$(this).remove();"><i>'+$('#eTags').val().slice(0, -1)+'</i><span class="icon-cross admSingleTagDel"></span></span>');
+		$('#eTags').val('');
+	}
+	if (event.keyCode==191 || event.keyCode==220)
+	{
+		$('#eTags').val($('#eTags').val().slice(0, -1));
+	}
+});
+
+if ($("#aID").val())
+{
+	$("#aID").attr ('readonly', 'readonly');
+}
+
 </script>
 
 </div>

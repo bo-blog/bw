@@ -37,7 +37,7 @@
 
 <p style="clear:both"><br/><br/></p>
 <h2><span class="icon-help"></span> [[=admin:sect:SysInfo]]</h2>
-<span class="icon-arrow-right5"></span> bitWinds (ver [[::thisVersion]])<br/>
+<span class="icon-arrow-right5"></span> bW (ver [[::thisVersion]])<br/>
 <span class="icon-arrow-right5"></span> [[::serverInfo]]<br/>
 <span class="icon-arrow-right5"></span> PHP Version [[::PHPVersion]]
 </div>

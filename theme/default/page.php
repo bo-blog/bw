@@ -70,7 +70,7 @@ var lng={
 [[=page:Links]]<br/>
 [[::externallink]]
 [[::ext_footer]]
-<div id="copyright">Powered by bitWinds</div>
+<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">Powered by bW</a></div>
 </footer>
 
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>

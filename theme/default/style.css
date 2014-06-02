@@ -195,6 +195,13 @@ color: #464646;
 background: #FFF;
 color: #356A00;
 }
+.tagsRow {
+display: block;
+text-align: right;
+}
+.oneTag {
+margin-right: 8px;
+}
 .commentArea {
 width: 92%;
 text-align: left;
@@ -548,6 +555,23 @@ width: 33%;
 .admStatBlock1 a, .admStatBlock2 a {
 color: #333;
 text-shadow: 1px 2px 1px #EEE;
+}
+.admSingleTag {
+font-size: 14px;
+padding: 4px 10px 4px 12px;
+background: #73D90C;
+color: #FFF;
+border-radius: 6px;
+margin-right: 12px;
+}
+.admSingleTag i
+{
+font-style: normal;
+}
+.admSingleTagDel {
+cursor: pointer;
+font-size: 16px;
+padding-left: 5px;
 }
 
 /* Forms */

@@ -23,5 +23,5 @@ if (!defined ('P')) {
 [[::aContent, formatText, less]]
 [[::aID, readMore, <span class="readMore"><a href="%s"><span class="icon-arrow-right6"></span> %s</a></span>]]
 </div>
-
+[[::tagsInView]]
 </article>

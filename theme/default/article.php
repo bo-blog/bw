@@ -22,6 +22,7 @@ if (!defined ('P')) {
 <div class="details">
 [[::aContent, formatText, full]]
 </div>
+[[::tagsInView]]
 </article>
 
 

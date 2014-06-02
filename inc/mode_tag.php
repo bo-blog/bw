@@ -7,14 +7,13 @@ if (!defined ('P')) {
 $article = new bwArticle;
 $view = new bwView;
 
-if (isset ($canonical -> currentArgs['cateID'])) {
-	$article -> alterCate($canonical -> currentArgs['cateID']);
-	$view -> setPageTitle (bw :: $cateData[$canonical -> currentArgs['cateID']]);
-	$view -> setActiveNav ($canonical -> currentArgs['cateID']);
-} else {
+if (isset ($canonical -> currentArgs['tValue'])) {
+	$view -> setPageTitle ($conf['l']['page:Tags'] . ' - ' . $canonical -> currentArgs['tValue']);
 	$view -> setActiveNav ('index');
+} else {
+	stopError ($conf['l']['admin:msg:NoContent']);
 } 
-$article -> getArticleList ();
+$article -> getArticleListByTag ($canonical -> currentArgs['tValue']);
 // Pagination
 $canonical -> calTotalPages ($article -> totalArticles);
 

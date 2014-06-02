@@ -45,7 +45,7 @@ var lng={
 <div id="mainArea" class="admMainArea">
 [[::admindashboard]][[::admincenter]][[::adminarticles]][[::adminwriter]][[::adminservices]]
 </div>
-<div id="copyright" class="admFooter">Powered by bitWinds</div>
+<div id="copyright" class="admFooter"><a href="http://bw.bo-blog.com/" target="_blank">Powered by bW</a></div>
 </div>
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>
 </body>

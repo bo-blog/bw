@@ -1,9 +1,7 @@
-<?php
-//Copyright: Byke
-
+<?php 
+// Copyright: Byke
 define ('P', './');
 define ('M', 'admin');
 
-
-include_once (P.'index.php');
+include_once (P . 'index.php');
 

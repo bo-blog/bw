@@ -12,6 +12,14 @@ $parts['navigation']=<<<eot
 </li>
 eot;
 
+$parts['singletag']=<<<eot
+<span class="oneTag"><a href="[[::siteURL]]/[[::linkPrefixTag]]/[[::tagValue, URLEncode]]/">[[::tagValue]]</a></span>
+eot;
+
+$parts['tagwrapper']=<<<eot
+<h3 class="tagsRow"><span class="icon-tag"></span> [[::singletag]]</h3>
+eot;
+
 $parts['pagination']=<<<eot
 <div id="pageBar">
 [[::prevpage]][[::nextpage]]
