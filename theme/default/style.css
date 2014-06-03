@@ -552,7 +552,15 @@ background: #DDD;
 box-shadow: 4px 4px 4px #CCC;
 width: 33%;
 }
-.admStatBlock1 a, .admStatBlock2 a {
+.admStatBlock3 {
+float: left;
+padding: 17px;
+min-height: 160px;
+background: #CDCDCD;
+box-shadow: 4px 4px 4px #CCC;
+width: 33%;
+}
+.admStatBlock1 a, .admStatBlock2 a, .admStatBlock3 a {
 color: #333;
 text-shadow: 1px 2px 1px #EEE;
 }
@@ -793,7 +801,8 @@ display: block;
 float: none;
 }
 .admStatBlock1,
-.admStatBlock2 {
+.admStatBlock2,
+.admStatBlock3 {
 float: none;
 padding: 17px;
 min-height: 10px;

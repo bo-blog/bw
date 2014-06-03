@@ -1,6 +1,6 @@
 <?php 
 // Copyright: Byke
-define ('DISABLE_CACHE', 0);
+define ('DISABLE_CACHE', 1);
 
 if (!defined ('P')) {
 	define ('P', './');

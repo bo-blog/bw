@@ -7,7 +7,7 @@ if (!defined ('P')) {
 } 
 
 include_once (P . 'conf/info.php');
-date_default_timezone_set('Asia/Shanghai');
+date_default_timezone_set ($conf['timeZone']);
 
 bw :: init ();
 
@@ -23,7 +23,7 @@ class bw {
 	{
 		global $conf;
 		self :: $conf = &$conf;
-		include_once (P . 'inc/sqlite.php');
+		include_once (P . 'inc/db.php');
 		self :: $db = new bwDatabase;
 		self :: $cateData = self :: $cateList = self :: $extList = self :: $extData = array();
 	} 
@@ -40,7 +40,7 @@ class bw {
 	public static function pageStat ($canonicalURL, $aID = false)
 	{
 		$canonicalURL = str_replace (self :: $conf['siteURL'], '', $canonicalURL);
-		self :: $db -> dbExec ('INSERT OR IGNORE INTO statistics (pageURL, sNum) VALUES (?, 0)', array ($canonicalURL));
+		DBTYPE=='MySQL' ? self :: $db -> dbExec ('INSERT IGNORE INTO statistics (pageURL, sNum) VALUES (?, 0)', array ($canonicalURL)) : self :: $db -> dbExec ('INSERT OR IGNORE INTO statistics (pageURL, sNum) VALUES (?, 0)', array ($canonicalURL));
 		self :: $db -> dbExec ('UPDATE statistics SET sNum=sNUM+1, lastView=? WHERE pageURL=?', array (date ('Y-m-d H:i:s'), $canonicalURL));
 		if ($aID) {
 			self :: $db -> dbExec ('UPDATE articles SET aReads=aReads+1 WHERE aID=?', array ($aID));
@@ -50,7 +50,7 @@ class bw {
 	public static function loadLanguage ()
 	{
 		global $conf;
-		self :: $conf['siteLang'] = basename(self :: $conf['siteLang']);
+		self :: $conf['siteLang'] = basename (self :: $conf['siteLang']);
 		if (file_exists (P . 'lang/' . self :: $conf['siteLang'] . '.php')) {
 			include_once (P . 'lang/' . self :: $conf['siteLang'] . '.php');
 		} else {
@@ -67,8 +67,8 @@ class bw {
 			foreach ($allHooks as $aHook) {
 				self :: $extList[$aHook][] = $aExt['extID'];
 			} 
-			if (file_exists (P . 'extension/' . basename($aExt['extID']) . '/do.php')) {
-				include_once (P . 'extension/' . basename($aExt['extID']) . '/do.php');
+			if (file_exists (P . 'extension/' . basename ($aExt['extID']) . '/do.php')) {
+				include_once (P . 'extension/' . basename ($aExt['extID']) . '/do.php');
 				$aExtID = 'ext_' . $aExt['extID'];
 				$aExtID :: init();
 			} 
@@ -136,7 +136,7 @@ class bwCategory {
 		foreach ($deletedCates as $delCate => $delCateName) {
 			$delLine = bw :: $db -> getSingleRow ('SELECT * FROM categories WHERE aCateURLName=:delCate', array(':delCate' => $delCate));
 			if ($delLine['aCateCounter'] == 0) {
-				bw :: $db -> dbExec('DELETE FROM categories WHERE aCateURLName=:delCate', array(':delCate' => $delCate));
+				bw :: $db -> dbExec ('DELETE FROM categories WHERE aCateURLName=:delCate', array(':delCate' => $delCate));
 			} else {
 				stopError (bw :: $conf['l']['admin:msg:CategoryNotEmpty']);
 			} 
@@ -181,13 +181,14 @@ class bwArticle {
 	{
 		$currentTitleStart = ($this -> pageNum-1) * bw :: $conf['perPage'];
 
-		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles ORDER BY aTime DESC LIMIT :currentTitleStart, :perPage' : 'SELECT * FROM articles WHERE aCateURLName=:aCateURLName ORDER BY aTime DESC LIMIT :currentTitleStart, :perPage';
-		$qBind = array (':currentTitleStart' => $currentTitleStart, ':perPage' => bw :: $conf['perPage']);
+		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? ORDER BY aTime DESC LIMIT ?, ?';
 		if ($this -> listCate != 'all') {
-			$qBind[':aCateURLName'] = $this -> listCate;
-		} 
-
+			$qBind = array ($this -> listCate, $currentTitleStart, bw :: $conf['perPage']);
+		} else {
+			$qBind = array ($currentTitleStart, bw :: $conf['perPage']);
+		}
 		$allTitles = bw :: $db -> getRows ($qStr, $qBind);
+	
 
 		if (count ($allTitles) < 1) {
 			stopError (bw :: $conf['l']['admin:msg:NoContent']);
@@ -288,7 +289,6 @@ class bwArticle {
 		bw :: $db -> dbExec ('INSERT INTO articles (aID, aTitle, aCateURLName, aTime, aTags, aReads, aContent) VALUES (?, ?, ?, ?, ?, 0, ?)', array ($smt['aID'], $smt['aTitle'], $smt['aCateURLName'], $smt['aTime'], $smt['aTags'], $smt['aContent']));
 		$this -> updateCateCount ($smt['aCateURLName'], 1);
 		clearCache (); //Clear all cache
-		
 		hook ('addArticle', 'Execute', $smt);
 		return true;
 	} 
@@ -330,7 +330,6 @@ class bwArticle {
 			$this -> updateCateCount ($old['aCateURLName'], -1);
 		} 
 		clearCache (); //Clear all cache
-		
 		hook ('updateArticle', 'Execute', $smt);
 		return true;
 	} 
@@ -349,7 +348,6 @@ class bwArticle {
 		bw :: $db -> dbExec ('DELETE FROM articles WHERE aID=?', array ($aID));
 		$this -> updateCateCount ($taID['aCateURLName'], -1);
 		clearCache (); //Clear all cache
-		
 		hook ('deleteArticle', 'Execute', $aID);
 		return true;
 	} 
@@ -980,8 +978,13 @@ function clearCache ($caID = false)
 	if ($caID) {
 		bw :: $db -> dbExec ('DELETE FROM cache WHERE caID=?', array ($caID));
 	} else {
-		bw :: $db -> dbExec ('DROP TABLE cache');
-		bw :: $db -> dbExec ('CREATE TABLE "cache" ("caID" CHAR (32), "caContent" TEXT)');
+		if (DBTYPE=='MySQL') {
+			bw :: $db -> dbExec ('TRUNCATE TABLE cache');
+		}
+		else {
+			bw :: $db -> dbExec ('DROP TABLE cache');
+			bw :: $db -> dbExec ('CREATE TABLE cache (caID CHAR (32) PRIMARY KEY NOT NULL, caContent TEXT)');
+		}
 	} 
 } 
 

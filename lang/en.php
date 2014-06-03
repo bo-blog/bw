@@ -71,6 +71,7 @@ $conf['l'] = array(
 	'admin:item:AuthorSocial' => 'Social Links',
 	'admin:item:Links' => 'Link Manager',
 	'admin:item:SetTag' => 'Set Tags',
+	'admin:item:TimeZone' => 'Set Timezone',
 
 	'admin:opt:SimplifiedChinese' => 'Chinese (PRC)',
 	'admin:opt:English' => 'English',
@@ -109,6 +110,7 @@ $conf['l'] = array(
 	'admin:msg:LeaveConfirm' => 'Sure to leave? Unsaved data will be lost!',
 	'admin:msg:Links' => 'One link per line. Format: URL=Name',
 	'admin:msg:SetTag' => 'Separate each tag with a comma.',
+	'admin:msg:TimeZone' => 'Timezone code supported by PHP. <a href="http://www.php.net/manual/zh/timezones.php" target="_blank">Click here</a> for more details.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',

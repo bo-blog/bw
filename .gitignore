@@ -1,4 +1,4 @@
 .htaccess
-conf/
-storage/
+conf/*
+storage/*
 trash/

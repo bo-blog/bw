@@ -70,6 +70,7 @@ $conf['l'] = array(
 	'admin:item:AuthorSocial' => '社交网站网址',
 	'admin:item:Links' => '友情链接管理',
 	'admin:item:SetTag' => '设置Tag',
+	'admin:item:TimeZone' => '设置时区',
 
 	'admin:opt:SimplifiedChinese' => '简体中文',
 	'admin:opt:English' => '英语',
@@ -108,6 +109,7 @@ $conf['l'] = array(
 	'admin:msg:LeaveConfirm' => '确认要离开？未保存的数据将丢失！',
 	'admin:msg:Links' => '每行一个友情链接，格式为：网址=网站名',
 	'admin:msg:SetTag' => '用逗号分隔每个Tag',
+	'admin:msg:TimeZone' => '填写PHP支持的时区代码。点击<a href="http://www.php.net/manual/zh/timezones.php" target="_blank">这里</a>查询。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',

@@ -21,7 +21,7 @@
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/services/backup/">[[=admin:item:BackupData]] </a><br/>
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/index.php/">[[=admin:item:BackHome]] </a><br/>
 </div>
-<div class="admStatBlock2">
+<div class="admStatBlock3">
 <h2>[[=admin:item:MostPopular]]</h2>
 <ul>
 [[::whatsHottest]]

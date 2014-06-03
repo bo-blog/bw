@@ -12,6 +12,9 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:SiteURL]]<br/><input type="text" class="inputLine inputLarge" name="smt[siteURL]" value="[[::siteURL]]" /><br/><span class="adminExplain">[[=admin:msg:SiteURL]]</span>
 </p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:TimeZone]]<br/><input type="text" class="inputLine inputLarge" name="smt[timeZone]" value="[[::timeZone]]" /><br/><span class="adminExplain">[[=admin:msg:TimeZone]]</span>
+</p>
 
 <p><br/><br/></p>
 
