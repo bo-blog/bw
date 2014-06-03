@@ -1,5 +1,10 @@
 <?php 
-// Copyright: Byke
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
 if (isset ($_REQUEST['step'])) {
 	$step = floor ($_REQUEST['step']);
 } else {
@@ -139,14 +144,15 @@ function dbInit ($dbType)
 
 function dbInitBind ()
 {
-	$return=array (
+	$siteURL = curPageURL ();
+	$return = array (
 		false,
 		false,
 		false,
 		false,
 		false,
 		false,
-		array ('hello-world', 'Hello, World!', 'default', date ('Y-m-d H:i:s'), null, 0, "Welcome to bW.\r\n\r\nThis is the first article that **bW** published on your behalf.\r\n\r\nIf you need help, please do not hesitate to visit our [Official Website](http://bw.bo-blog.com)!", null),
+		array ('hello-world', 'Hello, World!', 'default', date ('Y-m-d H:i:s'), null, 0, "Welcome to bW.\r\n\r\nThis is the first article that **bW** published on your behalf.\r\n\r\nbW allows you to [write in Markdown](http://daringfireball.net/projects/markdown/syntax).\r\n\r\n![]({$siteURL}/storage/firstrun.jpg)\r\n\r\nIf you need help, please do not hesitate to visit our [Official Website](http://bw.bo-blog.com)!", null),
 		array ('default', 'Uncategorized', 1, 1),
 		array ('hello_world', "name='Hello, world'\r\nintro='Test extension.'\r\nauthor='bW'\r\nurl='http://bw.bo-blog.com'", 'header,footer,textParser,generateOutputDone', 0, 1, null),
 	);
@@ -157,7 +163,7 @@ function curPageURL ()
 {
     $pageURL = 'http';
     if (isset ($_SERVER["HTTPS"])) {
-		if ($_SERVER["HTTPS"]=='on') {
+		if ($_SERVER["HTTPS"] == 'on') {
 	        $pageURL .= "s";
 		}
     }

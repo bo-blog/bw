@@ -1,5 +1,10 @@
 <?php 
-// Copyright: Byke
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
 define ('bwVersion', '0.9.1');
 
 if (!defined ('P')) {

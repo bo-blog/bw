@@ -1,5 +1,10 @@
 <?php 
-// Copyright: Byke
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
 define ('P', '../');
 
 if (file_exists ('../conf/info.php')) {
@@ -83,7 +88,7 @@ function output ()
 <input type="text" name="instd[dbPass]" id="dbPass" placeholder="DB Password" value="" class="inp inpL mysql" /><br/>
 </p>
 <p class="wM">
-<br/><br/><span class="wM wBox" id="btn3">CONTINUE</span>
+<br/><span class="wM wBox" id="btn3">CONTINUE</span>
 </p>
 </form>
 </div>
