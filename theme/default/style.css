@@ -390,7 +390,6 @@ font-family: Consolas, Monaco, "Microsoft Yahei", "Microsoft JhengHei", "Meiryo 
 }
 .details pre {
 width: 95%;
-background: #EFEFEF;
 border-left: 5px solid #CCC;
 padding: 2px 2px 2px 8px;
 }

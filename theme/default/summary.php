@@ -23,5 +23,7 @@ if (!defined ('P')) {
 [[::aContent, formatText, less]]
 [[::aID, readMore, <span class="readMore"><a href="%s"><span class="icon-arrow-right6"></span> %s</a></span>]]
 </div>
-[[::tagsInView]]
+
+[[::aTags, hasTags, <h3 class="tagsRow"><span class="icon-tag"></span>]] [[::aTags, formatTags, <span class="oneTag"><a href="[::siteURL]/[::linkPrefixTag]/[::tagInURL]/">[::tagValue]</a></span>]][[::aTags, hasTags, </h3>]]
+
 </article>

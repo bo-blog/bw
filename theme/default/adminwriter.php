@@ -59,7 +59,7 @@ $("#adminUploader").click(function() {
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:ACate]]<br/>
 <select name="smt[aCateURLName]" id="aCateURLName" class="selectLine">
-[[::admincatelist]]
+[[::loop, admincatelist]]<option value="[[::aCateURLName]]">[[::aCateDispName]]</option>[[::/loop]]
 </select>
 </p>
 <script type="text/javascript">
@@ -236,7 +236,6 @@ if ($('#eTags').val())
 $('#eTags').AutoComplete({
 'data': "[[::siteURL]]/admin.php/articles/getautocomplete/",
 'ajaxDataType': 'json',
-//'data': ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', '中文', '测试'],
 'afterSelectedHandler': function(data) {
 	$("#taghint").append('<span class="admSingleTag" onclick="$(this).remove();"><i>'+data.value+'</i><span class="icon-cross admSingleTagDel"></span></span>');
 	$('#eTags').val('');

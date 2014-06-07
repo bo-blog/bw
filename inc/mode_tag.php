@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
 * 
 * @link http://bw.bo-blog.com
@@ -23,27 +23,14 @@ $article -> getArticleListByTag ($canonical -> currentArgs['tValue']);
 $canonical -> calTotalPages ($article -> totalArticles);
 
 $view -> doPagination ();
-foreach ($article -> articleList as $aID => $row) {
-	if ($row['aTags']) {
-		$view -> setLoop ('singletag', $row['aAllTags']);
-		$view -> setMaster ('tagwrapper');
-		$view -> setWorkFlow (array ('singletag', 'tagwrapper'));
-		$view -> generateOutput ();
-		$article -> articleList[$aID]['tagsInView'] = $view -> outputContent;
-	} 
-} 
-
-$view -> setLoop ('summary', $article -> articleList);
+$view -> setPassData (array ('articlesummary' => $article -> articleList));
 
 if (defined ('ajax')) {
 	$view -> setMaster ('ajax-article-list');
 	$view -> setWorkFlow (array ('summary', 'ajax-article-list'));
 } else {
-	$view -> setLoop ('navigation', bw :: $cateList);
-	$view -> setLoop ('sociallink', bw :: getSocialLinks ());
-	$view -> setLoop ('externallink', bw :: getExternalLinks ());
+	$view -> setPassData (array ('navigation' => bw :: $cateList, 'sociallink' => bw :: getSocialLinks (), 'externallink' => bw :: getExternalLinks ()));
 	$view -> setMaster ('page');
-	$view -> setWorkFlow (array ('summary', 'navigation', 'sociallink', 'externallink', 'page'));
+	$view -> setWorkFlow (array ('summary', 'page'));
 } 
 $view -> finalize ();
-

@@ -8,7 +8,8 @@
 <h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/admin.php/articles/new/'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a></span></h2> 
 <p>
 <ul>
-[[::adminarticlelist]]
+[[::loop, adminarticlelist]]<li class="adminSingleArticle adminSAL" data-aid="[[::aID]]"><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" title="[[=admin:msg:Open]]"><span class="icon-export"></span> </a> [[::aTitle]] <span class="adminSADate">[[::aTime]]</span></li>
+[[::/loop]]
 </ul>
 </p>
 <br/>
@@ -18,7 +19,8 @@
 
 <h2><span class="icon-tag"></span> [[=admin:sect:Categories]]<span class="adminSANew"><a href='##' onclick='$("#adminSCInputNew").toggle()'><span class="icon-plus2"></span> [[=admin:btn:NewCate]]</a> <a href='##' onclick="saveCategoryChanges('[[::siteURL]]/admin.php/articles/savecategories/');"><span class="icon-disk"></span> [[=admin:btn:Save]]</a></span></h2>
 <p><ul class="adminCateList" id="adminCateList">
-[[::admincategorylist]]
+[[::loop, admincatelist]]<li class="adminSingleArticle adminSCL" data-cid="[[::aCateURLName]]" id="adminSCL-[[::aCateURLName]]"><a href="##" title="[[=admin:msg:Up]]" class="adminSCLUp" data-cid="[[::aCateURLName]]"><span class="icon-arrow-up3"></span></a> <a href="##" title="[[=admin:msg:Down]]" class="adminSCLDown" data-cid="[[::aCateURLName]]"><span class="icon-arrow-down4"></span></a> <span id="adminSCLine-[[::aCateURLName]]" class="adminSCLine" data-cid="[[::aCateURLName]]">[[::aCateDispName]]</span><span class="adminSCLModify" id="adminSCM-[[::aCateURLName]]"><input type="text" class="inputLine inputLarge" value="[[::aCateDispName]]" id="adminSCInput-[[::aCateURLName]]"> <br/><a href="##" onclick='$("#adminSCM-[[::aCateURLName]]").fadeToggle();$("#adminSCL-[[::aCateURLName]]").remove();'><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a> &nbsp; <a href="##" onclick='$("#adminSCM-[[::aCateURLName]]").fadeToggle();$("#adminSCLine-[[::aCateURLName]]").html($("#adminSCInput-[[::aCateURLName]]").val());$("#adminSCLine-[[::aCateURLName]]").toggle();'><span class="icon-arrow-up4"></span> [[=admin:msg:Close]]</a></span></li>
+[[::/loop]]
 </ul>
 <span id="adminSCInputNew"><input type="text" class="inputLine inputLarge" value="" placeholder="[[=admin:msg:NewCate]]"  id="adminSCInputNewItem" /> <a href='##' onclick="addCategory('[[::siteURL]]/admin.php/articles/validatecategory/');"><span class="icon-disk"></span> [[=admin:btn:Add]]</a><br/> </span>
 <span class="adminExplain">[[=admin:msg:Categories]]</span></p>

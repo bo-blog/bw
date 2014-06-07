@@ -86,7 +86,7 @@ function checkPassword (str){
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:SiteTheme]]<br/>
 <select name="smt[siteTheme]" id="siteTheme" class="selectLine">
-[[::themes]]
+[[::loop, themeList]]<option value="[[::themeDir]]">[[::themeName]] ([[=admin:msg:By]] [[::themeAuthor]])</option>[[::/loop]]
 </select>
 </p>
 <p>

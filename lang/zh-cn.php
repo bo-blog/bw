@@ -29,6 +29,7 @@ $conf['l'] = array(
 	'admin:Settings' => '参数设置',
 	'admin:Articles' => '文章管理',
 	'admin:Services' => '系统服务',
+	'admin:Extensions' => '插件扩展',
 	'admin:Logout' => '退出登录',
 
 	'admin:sect:BasicInfo' => '基本设置',

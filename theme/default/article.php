@@ -9,7 +9,7 @@ if (!defined ('P')) {
 
 <article id="article-[[::aID]]">
 <span class="decoArticle"></span>
-<h2><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/">[[::aTitle]]</a></h2>
+<h2>[[::aTitle]]</h2>
 <h3><span class="icon-pencil"></span> [[::aTime, dateFormat, Y/m/d H:i]] [[=page:InCate]] <a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a>
 <span class="articleShare"><a href="#comment-[[::aID]]"><span class="icon-comment" title="[[=page:Comments]]"></span></a> <a href="##"><span class="icon-share" id="share-[[::aID]]" title="[[=page:ShareTo]]"></span> </a></span>
 </h3>
@@ -22,7 +22,7 @@ if (!defined ('P')) {
 <div class="details">
 [[::aContent, formatText, full]]
 </div>
-[[::tagsInView]]
+[[::aTags, hasTags, <h3 class="tagsRow"><span class="icon-tag"></span>]] [[::aTags, formatTags, <span class="oneTag"><a href="[::siteURL]/[::linkPrefixTag]/[::tagInURL]/">[::tagValue]</a></span>]][[::aTags, hasTags, </h3>]]
 </article>
 
 

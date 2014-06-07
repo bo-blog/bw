@@ -91,8 +91,8 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		} 
 	} else {
 		$view -> setMaster ('admin');
-		$view -> setLoop ('themes', $view -> scanForThemes ());
-		$view -> setWorkFlow (array ('themes', 'admincenter', 'admin'));
+		$view -> setPassData (array ('themeList' => $view -> scanForThemes ()));
+		$view -> setWorkFlow (array ('admincenter', 'admin'));
 		$view -> finalize ();
 	} 
 } 
@@ -118,7 +118,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$article -> fetchArticle ($_REQUEST['aID']);
 		$view -> setMaster ('admin');
 		$view -> setPassData ($article -> articleList[$_REQUEST['aID']]);
-		$view -> setLoop ('admincatelist', bw :: $cateList);
+		$view -> setPassData (array ('admincatelist' => bw :: $cateList));
 
 		loadServices ();
 		if ($conf['qiniuBucket'] && $conf['qiniuUpload'] == '1') {
@@ -133,7 +133,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		} else {
 			$uploader = 'admincommonupload';
 		} 
-		$view -> setWorkFlow (array ('admincatelist', $uploader, 'adminwriter', 'admin'));
+		$view -> setWorkFlow (array ($uploader, 'adminwriter', 'admin'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'new') {
 		loadServices ();
@@ -150,8 +150,8 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		} 
 
 		$view -> setMaster ('admin');
-		$view -> setLoop ('admincatelist', bw :: $cateList);
-		$view -> setWorkFlow (array ('admincatelist', $uploader, 'adminwriter', 'admin'));
+		$view -> setPassData (array ('admincatelist' => bw :: $cateList));
+		$view -> setWorkFlow (array ($uploader, 'adminwriter', 'admin'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'getqiniuuploadpart') {
 		loadServices ();
@@ -199,8 +199,8 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		} 
 
 		$view -> setMaster ('adminuploadinsert');
-		$view -> setLoop ('adminuploaded', $files);
-		$view -> setWorkFlow (array ('adminuploaded', 'adminuploadinsert'));
+		$view -> setPassData (array ('adminuploaded' => $files));
+		$view -> setWorkFlow (array ('adminuploadinsert'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'qiniuuploader') {
 		$files = array();
@@ -212,8 +212,8 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$files[]['fileURL'] = $conf['qiniuDomain'] ? "{$conf['qiniuDomain']}/{$uploadReturn['fname']}" : "http://{$conf['qiniuBucket']}.qiniudn.com/{$uploadReturn['fname']}";
 		} 
 		$view -> setMaster ('adminuploadinsert');
-		$view -> setLoop ('adminuploaded', $files);
-		$view -> setWorkFlow (array ('adminuploaded', 'adminuploadinsert'));
+		$view -> setPassData (array ('adminuploaded' => $files));
+		$view -> setWorkFlow (array ('adminuploadinsert'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'savecategories') {
 		if (!isset ($_REQUEST['smt'])) {
@@ -250,8 +250,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$view -> doPagination ();
 
 		$view -> setMaster ('admin');
-		$view -> setLoop ('adminarticlelist', $article -> articleList);
-		$view -> setLoop ('admincategorylist', bw :: $cateList);
+		$view -> setPassData (array ('adminarticlelist' =>$article -> articleList, 'admincatelist' => bw :: $cateList));
 		$view -> setWorkFlow (array ('adminarticlelist', 'admincategorylist', 'adminarticles', 'admin'));
 		$view -> finalize ();
 	} 
@@ -356,8 +355,7 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 	$statVals['serverInfo'] = $_SERVER['SERVER_SOFTWARE'];
 	$view -> setMaster ('admin');
 	$view -> setPassData ($statVals);
-	$view -> setLoop ('themes', $view -> scanForThemes ());
-	$view -> setWorkFlow (array ('themes', 'admindashboard', 'admin'));
+	$view -> setWorkFlow (array ('admindashboard', 'admin'));
 	$view -> finalize ();
 } 
 

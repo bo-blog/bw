@@ -36,7 +36,9 @@ var lng={
 <nav>
 <ul>
 <li id="nav-index"><a href="[[::siteURL]]/">[[=page:Home]]</a></li>
-[[::navigation]]
+[[::loop, navigation]]
+<li id="nav-[[::aCateURLName]]"><a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a></li>
+[[::/loop]]
 </ul>
 </nav>
 [[::ext_header]]
@@ -54,7 +56,8 @@ var lng={
 [[::ext_mainAreaStart]]
 <!-- ajax loaded section -->
 <div id="ajax-article-list">
-[[::summary]][[::article]]
+[[::loop, articlesummary]][[::load, summary]][[::/loop]]
+[[::load, article]]
 [[::pagination]]
 <script src="[[::siteURL]]/inc/script/loader.js"></script>
 </div>
@@ -65,10 +68,11 @@ var lng={
 </div>
 
 <footer>
-[[=page:Connect]]<br/>[[::sociallink]]
+[[=page:Connect]]<br/>
+[[::loop, sociallink]]<a href="[[::socialLinkURL]]" target="_blank"><span class="icon-[[::socialLinkID]] fol"></span></a>[[::/loop]]
 <br/>
 [[=page:Links]]<br/>
-[[::externallink]]
+[[::loop, externallink]]<span class="lnk"><a href="[[::linkURL]]" target="_blank">[[::linkName]]</a></span>[[::/loop]]
 [[::ext_footer]]
 <div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">Powered by bW</a></div>
 </footer>

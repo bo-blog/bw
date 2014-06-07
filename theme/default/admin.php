@@ -37,13 +37,14 @@ var lng={
 <li class="adminList" id="admCenter"><a href="[[::siteURL]]/admin.php/center/" title="Settings"><span class="icon-cog"></span> <span class="adminItems">[[=admin:Settings]]</span></a></li>
 <li class="adminList" id="admArticles"><a href="[[::siteURL]]/admin.php/articles/" title="Articles"><span class="icon-pencil"></span> <span class="adminItems">[[=admin:Articles]]</span></a></li>
 <li class="adminList" id="admServices"><a href="[[::siteURL]]/admin.php/services/" title="Services"><span class="icon-cloud"></span> <span class="adminItems">[[=admin:Services]]</span></a></li>
+<li class="adminList" id="admServices"><a href="[[::siteURL]]/admin.php/extensions/" title="Extensions"><span class="icon-star"></span> <span class="adminItems">[[=admin:Extensions]]</span></a></li>
 <li class="adminList"><a href="[[::siteURL]]/admin.php/login/logout/" title="Logout"><span class="icon-logout"></span> <span class="adminItems">[[=admin:Logout]]</span></a></li>
 </ul>
 </nav>
 </header>
 
 <div id="mainArea" class="admMainArea">
-[[::admindashboard]][[::admincenter]][[::adminarticles]][[::adminwriter]][[::adminservices]]
+[[::load, admindashboard]][[::load, admincenter]][[::load, adminarticles]][[::load, adminwriter]][[::load, adminservices]]
 </div>
 <div id="copyright" class="admFooter"><a href="http://bw.bo-blog.com/" target="_blank">Powered by bW</a></div>
 </div>

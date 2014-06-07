@@ -6,20 +6,6 @@ if (!defined ('P')) {
 }
 
 
-$parts['navigation']=<<<eot
-<li id="nav-[[::aCateURLName]]">
-<a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a>
-</li>
-eot;
-
-$parts['singletag']=<<<eot
-<span class="oneTag"><a href="[[::siteURL]]/[[::linkPrefixTag]]/[[::tagValue, URLEncode]]/">[[::tagValue]]</a></span>
-eot;
-
-$parts['tagwrapper']=<<<eot
-<h3 class="tagsRow"><span class="icon-tag"></span> [[::singletag]]</h3>
-eot;
-
 $parts['pagination']=<<<eot
 <div id="pageBar">
 [[::prevpage]][[::nextpage]]
@@ -47,17 +33,9 @@ $parts['gotopage']=<<<eot
 eot;
 
 $parts['ajax-article-list']=<<<eot
-[[::summary]]
+[[::loop, articlesummary]][[::load, summary]][[::/loop]]
 [[::pagination]]
 <script src="[[::siteURL]]/inc/script/loader.js"></script>
-eot;
-
-$parts['sociallink']=<<<eot
-<a href="[[::socialLinkURL]]" target="_blank"><span class="icon-[[::socialLinkID]] fol"></span></a> 
-eot;
-
-$parts['externallink']=<<<eot
-<span class="lnk"><a href="[[::linkURL]]" target="_blank">[[::linkName]]</a></span>
 eot;
 
 $parts['adminlogin']=<<<eot
@@ -77,18 +55,6 @@ $parts['adminlogin']=<<<eot
 </div>
 eot;
 
-$parts['themes']=<<<eot
-<option value="[[::themeDir]]">[[::themeName]] ([[=admin:msg:By]] [[::themeAuthor]])</option>
-eot;
-
-$parts['adminarticlelist']=<<<eot
-<li class="adminSingleArticle adminSAL" data-aid="[[::aID]]"><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" title="[[=admin:msg:Open]]"><span class="icon-export"></span> </a> [[::aTitle]] <span class="adminSADate">[[::aTime]]</span></li>
-eot;
-
-$parts['admincatelist']=<<<eot
-<option value="[[::aCateURLName]]">[[::aCateDispName]]</option>
-eot;
-
 $parts['admincommonupload']=<<<eot
 <form id="picForm" method="post" action="[[::siteURL]]/admin.php/articles/uploader/" target="execPicTarget" enctype="multipart/form-data">
 <input type="file" style="display: none; height: 1px;" name="uploadFile[]" id="uploadPicFile" multiple="true" />
@@ -103,21 +69,11 @@ $parts['adminqiniuupload']=<<<eot
 </form>
 eot;
 
-
-
-$parts['adminuploaded']=<<<eot
-![]([[::fileURL]]) 
-eot;
-
 $parts['adminuploadinsert']=<<<eot
-<html><head></head><body><span id="upVals">[[::adminuploaded]]</span>
+<html><head></head><body><span id="upVals">[[::loop, adminuploaded]]![]([[::fileURL]]) [[::/loop]]</span>
 <script type="text/javascript">
 parent.insertUpURLs(document.getElementById('upVals').innerHTML);</script>
 </body></html>
-eot;
-
-$parts['admincategorylist']=<<<eot
-<li class="adminSingleArticle adminSCL" data-cid="[[::aCateURLName]]" id="adminSCL-[[::aCateURLName]]"><a href="##" title="[[=admin:msg:Up]]" class="adminSCLUp" data-cid="[[::aCateURLName]]"><span class="icon-arrow-up3"></span></a> <a href="##" title="[[=admin:msg:Down]]" class="adminSCLDown" data-cid="[[::aCateURLName]]"><span class="icon-arrow-down4"></span></a> <span id="adminSCLine-[[::aCateURLName]]" class="adminSCLine" data-cid="[[::aCateURLName]]">[[::aCateDispName]]</span><span class="adminSCLModify" id="adminSCM-[[::aCateURLName]]"><input type="text" class="inputLine inputLarge" value="[[::aCateDispName]]" id="adminSCInput-[[::aCateURLName]]"> <br/><a href="##" onclick='$("#adminSCM-[[::aCateURLName]]").fadeToggle();$("#adminSCL-[[::aCateURLName]]").remove();'><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a> &nbsp; <a href="##" onclick='$("#adminSCM-[[::aCateURLName]]").fadeToggle();$("#adminSCLine-[[::aCateURLName]]").html($("#adminSCInput-[[::aCateURLName]]").val());$("#adminSCLine-[[::aCateURLName]]").toggle();'><span class="icon-arrow-up4"></span> [[=admin:msg:Close]]</a></span></li>
 eot;
 
 ?>

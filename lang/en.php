@@ -30,6 +30,7 @@ $conf['l'] = array(
 	'admin:Settings' => 'Settings',
 	'admin:Articles' => 'Articles',
 	'admin:Services' => 'Services',
+	'admin:Extensions' => 'Extensions',
 	'admin:Logout' => 'Logout',
 
 	'admin:sect:BasicInfo' => 'Basic Information',

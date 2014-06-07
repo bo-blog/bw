@@ -447,7 +447,6 @@ class bwView {
 	private $modContent;
 	public $outputContent;
 	private $themeDir;
-	private $loopData;
 	private $passData;
 	private $masterMod;
 	private $loopEach;
@@ -472,11 +471,6 @@ class bwView {
 		} else {
 			$this -> themeDir = P . "theme/{$setThemeDir}";
 		} 
-	} 
-
-	public function setLoop ($modName, $modData)
-	{
-		$this -> loopData[$modName] = $modData;
 	} 
 
 	public function setMaster ($modName)
@@ -517,19 +511,44 @@ class bwView {
 				continue;
 			} 
 			// load looped data
-			if (array_key_exists ($viewMod, $this -> loopData)) {
-				$this -> modContent[$viewMod] = '';
-				foreach ($this -> loopData[$viewMod] as $this -> loopEach) {
-					$this -> modContent[$viewMod] .= preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInLoop'), $obContent);
-				} 
-			} else {
-				$this -> modContent[$viewMod] = preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInTheme'), $obContent);
-			} 
+			$this -> modContent[$viewMod] = $this -> commonParser ($obContent);
 		} 
 		$this -> outputContent = trim ($this -> modContent[$this -> masterMod]);
 		$this -> outputContent = preg_replace_callback ('/\[\[=(.+?)\]\]/', array($this, 'strInLang'), $this -> outputContent);
 		hook ('generateOutputDone', 'Execute', $this);
-	} 
+	}
+
+	private function passLoop ($param)
+	{
+		//print_r ($param);
+		$return = '';
+		if (isset ($this -> passData[$param[1]])) {
+			foreach ($this -> passData[$param[1]] as $this -> loopEach) {
+				$return .= preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInLoop'), $param[2]);
+			}
+		}
+		return ($return);
+	}
+
+	private function loadElement ($param)
+	{
+		$obContent = ' ';
+		$viewMod = basename ($param[1]);
+		if (in_array ($viewMod, $this -> viewWorkFlow) && file_exists ("{$this->themeDir}/{$viewMod}.php")) {
+			ob_start ();
+			include ("{$this->themeDir}/{$viewMod}.php");
+			$obContent = ob_get_clean ();
+			$obContent = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $obContent);
+		}
+		return $obContent;
+	}
+
+	private function commonParser ($text) {
+		$text = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $text);
+		$text = preg_replace_callback ('/\[\[::loop, (.+?)\]\](.+?)\[\[::\/loop\]\]/s', array($this, 'passLoop'), $text);
+		$text = preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInTheme'), $text);
+		return $text;
+	}
 
 	private function strInTheme ($param, $isLoop = false)
 	{
@@ -537,6 +556,7 @@ class bwView {
 		$key = $param[1];
 		if (strpos ($key, ', ')) {
 			@list ($key, $funcWalk, $funcParam) = explode (', ', $key);
+
 			$needWalk = true;
 		} else {
 			$needWalk = false;
@@ -553,7 +573,7 @@ class bwView {
 			} 
 		} elseif (array_key_exists ($key, $this -> passData)) {
 			$return = $this -> passData[$key];
-		} 
+		}
 
 		if ($needWalk) {
 			$return = call_user_func (array($this, 'theme_' . $funcWalk), $funcParam, $return);
@@ -634,7 +654,7 @@ class bwView {
 		$this -> generateOutput ();
 		$this -> outputView ();
 		hook ('finalize', 'Execute', $this);
-		if (defined ('docache')) {
+		if (defined ('docache') && $this -> masterMod <> 'error') {
 			bw :: $db -> dbExec ('INSERT INTO cache (caID, caContent) VALUES (?, ?)', array (docache, $this -> outputContent));
 		} 
 		exit ();
@@ -642,7 +662,9 @@ class bwView {
 
 	public function addHookIntoView ($hookInterface)
 	{
-		return hook ($hookInterface, 'Insert');
+		$return=hook ($hookInterface, 'Insert');
+		$return = $this -> commonParser ($return);
+		return $return;
 	} 
 
 	public function haltWithError ($errMsg)
@@ -734,7 +756,27 @@ class bwView {
 	{
 		$text = hook ('safeConvert', 'Replace', $text);
 		return htmlspecialchars ($text, 'UTF-8');
+	}
+
+	private function theme_formatTags ($format, $aTags)
+	{
+		$aAllTags = @explode (',', $aTags);
+		$return = '';
+		if (count ($aAllTags) > 0) {
+			foreach ($aAllTags as $tagValue) {
+				$return.= str_replace (array ('[::tagValue]', '[::tagInURL]'), array ($tagValue, urlencode ($tagValue)),  $format);
+			}
+			$return = str_replace (array ('[::', ']'), array ('[[::', ']]'), $return);
+			$return = preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInTheme'), $return);
+		}
+		return $return;
+	}
+
+	private function theme_hasTags ($format, $aTags)
+	{
+		return $aTags ? $format : '';
 	} 
+
 } 
 
 class bwCanonicalization {
