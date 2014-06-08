@@ -5,7 +5,7 @@
 
 <div class="adminArea">
 <form id="smtForm" action="post">
-<h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/admin.php/articles/new/'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a></span></h2> 
+<h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/admin.php/articles/new/?CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a></span></h2> 
 <p>
 <ul>
 [[::loop, adminarticlelist]]<li class="adminSingleArticle adminSAL" data-aid="[[::aID]]"><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" title="[[=admin:msg:Open]]"><span class="icon-export"></span> </a> [[::aTitle]] <span class="adminSADate">[[::aTime]]</span></li>
@@ -31,7 +31,7 @@
 <script type="text/javascript">
 $(".adminSAL").click(function(){
 	var aID=$(this).data("aid");
-	window.location="[[::siteURL]]/admin.php/articles/modify/?aID="+aID;
+	window.location="[[::siteURL]]/admin.php/articles/modify/?aID="+aID+"&CSRFCode=[[::oldCSRFCode]]";
 });
 
 $("#admArticles").addClass("activeNav");
@@ -74,7 +74,7 @@ function addCategory(smtURL) {
 		}
 		else
 		{
-			var smtURL=smtURL+"?ajax=1";	
+			var smtURL=smtURL+"?ajax=1&CSRFCode=[[::cateCSRFCode]]";	
 			var sVal=encodeURI("smt[aCateURLName]="+nList[0]+"&smt[aCateDispName]="+nList[1]);
 			$.post(smtURL, sVal, function(data) {
 				if (data.error==1) {
@@ -103,7 +103,7 @@ function saveCategoryChanges(smtURL) {
 		finalList+=encodeURI("smt["+cID+"]="+$("#"+"adminSCLine-"+cID).html()+"&");
 	});
 
-	var smtURL=smtURL+"?ajax=1";	
+	var smtURL=smtURL+"?ajax=1&CSRFCode=[[::cateCSRFCode]]";	
 
 	$.post(smtURL, finalList, function(data) {
 		$("#UI-loading").fadeOut(200);

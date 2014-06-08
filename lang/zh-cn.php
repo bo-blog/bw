@@ -43,6 +43,9 @@ $conf['l'] = array(
 	'admin:sect:OtherServices' => '其他服务',
 	'admin:sect:Welcome' => '欢迎',
 	'admin:sect:SysInfo' => '系统资讯',
+	'admin:sect:InstalledExt' => '已安装扩展',
+ 	'admin:sect:InstallExt' => '安装扩展',
+	'admin:sect:ExtSafety' => '安全注意事项',
 
 	'admin:item:SiteName' => '网站名',
 	'admin:item:SiteURL' => '根网址',
@@ -72,6 +75,7 @@ $conf['l'] = array(
 	'admin:item:Links' => '友情链接管理',
 	'admin:item:SetTag' => '设置Tag',
 	'admin:item:TimeZone' => '设置时区',
+	'admin:item:NewExtDir' => '新插件所在目录',
 
 	'admin:opt:SimplifiedChinese' => '简体中文',
 	'admin:opt:English' => '英语',
@@ -81,6 +85,8 @@ $conf['l'] = array(
 	'admin:opt:Many' => '较多',
 	'admin:opt:Off' => '关闭',
 	'admin:opt:On' => '开启',
+	'admin:opt:Enable' => '启用',
+	'admin:opt:Disable' => '停用',
 
 	'admin:msg:SiteURL' => '例如：http://name.com/path。除非你知道在修改什么，请勿改动。',
 	'admin:msg:BlankPsw' => '不填即不修改',
@@ -111,6 +117,10 @@ $conf['l'] = array(
 	'admin:msg:Links' => '每行一个友情链接，格式为：网址=网站名',
 	'admin:msg:SetTag' => '用逗号分隔每个Tag',
 	'admin:msg:TimeZone' => '填写PHP支持的时区代码。点击<a href="http://www.php.net/manual/zh/timezones.php" target="_blank">这里</a>查询。',
+ 	'admin:msg:Hook' => '注册接口：',
+ 	'admin:msg:ExtStatus1' => '已启用',
+ 	'admin:msg:ExtStatus0' => '未启用',
+ 	'admin:msg:ExtSafety' => '未经测试的扩展插件可能会造成安全隐患。请在确保插件来源可信后方才安装。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',
@@ -122,6 +132,7 @@ $conf['l'] = array(
 	'admin:btn:Uploading' => '正在上传...',
 	'admin:btn:Sync' => '点击立刻将所有文章同步到七牛云存储（请先确保已保存了七牛设置）',
 	'admin:btn:Backup' => '点击立刻导出所有文章为一个压缩文件',
+	'admin:btn:NewExt' => '安装',
 
 	'admin:msg:NeedLogin' => '请先登录。',
 	'admin:msg:ChangeSaved' => '保存成功。',
@@ -135,6 +146,8 @@ $conf['l'] = array(
 	'admin:msg:CategoryNotEmpty' => '删除分类时该分类必须不含任何文章。',
 	'admin:msg:NoContent' => '该页尚不存在。',
 	'admin:msg:NoChangeID' => '不能更改已经存在文章的ID',
+	'admin:msg:CSRF' => '由于当前请求疑似来自伪造的网址，已被拒绝。',
+	'admin:msg:ExtNotFound' => '在指定的位置找不到有效的扩展插件。',
 
 	'admin:item:AtAGlance' => '网站概况一瞥',
 	'admin:item:xxArticles' => '篇文章',

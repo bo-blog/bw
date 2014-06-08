@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
 * 
 * @link http://bw.bo-blog.com
@@ -45,7 +45,7 @@ class bw {
 	public static function pageStat ($canonicalURL, $aID = false)
 	{
 		$canonicalURL = str_replace (self :: $conf['siteURL'], '', $canonicalURL);
-		DBTYPE=='MySQL' ? self :: $db -> dbExec ('INSERT IGNORE INTO statistics (pageURL, sNum) VALUES (?, 0)', array ($canonicalURL)) : self :: $db -> dbExec ('INSERT OR IGNORE INTO statistics (pageURL, sNum) VALUES (?, 0)', array ($canonicalURL));
+		DBTYPE == 'MySQL' ? self :: $db -> dbExec ('INSERT IGNORE INTO statistics (pageURL, sNum) VALUES (?, 0)', array ($canonicalURL)) : self :: $db -> dbExec ('INSERT OR IGNORE INTO statistics (pageURL, sNum) VALUES (?, 0)', array ($canonicalURL));
 		self :: $db -> dbExec ('UPDATE statistics SET sNum=sNUM+1, lastView=? WHERE pageURL=?', array (date ('Y-m-d H:i:s'), $canonicalURL));
 		if ($aID) {
 			self :: $db -> dbExec ('UPDATE articles SET aReads=aReads+1 WHERE aID=?', array ($aID));
@@ -78,6 +78,21 @@ class bw {
 				$aExtID :: init();
 			} 
 		} 
+	} 
+
+	public static function getAllExtensions ()
+	{
+		$extDataReturn = array ();
+		$extData = self :: $db -> getRows ('SELECT * FROM extensions ORDER BY extOrder DESC');
+		foreach ($extData as $aExt) {
+			$aExt['extDesc'] = @parse_ini_string ($aExt['extDesc']);
+			$aExt['extName'] = $aExt['extDesc']['name'];
+			$aExt['extIntro'] = $aExt['extDesc']['intro'];
+			$aExt['extAuthor'] = $aExt['extDesc']['author'];
+			$aExt['extURL'] = $aExt['extDesc']['url'];
+			$extDataReturn[$aExt['extID']] = $aExt;
+		} 
+		return $extDataReturn;
 	} 
 
 	public static function getSocialLinks ()
@@ -191,9 +206,8 @@ class bwArticle {
 			$qBind = array ($this -> listCate, $currentTitleStart, bw :: $conf['perPage']);
 		} else {
 			$qBind = array ($currentTitleStart, bw :: $conf['perPage']);
-		}
+		} 
 		$allTitles = bw :: $db -> getRows ($qStr, $qBind);
-	
 
 		if (count ($allTitles) < 1) {
 			stopError (bw :: $conf['l']['admin:msg:NoContent']);
@@ -516,19 +530,19 @@ class bwView {
 		$this -> outputContent = trim ($this -> modContent[$this -> masterMod]);
 		$this -> outputContent = preg_replace_callback ('/\[\[=(.+?)\]\]/', array($this, 'strInLang'), $this -> outputContent);
 		hook ('generateOutputDone', 'Execute', $this);
-	}
+	} 
 
 	private function passLoop ($param)
-	{
-		//print_r ($param);
+	{ 
+		// print_r ($param);
 		$return = '';
 		if (isset ($this -> passData[$param[1]])) {
 			foreach ($this -> passData[$param[1]] as $this -> loopEach) {
 				$return .= preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInLoop'), $param[2]);
-			}
-		}
+			} 
+		} 
 		return ($return);
-	}
+	} 
 
 	private function loadElement ($param)
 	{
@@ -539,16 +553,17 @@ class bwView {
 			include ("{$this->themeDir}/{$viewMod}.php");
 			$obContent = ob_get_clean ();
 			$obContent = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $obContent);
-		}
+		} 
 		return $obContent;
-	}
+	} 
 
-	private function commonParser ($text) {
+	private function commonParser ($text)
+	{
 		$text = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $text);
 		$text = preg_replace_callback ('/\[\[::loop, (.+?)\]\](.+?)\[\[::\/loop\]\]/s', array($this, 'passLoop'), $text);
 		$text = preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInTheme'), $text);
 		return $text;
-	}
+	} 
 
 	private function strInTheme ($param, $isLoop = false)
 	{
@@ -573,7 +588,7 @@ class bwView {
 			} 
 		} elseif (array_key_exists ($key, $this -> passData)) {
 			$return = $this -> passData[$key];
-		}
+		} 
 
 		if ($needWalk) {
 			$return = call_user_func (array($this, 'theme_' . $funcWalk), $funcParam, $return);
@@ -662,7 +677,7 @@ class bwView {
 
 	public function addHookIntoView ($hookInterface)
 	{
-		$return=hook ($hookInterface, 'Insert');
+		$return = hook ($hookInterface, 'Insert');
 		$return = $this -> commonParser ($return);
 		return $return;
 	} 
@@ -756,7 +771,7 @@ class bwView {
 	{
 		$text = hook ('safeConvert', 'Replace', $text);
 		return htmlspecialchars ($text, 'UTF-8');
-	}
+	} 
 
 	private function theme_formatTags ($format, $aTags)
 	{
@@ -764,19 +779,18 @@ class bwView {
 		$return = '';
 		if (count ($aAllTags) > 0) {
 			foreach ($aAllTags as $tagValue) {
-				$return.= str_replace (array ('[::tagValue]', '[::tagInURL]'), array ($tagValue, urlencode ($tagValue)),  $format);
-			}
+				$return .= str_replace (array ('[::tagValue]', '[::tagInURL]'), array ($tagValue, urlencode ($tagValue)), $format);
+			} 
 			$return = str_replace (array ('[::', ']'), array ('[[::', ']]'), $return);
 			$return = preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInTheme'), $return);
-		}
+		} 
 		return $return;
-	}
+	} 
 
 	private function theme_hasTags ($format, $aTags)
 	{
 		return $aTags ? $format : '';
 	} 
-
 } 
 
 class bwCanonicalization {
@@ -938,6 +952,26 @@ class bwAdmin {
 	{
 		$_SESSION['login-token'] = md5(bw :: $conf['siteKey'] . bw :: $conf['myIP']);
 	} 
+
+	public function getCSRFCode ($actionCode)
+	{
+		if (isset ($_SESSION['login-token'])) {
+			return substr (md5 (bw :: $conf['myIP'] . bw :: $conf['siteKey'] . $actionCode), 0, 8);
+		} else {
+			stopError (bw :: $conf['l']['admin:msg:NeedLogin']);
+		} 
+	} 
+
+	public function checkCSRFCode ($actionCode)
+	{
+		if (!isset ($_SESSION['login-token'])) {
+			stopError (bw :: $conf['l']['admin:msg:NeedLogin']);
+		} elseif (!isset ($_REQUEST['CSRFCode'])) {
+			stopError (bw :: $conf['l']['admin:msg:CSRF']);
+		} elseif (substr (md5 (bw :: $conf['myIP'] . bw :: $conf['siteKey'] . $actionCode), 0, 8) <> $_REQUEST['CSRFCode']) {
+			stopError (bw :: $conf['l']['admin:msg:CSRF']);
+		} 
+	} 
 } 
 
 function stopError ($errMsg)
@@ -1025,13 +1059,12 @@ function clearCache ($caID = false)
 	if ($caID) {
 		bw :: $db -> dbExec ('DELETE FROM cache WHERE caID=?', array ($caID));
 	} else {
-		if (DBTYPE=='MySQL') {
+		if (DBTYPE == 'MySQL') {
 			bw :: $db -> dbExec ('TRUNCATE TABLE cache');
-		}
-		else {
+		} else {
 			bw :: $db -> dbExec ('DROP TABLE cache');
 			bw :: $db -> dbExec ('CREATE TABLE cache (caID CHAR (32) PRIMARY KEY NOT NULL, caContent TEXT)');
-		}
+		} 
 	} 
 } 
 

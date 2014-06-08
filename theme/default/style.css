@@ -580,6 +580,15 @@ cursor: pointer;
 font-size: 16px;
 padding-left: 5px;
 }
+.extStatus1 {
+color: green;
+}
+.extStatus0 {
+color: red;
+}
+.adminArea article a {
+border: 0;
+}
 
 /* Forms */
 .inputLine {

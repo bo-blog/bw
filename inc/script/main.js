@@ -91,6 +91,10 @@ function lightboxImage (imgSrc) {
 
 
 function checkLogin (oj) {
+	if(window !=parent) {
+		parent.location=window.location.href;
+		return false;
+	}
 	var rootURL= $('.'+oj).data('adminurl');
 	var targetURL = rootURL+"?ajax=1";
 
@@ -99,24 +103,29 @@ function checkLogin (oj) {
 		targetURL=targetURL+"&mobileToken="+localStorage.mobileToken;
 	}
 
-
-	$.get(targetURL, function (data) {
-		if (data.error==1) { //Not log in
-			lightboxLoader (rootURL+"/login/");
-		}
-		else {
-			var cact=location.pathname;
-			if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php/")!=-1)
-			{
-				var aID=$('.'+oj).data('adminid');
-				window.location=rootURL+"/articles/modify/?aID="+aID;
+	$.ajax({
+		type: "GET",
+		url: targetURL,
+		success: function (data)
+		{
+			if (data.error==1) { //Not log in
+				lightboxLoader (rootURL+"/login/");
 			}
-			else
-			{
-				window.location=rootURL+"/dashboard/";
+			else {
+				var cact=location.pathname;
+				if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php/")!=-1)
+				{
+					var aID=$('.'+oj).data('adminid');
+					window.location=rootURL+"/articles/modify/?aID="+aID+"&CSRFCode="+data.returnMsg;
+				}
+				else
+				{
+					window.location=rootURL+"/dashboard/?CSRFCode="+data.returnMsg;
+				}
 			}
-		}
-	}, "json");
+		},
+		dataType: "json"
+	});
 }
 
 function doLogin (oj, rootURL) {
@@ -150,21 +159,22 @@ function doLogin (oj, rootURL) {
 			return false;
 		}
 		else {
+			var plusCode = data.returnMsg.split ('-');
 			if (isRem && window.localStorage)
 			{
 				localStorage.clear();
-				localStorage.mobileToken=data.returnMsg;
+				localStorage.mobileToken=plusCode[0];
 			}
 
 			var cact=location.pathname;
 			if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php/")!=-1)
 			{
 				var aID=$('.adminSign').data('adminid');
-				window.location=rootURL+"/articles/modify/?aID="+aID;
+				window.location=rootURL+"/articles/modify/?aID="+aID+"&CSRFCode="+plusCode[1];
 			}
 			else
 			{
-				window.location=rootURL+"/dashboard/";
+				window.location=rootURL+"/dashboard/?CSRFCode="+plusCode[1];
 			}
 		}
 	}, "json");

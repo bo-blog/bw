@@ -83,7 +83,7 @@ $("#admArticles").addClass("activeNav");
 
 </script>
 </form>
-<div id="adminUploadContainer" data-upurl="[[::siteURL]]/admin.php/articles/getqiniuuploadpart/">
+<div id="adminUploadContainer" data-upurl="[[::siteURL]]/admin.php/articles/getqiniuuploadpart/?CSRFCode=[[::upCSRFCode]]">
 [[::adminqiniuupload]][[::admincommonupload]]
 </div>
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;"></iframe>
@@ -143,7 +143,7 @@ function insertUpURLs (str)
 	$('#adminUpAdd').html("[[=admin:btn:AddPic]]");
 	var targetURL=$('#adminUploadContainer').data('upurl');
 
-	$.get(targetURL+"?ajax=1", function (data){
+	$.get(targetURL+"?ajax=1&CSRFCode=[[::upCSRFCode]]", function (data){
 		if (data.error!=1) {
 			$("#adminUploadContainer").html (data.returnMsg);
 		}
@@ -188,7 +188,7 @@ function saveArticle(formID, smtURL) {
 		$('#'+formID).attr("action", smtURL+pURL);
 		$('#'+formID).submit();
 		*/
-		$.post(smtURL+pURL+"?ajax=1", $('#'+formID).serialize(), function(data) {
+		$.post(smtURL+pURL+"?ajax=1&CSRFCode=[[::articleCSRFCode]]", $('#'+formID).serialize(), function(data) {
 			$("#UI-loading").fadeOut(200);
 			if (data.error==1) {
 				$("#adminPromptError").text (data.returnMsg);
@@ -218,7 +218,7 @@ function deleteArticle (smtURL)
 	if (confirm("[[=admin:msg:Delete]]"))
 	{
 		clearLeaveWarning ();
-		window.location=smtURL+"?aID="+$("#originID").val();
+		window.location=smtURL+"?aID="+$("#originID").val()+"&CSRFCode=[[::articleCSRFCode]]";
 	}
 }
 

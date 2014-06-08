@@ -44,6 +44,9 @@ $conf['l'] = array(
 	'admin:sect:OtherServices' => 'Other Services',
 	'admin:sect:Welcome' => 'Welcome',
 	'admin:sect:SysInfo' => 'System Info',
+	'admin:sect:InstalledExt' => 'Installed Extension',
+	'admin:sect:InstallExt' => 'Install Extension',
+	'admin:sect:ExtSafety' => 'Security Notice',
 
 	'admin:item:SiteName' => 'Website Name',
 	'admin:item:SiteURL' => 'Website Root URL',
@@ -73,6 +76,7 @@ $conf['l'] = array(
 	'admin:item:Links' => 'Link Manager',
 	'admin:item:SetTag' => 'Set Tags',
 	'admin:item:TimeZone' => 'Set Timezone',
+	'admin:item:NewExtDir' => 'New Extension Dir.',
 
 	'admin:opt:SimplifiedChinese' => 'Chinese (PRC)',
 	'admin:opt:English' => 'English',
@@ -82,6 +86,8 @@ $conf['l'] = array(
 	'admin:opt:Many' => 'Many',
 	'admin:opt:Off' => 'Off',
 	'admin:opt:On' => 'On',
+	'admin:opt:Enable' => 'Enable',
+	'admin:opt:Disable' => 'Disable',
 
 	'admin:msg:SiteURL' => 'Example: http://name.com/path. Do not change unless you know what you\'re doing.',
 	'admin:msg:BlankPsw' => 'Leave blank to keep the current password',
@@ -112,6 +118,10 @@ $conf['l'] = array(
 	'admin:msg:Links' => 'One link per line. Format: URL=Name',
 	'admin:msg:SetTag' => 'Separate each tag with a comma.',
 	'admin:msg:TimeZone' => 'Timezone code supported by PHP. <a href="http://www.php.net/manual/zh/timezones.php" target="_blank">Click here</a> for more details.',
+ 	'admin:msg:Hook' => 'Interface: ',
+ 	'admin:msg:ExtStatus1' => 'Enabled',
+ 	'admin:msg:ExtStatus0' => 'Disabled',
+ 	'admin:msg:ExtSafety' => 'Untested extensions might be harmful. Please ensure you only install extensions provided by trusted sources.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',
@@ -123,6 +133,7 @@ $conf['l'] = array(
 	'admin:btn:Uploading' => 'Uploading...',
 	'admin:btn:Sync' => 'Click to sync all articles to Qiniu Cloud Service NOW!',
 	'admin:btn:Backup' => 'Click to save the backup article data NOW!',
+	'admin:btn:NewExt' => 'Install',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',
@@ -136,6 +147,8 @@ $conf['l'] = array(
 	'admin:msg:CategoryNotEmpty' => 'You cannot delete a category that is not empty.',
 	'admin:msg:NoContent' => 'This page has not been created yet.',
 	'admin:msg:NoChangeID' => 'You cannot change the ID of an existing article.',
+	'admin:msg:CSRF' => 'Your request seems to be made from a deceptive source. The action is therefore prohibited.',
+	'admin:msg:ExtNotFound' => 'No extension found in that directory.',
 
 	'admin:item:AtAGlance' => 'Your website at a glance',
 	'admin:item:xxArticles' => 'articles',

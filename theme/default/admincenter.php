@@ -199,7 +199,7 @@ function saveConf(formID, smtURL) {
 	if (!stopSubmit)
 	{
 		$("#UI-loading").fadeIn(500);
-		$.post(smtURL+"?ajax=1", $('#'+formID).serialize(), function(data) {
+		$.post(smtURL+"?ajax=1&CSRFCode=[[::CSRFCode]]", $('#'+formID).serialize(), function(data) {
 			$("#UI-loading").fadeOut(200);
 			if (data.error==1) {
 				$("#adminPromptError").text (data.returnMsg);

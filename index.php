@@ -5,7 +5,7 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('DISABLE_CACHE', 0);
+define ('DISABLE_CACHE', 1);
 
 if (!defined ('P')) {
 	define ('P', './');

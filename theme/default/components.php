@@ -56,7 +56,7 @@ $parts['adminlogin']=<<<eot
 eot;
 
 $parts['admincommonupload']=<<<eot
-<form id="picForm" method="post" action="[[::siteURL]]/admin.php/articles/uploader/" target="execPicTarget" enctype="multipart/form-data">
+<form id="picForm" method="post" action="[[::siteURL]]/admin.php/articles/uploader/?CSRFCode=[[::upCSRFCode]]" target="execPicTarget" enctype="multipart/form-data">
 <input type="file" style="display: none; height: 1px;" name="uploadFile[]" id="uploadPicFile" multiple="true" />
 </form>
 eot;

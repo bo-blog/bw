@@ -43,7 +43,7 @@
 
 <h2><span class="icon-clock"></span> [[=admin:sect:OtherServices]]</h2>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:Backup]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/admin.php/services/backup/" target="_blank"><span class="icon-export"></span> [[=admin:btn:Backup]] </a></span>
+<span class="icon-arrow-right5"></span> [[=admin:item:Backup]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/admin.php/services/backup/?CSRFCode=[[::serviceCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:Backup]] </a></span>
 </p>
 <p class="adminCommand"><br/>
 <button type="button" class="buttonLine" id="btnSubmit" onclick="saveConf('smtForm', '[[::siteURL]]/admin.php/services/store/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
@@ -99,7 +99,7 @@ goQiniuUpload();
 
 function saveConf(formID, smtURL) {
 	$("#UI-loading").fadeIn(500);
-	$.post(smtURL+"?ajax=1", $('#'+formID).serialize(), function(data) {
+	$.post(smtURL+"?ajax=1&CSRFCode=[[::serviceCSRFCode]]", $('#'+formID).serialize(), function(data) {
 		$("#UI-loading").fadeOut(200);
 		if (data.error==1) {
 			$("#adminPromptError").text (data.returnMsg);
