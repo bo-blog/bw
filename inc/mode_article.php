@@ -19,7 +19,7 @@ $view = new bwView;
 $view -> setPageTitle ($article -> articleList[$canonical -> currentArgs['aID']]['aTitle']);
 $view -> setActiveNav ($article -> articleList[$canonical -> currentArgs['aID']]['aCateURLName']);
 $view -> setPassData ($article -> articleList[$canonical -> currentArgs['aID']]);
-$view -> setPassData (array ('navigation' => bw :: $cateList, 'sociallink' => bw :: getSocialLinks (), 'externallink' => bw :: getExternalLinks ()));
+$view -> setPassData (array ('navigation' => bw :: $cateList, 'sociallink' => bw :: getSocialLinks (), 'externallink' => bw :: getExternalLinks (), 'tagClound' => bw :: getTagCloud ()));
 $view -> setMaster ('page');
 $view -> setWorkFlow (array ('article', 'page'));
 $view -> finalize ();

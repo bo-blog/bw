@@ -29,7 +29,7 @@ if (defined ('ajax')) {
 	$view -> setMaster ('ajax-article-list');
 	$view -> setWorkFlow (array ('summary', 'ajax-article-list'));
 } else {
-	$view -> setPassData (array ('navigation' => bw :: $cateList, 'sociallink' => bw :: getSocialLinks (), 'externallink' => bw :: getExternalLinks ()));
+	$view -> setPassData (array ('navigation' => bw :: $cateList, 'sociallink' => bw :: getSocialLinks (), 'externallink' => bw :: getExternalLinks (), 'tagClound' => bw :: getTagCloud ()));
 	$view -> setMaster ('page');
 	$view -> setWorkFlow (array ('summary', 'page'));
 } 

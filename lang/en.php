@@ -2,6 +2,7 @@
 $conf['l'] = array(
 	'page:code' => 'en',
 	'page:Home' => 'Home',
+	'page:Navigation' => 'Navigation',
 	'page:Admin' => 'Admin',
 	'page:Connect' => 'Connect',
 	'page:Links' => 'Links',
@@ -22,6 +23,8 @@ $conf['l'] = array(
 	'page:MobileRem' => 'This is my personal mobile device.',
 	'page:MobileRem2' => 'Remember my login status.',
 	'page:Tags' => 'Tag',
+	'page:NextPage' => 'Next Page',
+	'page:PrevPage' => 'Previous Page',
 
 	'js:RememberFail' => 'System will not remember your login status because the browser is working in Private Browsing mode.',
 	'js:AjaxFail' => 'An error occurs in Ajax communication.',
@@ -47,6 +50,7 @@ $conf['l'] = array(
 	'admin:sect:InstalledExt' => 'Installed Extension',
 	'admin:sect:InstallExt' => 'Install Extension',
 	'admin:sect:ExtSafety' => 'Security Notice',
+	'admin:sect:CustomizedHTML' => 'Customized HTML',
 
 	'admin:item:SiteName' => 'Website Name',
 	'admin:item:SiteURL' => 'Website Root URL',
@@ -77,6 +81,8 @@ $conf['l'] = array(
 	'admin:item:SetTag' => 'Set Tags',
 	'admin:item:TimeZone' => 'Set Timezone',
 	'admin:item:NewExtDir' => 'New Extension Dir.',
+	'admin:item:Cache' => 'Cache Frontend Contents',
+	'admin:item:CustomizedHTML' => 'Customized HTML',
 
 	'admin:opt:SimplifiedChinese' => 'Chinese (PRC)',
 	'admin:opt:English' => 'English',
@@ -122,18 +128,30 @@ $conf['l'] = array(
  	'admin:msg:ExtStatus1' => 'Enabled',
  	'admin:msg:ExtStatus0' => 'Disabled',
  	'admin:msg:ExtSafety' => 'Untested extensions might be harmful. Please ensure you only install extensions provided by trusted sources.',
+	'admin:msg:Cache' => 'Cached pages will be displayed without pre-process. Only turn off for debug use.',
+	'admin:msg:CustomizedHTML' => 'Insert customized HTML codes to interface hooks.',
+	'admin:msg:HookHTMLHead' => 'Insert code into area between &lt;head&gt; and &lt;/head&gt;.',
+	'admin:msg:HookHeader' => 'Insert code into the &lt;header&gt; area on the top.',
+	'admin:msg:HookIntro' => 'Insert code into the author introduction area.',
+	'admin:msg:HookMainAreaEnd' => 'Insert code into where the main content area ends.',
+	'admin:msg:HookFooter' => 'Insert code into the &lt;footer&gt; area at the bottom.',
+	'admin:msg:HookBeforeEnd' => 'Insert code into where the &lt;body&gt; ends.',
+	'admin:msg:HookSummaryDetail' => 'Insert code into where the article summary ends.',
+	'admin:msg:HookArticleDetail' => 'Insert code into where the full article ends.',
+	'admin:msg:HookCommentArea' => 'Insert code into the comment area.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',
 	'admin:btn:NewArticle' => 'New Article',
 	'admin:btn:NewCate' => 'New',
 	'admin:btn:Add' => 'Add',
-	'admin:btn:AddPic' => 'Add Pictures',
+	'admin:btn:AddPic' => 'Pictures',
 	'admin:btn:Delete' => 'Delete',
 	'admin:btn:Uploading' => 'Uploading...',
 	'admin:btn:Sync' => 'Click to sync all articles to Qiniu Cloud Service NOW!',
 	'admin:btn:Backup' => 'Click to save the backup article data NOW!',
 	'admin:btn:NewExt' => 'Install',
+	'admin:btn:GeoLoc' => 'Location',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',
@@ -162,5 +180,6 @@ $conf['l'] = array(
 	'admin:item:BackHome' => 'Go to your homepage',
 	'admin:item:MostPopular' => 'Most popular articles',
 	'admin:item:RecentView' => 'Recently viewed pages',
+	'admin:item:InterfaceName' => 'Interface Hook: ',
 
 	);

@@ -50,6 +50,7 @@
 <button type="button" class="buttonLine" onclick="window.location=window.location;"><span class="icon-ccw"></span></button> [[=admin:btn:Restore]]
 <p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
 </p>
+[[::ext_adminServices]]
 
 <script type="text/javascript">
 
@@ -116,4 +117,4 @@ function saveConf(formID, smtURL) {
 </form>
 
 </div>
-
+[[::ext_adminServicesEnding]]

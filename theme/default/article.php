@@ -23,6 +23,7 @@ if (!defined ('P')) {
 [[::aContent, formatText, full]]
 </div>
 [[::aTags, hasTags, <h3 class="tagsRow"><span class="icon-tag"></span>]] [[::aTags, formatTags, <span class="oneTag"><a href="[::siteURL]/[::linkPrefixTag]/[::tagInURL]/">[::tagValue]</a></span>]][[::aTags, hasTags, </h3>]]
+[[::ext_articleDetail]]
 </article>
 
 
@@ -44,6 +45,6 @@ var duoshuoQuery = {short_name:"[[::duoshuoID]]"};
 $("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/theme/default/duoshuo.css"}).appendTo("head");
 </script>
 <!-- Duoshuo JS end -->
-
+[[::ext_commentArea]]
 
 </div>

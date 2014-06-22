@@ -10,48 +10,14 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:ATitle]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTitle]" value="[[::aTitle]]" id="aTitle" />
 </p>
-<script type="text/javascript">
 
-window.onbeforeunload=function (){
-	return  ("[[=admin:msg:LeaveConfirm]]");
-};
-
-function clearLeaveWarning () {
-	window.onbeforeunload=null;
-}
-
-$("#aTitle").blur(function() {
-	if ($("#aTitle").val()=='')
-	{
-		$("#aTitle").addClass("inputLineWarn");
-	}
-	$("#aTitle").click(function() {
-		$("#aTitle").removeClass("inputLineWarn");
-	});
-});
-</script>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:AID]]<br/><input type="text" class="inputLine inputLarge" name="smt[aID]" value="[[::aID]]" placeholder="[[=admin:msg:AID]]" id="aID" /><br/><span class="adminExplain">[[=admin:msg:AID2]]</span>
 </p>
-<script type="text/javascript">
-$("#aID").blur(function() {
-	if ($("#aID").val()=='')
-	{
-		$("#aID").addClass("inputLineWarn");
-	}
-	$("#aID").click(function() {
-		$("#aID").removeClass("inputLineWarn");
-	});
-});
-</script>
+
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:AContent]] <span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a></span><br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea>
+<span class="icon-arrow-right5"></span> [[=admin:item:AContent]] <span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> <a href="##" id="adminGeoLoc"><span class="icon-location"> </span><span id="adminGeoLocAdd">[[=admin:btn:GeoLoc]]</span></a></span><br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea>
 </p>
-<script type="text/javascript">
-$("#adminUploader").click(function() {
-	$("#uploadPicFile").click();
-});
-</script>
 
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:SetTag]]<br/><input type="text" id='eTags' class="inputLine inputLarge" name="smt[aTags]" value="[[::aTags]]" placeholder="[[=admin:msg:SetTag]]" /><div id="taghint"></div></p>
@@ -63,14 +29,10 @@ $("#adminUploader").click(function() {
 </select>
 </p>
 <script type="text/javascript">
-if ("[[::aCateURLName]]")
-{
-	$("#aCateURLName").val("[[::aCateURLName]]");
-}
 </script>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" /></p>
 
+<span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" /></p>
 
 <p class="adminCommand"><br/>
 <button type="button" class="buttonLine" id="btnSubmit" onclick="saveArticle('smtForm', '[[::siteURL]]/admin.php/articles/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
@@ -78,16 +40,58 @@ if ("[[::aCateURLName]]")
 <span id="btnDel"><button type="button" class="buttonLine" onclick="deleteArticle('[[::siteURL]]/admin.php/articles/delete/');"><span class="icon-cross"></span></button> <span style="color: #FF2626">[[=admin:btn:Delete]]</span></span>
 <p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
 </p>
-<script type="text/javascript">
-$("#admArticles").addClass("activeNav");
-
-</script>
+[[::ext_adminWriter]]
 </form>
 <div id="adminUploadContainer" data-upurl="[[::siteURL]]/admin.php/articles/getqiniuuploadpart/?CSRFCode=[[::upCSRFCode]]">
 [[::adminqiniuupload]][[::admincommonupload]]
 </div>
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;"></iframe>
 <script type="text/javascript">
+$("#admArticles").addClass("activeNav");
+
+$("#aID").blur(function() {
+	if ($("#aID").val()=='')
+	{
+		$("#aID").addClass("inputLineWarn");
+	}
+	$("#aID").click(function() {
+		$("#aID").removeClass("inputLineWarn");
+	});
+});
+
+function setLeaveWarning () {
+	window.onbeforeunload=function (){
+		return  ("[[=admin:msg:LeaveConfirm]]");
+	};
+}
+
+function clearLeaveWarning () {
+	window.onbeforeunload=null;
+}
+
+$("#adminUploader").click(function() {
+	$("#uploadPicFile").click();
+});
+
+if ("[[::aCateURLName]]")
+{
+	$("#aCateURLName").val("[[::aCateURLName]]");
+}
+
+$("#aTitle").blur(function() {
+	if ($("#aTitle").val()=='')
+	{
+		$("#aTitle").addClass("inputLineWarn");
+	}
+	$("#aTitle").click(function() {
+		$("#aTitle").removeClass("inputLineWarn");
+	});
+});
+
+$("#aContent").click (function () {
+	setLeaveWarning ();
+});
+
 $(function() {
 	(function($) {
 		$.fn
@@ -196,9 +200,9 @@ function saveArticle(formID, smtURL) {
 				$('#eTags').val('');
 			}
 			else {
+				clearLeaveWarning ();
 				if ($("#originID").val()=='')
 				{
-					clearLeaveWarning ();
 					window.location="[[::siteURL]]/[[::linkPrefixArticle]]/"+$("#aID").val()+"/";
 				}
 				else
@@ -259,7 +263,30 @@ if ($("#aID").val())
 	$("#aID").attr ('readonly', 'readonly');
 }
 
+$("#adminGeoLoc").click(function() {
+	var URLSrc="http://api.map.baidu.com/geocoder/v2/?ak=NTbCXsEXUnd2BczNRlVdOBGP&output=json&pois=0&callback=insertGeoLoc&location=";
+
+	if(navigator.geolocation){
+		navigator.geolocation.getCurrentPosition (
+			function(p){
+				var latitude = p.coords.latitude;
+				var longitude = p.coords.longitude;
+				URLSrc=URLSrc+latitude+','+longitude;
+				$("<sc"+"ript>"+"</sc"+"ript>").attr({src: URLSrc}).appendTo("head");
+			},
+			function(e){
+				var msg = e.code+"\n"+e.message;
+			}
+		);
+	}
+});
+
+function insertGeoLoc (data) {
+	var str="\r\n\r\n!~!"+data.result.business+' ('+data.result.addressComponent.city+' '+data.result.addressComponent.district+")[location]";
+	$('#aContent').insertContent (str);
+}
+
 </script>
 
 </div>
-
+[[::ext_adminWriterEnding]]

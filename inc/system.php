@@ -98,11 +98,12 @@ class bw {
 	public static function getSocialLinks ()
 	{
 		$allSocial = array('sina-weibo', 'weixin', 'douban', 'instagram', 'renren', 'linkedin');
+		$allSocialNames = array(self :: $conf['l']['page:social:Weibo'], self :: $conf['l']['page:social:WeChat'], self :: $conf['l']['page:social:Douban'], self :: $conf['l']['page:social:Instagram'], self :: $conf['l']['page:social:Renren'], self :: $conf['l']['page:social:Linkedin']);
 		$allSocialLinks = array();
-		foreach ($allSocial as $aSocial) {
-			if (isset (bw :: $conf['social-' . $aSocial])) {
-				if (bw :: $conf['social-' . $aSocial]) {
-					$allSocialLinks[] = array ('socialLinkID' => $aSocial, 'socialLinkURL' => bw :: $conf['social-' . $aSocial]);
+		foreach ($allSocial as $i => $aSocial) {
+			if (isset (self :: $conf['social-' . $aSocial])) {
+				if (self :: $conf['social-' . $aSocial]) {
+					$allSocialLinks[] = array ('socialLinkID' => $aSocial, 'socialLinkURL' => self :: $conf['social-' . $aSocial], 'socialLinkName' => $allSocialNames[$i]);
 				} 
 			} 
 		} 
@@ -112,13 +113,19 @@ class bw {
 	public static function getExternalLinks ()
 	{
 		$allLinks = $allLinks2 = array();
-		if (isset (bw :: $conf['externalLinks'])) {
-			$allLinks = parse_ini_string (bw :: $conf['externalLinks']);
+		if (isset (self :: $conf['externalLinks'])) {
+			$allLinks = parse_ini_string (self :: $conf['externalLinks']);
 		} 
 		foreach ($allLinks as $linkURL => $linkName) {
 			$allLinks2[] = array ('linkURL' => $linkURL, 'linkName' => $linkName);
 		} 
 		return $allLinks2;
+	} 
+
+	public static function getTagCloud ($num=20)
+	{
+		$allTags = self :: $db -> getRows ('SELECT * FROM tags ORDER BY tCount DESC LIMIT 0, ?', array(floor ($num)));
+		return $allTags;
 	} 
 } 
 
@@ -201,44 +208,27 @@ class bwArticle {
 	{
 		$currentTitleStart = ($this -> pageNum-1) * bw :: $conf['perPage'];
 
-		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? ORDER BY aTime DESC LIMIT ?, ?';
+		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>0 AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?';
 		if ($this -> listCate != 'all') {
-			$qBind = array ($this -> listCate, $currentTitleStart, bw :: $conf['perPage']);
+			$qBind = array ($this -> listCate, date ('Y-m-d H:i:s'), $currentTitleStart, bw :: $conf['perPage']);
 		} else {
-			$qBind = array ($currentTitleStart, bw :: $conf['perPage']);
+			$qBind = array (date ('Y-m-d H:i:s'), $currentTitleStart, bw :: $conf['perPage']);
 		} 
 		$allTitles = bw :: $db -> getRows ($qStr, $qBind);
 
-		if (count ($allTitles) < 1) {
-			stopError (bw :: $conf['l']['admin:msg:NoContent']);
-		} 
-
-		foreach ($allTitles as $aID => $row) {
-			$this -> articleList[$aID] = $row;
-			$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$row['aCateURLName']];
-			$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $row['aTags']), 'tagValue');
-		} 
-
+		$this -> parseArticleList ($allTitles);
 		hook ('getArticleList', 'Execute', $this);
 		$this -> getTotalArticles ();
 	} 
 
 	public function getHottestArticles ($howMany)
 	{
-		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles ORDER BY aReads DESC LIMIT 0, ' . $howMany : 'SELECT * FROM articles WHERE aCateURLName=:aCateURLName ORDER BY aReads DESC LIMIT 0, ' . $howMany;
-		$qBind = $this -> listCate == 'all' ? array() : array(':aCateURLName' => $this -> listCate);
+		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>0 AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany;
+		$qBind = $this -> listCate == 'all' ? array(date ('Y-m-d H:i:s')) : array($this -> listCate, date ('Y-m-d H:i:s'));
 
 		$allTitles = bw :: $db -> getRows ($qStr, $qBind);
 
-		if (count ($allTitles) < 1) {
-			stopError (bw :: $conf['l']['admin:msg:NoContent']);
-		} 
-
-		foreach ($allTitles as $aID => $row) {
-			$this -> articleList[$aID] = $row;
-			$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$row['aCateURLName']];
-			$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $row['aTags']), 'tagValue');
-		} 
+		$this -> parseArticleList ($allTitles);
 		hook ('getHottestArticles', 'Execute', $this);
 		$this -> getTotalArticles ();
 	} 
@@ -253,14 +243,9 @@ class bwArticle {
 
 		$allIDs = str_replace (']', '', substr ($tagList['tList'], 1));
 
-		$allTitles = bw :: $db -> getRows ("SELECT * FROM articles WHERE aID IN ({$allIDs}) ORDER BY aTime DESC LIMIT :currentTitleStart, :perPage", array (':currentTitleStart' => $currentTitleStart, ':perPage' => bw :: $conf['perPage']));
+		$allTitles = bw :: $db -> getRows ("SELECT * FROM articles WHERE aID IN ({$allIDs})  AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?", array (date ('Y-m-d H:i:s'), $currentTitleStart, bw :: $conf['perPage']));
 
-		foreach ($allTitles as $aID => $row) {
-			$this -> articleList[$aID] = $row;
-			$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$row['aCateURLName']];
-			$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $row['aTags']), 'tagValue');
-		} 
-
+		$this -> parseArticleList ($allTitles);
 		hook ('getArticleListByTag', 'Execute', $this);
 		$this -> totalArticles = $tagList['tCount'];
 	} 
@@ -413,12 +398,26 @@ class bwArticle {
 		} 
 	} 
 
+	private function parseArticleList ($allTitles) 
+	{
+		if (count ($allTitles) < 1) {
+			stopError (bw :: $conf['l']['admin:msg:NoContent']);
+		} 
+
+		foreach ($allTitles as $aID => $row) {
+			$this -> articleList[$aID] = $row;
+			$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$row['aCateURLName']];
+			$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $row['aTags']), 'tagValue');
+		} 
+	} 
+
+
 	private function getTotalArticles ()
 	{
 		if ($this -> listCate == 'all') {
-			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles');
+			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName<>0 AND aTime<=?', array (date ('Y-m-d H:i:s')));
 		} else {
-			$this -> totalArticles = bw :: $cateList[$this -> listCate]['aCateCount'];
+			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName=? AND aTime<=?', array (bw :: $this -> listCate, date ('Y-m-d H:i:s')));
 		} 
 		hook ('getTotalArticles', 'Execute', $this);
 	} 
@@ -438,7 +437,7 @@ class bwArticle {
 			$acceptedKeys[] = 'originID';
 		} 
 		$smt = dataFilter ($acceptedKeys, $smt);
-		if (empty ($smt['aTitle']) || empty ($smt['aID']) || empty ($smt['aContent']) || empty ($smt['aCateURLName'])) {
+		if (empty ($smt['aTitle']) || $smt['aID']==='' || empty ($smt['aContent']) || $smt['aCateURLName']==='') {
 			stopError (bw :: $conf['l']['admin:msg:NoData']);
 		} 
 		if (!array_key_exists ($smt['aCateURLName'], bw :: $cateData)) {
@@ -464,7 +463,7 @@ class bwView {
 	private $passData;
 	private $masterMod;
 	private $loopEach;
-	private $markdownParser;
+	public static $markdownParser;
 	private $themeInternal;
 
 	public function __construct ()
@@ -473,7 +472,7 @@ class bwView {
 		$this -> viewWorkFlow = $this -> modContent = $this -> loopData = $this -> loopEach = $this -> themeInternal = $this -> parts = $this -> viewHooks = $this -> passData = array();
 		$this -> outputContent = $this -> masterMod = '';
 		$this -> markdownParser = null;
-		$this -> themeDir = P . 'theme/default';
+		$this -> setTheme ($conf['siteTheme']);
 		$this -> passData['pageTitle'] = '';
 	} 
 
@@ -506,10 +505,11 @@ class bwView {
 
 	public function generateOutput ()
 	{
+		include_once (P . "theme/default/components.php");
 		if (file_exists ($this -> themeDir . "/components.php")) {
 			include_once ($this -> themeDir . "/components.php");
-			$this -> parts = (count($this -> parts)) ? $this -> parts : $parts;
 		} 
+		$this -> parts = (count($this -> parts)) ? $this -> parts : $parts;
 
 		hook ('generateOutputInit', 'Execute', $this);
 
@@ -521,13 +521,17 @@ class bwView {
 				$obContent = ob_get_clean ();
 			} elseif (array_key_exists ($viewMod, $this -> parts)) {
 				$obContent = $this -> parts[$viewMod];
+			} elseif (file_exists (P . "theme/default/{$viewMod}.php")) {
+				ob_start ();
+				include (P . "theme/default/{$viewMod}.php");
+				$obContent = ob_get_clean ();
 			} else {
 				continue;
 			} 
 			// load looped data
 			$this -> modContent[$viewMod] = $this -> commonParser ($obContent);
 		} 
-		$this -> outputContent = trim ($this -> modContent[$this -> masterMod]);
+		$this -> outputContent = trim (@$this -> modContent[$this -> masterMod] ?: '');
 		$this -> outputContent = preg_replace_callback ('/\[\[=(.+?)\]\]/', array($this, 'strInLang'), $this -> outputContent);
 		hook ('generateOutputDone', 'Execute', $this);
 	} 
@@ -551,9 +555,14 @@ class bwView {
 		if (in_array ($viewMod, $this -> viewWorkFlow) && file_exists ("{$this->themeDir}/{$viewMod}.php")) {
 			ob_start ();
 			include ("{$this->themeDir}/{$viewMod}.php");
-			$obContent = ob_get_clean ();
-			$obContent = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $obContent);
-		} 
+		} elseif (in_array ($viewMod, $this -> viewWorkFlow) && file_exists (P. "theme/default/{$viewMod}.php")) {
+			ob_start ();
+			include (P. "theme/default/{$viewMod}.php");
+		} else {
+			return $obContent;
+		}
+		$obContent = ob_get_clean ();
+		$obContent = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $obContent);
 		return $obContent;
 	} 
 
@@ -578,7 +587,7 @@ class bwView {
 		} 
 		if (array_key_exists ($key, $this -> modContent)) {
 			$return = $this -> modContent[$key];
-		} elseif (array_key_exists ($key, bw :: $conf)) {
+		} elseif (array_key_exists ($key, bw :: $conf) && $key <> 'siteKey') {
 			$return = bw :: $conf[$key];
 		} elseif (strpos ($key, 'ext_') === 0) {
 			$return = $this -> addHookIntoView (str_replace ('ext_', '', $key));
@@ -607,7 +616,7 @@ class bwView {
 		if (array_key_exists ($key, bw :: $conf['l'])) {
 			return bw :: $conf['l'][$key];
 		} 
-		return '';
+		return "Unknown string: $key";
 	} 
 
 	public function doPagination ()
@@ -677,7 +686,11 @@ class bwView {
 
 	public function addHookIntoView ($hookInterface)
 	{
-		$return = hook ($hookInterface, 'Insert');
+		if (!isset ($this -> themeInternal['insert_'.$hookInterface])) 
+		{
+			$this -> themeInternal['insert_'.$hookInterface]=@file_get_contents (P. 'conf/insert_'. basename ($hookInterface). '.htm');
+		} 
+		$return = hook ($hookInterface, 'Insert'). $this -> themeInternal['insert_'.$hookInterface];
 		$return = $this -> commonParser ($return);
 		return $return;
 	} 
@@ -724,11 +737,6 @@ class bwView {
 
 	private function theme_formatText ($mode, $text)
 	{
-		if (!is_object ($this -> markdownParser)) {
-			include_once (P . 'inc/parsedown.php');
-			$this -> markdownParser = new Parsedown();
-		} 
-
 		if ($mode == 'less') {
 			$textcutter = strpos ($text, '+++');
 			if ($textcutter === false) {
@@ -741,15 +749,7 @@ class bwView {
 			$text = str_replace ('+++', '<a name="more"></a>', $text);
 		} 
 
-		$text = $this -> markdownParser -> text ($text); 
-		// Start customized markdown
-		// xiami music loader
-		$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text); 
-		// Youku loader
-		$text = preg_replace ("/!~!(.+?)\[youku\]/", "<iframe src=\"http://player.youku.com/embed/$1\"  frameborder='0' class=\"videoFrame\"></iframe>", $text); 
-		// !!URL = music
-		$text = preg_replace ("/!!<a href=\"(.+?)\">(.+?)<\/a>/", "<audio controls><source src=\"$1\" type=\"audio/mpeg\">Your browser does not support the audio element.</audio>", $text);
-		$text = hook ('textParser', 'Replace', $text);
+		$text = $this -> textFormatter ($text); 
 		return $text;
 	} 
 
@@ -791,6 +791,26 @@ class bwView {
 	{
 		return $aTags ? $format : '';
 	} 
+
+	public static function textFormatter ($text)
+	{
+		if (!is_object (self :: $markdownParser)) {
+			include_once (P . 'inc/parsedown.php');
+			self :: $markdownParser = new Parsedown();
+		} 
+		$text = self :: $markdownParser -> text ($text); 
+		// Start customized markdown
+		// xiami music loader
+		$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text); 
+		// Youku loader
+		$text = preg_replace ("/!~!(.+?)\[youku\]/", "<iframe src=\"http://player.youku.com/embed/$1\"  frameborder='0' class=\"videoFrame\"></iframe>", $text); 
+		// Geolocation from Baidu
+		$text = preg_replace ("/!~!(.+?)\[location\]/", "<span class=\"icon-location geoLocator\"></span> <span class=\"geoLocator\">$1</span>", $text); 
+		// !!URL = music
+		$text = preg_replace ("/!!<a href=\"(.+?)\">(.+?)<\/a>/", "<audio controls><source src=\"$1\" type=\"audio/mpeg\">Your browser does not support the audio element.</audio>", $text);
+		$text = hook ('textParser', 'Replace', $text);
+		return $text;
+	}
 } 
 
 class bwCanonicalization {
@@ -834,6 +854,10 @@ class bwCanonicalization {
 				$this -> argsPattern = array ('mainAction', 'subAction', 'pageNum');
 				$this -> loaderID = 'admin';
 				break;
+			/*case 'page':
+				$this -> argsPattern = array ('aID');
+				$this -> loaderID = 'article';
+				break;*/
 			default:
 				$this -> loaderID = 'error';
 				stopError ('Requested mode does not exist.');
@@ -866,7 +890,7 @@ class bwCanonicalization {
 		} 
 
 		$this -> cache = false;
-		if (DISABLE_CACHE == 0) {
+		if (bw :: $conf['pageCache'] == '1') {
 			if (M == 'index' || M == 'article') {
 				$plusAjax = defined ('ajax') ? 'ajax' : 'page';
 				$cacheKey = md5 ($this -> canonicalURL . $plusAjax);
@@ -906,7 +930,25 @@ class bwCanonicalization {
 	{
 		$this -> totalPages = ceil ($totalNum / $this -> perPage);
 	} 
-} 
+
+	public function loader ()
+	{
+		if ($this -> cache) { // Cached content: direct output
+			if (!defined ('ajax')) {
+				die ($this -> cache);
+			} else {
+				die (json_encode (array ('error' => 0, 'returnMsg' => $this -> cache)));
+			} 
+		} else {
+			hook ('newIndexPage', 'Execute', $this);
+
+			if (!file_exists (P . "inc/mode_{$this -> loaderID}.php")) {
+				stopError ("Invalid parameter.");
+			} 
+			return P . "inc/mode_{$this -> loaderID}.php";
+		} 
+	} 
+}
 
 class bwAdmin {
 	private $conf;

@@ -2,6 +2,7 @@
 $conf['l'] = array(
 	'page:code' => 'zh-CN',
 	'page:Home' => '首页',
+	'page:Navigation' => '导航',
 	'page:Admin' => '管理',
 	'page:Connect' => '关注',
 	'page:Links' => '友情链接',
@@ -20,7 +21,9 @@ $conf['l'] = array(
 	'page:social:Linkedin' => 'LinkedIn',
 	'page:MobileRem' => '这是我的个人移动设备。',
 	'page:MobileRem2' => '请记住我的登录状态。',
-	'page:Tags' => 'Tag',
+	'page:Tags' => '标签',
+	'page:NextPage' => '下页',
+	'page:PrevPage' => '上页',
 
 	'js:RememberFail' => '无法记住您的登录状态，因为当前浏览器工作在私密浏览模式下。',
 	'js:AjaxFail' => 'Ajax通讯错误。',
@@ -46,6 +49,7 @@ $conf['l'] = array(
 	'admin:sect:InstalledExt' => '已安装扩展',
  	'admin:sect:InstallExt' => '安装扩展',
 	'admin:sect:ExtSafety' => '安全注意事项',
+	'admin:sect:CustomizedHTML' => '自定义HTML',
 
 	'admin:item:SiteName' => '网站名',
 	'admin:item:SiteURL' => '根网址',
@@ -76,6 +80,8 @@ $conf['l'] = array(
 	'admin:item:SetTag' => '设置Tag',
 	'admin:item:TimeZone' => '设置时区',
 	'admin:item:NewExtDir' => '新插件所在目录',
+	'admin:item:Cache' => '前台缓存',
+	'admin:item:CustomizedHTML' => '自定义HTML',
 
 	'admin:opt:SimplifiedChinese' => '简体中文',
 	'admin:opt:English' => '英语',
@@ -121,6 +127,17 @@ $conf['l'] = array(
  	'admin:msg:ExtStatus1' => '已启用',
  	'admin:msg:ExtStatus0' => '未启用',
  	'admin:msg:ExtSafety' => '未经测试的扩展插件可能会造成安全隐患。请在确保插件来源可信后方才安装。',
+	'admin:msg:Cache' => '已缓存页面将直接输出无需解析。建议仅在调试模板和插件时禁用。',
+	'admin:msg:CustomizedHTML' => '将自定义的HTML代码插入到程序开放的接口。',
+	'admin:msg:HookHTMLHead' => '此接口用于在 &lt;head&gt; 与 &lt;/head&gt; 之间插入代码。',
+	'admin:msg:HookHeader' => '此接口用于在页面顶部 &lt;header&gt; 区域插入代码。',
+	'admin:msg:HookIntro' => '此接口用于在页面作者介绍区域插入代码。',
+	'admin:msg:HookMainAreaEnd' => '此接口用于在主要内容区域结束前插入代码。',
+	'admin:msg:HookFooter' => '此接口用于在页面底部 &lt;footer&gt; 区域插入代码。',
+	'admin:msg:HookBeforeEnd' => '此接口用于在页面 &lt;body&gt; 结束前插入代码。',
+	'admin:msg:HookSummaryDetail' => '此接口用于在文章概览结束前插入代码。',
+	'admin:msg:HookArticleDetail' => '此接口用于在全文结束前插入代码。',
+	'admin:msg:HookCommentArea' => '此接口用于在评论区内插入代码。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',
@@ -133,6 +150,7 @@ $conf['l'] = array(
 	'admin:btn:Sync' => '点击立刻将所有文章同步到七牛云存储（请先确保已保存了七牛设置）',
 	'admin:btn:Backup' => '点击立刻导出所有文章为一个压缩文件',
 	'admin:btn:NewExt' => '安装',
+	'admin:btn:GeoLoc' => '插入位置',
 
 	'admin:msg:NeedLogin' => '请先登录。',
 	'admin:msg:ChangeSaved' => '保存成功。',
@@ -161,5 +179,6 @@ $conf['l'] = array(
 	'admin:item:BackHome' => '前往主页',
 	'admin:item:MostPopular' => '最多浏览文章',
 	'admin:item:RecentView' => '最近被访问的页面',
+	'admin:item:InterfaceName' => '接口： ',
 
 	);

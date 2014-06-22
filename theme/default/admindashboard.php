@@ -41,10 +41,8 @@
 <span class="icon-arrow-right5"></span> [[::serverInfo]]<br/>
 <span class="icon-arrow-right5"></span> PHP Version [[::PHPVersion]]
 </div>
-
+[[::ext_adminDashboard]]
 <script type="text/javascript">
-
-
-
 $("#admPanel").addClass("activeNav");
 </script>
+[[::ext_adminDashboardEnding]]

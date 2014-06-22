@@ -85,7 +85,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 			stopError ('No data is submitted.');
 		} 
 
-		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
+		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$smt = array_map ('htmlspecialchars', $smt);
 		if (empty ($smt['siteKey'])) {
@@ -390,6 +390,7 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 } 
 
 if ($canonical -> currentArgs['mainAction'] == 'extensions') {
+	$allOpenHooks = array ('htmlhead', 'header', 'intro', 'mainAreaEnd', 'footer', 'beforeEnd', 'summaryDetail', 'articleDetail', 'commentArea');
 	if ($canonical -> currentArgs['subAction'] == 'modify') {
 		$admin -> checkCSRFCode ('extensions');
 		if (!isset ($_REQUEST['extID']) || !isset ($_REQUEST['extActivate'])) {
@@ -426,11 +427,21 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 		}
+	} elseif ($canonical -> currentArgs['subAction'] == 'savehooks') {
+		$admin -> checkCSRFCode ('extensions');
+		foreach ($allOpenHooks as $openHook) {
+			@file_put_contents (P. 'conf/insert_'. $openHook. '.htm', $_REQUEST['smt'][$openHook]);
+		}
+		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 	}
 	else {
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
 		$view -> setPassData (array ('extList' => bw :: getAllExtensions (), 'newCSRFCode' => $admin -> getCSRFCode ('newext'), 'extCSRFCode' => $admin -> getCSRFCode ('extensions')));
+		foreach ($allOpenHooks as $openHook) {
+			$allHooks['insert_'.$openHook] = @file_get_contents (P. 'conf/insert_'. $openHook. '.htm');
+		}
+		$view -> setPassData ($allHooks);
 		$view -> setWorkFlow (array ('adminextensions', 'admin'));
 		$view -> finalize ();
 	}

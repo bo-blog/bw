@@ -15,6 +15,9 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:TimeZone]]<br/><input type="text" class="inputLine inputLarge" name="smt[timeZone]" value="[[::timeZone]]" /><br/><span class="adminExplain">[[=admin:msg:TimeZone]]</span>
 </p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:Cache]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst pageCache" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast pageCache" data-reflect="1"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::pageCache]]" name="smt[pageCache]" id="pageCache"/><br/><span class="adminExplain">[[=admin:msg:Cache]]</span>
+</p>
 
 <p><br/><br/></p>
 
@@ -40,45 +43,6 @@
 <p id="siteKey2">
 <span class="icon-arrow-right5"></span> [[=admin:item:RepeatPsw]]<br/><input type="password" class="inputLine inputLarge" value="" id="siteKey3" placeholder="[[=admin:msg:BlankPsw]]" />
 </p>
-<script type="text/javascript">
-$("#siteKey3").blur(function() {
-	if ($("#siteKey3").val()!=$("#siteKey").val())
-	{
-		$("#siteKey3").addClass("inputLineWarn");
-	}
-	$("#siteKey3").click(function() {
-		$("#siteKey3").removeClass("inputLineWarn");
-	});
-});
-$("#siteKey").blur(function() {
-	if ($("#siteKey").val()!='')
-	{
-		if ( !checkPassword($("#siteKey").val()) )
-		{
-			$("#siteKey").addClass("inputLineWarn");
-			$("#siteKey").click(function() {
-				$("#siteKey").removeClass("inputLineWarn");
-			});
-		}		
-	}
-});
-function checkPassword (str){
-	if (str.length<8)
-	{
-		return false;
-	}
-	var specialCharacters = "~!@#$%^&*()_+-=[]{}\\|;:'\",.<>/? ";
-	for (var i=0; i<specialCharacters.length-1; i=i+1)
-	{
-	
-		if (str.indexOf(specialCharacters.charAt(i)) != -1)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-</script>
 
 <p><br/><br/></p>
 
@@ -96,49 +60,78 @@ function checkPassword (str){
 <option value="en">[[=admin:opt:English]]</option>
 </select>
 </p>
-<script type="text/javascript">
-$("#siteTheme").val("[[::siteTheme]]");
-$("#siteLang").val("[[::siteLang]]");
-</script>
+
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:PerPage]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst perPage" data-reflect="3">[[=admin:opt:VeryFew]]</span> <span class="buttonLine buttonGroup perPage" data-reflect="5">[[=admin:opt:AFew]]</span>  <span class="buttonLine buttonGroup perPage" data-reflect="10">[[=admin:opt:Normal]]</span> <span class="buttonLine buttonGroup buttonGroupLast perPage" data-reflect="15">[[=admin:opt:Many]]</span> <input type="hidden" value="[[::perPage]]" name="smt[perPage]" id="perPage"/>
 </p>
 <script type="text/javascript">
-function goPerPage() {
-	var perPageCD=$("#perPage").val();
-	$(".perPage").each(function(){
-		var perPageD=$(this).data('reflect');
-		if (perPageD==perPageCD)
-		{
-			$(this).addClass("buttonGroupSelected");
-		}
-		else {
-			$(this).removeClass("buttonGroupSelected");
-		}
-	});
-}
-
-$(".perPage").click(function(){
-	var perPageD=$(this).data('reflect');
-	$("#perPage").val(perPageD);
-	goPerPage();
-});
-
-goPerPage();
 </script>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:Links]]<br class="smallBr"/><textarea type="text" class="inputLine inputLarge textareaLine textareaMiddle" name="smt[externalLinks]" id="externalLinks" />[[::externalLinks]]</textarea>
 </p>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:URLRewrite]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst linkPrefix" data-reflect="index.php"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast linkPrefix" data-reflect="index"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::linkPrefixIndex]]" name="smt[linkPrefixIndex]" id="linkPrefixIndex"/><input type="hidden" value="[[::linkPrefixCategory]]" name="smt[linkPrefixCategory]" id="linkPrefixCategory"/><input type="hidden" value="[[::linkPrefixArticle]]" name="smt[linkPrefixArticle]" id="linkPrefixArticle"/><input type="hidden" value="[[::linkPrefixTag]]" name="smt[linkPrefixTag]" id="linkPrefixTag"/>
+<span class="icon-arrow-right5"></span> [[=admin:item:URLRewrite]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst linkPrefixIndex" data-reflect="index.php"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast linkPrefixIndex" data-reflect="index"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::linkPrefixIndex]]" name="smt[linkPrefixIndex]" id="linkPrefixIndex"/><input type="hidden" value="[[::linkPrefixCategory]]" name="smt[linkPrefixCategory]" id="linkPrefixCategory"/><input type="hidden" value="[[::linkPrefixArticle]]" name="smt[linkPrefixArticle]" id="linkPrefixArticle"/><input type="hidden" value="[[::linkPrefixTag]]" name="smt[linkPrefixTag]" id="linkPrefixTag"/>
 <br/><span class="adminExplain">[[=admin:msg:URLRewrite]]</span>
 </p>
+
+<p class="adminCommand"><br/>
+<button type="button" class="buttonLine" id="btnSubmit" onclick="saveConf('smtForm', '[[::siteURL]]/admin.php/center/store/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
+<button type="button" class="buttonLine" onclick="window.location=window.location;"><span class="icon-ccw"></span></button> [[=admin:btn:Restore]]
+<p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
+</p>
+[[::ext_adminCenter]]
+</form>
+
+</div>
+
 <script type="text/javascript">
-function goPrefix() {
-	var linkPrefixCD=$("#linkPrefixIndex").val();
-	$(".linkPrefix").each(function(){
-		var linkPrefixD=$(this).data('reflect');
-		if (linkPrefixD==linkPrefixCD)
+$("#siteTheme").val("[[::siteTheme]]");
+$("#siteLang").val("[[::siteLang]]");
+
+function errorPrompter (inputId)
+{
+	$('#'+inputId).addClass("inputLineWarn");
+	$('#'+inputId).click(function() {
+		$('#'+inputId).removeClass("inputLineWarn");
+	});
+}
+
+$("#siteKey3").blur(function() {
+	if ($("#siteKey3").val()!=$("#siteKey").val()) {
+		errorPrompter('siteKey3');
+	}
+});
+
+$("#siteKey").blur(function() {
+	if ($("#siteKey").val()!='')	{
+		if (!checkPassword($("#siteKey").val())){
+			errorPrompter('siteKey');
+		}		
+	}
+});
+
+function checkPassword (str){
+	if (str.length<8)
+	{
+		return false;
+	}
+	var specialCharacters = "~!@#$%^&*()_+-=[]{}\\|;:'\",.<>/? ";
+	for (var i=0; i<specialCharacters.length-1; i=i+1)
+	{
+	
+		if (str.indexOf(specialCharacters.charAt(i)) != -1)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+function goSelector(selID) {
+	var selIDVal=$('#'+selID).val();
+	$('.'+selID).each(function(){
+		var selIDValD=$(this).data('reflect');
+		if (selIDValD==selIDVal)
 		{
 			$(this).addClass("buttonGroupSelected");
 		}
@@ -146,7 +139,16 @@ function goPrefix() {
 			$(this).removeClass("buttonGroupSelected");
 		}
 	});
+
+	$('.'+selID).click(function(){
+		$('#'+selID).val($(this).data('reflect'));
+		goSelector(selID);
+	});
 }
+
+goSelector ('perPage');
+goSelector ('linkPrefixIndex');
+goSelector ('pageCache');
 
 function syncPrefix() {
 	var linkPrefixD=$("#linkPrefixIndex").val();
@@ -164,28 +166,8 @@ function syncPrefix() {
 	}
 }
 
-$(".linkPrefix").click(function(){
-	var linkPrefixD=$(this).data('reflect');
-	$("#linkPrefixIndex").val(linkPrefixD);
-	goPrefix();
-	syncPrefix();
-});
-
-goPrefix();
-</script>
-
-<p class="adminCommand"><br/>
-<button type="button" class="buttonLine" id="btnSubmit" onclick="saveConf('smtForm', '[[::siteURL]]/admin.php/center/store/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
-<button type="button" class="buttonLine" onclick="window.location=window.location;"><span class="icon-ccw"></span></button> [[=admin:btn:Restore]]
-<p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
-</p>
-</form>
-
-</div>
-
-<script type="text/javascript">
-
 function saveConf(formID, smtURL) {
+	syncPrefix();
 	var stopSubmit=false;
 	$('.inputLine').each(function() {
 		if ($(this).hasClass('inputLineWarn'))
@@ -222,3 +204,4 @@ function checkLogout (oj) {
 
 $("#admCenter").addClass("activeNav");
 </script>
+[[::ext_adminCenterEnding]]

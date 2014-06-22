@@ -13,11 +13,11 @@ $parts['pagination']=<<<eot
 eot;
 
 $parts['nextpage']=<<<eot
-<span id="goNextPage"><a href="[[::nextPageLink]]" class="pageLink"><span class="icon-arrow-right5"></span></a></span>
+<span id="goNextPage"><a href="[[::nextPageLink]]" class="pageLink" title="[[=page:NextPage]]"><span class="icon-arrow-right5"></span></a></span>
 eot;
 
 $parts['prevpage']=<<<eot
-<span id="goPrevPage"><a href="[[::prevPageLink]]" class="pageLink"><span class="icon-arrow-left5"></span></a></span>
+<span id="goPrevPage"><a href="[[::prevPageLink]]" class="pageLink" title="[[=page:PrevPage]]"><span class="icon-arrow-left5"></span></a></span>
 eot;
 
 $parts['firstpage']=<<<eot

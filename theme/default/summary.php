@@ -25,5 +25,6 @@ if (!defined ('P')) {
 </div>
 
 [[::aTags, hasTags, <h3 class="tagsRow"><span class="icon-tag"></span>]] [[::aTags, formatTags, <span class="oneTag"><a href="[::siteURL]/[::linkPrefixTag]/[::tagInURL]/">[::tagValue]</a></span>]][[::aTags, hasTags, </h3>]]
+[[::ext_summaryDetail]]
 
 </article>

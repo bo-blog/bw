@@ -16,6 +16,7 @@ if (!defined ('P')) {
 <link rel="canonical" href="[[::canonicalURL]]" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/style.css" media="all" rel="stylesheet" type="text/css" />
+<link  href="[[::siteURL]]/rss.php" rel="alternate" type="application/rss+xml" title="RSS 2.0" />
 <title>[[::pageTitle]][[::siteName]]</title>
 <script src="http://lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
 <script>
@@ -69,6 +70,7 @@ var lng={
 
 <footer>
 [[=page:Connect]]<br/>
+<a href="[[::siteURL]]/rss.php" target="_blank"><span class="icon-rss fol"></span></a>
 [[::loop, sociallink]]<a href="[[::socialLinkURL]]" target="_blank"><span class="icon-[[::socialLinkID]] fol"></span></a>[[::/loop]]
 <br/>
 [[=page:Links]]<br/>
@@ -79,12 +81,6 @@ var lng={
 
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>
 <div id="UI-lightbox"></div>
-<script type="text/javascript">
-$('#nav-[[::activeNav]]').addClass('activeNav');
-$('.adminSign').click(function (){checkLogin('adminSign');});
-
-var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F78dbd4727b01db1227afa104ae4c5d9a' type='text/javascript'%3E%3C/script%3E"));
-</script>
+[[::ext_beforeEnd]]
 </body>
 </html>

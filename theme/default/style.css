@@ -375,6 +375,10 @@ max-width: 90%;
 .details .xiamiLoader {
 max-width: 90%;
 }
+.details .geoLocator {
+font-size: 16px;
+color: #356A00;
+}
 .details ul {
 list-style: inside circle;
 }
@@ -684,6 +688,10 @@ line-height: 150%;
 .textareaMiddle {
 height: 120px;
 font-size: 12px;
+}
+.textareaSmall {
+height: 40px;
+font-size: 11px;
 }
 
 /* responsive */

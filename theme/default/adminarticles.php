@@ -27,6 +27,7 @@
 <p class="adminCommand">
 <p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
 </p>
+[[::ext_adminArticles]]
 
 <script type="text/javascript">
 $(".adminSAL").click(function(){
@@ -123,3 +124,4 @@ function saveCategoryChanges(smtURL) {
 
 </div>
 
+[[::ext_adminArticlesEnding]]

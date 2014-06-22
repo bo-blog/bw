@@ -29,6 +29,7 @@ var lng={
 	AjaxFail : '[[=js:AjaxFail]]'
 };
 </script>
+[[::ext_adminhtmlhead]]
 </head>
 <body>
 <div id="overallContainer">
@@ -45,13 +46,17 @@ var lng={
 <li class="adminList"><a href="[[::siteURL]]/admin.php/login/logout/?CSRFCode=[[::logoutCSRFCode]]" title="Logout"><span class="icon-logout"></span> <span class="adminItems">[[=admin:Logout]]</span></a></li>
 </ul>
 </nav>
+[[::ext_adminheader]]
 </header>
 
 <div id="mainArea" class="admMainArea">
+[[::ext_adminMainAreaStart]]
 [[::load, admindashboard]][[::load, admincenter]][[::load, adminarticles]][[::load, adminwriter]][[::load, adminservices]][[::load, adminextensions]]
 </div>
 <div id="copyright" class="admFooter"><a href="http://bw.bo-blog.com/" target="_blank">Powered by bW</a></div>
+[[::ext_adminMainAreaEnd]]
 </div>
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>
+[[::ext_adminfooter]]
 </body>
 </html>
