@@ -51,6 +51,8 @@ $conf['l'] = array(
 	'admin:sect:InstallExt' => 'Install Extension',
 	'admin:sect:ExtSafety' => 'Security Notice',
 	'admin:sect:CustomizedHTML' => 'Customized HTML',
+	'admin:sect:Modules' => 'Widgets',
+	'admin:sect:EditModules' => 'Add/Edit Widget',
 
 	'admin:item:SiteName' => 'Website Name',
 	'admin:item:SiteURL' => 'Website Root URL',
@@ -139,6 +141,11 @@ $conf['l'] = array(
 	'admin:msg:HookSummaryDetail' => 'Insert code into where the article summary ends.',
 	'admin:msg:HookArticleDetail' => 'Insert code into where the full article ends.',
 	'admin:msg:HookCommentArea' => 'Insert code into the comment area.',
+	'admin:msg:WgtHTMLHead' => '&lt;head&gt; Area',
+	'admin:msg:WgtHeader' => 'Top Navigation',
+	'admin:msg:WgtSidebar' => 'Sidebar',
+	'admin:msg:WgtFooter' => 'Page Footer',
+	'admin:msg:RemoveExtension' => 'Do you really want to remove this item?',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',
@@ -152,6 +159,7 @@ $conf['l'] = array(
 	'admin:btn:Backup' => 'Click to save the backup article data NOW!',
 	'admin:btn:NewExt' => 'Install',
 	'admin:btn:GeoLoc' => 'Location',
+	'admin:btn:NewWidget' => 'New Widget',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',
@@ -181,5 +189,6 @@ $conf['l'] = array(
 	'admin:item:MostPopular' => 'Most popular articles',
 	'admin:item:RecentView' => 'Recently viewed pages',
 	'admin:item:InterfaceName' => 'Interface Hook: ',
+	'admin:item:WgtInterfaceName' => 'Widget Interface: ',
 
 	);

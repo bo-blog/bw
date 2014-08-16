@@ -5,7 +5,7 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '0.9.1');
+define ('bwVersion', '0.9.1 alpha');
 
 if (!defined ('P')) {
 	die ('Access Denied.');
@@ -72,24 +72,36 @@ class bw {
 			foreach ($allHooks as $aHook) {
 				self :: $extList[$aHook][] = $aExt['extID'];
 			} 
-			if (file_exists (P . 'extension/' . basename ($aExt['extID']) . '/do.php')) {
-				include_once (P . 'extension/' . basename ($aExt['extID']) . '/do.php');
-				$aExtID = 'ext_' . $aExt['extID'];
-				$aExtID :: init();
-			} 
+			if (!$aExt['isWidget']) {
+				if (file_exists (P . 'extension/' . basename ($aExt['extID']) . '/do.php')) {
+					include_once (P . 'extension/' . basename ($aExt['extID']) . '/do.php');
+					$aExtID = 'ext_' . $aExt['extID'];
+					$aExtID :: init();
+				} 
+			}
 		} 
 	} 
 
 	public static function getAllExtensions ()
 	{
 		$extDataReturn = array ();
-		$extData = self :: $db -> getRows ('SELECT * FROM extensions ORDER BY extOrder DESC');
+		$extData = self :: $db -> getRows ('SELECT * FROM extensions WHERE isWidget=0 ORDER BY extOrder DESC');
 		foreach ($extData as $aExt) {
 			$aExt['extDesc'] = @parse_ini_string ($aExt['extDesc']);
 			$aExt['extName'] = $aExt['extDesc']['name'];
 			$aExt['extIntro'] = $aExt['extDesc']['intro'];
 			$aExt['extAuthor'] = $aExt['extDesc']['author'];
 			$aExt['extURL'] = $aExt['extDesc']['url'];
+			$extDataReturn[$aExt['extID']] = $aExt;
+		} 
+		return $extDataReturn;
+	} 
+
+	public static function getAllWidgets ()
+	{
+		$extDataReturn = array ();
+		$extData = self :: $db -> getRows ('SELECT * FROM extensions WHERE isWidget=1 ORDER BY extOrder DESC');
+		foreach ($extData as $aExt) {
 			$extDataReturn[$aExt['extID']] = $aExt;
 		} 
 		return $extDataReturn;
@@ -127,6 +139,16 @@ class bw {
 		$allTags = self :: $db -> getRows ('SELECT * FROM tags ORDER BY tCount DESC LIMIT 0, ?', array(floor ($num)));
 		return $allTags;
 	} 
+
+	public static function getWidgets ($widgetType)
+	{
+		$allWidgets = self :: $db -> getRows ('SELECT * FROM extensions WHERE isWidget=1 AND extHooks=? ORDER BY extOrder DESC', array($widgetType));
+		foreach ($allWidgets as $i => $oneWidget) {
+			$allWidgets[$i]['extStorage'] = @json_decode ($allWidgets[$i]['extStorage'], true);
+			is_array ($allWidgets[$i]['extStorage']) ? $allWidgets[$i]+=$allWidgets[$i]['extStorage'] : false;
+		}
+		return $allWidgets;
+	}
 } 
 
 class bwCategory {
@@ -162,7 +184,7 @@ class bwCategory {
 	{
 		foreach ($deletedCates as $delCate => $delCateName) {
 			$delLine = bw :: $db -> getSingleRow ('SELECT * FROM categories WHERE aCateURLName=:delCate', array(':delCate' => $delCate));
-			if ($delLine['aCateCounter'] == 0) {
+			if ($delLine['aCateCount'] == 0) {
 				bw :: $db -> dbExec ('DELETE FROM categories WHERE aCateURLName=:delCate', array(':delCate' => $delCate));
 			} else {
 				stopError (bw :: $conf['l']['admin:msg:CategoryNotEmpty']);
@@ -208,7 +230,7 @@ class bwArticle {
 	{
 		$currentTitleStart = ($this -> pageNum-1) * bw :: $conf['perPage'];
 
-		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>0 AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?';
+		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>"0" AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?';
 		if ($this -> listCate != 'all') {
 			$qBind = array ($this -> listCate, date ('Y-m-d H:i:s'), $currentTitleStart, bw :: $conf['perPage']);
 		} else {
@@ -223,7 +245,7 @@ class bwArticle {
 
 	public function getHottestArticles ($howMany)
 	{
-		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>0 AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany;
+		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>"0" AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany;
 		$qBind = $this -> listCate == 'all' ? array(date ('Y-m-d H:i:s')) : array($this -> listCate, date ('Y-m-d H:i:s'));
 
 		$allTitles = bw :: $db -> getRows ($qStr, $qBind);
@@ -415,7 +437,7 @@ class bwArticle {
 	private function getTotalArticles ()
 	{
 		if ($this -> listCate == 'all') {
-			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName<>0 AND aTime<=?', array (date ('Y-m-d H:i:s')));
+			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName<>"0" AND aTime<=?', array (date ('Y-m-d H:i:s')));
 		} else {
 			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName=? AND aTime<=?', array (bw :: $this -> listCate, date ('Y-m-d H:i:s')));
 		} 
@@ -591,6 +613,8 @@ class bwView {
 			$return = bw :: $conf[$key];
 		} elseif (strpos ($key, 'ext_') === 0) {
 			$return = $this -> addHookIntoView (str_replace ('ext_', '', $key));
+		} elseif (strpos ($key, 'widget_') === 0) {
+			$return = $this -> addWidgetIntoView (str_replace ('widget_', '', $key));
 		} elseif ($isLoop) {
 			if (array_key_exists ($key, $this -> loopEach)) {
 				$return = $this -> loopEach[$key];
@@ -695,6 +719,26 @@ class bwView {
 		return $return;
 	} 
 
+	public function addWidgetIntoView ($hookInterface)
+	{
+		if (isset (bw :: $extList[$hookInterface]) && isset ($this -> parts[$hookInterface])) {
+			$return = '';
+			foreach (bw :: $extList[$hookInterface] as $aWidget) {
+				$output = widget ($hookInterface, bw :: $extData[$aWidget]['extStorage']);
+				if (is_array ($output)) {
+					$outputKeys = array_map (array ($this, 'addWidgetIntoView_keyMaker'), array_keys ($output));
+					$return.= str_replace ($outputKeys, array_values ($output), $this -> parts[$hookInterface]);
+				}
+			}
+			return $return;
+		}
+	} 
+
+	private function addWidgetIntoView_keyMaker ($key)
+	{
+		return '[[::'.$key.']]';
+	}
+
 	public function haltWithError ($errMsg)
 	{
 		if (defined ('ajax')) {
@@ -770,7 +814,7 @@ class bwView {
 	private function theme_safeConvert ($unuse, $text)
 	{
 		$text = hook ('safeConvert', 'Replace', $text);
-		return htmlspecialchars ($text, 'UTF-8');
+		return htmlspecialchars ($text, ENT_QUOTES, 'UTF-8');
 	} 
 
 	private function theme_formatTags ($format, $aTags)
@@ -1159,6 +1203,30 @@ function hook ()
 			break;
 	} 
 } 
+
+function widget ($widgetHook, $storedValue)
+{
+	$storedValue = @json_decode ($storedValue, true);
+	if (!is_array ($storedValue)) {
+		return false;
+	}
+	$patternWidgetHooks = array (
+		'wghtmlhead' => 'value',
+		'wgheader' => 'text,url,title,target',
+		'wgsidebar' => 'title,value',
+		'wgfooter' => 'value'
+	);
+	if (array_key_exists ($widgetHook, $patternWidgetHooks)) {
+		$patterns=@explode (',', $patternWidgetHooks[$widgetHook]);
+		$output = array();
+		foreach ($patterns as $pattern) {
+			$output[$pattern] = isset ($storedValue[$pattern]) ? $storedValue[$pattern] : '';
+		}
+		return $output;
+	}
+	return false;
+}
+
 
 function stringToArray ($array, $key = false)
 {

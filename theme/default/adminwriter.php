@@ -147,7 +147,7 @@ function insertUpURLs (str)
 	$('#adminUpAdd').html("[[=admin:btn:AddPic]]");
 	var targetURL=$('#adminUploadContainer').data('upurl');
 
-	$.get(targetURL+"?ajax=1&CSRFCode=[[::upCSRFCode]]", function (data){
+	$.get(targetURL+"&ajax=1", function (data){
 		if (data.error!=1) {
 			$("#adminUploadContainer").html (data.returnMsg);
 		}

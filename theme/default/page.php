@@ -28,6 +28,7 @@ var lng={
 </script>
 <script src="[[::siteURL]]/inc/script/main.js"></script>
 [[::ext_htmlhead]]
+[[::widget_wghtmlhead]]
 </head>
 <body>
 <div id="overallContainer">
@@ -40,6 +41,7 @@ var lng={
 [[::loop, navigation]]
 <li id="nav-[[::aCateURLName]]"><a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a></li>
 [[::/loop]]
+[[::widget_wgheader]]
 </ul>
 </nav>
 [[::ext_header]]
@@ -77,10 +79,15 @@ var lng={
 [[::loop, externallink]]<span class="lnk"><a href="[[::linkURL]]" target="_blank">[[::linkName]]</a></span>[[::/loop]]
 [[::ext_footer]]
 <div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">Powered by bW</a></div>
+[[::widget_wgfooter]]
 </footer>
 
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>
 <div id="UI-lightbox"></div>
+<script type="text/javascript">
+$('#nav-index').addClass('activeNav');
+$('.adminSign').click(function (){checkLogin('adminSign');});
+</script>
 [[::ext_beforeEnd]]
 </body>
 </html>

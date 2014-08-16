@@ -19,6 +19,7 @@ if (isset ($canonical -> currentArgs['tValue'])) {
 	stopError ($conf['l']['admin:msg:NoContent']);
 } 
 $article -> getArticleListByTag ($canonical -> currentArgs['tValue']);
+loadServices (); //Load Duoshuo
 // Pagination
 $canonical -> calTotalPages ($article -> totalArticles);
 

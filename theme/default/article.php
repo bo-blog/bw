@@ -11,7 +11,8 @@ if (!defined ('P')) {
 <span class="decoArticle"></span>
 <h2>[[::aTitle]]</h2>
 <h3><span class="icon-pencil"></span> [[::aTime, dateFormat, Y/m/d H:i]] [[=page:InCate]] <a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a>
-<span class="articleShare"><a href="#comment-[[::aID]]"><span class="icon-comment" title="[[=page:Comments]]"></span></a> <a href="##"><span class="icon-share" id="share-[[::aID]]" title="[[=page:ShareTo]]"></span> </a></span>
+<span class="articleShare"><a href="#comment-[[::aID]]"><span class="icon-comment" title="[[=page:Comments]]"></span><span id="ds-thread-count" class="ds-thread-count" data-thread-key="[[::aID]]"></span>
+</a> <a href="##"><span class="icon-share" id="share-[[::aID]]" title="[[=page:ShareTo]]"></span> </a></span>
 </h3>
 <div class="shareLayer" id="share-[[::aID]]-layer">
 <span class="shareLayerItem"><a href="http://www.jiathis.com/send/?webid=weixin&url=[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/&title=[[::aTitle, URLEncode]]"><span class="icon-weixin"></span> [[=page:social:WeChat]]</a></span>
@@ -25,7 +26,6 @@ if (!defined ('P')) {
 [[::aTags, hasTags, <h3 class="tagsRow"><span class="icon-tag"></span>]] [[::aTags, formatTags, <span class="oneTag"><a href="[::siteURL]/[::linkPrefixTag]/[::tagInURL]/">[::tagValue]</a></span>]][[::aTags, hasTags, </h3>]]
 [[::ext_articleDetail]]
 </article>
-
 
 <div id="comment-[[::aID]]" class="commentArea">
 <!-- Duoshuo start -->
@@ -43,8 +43,8 @@ var duoshuoQuery = {short_name:"[[::duoshuoID]]"};
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
 	})();
 $("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/theme/default/duoshuo.css"}).appendTo("head");
+
 </script>
 <!-- Duoshuo JS end -->
 [[::ext_commentArea]]
-
 </div>

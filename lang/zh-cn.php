@@ -50,6 +50,8 @@ $conf['l'] = array(
  	'admin:sect:InstallExt' => '安装扩展',
 	'admin:sect:ExtSafety' => '安全注意事项',
 	'admin:sect:CustomizedHTML' => '自定义HTML',
+	'admin:sect:Modules' => '模块',
+	'admin:sect:EditModules' => '添加/编辑模块',
 
 	'admin:item:SiteName' => '网站名',
 	'admin:item:SiteURL' => '根网址',
@@ -118,7 +120,7 @@ $conf['l'] = array(
 	'admin:msg:Up' => '上移',
 	'admin:msg:Down' => '下移',
 	'admin:msg:Remove' => '移除',
-	'admin:msg:Close' => '关闭',
+	'admin:msg:Close' => '取消',
 	'admin:msg:LeaveConfirm' => '确认要离开？未保存的数据将丢失！',
 	'admin:msg:Links' => '每行一个友情链接，格式为：网址=网站名',
 	'admin:msg:SetTag' => '用逗号分隔每个Tag',
@@ -138,6 +140,11 @@ $conf['l'] = array(
 	'admin:msg:HookSummaryDetail' => '此接口用于在文章概览结束前插入代码。',
 	'admin:msg:HookArticleDetail' => '此接口用于在全文结束前插入代码。',
 	'admin:msg:HookCommentArea' => '此接口用于在评论区内插入代码。',
+	'admin:msg:WgtHTMLHead' => '&lt;head&gt;区域',
+	'admin:msg:WgtHeader' => '头部导航',
+	'admin:msg:WgtSidebar' => '侧边栏',
+	'admin:msg:WgtFooter' => '页面底部',
+	'admin:msg:RemoveExtension' => '确定要移除吗？删除后不可恢复。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',
@@ -151,6 +158,7 @@ $conf['l'] = array(
 	'admin:btn:Backup' => '点击立刻导出所有文章为一个压缩文件',
 	'admin:btn:NewExt' => '安装',
 	'admin:btn:GeoLoc' => '插入位置',
+	'admin:btn:NewWidget' => '新建模块',
 
 	'admin:msg:NeedLogin' => '请先登录。',
 	'admin:msg:ChangeSaved' => '保存成功。',
@@ -180,5 +188,6 @@ $conf['l'] = array(
 	'admin:item:MostPopular' => '最多浏览文章',
 	'admin:item:RecentView' => '最近被访问的页面',
 	'admin:item:InterfaceName' => '接口： ',
+	'admin:item:WgtInterfaceName' => '模块位置： ',
 
 	);

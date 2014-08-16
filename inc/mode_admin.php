@@ -417,13 +417,54 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		if (!isset ($_REQUEST['extID'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} else {
+			$extList = bw :: getAllExtensions ();
 			$extID = basename ($_REQUEST['extID']);
+			$extID = htmlspecialchars ($extID, ENT_QUOTES, 'UTF-8');
+			if (array_key_exists ($extID, $extList)) {
+				stopError ($conf['l']['admin:msg:Existed']);
+			}
 			if (!file_exists (P . 'extension/' . $extID . '/define.php') || !file_exists (P . 'extension/' . $extID . '/do.php')) {
 				stopError ($conf['l']['admin:msg:ExtNotFound']);
 			}
 			$aExt = @parse_ini_file (P . 'extension/' . $extID . '/define.php');
 			$aExt['extDesc'] = "name='{$aExt['name']}'\r\nintro='{$aExt['intro']}'\r\nauthor='{$aExt['author']}'\r\nurl='{$aExt['url']}'";
-			bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder) VALUES (?, ?, ?, 1, ?)', array ($aExt['ID'], $aExt['extDesc'], $aExt['hooks'], count (bw :: getAllExtensions ())+1));
+			bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget) VALUES (?, ?, ?, 1, ?, 0)', array ($aExt['ID'], $aExt['extDesc'], $aExt['hooks'], count ($extList)+1));
+			clearCache ();
+			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
+		}
+	}  elseif ($canonical -> currentArgs['subAction'] == 'widget') {
+		$admin -> checkCSRFCode ('newext');
+		if (!isset ($_REQUEST['wgtID']) || empty ($_REQUEST['wgtID'])) {
+			stopError ($conf['l']['admin:msg:NoData']);
+		} else {
+			$extOrder = floor ($_REQUEST['extOrder']);
+			$extList = bw :: getAllWidgets ();
+			$extID = htmlspecialchars ($_REQUEST['wgtID'], ENT_QUOTES, 'UTF-8');
+			$patternWidgetHooks = array (
+				'wghtmlhead' => 'value',
+				'wgheader' => 'text,url,title,target',
+				'wgsidebar' => 'title,value',
+				'wgfooter' => 'value'
+			);
+			$extHooks = $_REQUEST['extHooks'];
+			if (!array_key_exists ($extHooks, $patternWidgetHooks)) {
+				stopError ($conf['l']['admin:msg:NoContent']);
+			}
+			$extStorage = array ();
+			foreach (@explode (',', $patternWidgetHooks[$extHooks]) as $wgtCol) {
+				$extStorage[$wgtCol] = ($wgtCol == 'value') ? $_REQUEST['wgt'.$wgtCol] : htmlspecialchars ($_REQUEST['wgt'.$wgtCol], ENT_QUOTES, 'UTF-8');
+			} 
+			if ($extOrder == -1) {
+				if (array_key_exists ($extID, $extList)) {
+					stopError ($conf['l']['admin:msg:Existed']);
+				} 
+				bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget, extStorage) VALUES (?, "", ?, 1, ?, 1, ?)', array ($extID, $extHooks, count ($extList)+1, json_encode ($extStorage)));
+			} else {
+				if (!array_key_exists ($extID, $extList)) {
+					stopError ($conf['l']['admin:msg:NotExist']);
+				}
+				bw :: $db -> dbExec ('UPDATE extensions SET extStorage=? WHERE extID=? AND isWidget=1', array (json_encode ($extStorage), $extID));
+			}
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 		}
@@ -432,12 +473,14 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		foreach ($allOpenHooks as $openHook) {
 			@file_put_contents (P. 'conf/insert_'. $openHook. '.htm', $_REQUEST['smt'][$openHook]);
 		}
+		clearCache ();
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 	}
 	else {
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
 		$view -> setPassData (array ('extList' => bw :: getAllExtensions (), 'newCSRFCode' => $admin -> getCSRFCode ('newext'), 'extCSRFCode' => $admin -> getCSRFCode ('extensions')));
+		$view -> setPassData (array ('wgtListHtmlhead' => bw :: getWidgets ('wghtmlhead'), 'wgtListHeader' => bw :: getWidgets ('wgheader'), 'wgtListSiderbar' => bw :: getWidgets ('wgsidebar'), 'wgtListFooter' => bw :: getWidgets ('wgfooter')));
 		foreach ($allOpenHooks as $openHook) {
 			$allHooks['insert_'.$openHook] = @file_get_contents (P. 'conf/insert_'. $openHook. '.htm');
 		}

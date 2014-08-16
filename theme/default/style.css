@@ -429,6 +429,7 @@ font-family: Helvetica, Arial, "Microsoft Yahei", "Microsoft JhengHei", STHei, "
 line-height: 185%;
 }
 .adminArea h2 {
+clear: both;
 font-size: 20px;
 font-weight: bold;
 color: #346A00;
@@ -446,7 +447,7 @@ margin-bottom: 12px;
 .adminCommand {
 text-align: center;
 }
-#adminPromptError {
+#adminPromptError, .wgtPromptError {
 text-align: center;
 color: #FF2626;
 display: none;
@@ -592,6 +593,21 @@ color: red;
 }
 .adminArea article a {
 border: 0;
+}
+.adminLaidItem {
+width: 250px;
+overflow-x: auto;
+display: block;
+float: left;
+border: 1px dashed #ccc;
+cursor: pointer;
+padding: 3px;
+margin: 0 10px 3px 0;
+color: #505050;
+}
+.adminLaidItem:hover {
+background: #ccc;
+color: #000;
 }
 
 /* Forms */

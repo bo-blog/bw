@@ -21,6 +21,101 @@
 <span class="extStatus0"><span class="icon-warning"></span> [[=admin:msg:ExtSafety]]</span><br/>
 </article>
 
+<h2><span class="icon-star2"></span> [[=admin:sect:Modules]]</h2>
+[[::loop, wgtListHtmlhead]]<span class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '[[::extID]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
+<span class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
+<br style="clear: both"/>
+<article id="addWgtHtmlhead" style="display: none;">
+[[=admin:sect:EditModules]]<br/>
+<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="Widget Name" /><br class="smallBr"/>
+<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="HTML Value" />
+</textarea>
+<br class="smallBr"/>
+<input type="hidden" class="wgtCol extOrder" name="extOrder" value="" />
+<input type="hidden" class="wgtCol extHooks" name="extHooks" value="wghtmlhead" />
+<span class="details">
+<span class="btnAddWgt"><a href='##' onclick="addWidget('addWgtHtmlhead');"><span class="icon-disk"></span> [[=admin:btn:Save]]</a> &nbsp; &nbsp; </span>
+<span class="btnCancelEdit"><a href='##' onclick="$('#addWgtHtmlhead').fadeOut();"><span class="icon-ccw"></span> [[=admin:msg:Close]]</a> &nbsp; &nbsp; </span>
+<span class="btnEnable"><a href="##" onclick="makeEnabled($('#addWgtHtmlhead .wgtID').val());"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; </span>
+<span class="btnDisable"><a href="##" onclick="makeDisabled($('#addWgtHtmlhead .wgtID').val());"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; </span>
+<span class="btnRemoveWgt"><a href="##" onclick="removeExt($('#addWgtHtmlhead .wgtID').val());"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a></span>
+</span>
+<p class="wgtPromptError"></p>
+</article>
+<br/>
+
+<span class="icon-arrow-right5"></span> [[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtHeader]]<br/>
+[[::loop, wgtListHeader]]<span class="adminLaidItem" onclick="fillWgtHeader ('addWgtHeader', '[[::extID]]', '[[::text]]', '[[::url]]', '[[::target]]', '[[::title]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
+<span class="adminLaidItem" onclick="fillWgtHeader ('addWgtHeader', '', '', 'http://', '_self', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
+<br style="clear: both"/>
+<article id="addWgtHeader" style="display: none;">
+[[=admin:sect:EditModules]]<br/>
+<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="Widget Name" /><br class="smallBr"/>
+<input type="text" class="wgtCol inputLine inputLarge wgttext" name="wgttext" placeholder="Link Text" /><br class="smallBr"/>
+<input type="text" class="wgtCol inputLine inputLarge wgturl" name="wgturl" placeholder="Link URL" /><br class="smallBr"/>
+<input type="text" class="wgtCol inputLine inputLarge wgttitle" name="wgttitle" placeholder="Mouseover Prompt" /><br class="smallBr"/>
+<select class="wgtCol selectLine inputLarge wgttarget" name="wgttarget"><option value="_self">Open Link in Current Window</option><option value="_blank">Open Link in New Window</option><option value="_parent">Open Link in Parent Window</option></select><br/>
+<input type="hidden" class="wgtCol extOrder" name="extOrder" value="" />
+<input type="hidden" class="wgtCol extHooks" name="extHooks" value="wgheader" />
+<span class="details">
+<span class="btnAddWgt"><a href='##' onclick="addWidget('addWgtHeader');"><span class="icon-disk"></span> [[=admin:btn:Save]]</a> &nbsp; &nbsp; </span>
+<span class="btnCancelEdit"><a href='##' onclick="$('#addWgtHeader').fadeOut();"><span class="icon-ccw"></span> [[=admin:msg:Close]]</a> &nbsp; &nbsp; </span>
+<span class="btnEnable"><a href="##" onclick="makeEnabled($('#addWgtHeader .wgtID').val());"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; </span>
+<span class="btnDisable"><a href="##" onclick="makeDisabled($('#addWgtHeader .wgtID').val());"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; </span>
+<span class="btnRemoveWgt"><a href="##" onclick="removeExt($('#addWgtHeader .wgtID').val());"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a></span>
+</span>
+<p class="wgtPromptError"></p>
+</article>
+<br/>
+
+<span class="icon-arrow-right5"></span> [[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtSidebar]]<br/>
+[[::loop, wgtListSiderbar]]<span class="adminLaidItem" onclick="fillWgtSidebar ('addWgtSidebar', '[[::extID]]', '[[::title]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
+<span class="adminLaidItem" onclick="fillWgtSidebar ('addWgtSidebar', '', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
+<br style="clear: both"/>
+<article id="addWgtSidebar" style="display: none;">
+[[=admin:sect:EditModules]]<br/>
+<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="Widget Name" /><br class="smallBr"/>
+<input type="text" class="wgtCol inputLine inputLarge wgttitle" name="wgttitle" placeholder="Sidebar Title" /><br class="smallBr"/>
+<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="HTML Value" />
+</textarea>
+<br class="smallBr"/>
+<input type="hidden" class="wgtCol extOrder" name="extOrder" value="" />
+<input type="hidden" class="wgtCol extHooks" name="extHooks" value="wgsidebar" />
+<span class="details">
+<span class="btnAddWgt"><a href='##' onclick="addWidget('addWgtSidebar');"><span class="icon-disk"></span> [[=admin:btn:Save]]</a> &nbsp; &nbsp; </span>
+<span class="btnCancelEdit"><a href='##' onclick="$('#addWgtSidebar').fadeOut();"><span class="icon-ccw"></span> [[=admin:msg:Close]]</a> &nbsp; &nbsp; </span>
+<span class="btnEnable"><a href="##" onclick="makeEnabled($('#addWgtSidebar .wgtID').val());"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; </span>
+<span class="btnDisable"><a href="##" onclick="makeDisabled($('#addWgtSidebar .wgtID').val());"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; </span>
+<span class="btnRemoveWgt"><a href="##" onclick="removeExt($('#addWgtSidebar .wgtID').val());"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a></span>
+</span>
+<p class="wgtPromptError"></p>
+</article>
+<br/>
+
+<span class="icon-arrow-right5"></span> [[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtFooter]]<br/>
+[[::loop, wgtListFooter]]<span class="adminLaidItem" onclick="fillWgtFooter ('addWgtFooter', '[[::extID]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
+<span class="adminLaidItem" onclick="fillWgtFooter ('addWgtFooter', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
+<br style="clear: both"/>
+<article id="addWgtFooter" style="display: none;">
+[[=admin:sect:EditModules]]<br/>
+<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="Widget Name" /><br class="smallBr"/>
+<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="HTML Value" />
+</textarea>
+<br class="smallBr"/>
+<input type="hidden" class="wgtCol extOrder" name="extOrder" value="" />
+<input type="hidden" class="wgtCol extHooks" name="extHooks" value="wgfooter" />
+<span class="details">
+<span class="btnAddWgt"><a href='##' onclick="addWidget('addWgtFooter');"><span class="icon-disk"></span> [[=admin:btn:Save]]</a> &nbsp; &nbsp; </span>
+<span class="btnCancelEdit"><a href='##' onclick="$('#addWgtFooter').fadeOut();"><span class="icon-ccw"></span> [[=admin:msg:Close]]</a> &nbsp; &nbsp; </span>
+<span class="btnEnable"><a href="##" onclick="makeEnabled($('#addWgtFooter .wgtID').val());"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; </span>
+<span class="btnDisable"><a href="##" onclick="makeDisabled($('#addWgtFooter .wgtID').val());"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; </span>
+<span class="btnRemoveWgt"><a href="##" onclick="removeExt($('#addWgtFooter .wgtID').val());"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a></span>
+</span>
+<p class="wgtPromptError"></p>
+</article>
+
+
+<br class="smallBr"/>
 
 <h2><span class="icon-paperclip"></span> [[=admin:sect:CustomizedHTML]]</h2> 
 <span class="adminExplain">[[=admin:msg:CustomizedHTML]]</span>
@@ -110,25 +205,100 @@ function makeEnabledDisabled (extID, extActivate) {
 			$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
 		}
 		else {
-			window.location=smtURL+"?CSRFCode=[[::navCSRFCode]]";
+			location.reload();
+		}
+	}, "json");
+}
+
+function fillWgtHeader (formID, extID, text, url, target, title, extOrder, extActivate) {
+	$('#'+formID+' .wgtID').val(extID);
+	$('#'+formID+' .wgttext').val(text);
+	$('#'+formID+' .wgturl').val(url);
+	$('#'+formID+' .wgttitle').val(title);
+	$('#'+formID+' .wgttarget').val(target);
+	$('#'+formID+' .extOrder').val(extOrder);
+	wgtBtns (formID, extActivate);
+	$('#'+formID).fadeIn('fast');
+}
+
+
+function fillWgtHtmlHead (formID, extID, value, extOrder, extActivate) {
+	$('#'+formID+' .wgtID').val(extID);
+	$('#'+formID+' .wgtvalue').val(value);
+	$('#'+formID+' .extOrder').val(extOrder);
+	wgtBtns (formID, extActivate);
+	$('#'+formID).fadeIn('fast');
+}
+
+function fillWgtSidebar (formID, extID, title, value, extOrder, extActivate) {
+	$('#'+formID+' .wgtID').val(extID);
+	$('#'+formID+' .wgttitle').val(title);
+	$('#'+formID+' .wgtvalue').val(value);
+	$('#'+formID+' .extOrder').val(extOrder);
+	$('#'+formID).fadeIn('fast');
+}
+
+function fillWgtFooter (formID, extID, value, extOrder, extActivate) {
+	fillWgtHtmlHead (formID, extID, value, extOrder, extActivate);
+}
+
+function wgtBtns (formID, extActivate) {
+	if (extActivate == 1) {
+		$('#'+formID+' .wgtID').attr('readonly', 'readonly');
+		$('#'+formID+' .btnEnable').hide();
+		$('#'+formID+' .btnDisable').show();
+		$('#'+formID+' .btnRemoveWgt').show();
+	}
+	if (extActivate == 0) {
+		$('#'+formID+' .wgtID').attr('readonly', 'readonly');
+		$('#'+formID+' .btnEnable').show();
+		$('#'+formID+' .btnDisable').hide();
+		$('#'+formID+' .btnRemoveWgt').show();
+	}
+	if (extActivate == -1) {
+		$('#'+formID+' .wgtID').removeAttr('readonly');
+		$('#'+formID+' .btnEnable').hide();
+		$('#'+formID+' .btnDisable').hide();
+		$('#'+formID+' .btnRemoveWgt').hide();
+	}
+}
+
+function addWidget (formID) {
+	$("#UI-loading").fadeIn(500);
+	var finalResult='';
+	var targetURL=smtURL+"widget/?ajax=1&CSRFCode=[[::newCSRFCode]]";
+	$('#'+formID+' .wgtCol').each (function () {
+		finalResult+=$(this).attr('name')+'='+encodeURIComponent($(this).val())+"&";
+	});
+	$.post(targetURL, finalResult, function(data) {
+		$("#UI-loading").fadeOut(200);
+		if (data.error==1) {
+			$('#'+formID+' .wgtPromptError').text (data.returnMsg);
+			$('#'+formID+' .wgtPromptError').fadeIn(400).delay(1500).fadeOut(600);
+		}
+		else {
+			location.reload();
 		}
 	}, "json");
 }
 
 function removeExt (extID) {
-	$("#UI-loading").fadeIn(500);
-	var targetURL=smtURL+"remove/?ajax=1&CSRFCode=[[::extCSRFCode]]";
+	if (confirm("[[=admin:msg:RemoveExtension]]"))
+	{
+		$("#UI-loading").fadeIn(500);
+		var targetURL=smtURL+"remove/?ajax=1&CSRFCode=[[::extCSRFCode]]";
 
-	$.post(targetURL, {extID : extID}, function(data) {
-		$("#UI-loading").fadeOut(200);
-		if (data.error==1) {
-			$("#adminPromptError").text (data.returnMsg);
-			$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
-		}
-		else {
-			window.location=smtURL+"?CSRFCode=[[::navCSRFCode]]";
-		}
-	}, "json");
+		$.post(targetURL, {extID : extID}, function(data) {
+			$("#UI-loading").fadeOut(200);
+			if (data.error==1) {
+				$("#adminPromptError").text (data.returnMsg);
+				$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
+			}
+			else {
+				location.reload();
+			}
+		}, "json");
+	}
 }
 
 function addExt () {

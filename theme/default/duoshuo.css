@@ -9,6 +9,7 @@
 .ds-comment-body {color: #464646 !important;}
 .ds-comment-footer {padding-bottom: 8px !important; border-bottom: 1px solid #F0F0F0 !important;}
 .ds-comments {border: 0 !important;}
+.ds-thread-count {vertical-align: super;}
 @media only screen and (max-width:600px) {
 .ds-replybox img, .ds-avatar img {width: 24px !important; height: 24px !important; border-radius: 50% !important; margin-top: 5px !important;}
 }
