@@ -242,11 +242,19 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
 		$cates = new bwCategory;
+		$cates -> bufferCacheClear ();
 		$newCates = array_diff_key ($_REQUEST['smt'], bw :: $cateData);
 		$cates -> addCategories ($newCates);
 		$deletedCates = array_diff_key (bw :: $cateData, $_REQUEST['smt']);
 		$cates -> deleteCategories ($deletedCates);
-		$cates -> orderCategories (array_keys($_REQUEST['smt']));
+		$remainedCates = array_diff_key (bw :: $cateData, $deletedCates);
+		$remainedAsNewCates = array ();
+		foreach ($remainedCates as $k => $aRemainedCate) {
+			$remainedAsNewCates[] = $_REQUEST['smt'][$k];
+		}
+		$cates -> renameCategories (array_keys ($remainedCates), array_values ($remainedCates), $remainedAsNewCates);
+		$cates -> orderCategories (array_keys ($_REQUEST['smt']));
+		$cates -> endBufferCache ();
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 	} elseif ($canonical -> currentArgs['subAction'] == 'validatecategory') {
 		$admin -> checkCSRFCode ('category');
@@ -281,7 +289,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 } 
 
 if ($canonical -> currentArgs['mainAction'] == 'services') {
-	if ($canonical -> currentArgs['subAction'] == 'services') {
+	if ($canonical -> currentArgs['subAction'] == 'store') {
 		$admin -> checkCSRFCode ('services');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);

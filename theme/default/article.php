@@ -28,6 +28,7 @@ if (!defined ('P')) {
 </article>
 
 <div id="comment-[[::aID]]" class="commentArea">
+[[::commentarea]]
 <!-- Duoshuo start -->
 <div class="ds-thread" data-thread-key="[[::aID]]" data-title="[[::aTitle]]" data-url="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" data-form-position="top" data-order="desc"></div>
 <!-- Duoshuo end -->

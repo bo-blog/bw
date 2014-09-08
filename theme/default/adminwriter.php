@@ -6,7 +6,7 @@
 <div class="adminArea">
 <form id="smtForm" action="post">
 <input type="hidden" name="smt[originID]" id="originID" value="[[::aID]]" />
-<h2><span class="icon-pie"></span> [[=admin:sect:Writer]]</h2>
+<h2><span class="icon-book2"></span> [[=admin:sect:Writer]]</h2>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:ATitle]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTitle]" value="[[::aTitle]]" id="aTitle" />
 </p>
@@ -284,6 +284,16 @@ $("#adminGeoLoc").click(function() {
 function insertGeoLoc (data) {
 	var str="\r\n\r\n!~!"+data.result.business+' ('+data.result.addressComponent.city+' '+data.result.addressComponent.district+")[location]";
 	$('#aContent').insertContent (str);
+}
+
+if ($(window).width()>800)
+{
+	$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/inc/script/editor/themes/default/default.css"}).appendTo("head");
+	$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "[[::siteURL]]/inc/script/editor/jquery.markbar.js"}).appendTo("head");
+
+	$(function() {
+		$('#aContent').markbar();
+	});
 }
 
 </script>

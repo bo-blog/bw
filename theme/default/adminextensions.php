@@ -21,14 +21,14 @@
 <span class="extStatus0"><span class="icon-warning"></span> [[=admin:msg:ExtSafety]]</span><br/>
 </article>
 
-<h2><span class="icon-star2"></span> [[=admin:sect:Modules]]</h2>
+<h2><span class="icon-module"></span> [[=admin:sect:Modules]]</h2>[[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtHTMLHead]]<br/>
 [[::loop, wgtListHtmlhead]]<span class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '[[::extID]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
 <span class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
 <br style="clear: both"/>
 <article id="addWgtHtmlhead" style="display: none;">
 [[=admin:sect:EditModules]]<br/>
-<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="Widget Name" /><br class="smallBr"/>
-<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="HTML Value" />
+<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="[[=admin:item:WgtName]]" /><br class="smallBr"/>
+<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="[[=admin:item:HTMLValue]]" />
 </textarea>
 <br class="smallBr"/>
 <input type="hidden" class="wgtCol extOrder" name="extOrder" value="" />
@@ -50,11 +50,11 @@
 <br style="clear: both"/>
 <article id="addWgtHeader" style="display: none;">
 [[=admin:sect:EditModules]]<br/>
-<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="Widget Name" /><br class="smallBr"/>
-<input type="text" class="wgtCol inputLine inputLarge wgttext" name="wgttext" placeholder="Link Text" /><br class="smallBr"/>
-<input type="text" class="wgtCol inputLine inputLarge wgturl" name="wgturl" placeholder="Link URL" /><br class="smallBr"/>
-<input type="text" class="wgtCol inputLine inputLarge wgttitle" name="wgttitle" placeholder="Mouseover Prompt" /><br class="smallBr"/>
-<select class="wgtCol selectLine inputLarge wgttarget" name="wgttarget"><option value="_self">Open Link in Current Window</option><option value="_blank">Open Link in New Window</option><option value="_parent">Open Link in Parent Window</option></select><br/>
+<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="[[=admin:item:WgtName]]" /><br class="smallBr"/>
+<input type="text" class="wgtCol inputLine inputLarge wgttext" name="wgttext" placeholder="[[=admin:item:LinkText]]" /><br class="smallBr"/>
+<input type="text" class="wgtCol inputLine inputLarge wgturl" name="wgturl" placeholder="[[=admin:item:LinkURL]]" /><br class="smallBr"/>
+<input type="text" class="wgtCol inputLine inputLarge wgttitle" name="wgttitle" placeholder="[[=admin:item:LinkTitle]]" /><br class="smallBr"/>
+<select class="wgtCol selectLine inputLarge wgttarget" name="wgttarget"><option value="_self">[[=admin:item:LinkDes1]]</option><option value="_blank">[[=admin:item:LinkDes2]]</option><option value="_parent">[[=admin:item:LinkDes3]]</option></select><br/>
 <input type="hidden" class="wgtCol extOrder" name="extOrder" value="" />
 <input type="hidden" class="wgtCol extHooks" name="extHooks" value="wgheader" />
 <span class="details">
@@ -74,9 +74,9 @@
 <br style="clear: both"/>
 <article id="addWgtSidebar" style="display: none;">
 [[=admin:sect:EditModules]]<br/>
-<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="Widget Name" /><br class="smallBr"/>
-<input type="text" class="wgtCol inputLine inputLarge wgttitle" name="wgttitle" placeholder="Sidebar Title" /><br class="smallBr"/>
-<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="HTML Value" />
+<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="[[=admin:item:WgtName]]" /><br class="smallBr"/>
+<input type="text" class="wgtCol inputLine inputLarge wgttitle" name="wgttitle" placeholder="[[=admin:item:SidebarTitle]]" /><br class="smallBr"/>
+<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="[[=admin:item:HTMLValue]]" />
 </textarea>
 <br class="smallBr"/>
 <input type="hidden" class="wgtCol extOrder" name="extOrder" value="" />
@@ -98,8 +98,8 @@
 <br style="clear: both"/>
 <article id="addWgtFooter" style="display: none;">
 [[=admin:sect:EditModules]]<br/>
-<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="Widget Name" /><br class="smallBr"/>
-<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="HTML Value" />
+<input type="text" class="wgtCol inputLine inputLarge wgtID" name="wgtID" placeholder="[[=admin:item:WgtName]]" /><br class="smallBr"/>
+<textarea class="wgtCol inputLine inputLarge textareaLine textareaMiddle wgtvalue" name="wgtvalue" placeholder="[[=admin:item:HTMLValue]]" />
 </textarea>
 <br class="smallBr"/>
 <input type="hidden" class="wgtCol extOrder" name="extOrder" value="" />
@@ -117,7 +117,7 @@
 
 <br class="smallBr"/>
 
-<h2><span class="icon-paperclip"></span> [[=admin:sect:CustomizedHTML]]</h2> 
+<h2><span class="icon-file-xml"></span> [[=admin:sect:CustomizedHTML]]</h2> 
 <span class="adminExplain">[[=admin:msg:CustomizedHTML]]</span>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:InterfaceName]] htmlhead<br/>

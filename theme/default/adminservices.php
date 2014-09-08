@@ -5,9 +5,15 @@
 
 <div class="adminArea">
 <form id="smtForm" action="post">
-<h2><span class="icon-chat"></span> [[=admin:sect:Duoshuo]]</h2> 
+<h2><span class="icon-chat"></span> [[=admin:sect:CommentServices]]</h2> 
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:DuoshuoID]]<br/><input type="text" class="inputLine inputLarge" name="smt[duoshuoID]" value="[[::duoshuoID]]" id="duoshuoID" /><br/><span class="adminExplain">[[=admin:msg:Duoshuo]]</span>
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:BaiduAK]]<br/><input type="text" class="inputLine inputLarge" name="smt[baiduAKey]" value="[[::baiduAKey]]" id="baiduAKey" /><br/><span class="adminExplain">[[=admin:NotReady]] [[=admin:msg:BaiduAPI]]</span>
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:BaiduSK]]<br/><input type="text" class="inputLine inputLarge" name="smt[baiduSKey]" value="[[::baiduSKey]]" id="baiduSKey" />
 </p>
 
 <p><br/><br/></p>
@@ -41,7 +47,7 @@
 
 <p><br/><br/></p>
 
-<h2><span class="icon-clock"></span> [[=admin:sect:OtherServices]]</h2>
+<h2><span class="icon-cone"></span> [[=admin:sect:OtherServices]]</h2>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:Backup]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/admin.php/services/backup/?CSRFCode=[[::serviceCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:Backup]] </a></span>
 </p>

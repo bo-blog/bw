@@ -5,7 +5,7 @@
 
 <div class="adminArea">
 <form id="smtForm" action="post">
-<h2><span class="icon-compass"></span> [[=admin:sect:BasicInfo]]</h2>
+<h2><span class="icon-cogs"></span> [[=admin:sect:BasicInfo]]</h2>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:SiteName]]<br/><input type="text" class="inputLine inputLarge" name="smt[siteName]" value="[[::siteName]]" />
 </p>
@@ -18,10 +18,19 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:Cache]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst pageCache" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast pageCache" data-reflect="1"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::pageCache]]" name="smt[pageCache]" id="pageCache"/><br/><span class="adminExplain">[[=admin:msg:Cache]]</span>
 </p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:CommentOpt]]<br class="smallBr"/>
+<select name="smt[commentOpt]" id="commentOpt" class="selectLine">
+<option value="0">[[=admin:opt:NoComment]]</option>
+<option value="1">[[=admin:opt:AllowComment]]</option>
+<option value="2">[[=admin:opt:OnlyLoginComment]]</option>
+<option value="3">[[=admin:opt:ThirdPartyComment]]</option>
+</select>
+<br/><span class="adminExplain">[[=admin:NotReady]] [[=admin:msg:CommentOpt]]</span></p>
 
 <p><br/><br/></p>
 
-<h2><span class="icon-user"></span> [[=admin:sect:Author]]</h2>
+<h2><span class="icon-user5"></span> [[=admin:sect:Author]]</h2>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:AuthorName]]<br/><input type="text" class="inputLine inputLarge" name="smt[authorName]" value="[[::authorName]]" />
 </p>

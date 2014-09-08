@@ -42,7 +42,7 @@ $conf['l'] = array(
 	'admin:sect:Articles' => 'Manage Articles',
 	'admin:sect:Categories' => 'Manage Categories',
 	'admin:sect:Writer' => 'Writer',
-	'admin:sect:Duoshuo' => 'Setup Duoshuo',
+	'admin:sect:CommentServices' => 'Third Party Comment Services',
 	'admin:sect:Qiniu' => 'Setup Qiniu',
 	'admin:sect:OtherServices' => 'Other Services',
 	'admin:sect:Welcome' => 'Welcome',
@@ -85,6 +85,9 @@ $conf['l'] = array(
 	'admin:item:NewExtDir' => 'New Extension Dir.',
 	'admin:item:Cache' => 'Cache Frontend Contents',
 	'admin:item:CustomizedHTML' => 'Customized HTML',
+	'admin:item:CommentOpt' => 'Comments from Others',
+	'admin:item:BaiduAK' => 'Baidu API Key',
+	'admin:item:BaiduSK' => 'Baidu Secret Key',
 
 	'admin:opt:SimplifiedChinese' => 'Chinese (PRC)',
 	'admin:opt:English' => 'English',
@@ -96,6 +99,10 @@ $conf['l'] = array(
 	'admin:opt:On' => 'On',
 	'admin:opt:Enable' => 'Enable',
 	'admin:opt:Disable' => 'Disable',
+	'admin:opt:NoComment' => 'Do not allow comments',
+	'admin:opt:AllowComment' => 'Everyone can comment',
+	'admin:opt:OnlyLoginComment' => 'Require login with social media accounts',
+	'admin:opt:ThirdPartyComment' => 'Hosted by social comment services',
 
 	'admin:msg:SiteURL' => 'Example: http://name.com/path. Do not change unless you know what you\'re doing.',
 	'admin:msg:BlankPsw' => 'Leave blank to keep the current password',
@@ -109,6 +116,7 @@ $conf['l'] = array(
 	'admin:msg:ATime' => 'Leave blank for current time.',
 	'admin:msg:Delete' => 'Do you really want to delete this article?',
 	'admin:msg:Duoshuo' => 'Duoshuo is a social comment service provided by <a href="http://www.duoshuo.com">duoshuo.com</a>.',
+	'admin:msg:BaiduAPI' => 'Baidu Cloud Service is provided by <a href="http://developer.baidu.com/">baidu.com</a> which allows social media account login.',
 	'admin:msg:Qiniu' => 'Qiniu is a cloud storage service provided by <a href="http://www.qiniu.com">qiniu.com</a>.',
 	'admin:msg:QiniuSync' => 'Articles will be synchronized with your Qiniu bucket.',
 	'admin:msg:QiniuUpload' => 'Upload to Qiniu instead of local server. The bucket must be set to Public.',
@@ -146,6 +154,7 @@ $conf['l'] = array(
 	'admin:msg:WgtSidebar' => 'Sidebar',
 	'admin:msg:WgtFooter' => 'Page Footer',
 	'admin:msg:RemoveExtension' => 'Do you really want to remove this item?',
+	'admin:msg:CommentOpt' => 'For social media account login and social comment services, configure in the Services page.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',
@@ -190,5 +199,16 @@ $conf['l'] = array(
 	'admin:item:RecentView' => 'Recently viewed pages',
 	'admin:item:InterfaceName' => 'Interface Hook: ',
 	'admin:item:WgtInterfaceName' => 'Widget Interface: ',
+	'admin:item:WgtName' => 'Widget Name ',
+	'admin:item:HTMLValue' => 'HTML Code',
+	'admin:item:LinkText' => 'Link Text',
+	'admin:item:LinkURL' => 'Link URL',
+	'admin:item:LinkTitle' => 'Link Description',
+	'admin:item:LinkDes1' => 'Open Link in Current Window',
+	'admin:item:LinkDes2' => 'Open Link in New Window',
+	'admin:item:LinkDes3' => 'Open Link in Parent Window',
+ 	'admin:item:SidebarTitle' => 'Sidebar Item Title',
+
+	'admin:NotReady' => '*To-do*',
 
 	);

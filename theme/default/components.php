@@ -57,7 +57,7 @@ eot;
 
 $parts['admincommonupload']=<<<eot
 <form id="picForm" method="post" action="[[::siteURL]]/admin.php/articles/uploader/?CSRFCode=[[::upCSRFCode]]" target="execPicTarget" enctype="multipart/form-data">
-<input type="file" style="display: none; height: 1px;" name="uploadFile[]" id="uploadPicFile" multiple="true" />
+<input type="file" style="display: none; height: 1px;" name="uploadFile[]" id="uploadPicFile" multiple="true" onchange="doPicUp();"/>
 </form>
 eot;
 
@@ -93,6 +93,11 @@ $parts['wgfooter']=$parts['wghtmlhead']=<<<eot
 [[::value]]
 eot;
 
-
+$parts['commentarea']=<<<eot
+<input type="text" name="smt[userName]" class="inputLine inputMiddle" placeholder="Nick Name" /><br/>
+<input type="text" name="smt[userEmail]" class="inputLine inputMiddle" placeholder="Email (will not be displayed)" /><br/>
+<input type="text" name="smt[userURL]" class="inputLine inputMiddle" placeholder="Homepage URL (optional)" /><br/>
+<textarea type="text" class="inputLine inputMiddle textareaLine textareaMiddle" name="smt[userContent]" placeholder="Your comment" /></textarea>
+eot;
 
 ?>

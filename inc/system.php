@@ -5,11 +5,16 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '0.9.1 alpha');
+define ('bwVersion', '0.9.1 alpha-r1');
 
 if (!defined ('P')) {
 	die ('Access Denied.');
 } 
+
+if (!file_exists (P . 'conf/info.php')) {
+	header ('Location: ' . P . 'install/index.php');
+	exit ();
+}
 
 include_once (P . 'conf/info.php');
 date_default_timezone_set ($conf['timeZone']);
@@ -152,6 +157,13 @@ class bw {
 } 
 
 class bwCategory {
+	private $cacheClear;
+
+	public function __construct () 
+	{
+		$this -> cacheClear = true;
+	} 
+
 	public function getCategories ()
 	{
 		bw :: initCategories ();
@@ -173,8 +185,10 @@ class bwCategory {
 			$dataLineCounter = count ($dataLine);
 			if ($dataLineCounter > 0) {
 				bw :: $db -> dbExecBatch ("INSERT INTO categories (aCateURLName, aCateDispName, aCateCount, aCateOrder) VALUES (:aCateURLName, :aCateDispName, 0, {$dataLineCounter})", $dataLine);
-				$this -> getCategories (); //Refresh immediately
-				clearCache (); //Clear all cache
+				if ($this -> cacheClear) {
+					$this -> getCategories (); //Refresh immediately
+					clearCache (); //Clear all cache
+				}
 			} 
 			hook ('addCategories', 'Execute', $smt);
 		} 
@@ -190,8 +204,10 @@ class bwCategory {
 				stopError (bw :: $conf['l']['admin:msg:CategoryNotEmpty']);
 			} 
 		} 
-		$this -> getCategories (); //Refresh immediately
-		clearCache (); //Clear all cache
+		if ($this -> cacheClear) {
+			$this -> getCategories (); //Refresh immediately
+			clearCache (); //Clear all cache
+		}
 		hook ('deleteCategories', 'Execute', $deletedCates);
 	} 
 
@@ -205,10 +221,42 @@ class bwCategory {
 			$i -= 1;
 		} 
 		bw :: $db -> dbExecBatch ('UPDATE categories SET aCateOrder=:aCateOrder WHERE aCateURLName=:aCateURLName', $dataLine);
-		$this -> getCategories ();
-		clearCache (); //Clear all cache
+		if ($this -> cacheClear) {
+			$this -> getCategories (); //Refresh immediately
+			clearCache (); //Clear all cache
+		}
 		hook ('orderCategories', 'Execute', $arrayOrder);
 	} 
+
+	public function renameCategories ($arrayCateID, $arrayOldNames, $arrayNewNames)
+	{
+		if (count ($arrayCateID) <> count ($arrayOldNames) || count ($arrayCateID) <> count ($arrayNewNames)) {
+			return;
+		}
+		for ($i = 0; $i < count ($arrayCateID); $i++) {
+			$arrayNewNames[$i] = htmlspecialchars ($arrayNewNames[$i], ENT_QUOTES, 'UTF-8');
+			if ($arrayOldNames[$i] <> $arrayNewNames[$i]) {
+				bw :: $db -> dbExec ('UPDATE categories SET aCateDispName=? WHERE aCateURLName=?', array ($arrayNewNames[$i], $arrayCateID[$i]));
+			}
+		}
+		if ($this -> cacheClear) {
+			$this -> getCategories (); //Refresh immediately
+			clearCache (); //Clear all cache
+		}
+		hook ('renameCategories', 'Execute', array ($arrayCateID, $arrayOldNames, $arrayNewNames));
+	} 
+
+	public function bufferCacheClear ()
+	{
+		$this -> cacheClear = false;
+	}
+
+	public function endBufferCache ()
+	{
+		$this -> getCategories (); //Refresh immediately
+		clearCache (); //Clear all cache
+		$this -> cacheClear = true;
+	}
 } 
 
 class bwArticle {
@@ -439,7 +487,7 @@ class bwArticle {
 		if ($this -> listCate == 'all') {
 			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName<>"0" AND aTime<=?', array (date ('Y-m-d H:i:s')));
 		} else {
-			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName=? AND aTime<=?', array (bw :: $this -> listCate, date ('Y-m-d H:i:s')));
+			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName=? AND aTime<=?', array ($this -> listCate, date ('Y-m-d H:i:s')));
 		} 
 		hook ('getTotalArticles', 'Execute', $this);
 	} 
@@ -493,7 +541,7 @@ class bwView {
 		global $conf;
 		$this -> viewWorkFlow = $this -> modContent = $this -> loopData = $this -> loopEach = $this -> themeInternal = $this -> parts = $this -> viewHooks = $this -> passData = array();
 		$this -> outputContent = $this -> masterMod = '';
-		$this -> markdownParser = null;
+		self :: $markdownParser = null;
 		$this -> setTheme ($conf['siteTheme']);
 		$this -> passData['pageTitle'] = '';
 	} 
@@ -699,6 +747,7 @@ class bwView {
 
 	public function finalize ()
 	{
+		header ("Content-Type: text/html; charset=UTF-8");
 		$this -> generateOutput ();
 		$this -> outputView ();
 		hook ('finalize', 'Execute', $this);
@@ -723,21 +772,19 @@ class bwView {
 	{
 		if (isset (bw :: $extList[$hookInterface]) && isset ($this -> parts[$hookInterface])) {
 			$return = '';
+			$keyMaker = function ($key) {
+				return '[[::'.$key.']]';
+			};
 			foreach (bw :: $extList[$hookInterface] as $aWidget) {
 				$output = widget ($hookInterface, bw :: $extData[$aWidget]['extStorage']);
 				if (is_array ($output)) {
-					$outputKeys = array_map (array ($this, 'addWidgetIntoView_keyMaker'), array_keys ($output));
+					$outputKeys = array_map ($keyMaker, array_keys ($output));
 					$return.= str_replace ($outputKeys, array_values ($output), $this -> parts[$hookInterface]);
 				}
 			}
 			return $return;
 		}
 	} 
-
-	private function addWidgetIntoView_keyMaker ($key)
-	{
-		return '[[::'.$key.']]';
-	}
 
 	public function haltWithError ($errMsg)
 	{
@@ -814,7 +861,7 @@ class bwView {
 	private function theme_safeConvert ($unuse, $text)
 	{
 		$text = hook ('safeConvert', 'Replace', $text);
-		return htmlspecialchars ($text, ENT_QUOTES, 'UTF-8');
+		return str_replace ('\'', '\\\'', htmlspecialchars (str_replace (array("\r\n", "\r", "\n"), "\\r", $text), ENT_COMPAT, 'UTF-8'));
 	} 
 
 	private function theme_formatTags ($format, $aTags)

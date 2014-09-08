@@ -505,6 +505,7 @@ display: none;
 float: right;
 display: block;
 margin-right: 20%;
+margin-top: 25px;
 }
 .adminUploader a {
 color: #717171;
@@ -839,6 +840,9 @@ float: none;
 padding: 17px;
 min-height: 10px;
 width: 85%;
+}
+.adminUploader {
+margin-top: 0;
 }
 
 }
