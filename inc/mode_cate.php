@@ -20,7 +20,7 @@ if (isset ($canonical -> currentArgs['cateID'])) {
 	$view -> setActiveNav ('index');
 } 
 $article -> getArticleList ();
-loadServices (); //Load Duoshuo
+
 // Pagination
 $canonical -> calTotalPages ($article -> totalArticles);
 $view -> doPagination ();

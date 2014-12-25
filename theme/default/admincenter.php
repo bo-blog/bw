@@ -23,10 +23,13 @@
 <select name="smt[commentOpt]" id="commentOpt" class="selectLine">
 <option value="0">[[=admin:opt:NoComment]]</option>
 <option value="1">[[=admin:opt:AllowComment]]</option>
-<option value="2">[[=admin:opt:OnlyLoginComment]]</option>
+<option value="2">[[=admin:NotReady]] [[=admin:opt:OnlyLoginComment]]</option>
 <option value="3">[[=admin:opt:ThirdPartyComment]]</option>
 </select>
-<br/><span class="adminExplain">[[=admin:NotReady]] [[=admin:msg:CommentOpt]]</span></p>
+<br/><span class="adminExplain">[[=admin:msg:CommentOpt]]</span></p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:CommentFrequency]]<br/><input type="text" class="inputLine inputLarge" name="smt[comFrequency]" value="[[::comFrequency]]" /><br/><span class="adminExplain">[[=admin:msg:CommentFrequency]]</span>
+</p>
 
 <p><br/><br/></p>
 
@@ -80,7 +83,7 @@
 </p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:URLRewrite]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst linkPrefixIndex" data-reflect="index.php"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast linkPrefixIndex" data-reflect="index"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::linkPrefixIndex]]" name="smt[linkPrefixIndex]" id="linkPrefixIndex"/><input type="hidden" value="[[::linkPrefixCategory]]" name="smt[linkPrefixCategory]" id="linkPrefixCategory"/><input type="hidden" value="[[::linkPrefixArticle]]" name="smt[linkPrefixArticle]" id="linkPrefixArticle"/><input type="hidden" value="[[::linkPrefixTag]]" name="smt[linkPrefixTag]" id="linkPrefixTag"/>
-<br/><span class="adminExplain">[[=admin:msg:URLRewrite]]</span>
+<br/><span class="adminExplain">[[=admin:NotReady]] [[=admin:msg:URLRewrite]]</span>
 </p>
 
 <p class="adminCommand"><br/>
@@ -96,6 +99,7 @@
 <script type="text/javascript">
 $("#siteTheme").val("[[::siteTheme]]");
 $("#siteLang").val("[[::siteLang]]");
+$("#commentOpt").val("[[::commentOpt]]");
 
 function errorPrompter (inputId)
 {

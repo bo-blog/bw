@@ -25,9 +25,20 @@ $conf['l'] = array(
 	'page:Tags' => 'Tag',
 	'page:NextPage' => 'Next Page',
 	'page:PrevPage' => 'Previous Page',
+	'page:ComError1' => 'Missing required fields.',
+	'page:ComSuccess' => 'Comment added.',
+	'page:BlockItem' => 'Block this comment',
+	'page:BlockIP' => 'Block this IP',
+	'page:AddComment' => 'Add your comment',
+	'page:NickName' => 'Name',
+	'page:URL' => 'URL (Optional)',
+	'page:CommentContent' => 'Your comment',
+	'page:SendComment' => 'Send',
+	'page:ClearComment' => 'Clear',
 
 	'js:RememberFail' => 'System will not remember your login status because the browser is working in Private Browsing mode.',
 	'js:AjaxFail' => 'An error occurs in Ajax communication.',
+	'js:BlockIP' => 'Do you really want to block all comments from this IP address for all articles?',
 
 	'admin:Dashboard' => 'Dashboard',
 	'admin:Settings' => 'Settings',
@@ -88,6 +99,7 @@ $conf['l'] = array(
 	'admin:item:CommentOpt' => 'Comments from Others',
 	'admin:item:BaiduAK' => 'Baidu API Key',
 	'admin:item:BaiduSK' => 'Baidu Secret Key',
+	'admin:item:CommentFrequency' => 'Comment Frequency',
 
 	'admin:opt:SimplifiedChinese' => 'Chinese (PRC)',
 	'admin:opt:English' => 'English',
@@ -155,6 +167,7 @@ $conf['l'] = array(
 	'admin:msg:WgtFooter' => 'Page Footer',
 	'admin:msg:RemoveExtension' => 'Do you really want to remove this item?',
 	'admin:msg:CommentOpt' => 'For social media account login and social comment services, configure in the Services page.',
+	'admin:msg:CommentFrequency' => 'After an article is loaded or a comment is sent, how many seconds the user has to wait before being able to submit a new comment.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',
@@ -184,6 +197,8 @@ $conf['l'] = array(
 	'admin:msg:NoChangeID' => 'You cannot change the ID of an existing article.',
 	'admin:msg:CSRF' => 'Your request seems to be made from a deceptive source. The action is therefore prohibited.',
 	'admin:msg:ExtNotFound' => 'No extension found in that directory.',
+	'admin:msg:AntiSpam' => 'The comment you submitted was identified as a spam. Check if your browser cookie has been enabled.',
+ 	'admin:msg:AntiSpam2' => 'Please wait for another %s seconds and try again. Thanks for your understanding.',
 
 	'admin:item:AtAGlance' => 'Your website at a glance',
 	'admin:item:xxArticles' => 'articles',

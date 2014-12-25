@@ -85,7 +85,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 			stopError ('No data is submitted.');
 		} 
 
-		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
+		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$smt = array_map ('htmlspecialchars', $smt);
 		if (empty ($smt['siteKey'])) {
@@ -497,6 +497,25 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		$view -> finalize ();
 	}
 
+}
+
+
+if ($canonical -> currentArgs['mainAction'] == 'comments') {
+	$comment = new bwComment;
+	if ($canonical -> currentArgs['subAction'] == 'blockitem') {
+		if (!$_REQUEST['comID'] || !$_REQUEST['aID']) {
+			stopError ($conf['l']['admin:msg:NotExist']);
+		} 
+		$comment -> blockItem ($_REQUEST['comID'], $_REQUEST['aID']);
+		ajaxSuccess($conf['l']['admin:msg:ChangeSaved']);
+	}
+	if ($canonical -> currentArgs['subAction'] == 'blockip') {
+		if (!$_REQUEST['comID']) {
+			stopError ($conf['l']['admin:msg:NotExist']);
+		} 
+		$comment -> blockIP ($_REQUEST['comID']);
+		ajaxSuccess($conf['l']['admin:msg:ChangeSaved']);
+	}
 }
 
 hook ('newAdminCategory', 'Execute', $canonical, $admin, $view);

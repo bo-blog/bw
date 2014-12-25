@@ -11,7 +11,7 @@ if (!defined ('P')) {
 <span class="decoArticle"></span>
 <h2>[[::aTitle]]</h2>
 <h3><span class="icon-pencil"></span> [[::aTime, dateFormat, Y/m/d H:i]] [[=page:InCate]] <a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a>
-<span class="articleShare"><a href="#comment-[[::aID]]"><span class="icon-comment" title="[[=page:Comments]]"></span><span id="ds-thread-count" class="ds-thread-count" data-thread-key="[[::aID]]"></span>
+<span class="articleShare"><a href="#comment-[[::aID]]"><span class="icon-comment" title="[[=page:Comments]]"></span><span id="ds-thread-count" class="ds-thread-count" data-thread-key="[[::aID]]"></span>[[::aComments]]
 </a> <a href="##"><span class="icon-share" id="share-[[::aID]]" title="[[=page:ShareTo]]"></span> </a></span>
 </h3>
 <div class="shareLayer" id="share-[[::aID]]-layer">
@@ -27,25 +27,8 @@ if (!defined ('P')) {
 [[::ext_articleDetail]]
 </article>
 
-<div id="comment-[[::aID]]" class="commentArea">
+<div id="comment-[[::aID]]">
 [[::commentarea]]
-<!-- Duoshuo start -->
-<div class="ds-thread" data-thread-key="[[::aID]]" data-title="[[::aTitle]]" data-url="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" data-form-position="top" data-order="desc"></div>
-<!-- Duoshuo end -->
-<!-- Duoshuo JS start -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"[[::duoshuoID]]"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/theme/default/duoshuo.css"}).appendTo("head");
-
-</script>
-<!-- Duoshuo JS end -->
+[[::duoshuoarea]]
 [[::ext_commentArea]]
 </div>

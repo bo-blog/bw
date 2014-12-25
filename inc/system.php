@@ -5,7 +5,7 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '0.9.1 alpha-r1');
+define ('bwVersion', '0.9.3 alpha');
 
 if (!defined ('P')) {
 	die ('Access Denied.');
@@ -339,6 +339,11 @@ class bwArticle {
 		} 
 		$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$this -> articleList[$aID]['aCateURLName']];
 		$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $this -> articleList[$aID]['aTags']), 'tagValue');
+		if (isset (bw :: $conf['commentOpt'])) {
+			if (bw :: $conf['commentOpt'] == 0 || bw :: $conf['commentOpt'] == 3) { //If using non-built-in comment system, give an empty string instead of 0 for the attribute aComments
+				$this -> articleList[$aID]['aComments'] = '';
+			} 
+		} 
 		hook ('fetchArticle', 'Execute', $this);
 	} 
 
@@ -478,6 +483,11 @@ class bwArticle {
 			$this -> articleList[$aID] = $row;
 			$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$row['aCateURLName']];
 			$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $row['aTags']), 'tagValue');
+			if (isset (bw :: $conf['commentOpt'])) {
+			if (bw :: $conf['commentOpt'] == 0 || bw :: $conf['commentOpt'] == 3) { //If using non-built-in comment system, give an empty string instead of 0 for the attribute aComments
+					$this -> articleList[$aID]['aComments'] = '';
+				} 
+			} 
 		} 
 	} 
 
@@ -523,6 +533,205 @@ class bwArticle {
 		return $smt;
 	} 
 } 
+
+class bwComment {
+	public $comList;
+	public $totalCom;
+	private $pageNum;
+	private $parentComID;
+	private $aID;
+	private $listBlocked;
+	private $myIP;
+
+	public function __construct ()
+	{
+		global $canonical;
+		$this -> pageNum = $canonical -> currentPage;
+		$this -> comList = array();
+		$this -> aID = $this -> listBlocked = false;
+		$this -> totalCom = 0;
+		$this -> myIP = getIP ();
+	} 
+
+	public function alterAID ($aID)
+	{
+		$this -> aID = $aID;
+		hook ('alterAID', 'Execute', $this);
+	} 
+
+	public function alterPerPage ($num)
+	{
+		bw :: $conf['perPage'] = floor ($num);
+	} 
+
+	public function getComList ()
+	{
+		$currentTitleStart = ($this -> pageNum-1) * bw :: $conf['perPage'] * 10;
+		if ($this -> listBlocked) {
+			$blockedStr = $this -> listBlocked == 'only' ? 'comBlock=1' : '1=1';
+		} else {
+			$blockedStr = 'comBlock=0';
+		}
+
+		$qStr = $this -> aID === false ? "SELECT * FROM comments WHERE {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?" : "SELECT * FROM comments WHERE comArtID=? AND {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?";
+
+		if ($this -> aID === false) {
+			$qBind = array ($currentTitleStart, bw :: $conf['perPage'] * 10);
+		} else {
+			$qBind = array ($this -> aID, $currentTitleStart, bw :: $conf['perPage'] * 10);
+		} 
+		$allComs = bw :: $db -> getRows ($qStr, $qBind);
+
+		foreach ($allComs as $comID => $row) {
+			$row['comAvatar'] = $row['comAvatar'] ? $row['comAvatar'] : bw :: $conf['siteURL'] . '/conf/default.png';
+			$this -> comList[$comID] = $row;
+		} 
+		hook ('getComList', 'Execute', $this);
+		$this -> getTotalComs ();
+	} 
+
+
+	private function getTotalComs ()
+	{
+		if ($this -> listBlocked) {
+			$blockedStr = $this -> listBlocked == 'only' ? 'comBlock=1' : '1=1';
+		} else {
+			$blockedStr = 'comBlock=0';
+		}
+		if ($this -> aID === false) {
+			$this -> totalCom = bw :: $db -> countRows ("SELECT comID FROM comments WHERE {$blockedStr}");
+		} else {
+			$this -> totalCom = bw :: $db -> countRows ("SELECT comID FROM comments WHERE comArtID=? AND {$blockedStr}", array ($this -> aID));
+		} 
+		hook ('getTotalComs', 'Execute', $this);
+	} 
+
+	public function setBlockStatus ($statusCode) 
+	{
+		switch ($statusCode) {
+			case 0:
+				$this -> listBlocked = false;
+			break;
+			case 1:
+				$this -> listBlocked = 'all';
+			break;
+			case 2:
+				$this -> listBlocked = 'only';
+			break;
+			default:
+				$this -> listBlocked = false;
+		}
+	} 
+
+	public function initComAKey ()
+	{
+		return md5 ($this -> aID . bw :: $conf['siteKey']);
+	} 
+
+	public function initComSKey ()
+	{
+		$str = '';
+		$strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		$max = strlen ($strPol)-1;
+		for ($i=0;$i<6; $i++) {
+			$str.= $strPol[rand (0, $max)];
+		}
+		$_SESSION['SKey_' . $this -> aID] = $str;
+		$_SESSION['OTime_' . $this -> aID] = time ();
+		return $str;
+	}
+
+	public function addComment ($smt)
+	{
+		$smt = $this -> checkComData ($smt);
+		if (!$smt['aID']) {
+			stopError (bw :: $conf['l']['admin:msg:NotExist']);
+		} else {
+			$this -> aID = $smt['aID'];
+		} 
+
+		if (!isset ($_SESSION['SKey_' . $this -> aID]) || !isset ($_SESSION['OTime_' . $this -> aID])) {
+			stopError (bw :: $conf['l']['admin:msg:AntiSpam']);
+		} 
+
+		if (time () - $_SESSION['OTime_' . $this -> aID] < floor (bw :: $conf['comFrequency'])) {
+			stopError (sprintf (bw :: $conf['l']['admin:msg:AntiSpam2'], floor (bw :: $conf['comFrequency']) - (time () - $_SESSION['OTime_' . $this -> aID])));
+		}
+
+		if (md5 ($this -> initComAKey () . $_SESSION['SKey_' . $this -> aID]) <> $smt['comkey']) {
+			stopError (bw :: $conf['l']['admin:msg:AntiSpam']);
+		}
+
+		$taID = bw :: $db -> getSingleRow ('SELECT * FROM articles WHERE aID=?', array ($this -> aID));
+		if (!isset ($taID['aID'])) {
+			stopError (bw :: $conf['l']['admin:msg:NotExist']);
+		} 
+
+		bw :: $db -> dbExec ('INSERT INTO comments (comName, comTime, comIP1, comIP2, comAvatar, comContent, comArtID, comParentID, comSource, comURL, comBlock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array ($smt['userName'], date ('Y-m-d H:i:s'), $this -> myIP[0], $this -> myIP[1], '', $smt['userContent'], $smt['aID'], 0, '', $smt['userURL'], 0));
+		bw :: $db -> dbExec ('UPDATE articles SET aComments=aComments+1 WHERE aID=?', array ($smt['aID']));
+
+		$_SESSION['OTime_' . $this -> aID] = time ();
+
+		clearCache (); //Clear all cache
+		hook ('addComment', 'Execute', $smt);
+		
+		$smt2 = array ('comID' =>bw :: $db -> dbLastInsertId (), 'comName' => $smt['userName'], 'comTime' => date ('Y-m-d H:i:s'), 'comAvatar' => bw :: $conf['siteURL'] . '/conf/default.png', 'comContent' => $smt['userContent'], 'comArtID' => $smt['aID'], 'comURL' => $smt['userURL']);
+		return $smt2;
+
+	}
+
+	private function checkComData ($smt)
+	{
+		$acceptedKeys = array ('userName', 'userURL', 'userContent', 'aID', 'comkey');
+		$smt = dataFilter ($acceptedKeys, $smt);
+		if (empty ($smt['aID']) || $smt['userName']==='' || empty ($smt['userContent']) || empty ($smt['comkey'])) {
+			stopError (bw :: $conf['l']['admin:msg:NoData']);
+		} 
+		$smt['userName'] = htmlspecialchars ($smt['userName'], ENT_QUOTES, 'UTF-8');
+		$smt['userURL'] = htmlspecialchars ($smt['userURL'], ENT_QUOTES, 'UTF-8');
+		$smt['userContent'] = htmlspecialchars ($smt['userContent'], ENT_QUOTES, 'UTF-8');
+		return $smt;
+	} 
+
+	public function blockItem ($comID, $aID) 
+	{
+		bw :: $db -> dbExec ('UPDATE comments SET comBlock=1 WHERE comID=?', array ($comID));
+		bw :: $db -> dbExec ('UPDATE articles SET aComments=aComments-1 WHERE aID=?', array ($aID));
+		clearCache (); //Clear all cache
+		hook ('blockItem', 'Execute', $comID, $aID);
+	} 
+
+	public function blockIP ($comID) 
+	{
+		$taID = bw :: $db -> getSingleRow ('SELECT * FROM comments WHERE comID=?', array ($comID));
+		$allAffectedCom = array ();
+		if ($taID['comIP1']) {
+			$allAffectedCom = bw :: $db -> getColumns ('SELECT * FROM comments WHERE comBlock=0 AND (comIP1=? OR comIP2=?)', array ($taID['comIP1'], $taID['comIP1']));
+		} 
+		if ($taID['comIP2']) {
+			$allAffectedCom = array_merge_recursive ($allAffectedCom, bw :: $db -> getColumns ('SELECT * FROM comments WHERE comBlock=0 AND (comIP1=? OR comIP2=?)', array ($taID['comIP2'], $taID['comIP2'])));
+		} 
+		
+/*		print_r ($allAffectedCom['comArtID']); 
+		print ('<br>');
+		print_r (array_count_values ($allAffectedCom['comArtID'])); 
+		print ('<br>');
+		print ('('.implode (',', array_unique ($allAffectedCom['comID'])).')');
+		print ('<br>');
+		die();*/
+
+		if (count ($allAffectedCom) > 0) {
+			$allAffectedArticles = array_count_values ($allAffectedCom['comArtID']);
+			$allAffectedComments = '('.implode (',', array_unique ($allAffectedCom['comID'])).')';
+			bw :: $db -> dbExec ('UPDATE comments SET comBlock=1 WHERE comID in '.$allAffectedComments);
+			foreach ($allAffectedArticles as $affAID => $affCount) {
+				bw :: $db -> dbExec ('UPDATE articles SET aComments=aComments-? WHERE aID=?', array ($affCount, $affAID));
+			} 
+			clearCache (); //Clear all cache
+		} 
+		hook ('blockIP', 'Execute', $comID);
+	} 
+}
 
 class bwView {
 	public $viewWorkFlow;
@@ -945,6 +1154,10 @@ class bwCanonicalization {
 				$this -> argsPattern = array ('mainAction', 'subAction', 'pageNum');
 				$this -> loaderID = 'admin';
 				break;
+			case 'send':
+				$this -> argsPattern = array ('mainAction', 'subAction');
+				$this -> loaderID = 'send';
+				break;
 			/*case 'page':
 				$this -> argsPattern = array ('aID');
 				$this -> loaderID = 'article';
@@ -954,7 +1167,15 @@ class bwCanonicalization {
 				stopError ('Requested mode does not exist.');
 		} 
 
-		$requestedURL = @explode ('/', str_replace (parse_url ($conf['siteURL'], PHP_URL_PATH) . '/', '', $_SERVER['PHP_SELF']));
+		$siteURLTmp = parse_url ($conf['siteURL'], PHP_URL_PATH) . '/';
+
+		if ($siteURLTmp == '/') {
+			$requestedURL = explode ('/', $_SERVER['PHP_SELF']);
+			array_shift ($requestedURL);
+		} else {
+			$requestedURL = explode ('/', str_replace ($siteURLTmp, '', $_SERVER['PHP_SELF']));
+		}
+
 		$this -> currentScript = $requestedURL[0];
 		array_shift ($requestedURL);
 		if (count ($requestedURL) > count ($this -> argsPattern)) {
@@ -1049,6 +1270,7 @@ class bwAdmin {
 	public function __construct ()
 	{
 		bw :: $conf['myIP'] = getIP ();
+		bw :: $conf['myIP'] = bw :: $conf['myIP'][0];
 		$this -> initToken ();
 		$this -> verified = false;
 	} 
@@ -1127,26 +1349,28 @@ function ajaxSuccess ($successMsg)
 
 function getIP ()
 {
-	$realip = '';
+	$realip = $realip2 = '';
 	if (isset ($_SERVER)) {
 		if (isset ($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-			$realip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+			$realip2 = $_SERVER["HTTP_X_FORWARDED_FOR"];
 		} else if (isset($_SERVER["HTTP_CLIENT_IP"])) {
-			$realip = $_SERVER["HTTP_CLIENT_IP"];
-		} else {
-			$realip = $_SERVER["REMOTE_ADDR"];
-		} 
+			$realip2 = $_SERVER["HTTP_CLIENT_IP"];
+		}
+		$realip = $_SERVER["REMOTE_ADDR"];
 	} else {
 		if (getenv ("HTTP_X_FORWARDED_FOR")) {
-			$realip = getenv ("HTTP_X_FORWARDED_FOR");
+			$realip2 = getenv ("HTTP_X_FORWARDED_FOR");
 		} else if (getenv ("HTTP_CLIENT_IP")) {
-			$realip = getenv ("HTTP_CLIENT_IP");
-		} else {
-			$realip = getenv ("REMOTE_ADDR");
-		} 
+			$realip2 = getenv ("HTTP_CLIENT_IP");
+		}
+		$realip = getenv ("REMOTE_ADDR");
 	} 
+	if (!$realip) {
+		$realip = $realip2;
+	}
 	$realip = basename ($realip);
-	return $realip;
+	$realip2 = basename ($realip2);
+	return array ($realip, $realip2);
 } 
 
 function dataFilter ($reservedKeys, $submitData)

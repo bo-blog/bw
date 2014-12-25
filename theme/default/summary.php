@@ -11,7 +11,7 @@ if (!defined ('P')) {
 <span class="decoArticle"></span>
 <h2><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/">[[::aTitle]]</a></h2>
 <h3><span class="icon-pencil"></span> [[::aTime, dateFormat, Y/m/d H:i]] [[=page:InCate]] <a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a>
-<span class="articleShare"><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/#comment-[[::aID]]"><span class="icon-comment" title="[[=page:Comments]]"></span></a> <a href="##"><span class="icon-share" id="share-[[::aID]]" title="[[=page:ShareTo]]"></span></a></span>
+<span class="articleShare"><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/#comment-[[::aID]]"><span class="icon-comment" title="[[=page:Comments]]"></span>[[::aComments]]</a> <a href="##"><span class="icon-share" id="share-[[::aID]]" title="[[=page:ShareTo]]"></span></a></span>
 </h3>
 <div class="shareLayer" id="share-[[::aID]]-layer">
 <span class="shareLayerItem"><a href="http://www.jiathis.com/send/?webid=weixin&url=[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/&title=[[::aTitle, URLEncode]]"><span class="icon-weixin"></span> [[=page:social:WeChat]]</a></span>

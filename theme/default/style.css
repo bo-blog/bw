@@ -210,6 +210,110 @@ padding: 20px;
 background: #FFF;
 box-shadow: 2px 5px 7px #D6D6D6;
 }
+.comAvatar {
+float: left;
+}
+.comAvatar img {
+border-radius: 50%;
+width: 48px;
+box-shadow: 2px 2px 2px #AAA;
+}
+.comName {
+margin-left: 70px;
+font-size: 14px;
+}
+.comName h6 {
+color: #356A00;
+}
+.comName h5 {
+color: #AAA;
+}
+.comSrc {
+color: #AAA;
+margin-left: 12px;
+}
+.icon-comSrc-weibo:before {
+	content: "\e8d9";
+}
+.comNameLink {
+cursor: pointer;
+}
+.comContent {
+clear: both;
+color: #464646;
+margin-bottom: 18px;
+}
+.comContent pre {
+font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+font-size: 13px;
+margin-left: 70px;
+white-space: pre-wrap;
+word-wrap: break-word;
+}
+.comTitle {
+color: #000;
+font-size: 22px;
+font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+text-shadow: 3px 2px 3px #ddd;
+}
+.comForm {
+margin-top: 20px;
+margin-bottom: 40px;
+}
+.comInput {
+border-radius: 5px;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+font-size: 14px;
+padding: 4px 8px 4px 8px;
+border: 1px solid #AAA;
+box-shadow: 0 0 2px #73D90C inset;
+display: block;
+}
+.comInput:hover {
+box-shadow: 1px 1px 1px #AAA inset, 1px 1px 1px #AAA;
+}
+.comInputWarn {
+border: 1px solid red;
+box-shadow: 1px 1px 1px red inset, 1px 1px 1px red;
+}
+.comInputSmall {
+height: 18px;
+width: 25%;
+min-width: 250px;
+margin: 0 0 12px 0;
+}
+.comInputLarge {
+height: 68px;
+width: 36%;
+min-width: 340px;
+margin: 0 0 12px 0;
+}
+#comSubmit {
+margin-top: -6px;
+}
+#comSubmit a {
+font-size: 14px;
+color: #356A00;
+}
+#comSubmit a:hover {
+color: #AAA;
+}
+#comPromptError {
+color: red;
+}
+#comPromptSuccess {
+color: #356A00;
+}
+.comBlockBar {
+margin-top: 3px;
+}
+.comBlockBar, .comBlockBar a {
+color: #fff;
+}
+.comBlockBar:hover,  .comBlockBar:hover a {
+color: #999;
+}
+
 footer {
 clear: both;
 background: #1B1B1B;

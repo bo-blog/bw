@@ -1,3 +1,5 @@
+var In_Block_Mode=false;
+
 function scrollToTop () {
 	$('html,body').animate({scrollTop: '0px'}, 400);
 }
@@ -166,16 +168,25 @@ function doLogin (oj, rootURL) {
 				localStorage.mobileToken=plusCode[0];
 			}
 
-			var cact=location.pathname;
-			if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php/")!=-1)
+			if (!In_Block_Mode)
 			{
-				var aID=$('.adminSign').data('adminid');
-				window.location=rootURL+"/articles/modify/?aID="+aID+"&CSRFCode="+plusCode[1];
+				var cact=location.pathname;
+				if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php/")!=-1)
+				{
+					var aID=$('.adminSign').data('adminid');
+					window.location=rootURL+"/articles/modify/?aID="+aID+"&CSRFCode="+plusCode[1];
+				}
+				else
+				{
+					window.location=rootURL+"/dashboard/?CSRFCode="+plusCode[1];
+				}
 			}
-			else
-			{
-				window.location=rootURL+"/dashboard/?CSRFCode="+plusCode[1];
+			else {
+				lightboxLoaderDestroy ();
+				blockComment (In_Block_Mode[0], In_Block_Mode[1], In_Block_Mode[2], In_Block_Mode[3]);
+				In_Block_Mode=false;
 			}
+
 		}
 	}, "json");
 }
@@ -229,3 +240,65 @@ function changeNav ()
 	t=setTimeout ("changeNav()", 600);
 }
 
+function makeComUserLink ()
+{
+	var comURL;
+	var comSource;
+	$(".comName h6").each (function () {
+		comURL=$(this).data ('userurl');
+		comSource=$(this).data ('usersource');
+		if (comURL) {
+			$(this).addClass ('comNameLink');
+			$(this).click (function () {
+				window.location=comURL;
+			});
+		}
+		if (comSource) {
+			$(this).append( "<span class='comSrc icon-comSrc-"+comSource+"'></span>" );
+		}
+	});
+}
+
+function blockComment (oj, mode, comID, aID) {
+	if(window !=parent) {
+		parent.location=window.location.href;
+		return false;
+	}
+
+	if (mode=='blockip')
+	{
+		if (!confirm(lng['BlockIP']))
+		{
+			return false;
+		}
+	}
+
+	var rootURL= $('#'+oj).data('adminurl');
+	var targetURL = rootURL+"/comments/"+mode+"/?ajax=1";
+
+	targetURL=targetURL+"&comID="+comID+"&aID="+aID;
+
+
+	$.ajax({
+		type: "GET",
+		url: targetURL,
+		success: function (data)
+		{
+			if (data.error==1) { //Not log in
+				In_Block_Mode=new Array(oj, mode, comID, aID);
+				lightboxLoader (rootURL+"/login/");
+			}
+			else {
+				if (mode=="blockitem")
+				{
+					$("#comWrap-"+comID).fadeOut(400);
+				}
+				if (mode=="blockip")
+				{
+					window.location.reload();
+				}
+			}
+		},
+		dataType: "json"
+	});
+}

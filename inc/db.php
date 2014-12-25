@@ -12,6 +12,7 @@ if (!defined ('P')) {
 class bwDatabase extends PDO {
 	private $errorMsg;
 	public $qNum;
+	private $dbh;
 	public function __construct ()
 	{
 		include_once (P . 'conf/dbcon.php');
@@ -51,10 +52,10 @@ class bwDatabase extends PDO {
 		return $return;
 	} 
 
-	public function getColums ($query, $bindarray = null)
+	public function getColumns ($query, $bindarray = null)
 	{
 		$stmt = $this -> dbExec ($query, $bindarray);
-		$return = $this -> getColumsByStmt ($stmt);
+		$return = $this -> getColumnsByStmt ($stmt);
 		return $return;
 	} 
 
@@ -84,7 +85,7 @@ class bwDatabase extends PDO {
 		return $return;
 	} 
 
-	private function getColumsByStmt ($statement)
+	private function getColumnsByStmt ($statement)
 	{
 		$array = $this -> getRowsByStmt ($statement);
 		if (!$array) {
@@ -137,6 +138,11 @@ class bwDatabase extends PDO {
 		} 
 		return $stmt;
 	} 
+
+	public function dbLastInsertId ()
+	{
+		return $this -> lastInsertId();
+	}
 
 	private function throwError ()
 	{

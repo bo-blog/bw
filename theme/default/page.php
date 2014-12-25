@@ -23,7 +23,8 @@ if (!defined ('P')) {
 !window.jQuery && document.write ('<script src="[[::siteURL]]/inc/script/jquery.min.js"><\/script>');
 var lng={
 	RememberFail : '[[=js:RememberFail]]',
-	AjaxFail : '[[=js:AjaxFail]]'
+	AjaxFail : '[[=js:AjaxFail]]',
+	BlockIP : '[[=js:BlockIP]]'
 };
 </script>
 <script src="[[::siteURL]]/inc/script/main.js"></script>
@@ -34,7 +35,7 @@ var lng={
 <div id="overallContainer">
 <header>
 <span class="icon-newicon iconLogo"><h1><a href="[[::siteURL]]/">[[::siteName]]</a></h1></span>
-<span id="menuDown"><a href="#" onclick="$('nav').toggle('fast');"><span class="icon-list2 menuDownIcon"></span> </a></span>
+<span id="menuDown"><a href="#" onclick="$('nav').toggle('fast');"><span class="icon-list menuDownIcon"></span> </a></span>
 <nav>
 <ul>
 <li id="nav-index"><a href="[[::siteURL]]/">[[=page:Home]]</a></li>
