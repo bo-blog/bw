@@ -18,6 +18,7 @@ $view -> setPageTitle ($article -> articleList[$canonical -> currentArgs['aID']]
 $view -> setActiveNav ($article -> articleList[$canonical -> currentArgs['aID']]['aCateURLName']);
 $view -> setPassData ($article -> articleList[$canonical -> currentArgs['aID']]);
 $view -> setPassData (array ('navigation' => bw :: $cateList, 'sociallink' => bw :: getSocialLinks (), 'externallink' => bw :: getExternalLinks (), 'tagClound' => bw :: getTagCloud ()));
+$view -> setMaster ('page');
 
 $areaName = 'nocommentarea';
 if ($conf['commentOpt']<>0) {
@@ -30,12 +31,12 @@ if ($conf['commentOpt']<>0) {
 		$view -> setPassData (array ('comments' => $comment -> comList));
 		$comkey = md5 ($comment -> initComAKey () . $comment -> initComSKey ());
 		$view -> setPassData (array ('comkey' => $comkey));
-		$areaName = 'commentarea';
+		$totalBatches = ceil ($comment -> totalCom / bw :: $conf['comPerLoad']);
+		$view -> setPassData (array ('totalbatches' => $totalBatches, 'currentbatch' => $canonical -> currentPage));
+		$view -> setWorkFlow (array ('ajaxcommentgroup', 'commentarea', 'article', 'page'));
 	} elseif ($conf['commentOpt'] == 3) {
-		$areaName = 'duoshuoarea';
+		$view -> setWorkFlow (array ('duoshuoarea', 'article', 'page'));
 	}
 }
 
-$view -> setMaster ('page');
-$view -> setWorkFlow (array ($areaName, 'article', 'page')); //Built-in commentary system in development
 $view -> finalize ();

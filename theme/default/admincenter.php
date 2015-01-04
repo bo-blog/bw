@@ -30,6 +30,9 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentFrequency]]<br/><input type="text" class="inputLine inputLarge" name="smt[comFrequency]" value="[[::comFrequency]]" /><br/><span class="adminExplain">[[=admin:msg:CommentFrequency]]</span>
 </p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:CommentBreak]]<br/><input type="text" class="inputLine inputLarge" name="smt[comPerLoad]" value="[[::comPerLoad]]" />
+</p>
 
 <p><br/><br/></p>
 

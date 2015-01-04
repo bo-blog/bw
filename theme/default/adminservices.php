@@ -9,11 +9,19 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:DuoshuoID]]<br/><input type="text" class="inputLine inputLarge" name="smt[duoshuoID]" value="[[::duoshuoID]]" id="duoshuoID" /><br/><span class="adminExplain">[[=admin:msg:Duoshuo]]</span>
 </p>
+<!--
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:BaiduAK]]<br/><input type="text" class="inputLine inputLarge" name="smt[baiduAKey]" value="[[::baiduAKey]]" id="baiduAKey" /><br/><span class="adminExplain">[[=admin:NotReady]] [[=admin:msg:BaiduAPI]]</span>
 </p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:BaiduSK]]<br/><input type="text" class="inputLine inputLarge" name="smt[baiduSKey]" value="[[::baiduSKey]]" id="baiduSKey" />
+</p>
+-->
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:SinaAK]]<br/><input type="text" class="inputLine inputLarge" name="smt[sinaAKey]" value="[[::sinaAKey]]" id="sinaAKey" /><br/><span class="adminExplain">[[=admin:msg:SinaAPI]]</span>
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:SinaSK]]<br/><input type="text" class="inputLine inputLarge" name="smt[sinaSKey]" value="[[::sinaSKey]]" id="sinaSKey" />
 </p>
 
 <p><br/><br/></p>

@@ -22,7 +22,11 @@
 [[::loop, admincatelist]]<li class="adminSingleArticle adminSCL" data-cid="[[::aCateURLName]]" id="adminSCL-[[::aCateURLName]]"><a href="##" title="[[=admin:msg:Up]]" class="adminSCLUp" data-cid="[[::aCateURLName]]"><span class="icon-arrow-up3"></span></a> <a href="##" title="[[=admin:msg:Down]]" class="adminSCLDown" data-cid="[[::aCateURLName]]"><span class="icon-arrow-down4"></span></a> <span id="adminSCLine-[[::aCateURLName]]" class="adminSCLine" data-cid="[[::aCateURLName]]">[[::aCateDispName]]</span><span class="adminSCLModify" id="adminSCM-[[::aCateURLName]]"><input type="text" class="inputLine inputLarge" value="[[::aCateDispName]]" id="adminSCInput-[[::aCateURLName]]"> <br/><a href="##" onclick='$("#adminSCM-[[::aCateURLName]]").fadeToggle();$("#adminSCL-[[::aCateURLName]]").remove();'><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a> &nbsp; <a href="##" onclick='$("#adminSCM-[[::aCateURLName]]").fadeToggle();$("#adminSCLine-[[::aCateURLName]]").html($("#adminSCInput-[[::aCateURLName]]").val());$("#adminSCLine-[[::aCateURLName]]").toggle();'><span class="icon-arrow-up4"></span> [[=admin:msg:Close]]</a></span></li>
 [[::/loop]]
 </ul>
-<span id="adminSCInputNew"><input type="text" class="inputLine inputLarge" value="" placeholder="[[=admin:msg:NewCate]]"  id="adminSCInputNewItem" /> <a href='##' onclick="addCategory('[[::siteURL]]/admin.php/articles/validatecategory/');"><span class="icon-disk"></span> [[=admin:btn:Add]]</a><br/> </span>
+<span id="adminSCInputNew">
+
+<input type="text" class="inputLine inputSmall" value="" placeholder="[[=admin:msg:NewCate]]"  id="adminSCInputNewItemName" /> <input type="text" class="inputLine inputSmall" value="" placeholder="ID"  id="adminSCInputNewItemID" />
+
+<a href='##' onclick="addCategory('[[::siteURL]]/admin.php/articles/validatecategory/');"><span class="icon-disk"></span> [[=admin:btn:Add]]</a><br/> </span>
 <span class="adminExplain">[[=admin:msg:Categories]]</span></p>
 <p class="adminCommand">
 <p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
@@ -65,35 +69,32 @@ bindUpDown ();
 $("#adminSCInputNew").hide();
 
 function addCategory(smtURL) {
-	var newList=$("#adminSCInputNewItem").val();
-	if (newList!='')
+	if ($("#adminSCInputNewItemID").val()=='' || $("#adminSCInputNewItemName").val()=='')
 	{
-		var nList=newList.split('=');
-		if (nList[1]==null)
-		{
-			return false;
-		}
-		else
-		{
-			var smtURL=smtURL+"?ajax=1&CSRFCode=[[::cateCSRFCode]]";	
-			var sVal=encodeURI("smt[aCateURLName]="+nList[0]+"&smt[aCateDispName]="+nList[1]);
-			$.post(smtURL, sVal, function(data) {
-				if (data.error==1) {
-					$("#adminPromptError").text (data.returnMsg);
-					$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
-				}
-				else {
-					$("#adminCateList").append(data.returnMsg);
-					$( '.adminSCLUp').unbind("click");
-					$( '.adminSCLDown').unbind("click");
-					$( '.adminSCLine').unbind("click");
-					bindUpDown ();
-					$("#adminSCInputNewItem").val('');
-					$("#adminSCInputNew").hide();
-				}
-			}, "json");
-		}
+		alert ("[[=admin:msg:ErrorCorrection]]");
+		return false;
 	}
+
+
+	var newList=$("#adminSCInputNewItemID").val()+'='+$("#adminSCInputNewItemName").val();
+	var nList=newList.split('=');
+	var smtURL=smtURL+"?ajax=1&CSRFCode=[[::cateCSRFCode]]";	
+	var sVal=encodeURI("smt[aCateURLName]="+nList[0]+"&smt[aCateDispName]="+nList[1]);
+	$.post(smtURL, sVal, function(data) {
+		if (data.error==1) {
+			$("#adminPromptError").text (data.returnMsg);
+			$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
+		}
+		else {
+			$("#adminCateList").append(data.returnMsg);
+			$( '.adminSCLUp').unbind("click");
+			$( '.adminSCLDown').unbind("click");
+			$( '.adminSCLine').unbind("click");
+			bindUpDown ();
+			$("#adminSCInputNewItem").val('');
+			$("#adminSCInputNew").hide();
+		}
+	}, "json");
 }
 
 function saveCategoryChanges(smtURL) {

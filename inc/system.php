@@ -566,7 +566,7 @@ class bwComment {
 
 	public function getComList ()
 	{
-		$currentTitleStart = ($this -> pageNum-1) * bw :: $conf['perPage'] * 10;
+		$currentTitleStart = ($this -> pageNum-1) * bw :: $conf['comPerLoad'];
 		if ($this -> listBlocked) {
 			$blockedStr = $this -> listBlocked == 'only' ? 'comBlock=1' : '1=1';
 		} else {
@@ -576,9 +576,9 @@ class bwComment {
 		$qStr = $this -> aID === false ? "SELECT * FROM comments WHERE {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?" : "SELECT * FROM comments WHERE comArtID=? AND {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?";
 
 		if ($this -> aID === false) {
-			$qBind = array ($currentTitleStart, bw :: $conf['perPage'] * 10);
+			$qBind = array ($currentTitleStart, bw :: $conf['comPerLoad']);
 		} else {
-			$qBind = array ($this -> aID, $currentTitleStart, bw :: $conf['perPage'] * 10);
+			$qBind = array ($this -> aID, $currentTitleStart, bw :: $conf['comPerLoad']);
 		} 
 		$allComs = bw :: $db -> getRows ($qStr, $qBind);
 
@@ -667,7 +667,7 @@ class bwComment {
 			stopError (bw :: $conf['l']['admin:msg:NotExist']);
 		} 
 
-		bw :: $db -> dbExec ('INSERT INTO comments (comName, comTime, comIP1, comIP2, comAvatar, comContent, comArtID, comParentID, comSource, comURL, comBlock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array ($smt['userName'], date ('Y-m-d H:i:s'), $this -> myIP[0], $this -> myIP[1], '', $smt['userContent'], $smt['aID'], 0, '', $smt['userURL'], 0));
+		bw :: $db -> dbExec ('INSERT INTO comments (comName, comTime, comIP1, comIP2, comAvatar, comContent, comArtID, comParentID, comSource, comURL, comBlock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array ($smt['userName'], date ('Y-m-d H:i:s'), $this -> myIP[0], $this -> myIP[1], $smt['userAvatar'], $smt['userContent'], $smt['aID'], 0, $smt['socialkey'], $smt['userURL'], 0));
 		bw :: $db -> dbExec ('UPDATE articles SET aComments=aComments+1 WHERE aID=?', array ($smt['aID']));
 
 		$_SESSION['OTime_' . $this -> aID] = time ();
@@ -675,14 +675,14 @@ class bwComment {
 		clearCache (); //Clear all cache
 		hook ('addComment', 'Execute', $smt);
 		
-		$smt2 = array ('comID' =>bw :: $db -> dbLastInsertId (), 'comName' => $smt['userName'], 'comTime' => date ('Y-m-d H:i:s'), 'comAvatar' => bw :: $conf['siteURL'] . '/conf/default.png', 'comContent' => $smt['userContent'], 'comArtID' => $smt['aID'], 'comURL' => $smt['userURL']);
+		$smt2 = array ('comID' =>bw :: $db -> dbLastInsertId (), 'comName' => $smt['userName'], 'comTime' => date ('Y-m-d H:i:s'), 'comAvatar' => $smt['userAvatar'] ? $smt['userAvatar'] : bw :: $conf['siteURL'] . '/conf/default.png', 'comContent' => $smt['userContent'], 'comArtID' => $smt['aID'], 'comURL' => $smt['userURL'], 'comSource' => $smt['socialkey']);
 		return $smt2;
 
 	}
 
 	private function checkComData ($smt)
 	{
-		$acceptedKeys = array ('userName', 'userURL', 'userContent', 'aID', 'comkey');
+		$acceptedKeys = array ('userName', 'userURL', 'userContent', 'aID', 'comkey', 'socialkey', 'userAvatar');
 		$smt = dataFilter ($acceptedKeys, $smt);
 		if (empty ($smt['aID']) || $smt['userName']==='' || empty ($smt['userContent']) || empty ($smt['comkey'])) {
 			stopError (bw :: $conf['l']['admin:msg:NoData']);
@@ -1032,7 +1032,12 @@ class bwView {
 
 	private function theme_dateFormat ($format, $timestamp)
 	{
-		return date ($format, strtotime ($timestamp));
+		if (!$timestamp) {
+			$timestamp = time ();
+		} else {
+			$timestamp = strtotime ($timestamp);
+		}
+		return date ($format, $timestamp);
 	} 
 
 	private function theme_formatText ($mode, $text)
@@ -1155,7 +1160,7 @@ class bwCanonicalization {
 				$this -> loaderID = 'admin';
 				break;
 			case 'send':
-				$this -> argsPattern = array ('mainAction', 'subAction');
+				$this -> argsPattern = array ('mainAction', 'subAction', 'pageNum');
 				$this -> loaderID = 'send';
 				break;
 			/*case 'page':
@@ -1221,7 +1226,7 @@ class bwCanonicalization {
 			bw :: loadExtensions ();
 		} 
 
-		if (M != 'admin') {
+		if (M != 'admin' && M != 'send') {
 			bw :: pageStat ($this -> canonicalURL, M == 'article' ? $this -> currentArgs['aID'] : false);
 		} 
 

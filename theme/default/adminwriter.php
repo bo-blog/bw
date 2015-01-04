@@ -47,6 +47,12 @@
 </div>
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;"></iframe>
 <script type="text/javascript">
+if ($("#aID").val()=='')
+{
+	var myDate = new Date();
+	$("#aID").val('post-[[::aTime, dateFormat, YmdHi]]');
+}
+
 $("#admArticles").addClass("activeNav");
 
 $("#aID").blur(function() {
@@ -237,6 +243,7 @@ if ($('#eTags').val())
 	$('#eTags').val('');
 }
 
+<!--
 $('#eTags').AutoComplete({
 'data': "[[::siteURL]]/admin.php/articles/getautocomplete/",
 'ajaxDataType': 'json',
@@ -245,6 +252,7 @@ $('#eTags').AutoComplete({
 	$('#eTags').val('');
 }
 });
+-->
 
 $('#eTags').keyup (function(event) {
 	if (event.keyCode==188)

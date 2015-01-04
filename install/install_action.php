@@ -52,8 +52,9 @@ if ($step == 2) {
   'pageCache' => '1',
   'commentOpt' => '1',
   'comFrequency' => '10',
+  'comPerLoad' => '20',
   'siteTheme' => 'default',
-  'siteLang' => 'en',
+  'siteLang' => 'zh-cn',
   'perPage' => '3',
   'linkPrefixIndex' => 'index.php',
   'linkPrefixCategory' => 'category.php',
@@ -72,6 +73,8 @@ if ($step == 2) {
 		$servicesConfContent = "<?php
 \$conf+=array (
   'duoshuoID' => '',
+  'sinaAKey' => '',
+  'sinaSKey' => '',
   'qiniuAKey' => '',
   'qiniuSKey' => '',
   'qiniuBucket' => '',

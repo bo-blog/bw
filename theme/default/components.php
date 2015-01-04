@@ -98,11 +98,16 @@ $parts['commentarea']=<<<eot
 <div class="comTitle">[[=page:AddComment]]</div>
 <div class="comForm">
 <form id="smtForm">
-<input type="text" name="smt[userName]" class="comInput comInputSmall" id="comUserName" placeholder="[[=page:NickName]]" />
-<input type="text" name="smt[userURL]" class="comInput comInputSmall" id="comUserURL" placeholder="[[=page:URL]]" />
+
+<span id="wb_connect_btn"></span>
+<span id="comLoggedIn">[[=page:LoggedIn]] <span id="comLoggedInAs"></span> <span id="comLogout">[[[=page:LogOut]]]</span><br/></span>
+<input type="text" name="smt[userName]" class="comInput comInputSmall" id="comUserName" placeholder="[[=page:NickName]]" /> <span><span class="icon-sina-weibo" id="comUseWeibo" title="Login with Sina Weibo"></span></span><br class="comLineChange"/>
+<input type="text" name="smt[userURL]" class="comInput comInputSmall" id="comUserURL" placeholder="[[=page:URL]]" /><br class="comLineChange"/>
 <textarea type="text" class="comInput comInputLarge" name="smt[userContent]" id="comUserContent" placeholder="[[=page:CommentContent]]" /></textarea>
 <input type="hidden" name="smt[aID]" value="[[::aID]]" />
 <input type="hidden" name="smt[comkey]" value="[[::comkey]]" />
+<input type="hidden" id="comSocialStatus" name="smt[socialStatus]" value="" />
+<input type="hidden" id="comSocialKey" name="smt[socialkey]" value="" />
 <div id="comSubmit"><a href="##" id="comSubmitBtn"><span class="icon-forward4"></span> [[=page:SendComment]]</a> &nbsp; <a href="##" id="comClearBtn"><span class="icon-ccw"></span> [[=page:ClearComment]]</a>
 <span id="comPromptError"></span>
 <span id="comPromptSuccess"></span>
@@ -112,17 +117,12 @@ $parts['commentarea']=<<<eot
 
 <span id="comAdm" data-adminurl="[[::siteURL]]/admin.php"></span>
 <div id="comInsertNew"></div>
-[[::loop, comments]]
-<div id="comWrap-[[::comID]]" class="comWrap">
-<div class="comAvatar"><img src="[[::comAvatar]]" alt="User" /></div>
-<div class="comName"><h6 data-userurl="[[::comURL]]" data-usersource="[[::comSource]]">[[::comName]]</h6><h5>[[::comTime, dateFormat, Y/m/d H:i]]</h5></div>
-<div class="comContent"><pre>[[::comContent]]<div class="comBlockBar"><a href="##" onclick="blockComment ('comAdm', 'blockitem', '[[::comID]]', '[[::comArtID]]');"><span class="icon-cross"></span> [[=page:BlockItem]]</a> &nbsp; &nbsp; <a href="##" onclick="blockComment ('comAdm', 'blockip', '[[::comID]]', '[[::comArtID]]');"><span class="icon-minus3"></span> [[=page:BlockIP]]</a></div></pre></div>
-</div>
-[[::/loop]]
-
+[[::ajaxcommentgroup]]
+<div id="comInsertOld"></div>
 </div>
 <script>
 makeComUserLink ();
+commentBatches ('[[::siteURL]]/send.php/comments/load/', "[[::aID]]");
 
 function errorPrompter (inputId)
 {
@@ -133,15 +133,17 @@ function errorPrompter (inputId)
 }
 
 $('#comClearBtn').click (function () {
-	$("#comUserName").val('');
 	$("#comUserContent").val('');
 	$("#comUserURL").val('');
 });
 
 $('#comSubmitBtn').click (function () {
 	var stopSubmit=false;
-	if (!$("#comUserName").val() || $("#comUserName").val()=="[[::authorName]]") {
+	if (!$("#comUserName").val()) {
 		errorPrompter('comUserName');
+	}
+	if ($("#comUserName").val()=="[[::authorName]]" && $('#comSocialKey').val()!='administrator') {
+		errorPrompter("[[=page:NameViolation]]");
 	}
 	if (!$("#comUserContent").val() || $("#comUserContent").val().length<4) {
 		errorPrompter('comUserContent');
@@ -173,19 +175,69 @@ $('#comSubmitBtn').click (function () {
 				$("#comPromptSuccess").fadeIn(400).delay(1500).fadeOut(600);
 				$("#comInsertNew").after(data.returnMsg);
 				$(".comWrap:first").hide().delay(100).fadeIn(800);
-				window.location.hash="comInsertNew";
 				$('#comClearBtn').click();
 			}
 		}, "json");
 	}
 });
+
+$('#comUseWeibo').click (function () {
+window.location="[[::siteURL]]/send.php/sina/start/?aID=[[::aID]]";
+});
+
+$.get("[[::siteURL]]/send.php/sina/check/?ajax=1", function(data) {
+	if (data.error==0) { //Logged in with Sina Weibo
+		$('#comLoggedInAs').html ('<span class="icon-sina-weibo"></span> '+data.returnMsg['screen_name']);
+		$('#comLogout').click(function () {
+			window.location="[[::siteURL]]/send.php/sina/end/?aID=[[::aID]]";
+		});
+		$('#comLoggedIn').show();
+		$('#comUserName').val (data.returnMsg['screen_name']);
+		$('#comUserURL').val (data.returnMsg['url']);
+		$('#comUserName').hide();
+		$('#comUserURL').hide();
+		$('#comUseWeibo').hide();
+		$('.comLineChange').hide();
+		$('#comSocialKey').val ('sina');
+	}
+}, "json");
+
+$.get("[[::siteURL]]/send.php/comments/check/?ajax=1", function(data) {
+	if (data.error==0) { //Logged in 
+		$('#comLoggedInAs').html ("[[::authorName]]");
+		$('#comLogout').hide();
+		$('#comLoggedIn').show();
+		$('#comUserName').val ("[[::authorName]]");
+		$('#comUserURL').val ("[[::siteURL]]");
+		$('#comUserName').hide();
+		$('#comUserURL').hide();
+		$('#comUseWeibo').hide();
+		$('.comLineChange').hide();
+		$('#comSocialKey').val ('administrator');
+	}
+}, "json");
+
 </script>
+eot;
+
+
+$parts['ajaxcommentgroup']=<<<eot
+[[::loop, comments]]
+<div id="comWrap-[[::comID]]" class="comWrap">
+<div class="comAvatar"><img src="[[::comAvatar]]" alt="User" /></div>
+<div class="comName"><h6 data-usersource="[[::comSource]]"><a href="[[::comURL]]" target="_blank">[[::comName]]</a></h6><h5>[[::comTime, dateFormat, Y/m/d H:i]]</h5></div>
+<div class="comContent"><pre>[[::comContent]]<div class="comBlockBar"><a href="##" onclick="blockComment ('comAdm', 'blockitem', '[[::comID]]', '[[::comArtID]]');"><span class="icon-cross"></span> [[=page:BlockItem]]</a> &nbsp; &nbsp; <a href="##" onclick="blockComment ('comAdm', 'blockip', '[[::comID]]', '[[::comArtID]]');"><span class="icon-minus3"></span> [[=page:BlockIP]]</a></div></pre></div>
+</div>
+[[::/loop]]
+<div id="comLoadMore">
+<a id="comLoadMoreA" href="##" data-currentbatch="[[::currentbatch]]" data-totalbatches="[[::totalbatches]]">[[=page:LoadMoreComments]]...</a>
+</div>
 eot;
 
 $parts['ajaxcomment']=<<<eot
 <div id="comWrap-[[::comID]]" class="comWrap">
 <div class="comAvatar"><img src="[[::comAvatar]]" alt="User" /></div>
-<div class="comName"><h6 data-userurl="[[::comURL]]" data-usersource="[[::comSource]]">[[::comName]]</h6><h5>[[::comTime, dateFormat, Y/m/d H:i]]</h5></div>
+<div class="comName"><h6 data-usersource="[[::comSource]]"><a href="[[::comURL]]" target="_blank">[[::comName]]</a></h6><h5>[[::comTime, dateFormat, Y/m/d H:i]]</h5></div>
 <div class="comContent"><pre>[[::comContent]]<div class="comBlockBar"><a href="##" onclick="blockComment ('comAdm', 'blockitem', '[[::comID]]', '[[::comArtID]]');"><span class="icon-cross"></span> [[=page:BlockItem]]</a> &nbsp; &nbsp; <a href="##" onclick="blockComment ('comAdm', 'blockip', '[[::comID]]', '[[::comArtID]]');"><span class="icon-minus3"></span> [[=page:BlockIP]]</a></div></pre></div>
 </div>
 eot;

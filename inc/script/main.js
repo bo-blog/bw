@@ -242,19 +242,16 @@ function changeNav ()
 
 function makeComUserLink ()
 {
-	var comURL;
-	var comSource;
 	$(".comName h6").each (function () {
-		comURL=$(this).data ('userurl');
-		comSource=$(this).data ('usersource');
-		if (comURL) {
-			$(this).addClass ('comNameLink');
-			$(this).click (function () {
-				window.location=comURL;
-			});
-		}
+		var comSource=$(this).data ('usersource');
 		if (comSource) {
 			$(this).append( "<span class='comSrc icon-comSrc-"+comSource+"'></span>" );
+		}
+	});
+	$(".comName h6 a").each (function () {
+		var comURL=$(this).attr ('href');
+		if (!comURL) {
+			$(this).removeAttr ('href');
 		}
 	});
 }
@@ -301,4 +298,27 @@ function blockComment (oj, mode, comID, aID) {
 		},
 		dataType: "json"
 	});
+}
+
+function commentBatches (rootURL, aID) {
+	var currentbatch = $("#comLoadMoreA").data('currentbatch');
+	var totalbatches = $("#comLoadMoreA").data('totalbatches');
+	if (currentbatch < totalbatches)
+	{
+		$("#comLoadMoreA").click(function (){
+			$("#UI-loading").fadeIn(500);
+			$.get (rootURL+(currentbatch+1)+'/?ajax=1', {aID: aID}, function (data) 	{
+				$("#UI-loading").fadeOut(200);
+				if (data.error==0)
+				{
+					$("#comLoadMore").remove();
+					$("#comInsertOld").append(data.returnMsg);
+					commentBatches (rootURL, aID);
+				}
+			}, 'json');
+		});
+	}
+	else {
+		$("#comLoadMoreA").remove();
+	}
 }

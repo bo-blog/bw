@@ -1,5 +1,5 @@
 <?php
 $theme['themeName']="Breeze - Default Theme";
-$theme['themeAuthor']="bitWinds";
+$theme['themeAuthor']="bW";
 $theme['themeUrl']="#";
 $theme['themeVersion']="1.0";
