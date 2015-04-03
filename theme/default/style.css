@@ -638,6 +638,9 @@ color: #999;
 text-shadow: 1px 1px 1px #EEE;
 margin-right: 18px;
 }
+#adminSAPage {
+margin-left: -35px;
+}
 .adminSCLModify {
 display: none;
 }

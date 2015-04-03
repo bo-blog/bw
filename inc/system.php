@@ -5,7 +5,7 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '0.9.3 alpha');
+define ('bwVersion', '0.9.5 alpha');
 
 if (!defined ('P')) {
 	die ('Access Denied.');

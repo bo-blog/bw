@@ -85,7 +85,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 			stopError ('No data is submitted.');
 		} 
 
-		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
+		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$smt = array_map ('htmlspecialchars', $smt);
 		if (empty ($smt['siteKey'])) {
@@ -279,6 +279,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$article -> alterPerPage (20);
 		$article -> getArticleList ();
 		$canonical -> calTotalPages ($article -> totalArticles);
+		$canonical -> paginableURL = bw :: $conf['siteURL'] . '/admin.php/articles//%d?CSRFCode=' . $admin -> getCSRFCode ('navibar');
 		$view -> doPagination ();
 
 		$view -> setMaster ('admin');
@@ -294,7 +295,7 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
-		$acceptedKeys = array ('duoshuoID', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain');
+		$acceptedKeys = array ('duoshuoID', 'sinaAKey', 'sinaSKey', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$smt = array_map ('htmlspecialchars', $smt);
 		if ($smt['qiniuBucket']) {

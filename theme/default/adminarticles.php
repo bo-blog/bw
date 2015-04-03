@@ -13,7 +13,7 @@
 </ul>
 </p>
 <br/>
-[[::pagination]]
+<div id="adminSAPage">[[::pagination]]</div>
 
 
 
