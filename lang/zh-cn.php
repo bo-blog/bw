@@ -69,6 +69,7 @@ $conf['l'] = array(
 	'admin:sect:CustomizedHTML' => '自定义HTML',
 	'admin:sect:Modules' => '模块',
 	'admin:sect:EditModules' => '添加/编辑模块',
+	'admin:sect:AutoUpdate' => '自动更新',
 
 	'admin:item:SiteName' => '网站名',
 	'admin:item:SiteURL' => '根网址',
@@ -192,6 +193,8 @@ $conf['l'] = array(
 	'admin:btn:NewExt' => '安装',
 	'admin:btn:GeoLoc' => '插入位置',
 	'admin:btn:NewWidget' => '新建模块',
+	'admin:btn:CheckUpdate' => '点击检查更新',
+	'admin:btn:DoUpdate' => '立即更新',
 
 	'admin:msg:NeedLogin' => '请先登录。',
 	'admin:msg:ChangeSaved' => '保存成功。',
@@ -209,6 +212,11 @@ $conf['l'] = array(
 	'admin:msg:ExtNotFound' => '在指定的位置找不到有效的扩展插件。',
 	'admin:msg:AntiSpam' => '您当前的评论请求被系统识别为垃圾评论，已拒绝提交。请检查浏览器是否已启用Cookie。',
 	'admin:msg:AntiSpam2' => '为防止垃圾留言，您需要等待 %s 秒后才能提交评论。',
+	'admin:msg:DoUpdate' => '启动自动更新将覆盖一些系统文件，且不可恢复。',
+	'admin:msg:UpdateDownloadFail' => '下载更新文件压缩包失败。可能是服务器忙，或者当前服务器不支持 cURL。',
+	'admin:msg:UpdateUnzipFail' => '更新文件压缩包解压失败。可能是下载出错，请重试。',
+	'admin:msg:UpdateDone' => '自动更新已成功。',
+	'admin:msg:CheckingUpdate' => '正在检查更新。如长时间无反应请稍候重试。',
 
 	'admin:item:AtAGlance' => '网站概况一瞥',
 	'admin:item:xxArticles' => '篇文章',

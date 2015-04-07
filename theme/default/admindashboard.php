@@ -40,9 +40,37 @@
 <span class="icon-arrow-right5"></span> bW (ver [[::thisVersion]])<br/>
 <span class="icon-arrow-right5"></span> [[::serverInfo]]<br/>
 <span class="icon-arrow-right5"></span> PHP Version [[::PHPVersion]]
+<br/><br/>
+<h2><span class="icon-upload2"></span> [[=admin:sect:AutoUpdate]]</h2>
+<div id="ins"><span class="adminGoSync"><a href="##" onclick="checkUpdates();"><span class="icon-export"></span> [[=admin:btn:CheckUpdate]] </a></span><br/>
+</div>
 </div>
 [[::ext_adminDashboard]]
 <script type="text/javascript">
+
+function checkUpdates () {
+	$("#ins").html (" [[=admin:msg:CheckingUpdate]]");
+	$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "<?=bwUpdate?>cver/<?=bwInternalVersion?>.js"}).appendTo("head");
+}
+
+function addUpdateBtn (URL, md5) {
+	$("#ins").append("<div><span class='adminGoSync'><a id='dlURL' href='##' onclick=\"gotoUpdate('[[::siteURL]]/admin.php/dashboard/update/?CSRFCode=[[::updateCSRFCode]]&dlURL=', '"+URL+"', '"+md5+"');\"><span class=\"icon-arrow-right5\"></span> [[=admin:btn:DoUpdate]] </a></span><br/></div>");
+}
+
+function gotoUpdate (desAddr, dlURL, md5) {
+	if (confirm ("[[=admin:msg:DoUpdate]]"))
+	{
+		window.location=desAddr+dlURL+"&hash="+md5;
+	} else {
+	}
+}
+
+if (window.location.hash == '#UpdateSuccess')
+{
+	$("#ins").html (" [[=admin:msg:UpdateDone]]");
+	alert ("[[=admin:msg:UpdateDone]]");
+}
 $("#admPanel").addClass("activeNav");
 </script>
 [[::ext_adminDashboardEnding]]
+

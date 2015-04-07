@@ -5,7 +5,9 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '0.9.5 alpha');
+define ('bwVersion', '0.9.8 alpha');
+define ('bwInternalVersion', '0980');
+define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
 
 if (!defined ('P')) {
 	die ('Access Denied.');
@@ -14,7 +16,7 @@ if (!defined ('P')) {
 if (!file_exists (P . 'conf/info.php')) {
 	header ('Location: ' . P . 'install/index.php');
 	exit ();
-}
+} 
 
 include_once (P . 'conf/info.php');
 date_default_timezone_set ($conf['timeZone']);
@@ -83,7 +85,7 @@ class bw {
 					$aExtID = 'ext_' . $aExt['extID'];
 					$aExtID :: init();
 				} 
-			}
+			} 
 		} 
 	} 
 
@@ -139,7 +141,7 @@ class bw {
 		return $allLinks2;
 	} 
 
-	public static function getTagCloud ($num=20)
+	public static function getTagCloud ($num = 20)
 	{
 		$allTags = self :: $db -> getRows ('SELECT * FROM tags ORDER BY tCount DESC LIMIT 0, ?', array(floor ($num)));
 		return $allTags;
@@ -150,16 +152,16 @@ class bw {
 		$allWidgets = self :: $db -> getRows ('SELECT * FROM extensions WHERE isWidget=1 AND extHooks=? ORDER BY extOrder DESC', array($widgetType));
 		foreach ($allWidgets as $i => $oneWidget) {
 			$allWidgets[$i]['extStorage'] = @json_decode ($allWidgets[$i]['extStorage'], true);
-			is_array ($allWidgets[$i]['extStorage']) ? $allWidgets[$i]+=$allWidgets[$i]['extStorage'] : false;
-		}
+			is_array ($allWidgets[$i]['extStorage']) ? $allWidgets[$i] += $allWidgets[$i]['extStorage'] : false;
+		} 
 		return $allWidgets;
-	}
+	} 
 } 
 
 class bwCategory {
 	private $cacheClear;
 
-	public function __construct () 
+	public function __construct ()
 	{
 		$this -> cacheClear = true;
 	} 
@@ -188,7 +190,7 @@ class bwCategory {
 				if ($this -> cacheClear) {
 					$this -> getCategories (); //Refresh immediately
 					clearCache (); //Clear all cache
-				}
+				} 
 			} 
 			hook ('addCategories', 'Execute', $smt);
 		} 
@@ -207,7 +209,7 @@ class bwCategory {
 		if ($this -> cacheClear) {
 			$this -> getCategories (); //Refresh immediately
 			clearCache (); //Clear all cache
-		}
+		} 
 		hook ('deleteCategories', 'Execute', $deletedCates);
 	} 
 
@@ -224,7 +226,7 @@ class bwCategory {
 		if ($this -> cacheClear) {
 			$this -> getCategories (); //Refresh immediately
 			clearCache (); //Clear all cache
-		}
+		} 
 		hook ('orderCategories', 'Execute', $arrayOrder);
 	} 
 
@@ -232,31 +234,31 @@ class bwCategory {
 	{
 		if (count ($arrayCateID) <> count ($arrayOldNames) || count ($arrayCateID) <> count ($arrayNewNames)) {
 			return;
-		}
+		} 
 		for ($i = 0; $i < count ($arrayCateID); $i++) {
 			$arrayNewNames[$i] = htmlspecialchars ($arrayNewNames[$i], ENT_QUOTES, 'UTF-8');
 			if ($arrayOldNames[$i] <> $arrayNewNames[$i]) {
 				bw :: $db -> dbExec ('UPDATE categories SET aCateDispName=? WHERE aCateURLName=?', array ($arrayNewNames[$i], $arrayCateID[$i]));
-			}
-		}
+			} 
+		} 
 		if ($this -> cacheClear) {
 			$this -> getCategories (); //Refresh immediately
 			clearCache (); //Clear all cache
-		}
+		} 
 		hook ('renameCategories', 'Execute', array ($arrayCateID, $arrayOldNames, $arrayNewNames));
 	} 
 
 	public function bufferCacheClear ()
 	{
 		$this -> cacheClear = false;
-	}
+	} 
 
 	public function endBufferCache ()
 	{
 		$this -> getCategories (); //Refresh immediately
 		clearCache (); //Clear all cache
 		$this -> cacheClear = true;
-	}
+	} 
 } 
 
 class bwArticle {
@@ -340,7 +342,7 @@ class bwArticle {
 		$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$this -> articleList[$aID]['aCateURLName']];
 		$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $this -> articleList[$aID]['aTags']), 'tagValue');
 		if (isset (bw :: $conf['commentOpt'])) {
-			if (bw :: $conf['commentOpt'] == 0 || bw :: $conf['commentOpt'] == 3) { //If using non-built-in comment system, give an empty string instead of 0 for the attribute aComments
+			if (bw :: $conf['commentOpt'] == 0 || bw :: $conf['commentOpt'] == 3) { // If using non-built-in comment system, give an empty string instead of 0 for the attribute aComments
 				$this -> articleList[$aID]['aComments'] = '';
 			} 
 		} 
@@ -473,7 +475,7 @@ class bwArticle {
 		} 
 	} 
 
-	private function parseArticleList ($allTitles) 
+	private function parseArticleList ($allTitles)
 	{
 		if (count ($allTitles) < 1) {
 			stopError (bw :: $conf['l']['admin:msg:NoContent']);
@@ -484,13 +486,12 @@ class bwArticle {
 			$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$row['aCateURLName']];
 			$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $row['aTags']), 'tagValue');
 			if (isset (bw :: $conf['commentOpt'])) {
-			if (bw :: $conf['commentOpt'] == 0 || bw :: $conf['commentOpt'] == 3) { //If using non-built-in comment system, give an empty string instead of 0 for the attribute aComments
+				if (bw :: $conf['commentOpt'] == 0 || bw :: $conf['commentOpt'] == 3) { // If using non-built-in comment system, give an empty string instead of 0 for the attribute aComments
 					$this -> articleList[$aID]['aComments'] = '';
 				} 
 			} 
 		} 
 	} 
-
 
 	private function getTotalArticles ()
 	{
@@ -517,7 +518,7 @@ class bwArticle {
 			$acceptedKeys[] = 'originID';
 		} 
 		$smt = dataFilter ($acceptedKeys, $smt);
-		if (empty ($smt['aTitle']) || $smt['aID']==='' || empty ($smt['aContent']) || $smt['aCateURLName']==='') {
+		if (empty ($smt['aTitle']) || $smt['aID'] === '' || empty ($smt['aContent']) || $smt['aCateURLName'] === '') {
 			stopError (bw :: $conf['l']['admin:msg:NoData']);
 		} 
 		if (!array_key_exists ($smt['aCateURLName'], bw :: $cateData)) {
@@ -571,7 +572,7 @@ class bwComment {
 			$blockedStr = $this -> listBlocked == 'only' ? 'comBlock=1' : '1=1';
 		} else {
 			$blockedStr = 'comBlock=0';
-		}
+		} 
 
 		$qStr = $this -> aID === false ? "SELECT * FROM comments WHERE {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?" : "SELECT * FROM comments WHERE comArtID=? AND {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?";
 
@@ -590,14 +591,13 @@ class bwComment {
 		$this -> getTotalComs ();
 	} 
 
-
 	private function getTotalComs ()
 	{
 		if ($this -> listBlocked) {
 			$blockedStr = $this -> listBlocked == 'only' ? 'comBlock=1' : '1=1';
 		} else {
 			$blockedStr = 'comBlock=0';
-		}
+		} 
 		if ($this -> aID === false) {
 			$this -> totalCom = bw :: $db -> countRows ("SELECT comID FROM comments WHERE {$blockedStr}");
 		} else {
@@ -606,21 +606,21 @@ class bwComment {
 		hook ('getTotalComs', 'Execute', $this);
 	} 
 
-	public function setBlockStatus ($statusCode) 
+	public function setBlockStatus ($statusCode)
 	{
 		switch ($statusCode) {
 			case 0:
 				$this -> listBlocked = false;
-			break;
+				break;
 			case 1:
 				$this -> listBlocked = 'all';
-			break;
+				break;
 			case 2:
 				$this -> listBlocked = 'only';
-			break;
+				break;
 			default:
 				$this -> listBlocked = false;
-		}
+		} 
 	} 
 
 	public function initComAKey ()
@@ -633,13 +633,13 @@ class bwComment {
 		$str = '';
 		$strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$max = strlen ($strPol)-1;
-		for ($i=0;$i<6; $i++) {
-			$str.= $strPol[rand (0, $max)];
-		}
+		for ($i = 0;$i < 6; $i++) {
+			$str .= $strPol[rand (0, $max)];
+		} 
 		$_SESSION['SKey_' . $this -> aID] = $str;
 		$_SESSION['OTime_' . $this -> aID] = time ();
 		return $str;
-	}
+	} 
 
 	public function addComment ($smt)
 	{
@@ -656,11 +656,11 @@ class bwComment {
 
 		if (time () - $_SESSION['OTime_' . $this -> aID] < floor (bw :: $conf['comFrequency'])) {
 			stopError (sprintf (bw :: $conf['l']['admin:msg:AntiSpam2'], floor (bw :: $conf['comFrequency']) - (time () - $_SESSION['OTime_' . $this -> aID])));
-		}
+		} 
 
 		if (md5 ($this -> initComAKey () . $_SESSION['SKey_' . $this -> aID]) <> $smt['comkey']) {
 			stopError (bw :: $conf['l']['admin:msg:AntiSpam']);
-		}
+		} 
 
 		$taID = bw :: $db -> getSingleRow ('SELECT * FROM articles WHERE aID=?', array ($this -> aID));
 		if (!isset ($taID['aID'])) {
@@ -674,17 +674,16 @@ class bwComment {
 
 		clearCache (); //Clear all cache
 		hook ('addComment', 'Execute', $smt);
-		
-		$smt2 = array ('comID' =>bw :: $db -> dbLastInsertId (), 'comName' => $smt['userName'], 'comTime' => date ('Y-m-d H:i:s'), 'comAvatar' => $smt['userAvatar'] ? $smt['userAvatar'] : bw :: $conf['siteURL'] . '/conf/default.png', 'comContent' => $smt['userContent'], 'comArtID' => $smt['aID'], 'comURL' => $smt['userURL'], 'comSource' => $smt['socialkey']);
-		return $smt2;
 
-	}
+		$smt2 = array ('comID' => bw :: $db -> dbLastInsertId (), 'comName' => $smt['userName'], 'comTime' => date ('Y-m-d H:i:s'), 'comAvatar' => $smt['userAvatar'] ? $smt['userAvatar'] : bw :: $conf['siteURL'] . '/conf/default.png', 'comContent' => $smt['userContent'], 'comArtID' => $smt['aID'], 'comURL' => $smt['userURL'], 'comSource' => $smt['socialkey']);
+		return $smt2;
+	} 
 
 	private function checkComData ($smt)
 	{
 		$acceptedKeys = array ('userName', 'userURL', 'userContent', 'aID', 'comkey', 'socialkey', 'userAvatar');
 		$smt = dataFilter ($acceptedKeys, $smt);
-		if (empty ($smt['aID']) || $smt['userName']==='' || empty ($smt['userContent']) || empty ($smt['comkey'])) {
+		if (empty ($smt['aID']) || $smt['userName'] === '' || empty ($smt['userContent']) || empty ($smt['comkey'])) {
 			stopError (bw :: $conf['l']['admin:msg:NoData']);
 		} 
 		$smt['userName'] = htmlspecialchars ($smt['userName'], ENT_QUOTES, 'UTF-8');
@@ -693,7 +692,7 @@ class bwComment {
 		return $smt;
 	} 
 
-	public function blockItem ($comID, $aID) 
+	public function blockItem ($comID, $aID)
 	{
 		bw :: $db -> dbExec ('UPDATE comments SET comBlock=1 WHERE comID=?', array ($comID));
 		bw :: $db -> dbExec ('UPDATE articles SET aComments=aComments-1 WHERE aID=?', array ($aID));
@@ -701,7 +700,7 @@ class bwComment {
 		hook ('blockItem', 'Execute', $comID, $aID);
 	} 
 
-	public function blockIP ($comID) 
+	public function blockIP ($comID)
 	{
 		$taID = bw :: $db -> getSingleRow ('SELECT * FROM comments WHERE comID=?', array ($comID));
 		$allAffectedCom = array ();
@@ -711,19 +710,21 @@ class bwComment {
 		if ($taID['comIP2']) {
 			$allAffectedCom = array_merge_recursive ($allAffectedCom, bw :: $db -> getColumns ('SELECT * FROM comments WHERE comBlock=0 AND (comIP1=? OR comIP2=?)', array ($taID['comIP2'], $taID['comIP2'])));
 		} 
-		
-/*		print_r ($allAffectedCom['comArtID']); 
-		print ('<br>');
-		print_r (array_count_values ($allAffectedCom['comArtID'])); 
-		print ('<br>');
-		print ('('.implode (',', array_unique ($allAffectedCom['comID'])).')');
-		print ('<br>');
-		die();*/
+
+		/**
+		* print_r ($allAffectedCom['comArtID']); 
+		* print ('<br>');
+		* print_r (array_count_values ($allAffectedCom['comArtID'])); 
+		* print ('<br>');
+		* print ('('.implode (',', array_unique ($allAffectedCom['comID'])).')');
+		* print ('<br>');
+		* die();
+		*/
 
 		if (count ($allAffectedCom) > 0) {
 			$allAffectedArticles = array_count_values ($allAffectedCom['comArtID']);
-			$allAffectedComments = '('.implode (',', array_unique ($allAffectedCom['comID'])).')';
-			bw :: $db -> dbExec ('UPDATE comments SET comBlock=1 WHERE comID in '.$allAffectedComments);
+			$allAffectedComments = '(' . implode (',', array_unique ($allAffectedCom['comID'])) . ')';
+			bw :: $db -> dbExec ('UPDATE comments SET comBlock=1 WHERE comID in ' . $allAffectedComments);
 			foreach ($allAffectedArticles as $affAID => $affCount) {
 				bw :: $db -> dbExec ('UPDATE articles SET aComments=aComments-? WHERE aID=?', array ($affCount, $affAID));
 			} 
@@ -731,7 +732,7 @@ class bwComment {
 		} 
 		hook ('blockIP', 'Execute', $comID);
 	} 
-}
+} 
 
 class bwView {
 	public $viewWorkFlow;
@@ -834,12 +835,12 @@ class bwView {
 		if (in_array ($viewMod, $this -> viewWorkFlow) && file_exists ("{$this->themeDir}/{$viewMod}.php")) {
 			ob_start ();
 			include ("{$this->themeDir}/{$viewMod}.php");
-		} elseif (in_array ($viewMod, $this -> viewWorkFlow) && file_exists (P. "theme/default/{$viewMod}.php")) {
+		} elseif (in_array ($viewMod, $this -> viewWorkFlow) && file_exists (P . "theme/default/{$viewMod}.php")) {
 			ob_start ();
-			include (P. "theme/default/{$viewMod}.php");
+			include (P . "theme/default/{$viewMod}.php");
 		} else {
 			return $obContent;
-		}
+		} 
 		$obContent = ob_get_clean ();
 		$obContent = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $obContent);
 		return $obContent;
@@ -968,11 +969,10 @@ class bwView {
 
 	public function addHookIntoView ($hookInterface)
 	{
-		if (!isset ($this -> themeInternal['insert_'.$hookInterface])) 
-		{
-			$this -> themeInternal['insert_'.$hookInterface]=@file_get_contents (P. 'conf/insert_'. basename ($hookInterface). '.htm');
+		if (!isset ($this -> themeInternal['insert_' . $hookInterface])) {
+			$this -> themeInternal['insert_' . $hookInterface] = @file_get_contents (P . 'conf/insert_' . basename ($hookInterface) . '.htm');
 		} 
-		$return = hook ($hookInterface, 'Insert'). $this -> themeInternal['insert_'.$hookInterface];
+		$return = hook ($hookInterface, 'Insert') . $this -> themeInternal['insert_' . $hookInterface];
 		$return = $this -> commonParser ($return);
 		return $return;
 	} 
@@ -981,18 +981,19 @@ class bwView {
 	{
 		if (isset (bw :: $extList[$hookInterface]) && isset ($this -> parts[$hookInterface])) {
 			$return = '';
-			$keyMaker = function ($key) {
-				return '[[::'.$key.']]';
-			};
+			$keyMaker = function ($key)
+			{
+				return '[[::' . $key . ']]';
+			} ;
 			foreach (bw :: $extList[$hookInterface] as $aWidget) {
 				$output = widget ($hookInterface, bw :: $extData[$aWidget]['extStorage']);
 				if (is_array ($output)) {
 					$outputKeys = array_map ($keyMaker, array_keys ($output));
-					$return.= str_replace ($outputKeys, array_values ($output), $this -> parts[$hookInterface]);
-				}
-			}
+					$return .= str_replace ($outputKeys, array_values ($output), $this -> parts[$hookInterface]);
+				} 
+			} 
 			return $return;
-		}
+		} 
 	} 
 
 	public function haltWithError ($errMsg)
@@ -1036,7 +1037,7 @@ class bwView {
 			$timestamp = time ();
 		} else {
 			$timestamp = strtotime ($timestamp);
-		}
+		} 
 		return date ($format, $timestamp);
 	} 
 
@@ -1054,7 +1055,7 @@ class bwView {
 			$text = str_replace ('+++', '<a name="more"></a>', $text);
 		} 
 
-		$text = $this -> textFormatter ($text); 
+		$text = $this -> textFormatter ($text);
 		return $text;
 	} 
 
@@ -1115,7 +1116,7 @@ class bwView {
 		$text = preg_replace ("/!!<a href=\"(.+?)\">(.+?)<\/a>/", "<audio controls><source src=\"$1\" type=\"audio/mpeg\">Your browser does not support the audio element.</audio>", $text);
 		$text = hook ('textParser', 'Replace', $text);
 		return $text;
-	}
+	} 
 } 
 
 class bwCanonicalization {
@@ -1163,10 +1164,12 @@ class bwCanonicalization {
 				$this -> argsPattern = array ('mainAction', 'subAction', 'pageNum');
 				$this -> loaderID = 'send';
 				break;
-			/*case 'page':
-				$this -> argsPattern = array ('aID');
-				$this -> loaderID = 'article';
-				break;*/
+			/**
+			* case 'page':
+			* $this -> argsPattern = array ('aID');
+			* $this -> loaderID = 'article';
+			* break;
+			*/
 			default:
 				$this -> loaderID = 'error';
 				stopError ('Requested mode does not exist.');
@@ -1179,7 +1182,7 @@ class bwCanonicalization {
 			array_shift ($requestedURL);
 		} else {
 			$requestedURL = explode ('/', str_replace ($siteURLTmp, '', $_SERVER['PHP_SELF']));
-		}
+		} 
 
 		$this -> currentScript = $requestedURL[0];
 		array_shift ($requestedURL);
@@ -1265,7 +1268,7 @@ class bwCanonicalization {
 			return P . "inc/mode_{$this -> loaderID}.php";
 		} 
 	} 
-}
+} 
 
 class bwAdmin {
 	private $conf;
@@ -1360,19 +1363,19 @@ function getIP ()
 			$realip2 = $_SERVER["HTTP_X_FORWARDED_FOR"];
 		} else if (isset($_SERVER["HTTP_CLIENT_IP"])) {
 			$realip2 = $_SERVER["HTTP_CLIENT_IP"];
-		}
+		} 
 		$realip = $_SERVER["REMOTE_ADDR"];
 	} else {
 		if (getenv ("HTTP_X_FORWARDED_FOR")) {
 			$realip2 = getenv ("HTTP_X_FORWARDED_FOR");
 		} else if (getenv ("HTTP_CLIENT_IP")) {
 			$realip2 = getenv ("HTTP_CLIENT_IP");
-		}
+		} 
 		$realip = getenv ("REMOTE_ADDR");
 	} 
 	if (!$realip) {
 		$realip = $realip2;
-	}
+	} 
 	$realip = basename ($realip);
 	$realip2 = basename ($realip2);
 	return array ($realip, $realip2);
@@ -1485,24 +1488,22 @@ function widget ($widgetHook, $storedValue)
 	$storedValue = @json_decode ($storedValue, true);
 	if (!is_array ($storedValue)) {
 		return false;
-	}
-	$patternWidgetHooks = array (
-		'wghtmlhead' => 'value',
+	} 
+	$patternWidgetHooks = array ('wghtmlhead' => 'value',
 		'wgheader' => 'text,url,title,target',
 		'wgsidebar' => 'title,value',
 		'wgfooter' => 'value'
-	);
+		);
 	if (array_key_exists ($widgetHook, $patternWidgetHooks)) {
-		$patterns=@explode (',', $patternWidgetHooks[$widgetHook]);
+		$patterns = @explode (',', $patternWidgetHooks[$widgetHook]);
 		$output = array();
 		foreach ($patterns as $pattern) {
 			$output[$pattern] = isset ($storedValue[$pattern]) ? $storedValue[$pattern] : '';
-		}
+		} 
 		return $output;
-	}
+	} 
 	return false;
-}
-
+} 
 
 function stringToArray ($array, $key = false)
 {
@@ -1518,6 +1519,45 @@ function stringToArray ($array, $key = false)
 	} 
 	return $newArray;
 } 
+
+function curlRetrieve ($URL, $timeOut = 5)
+{
+	$ch = curl_init ();
+	curl_setopt ($ch, CURLOPT_URL, $URL);
+	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt ($ch, CURLOPT_TIMEOUT, $timeOut);
+	curl_setopt ($ch, CURLOPT_HEADER, false);
+	$fileContents = curl_exec ($ch);
+	curl_close ($ch);
+	return $fileContents;
+} 
+
+function fileReplaceRecursive ($readDir, $destDir)
+{
+	$handle = opendir ($readDir);
+	while (false !== ($file = readdir ($handle))) {
+		if ($file == '.' || $file == '..') {
+			continue;
+		} 
+		if (!is_dir ($readDir . $file)) {
+			rename ($readDir . $file, $destDir . $file);
+		} else {
+			fileReplaceRecursive ($readDir . $file . '/', $destDir . $file . '/');
+		}
+	} 
+} 
+
+function rrmdir ($dir) {
+	foreach (glob ($dir . '/*') as $file) {
+		if (is_dir ($file)) {
+			rrmdir ($file);
+		} else {
+			unlink ($file);
+		}
+	}
+	rmdir ($dir);
+}
+
 
 if (@get_magic_quotes_gpc()) {
 	function stripslashes_deep($value)

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
 * 
 * @link http://bw.bo-blog.com
@@ -33,7 +33,7 @@ if ($canonical -> currentArgs['mainAction'] <> 'login') {
 		stopError ($conf['l']['admin:msg:NeedLogin']);
 	} else {
 		$view -> setPassData (array ('logoutCSRFCode' => $admin -> getCSRFCode ('logout'), 'navCSRFCode' => $admin -> getCSRFCode ('navibar')));
-	}
+	} 
 } 
 
 if ($canonical -> currentArgs['mainAction'] == '1') {
@@ -42,10 +42,10 @@ if ($canonical -> currentArgs['mainAction'] == '1') {
 			ajaxSuccess ($admin -> getCSRFCode ('navibar'));
 		} else {
 			stopError (bw :: $conf['l']['admin:msg:CSRF']);
-		}
+		} 
 	} else {
 		stopError (bw :: $conf['l']['admin:msg:CSRF']);
-	}
+	} 
 } 
 
 if ($canonical -> currentArgs['mainAction'] == 'login') {
@@ -66,7 +66,7 @@ if ($canonical -> currentArgs['mainAction'] == 'login') {
 			$admin -> storeSessionToken ($s_token);
 			$navCSRFCode = $admin -> getCSRFCode ('navibar');
 			if ($isRem == 1) {
-				ajaxSuccess (sha1($conf['siteKey'] . 'mobile') . '-'. $navCSRFCode);
+				ajaxSuccess (sha1($conf['siteKey'] . 'mobile') . '-' . $navCSRFCode);
 			} else {
 				ajaxSuccess ('-' . $navCSRFCode);
 			} 
@@ -196,7 +196,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 	} elseif ($canonical -> currentArgs['subAction'] == 'delete') {
 		$admin -> checkCSRFCode ('articlesave');
 		$article -> deleteArticle ($_REQUEST['aID']);
-		header ("Location: {$conf['siteURL']}/admin.php/articles/");
+		header ("Location: {$conf['siteURL']}/admin.php/articles/?CSRFCode=" . $admin -> getCSRFCode ('navibar'));
 	} elseif ($canonical -> currentArgs['subAction'] == 'uploader') {
 		$admin -> checkCSRFCode ('upload');
 		if (count ($_FILES) < 1) {
@@ -251,7 +251,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$remainedAsNewCates = array ();
 		foreach ($remainedCates as $k => $aRemainedCate) {
 			$remainedAsNewCates[] = $_REQUEST['smt'][$k];
-		}
+		} 
 		$cates -> renameCategories (array_keys ($remainedCates), array_values ($remainedCates), $remainedAsNewCates);
 		$cates -> orderCategories (array_keys ($_REQUEST['smt']));
 		$cates -> endBufferCache ();
@@ -274,7 +274,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$view -> setWorkFlow (array ('admincategorylist'));
 		$view -> finalize ();
 	} else {
-		$admin -> checkCSRFCode ('navibar');
+		$admin -> checkCSRFCode ('navibar'); 
 		// Pagination
 		$article -> alterPerPage (20);
 		$article -> getArticleList ();
@@ -283,7 +283,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$view -> doPagination ();
 
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('adminarticlelist' =>$article -> articleList, 'admincatelist' => bw :: $cateList, 'newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'oldCSRFCode' => $admin -> getCSRFCode ('navibar'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
+		$view -> setPassData (array ('adminarticlelist' => $article -> articleList, 'admincatelist' => bw :: $cateList, 'newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'oldCSRFCode' => $admin -> getCSRFCode ('navibar'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
 		$view -> setWorkFlow (array ('adminarticlelist', 'admincategorylist', 'adminarticles', 'admin'));
 		$view -> finalize ();
 	} 
@@ -365,37 +365,66 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 } 
 
 if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
-	$admin -> checkCSRFCode ('navibar');
-	$statVals = array();
-	$statVals['totalArticles'] = bw :: $db -> countRows ('SELECT aID FROM articles');
-	$statVals['totalReads'] = bw :: $db -> getSingleRow ('SELECT SUM(aReads) FROM articles');
-	$statVals['totalReads'] = $statVals['totalReads']['SUM(aReads)'];
-	$statVals['totalPVs'] = bw :: $db -> getSingleRow ('SELECT SUM(sNum) FROM statistics');
-	$statVals['totalPVs'] = $statVals['totalPVs']['SUM(sNum)'];
-	$statVals['sinceWhen'] = bw :: $db -> getSingleRow ('SELECT aTime FROM articles ORDER BY aTime ASC LIMIT 0, 1');
-	$statVals['sinceWhen'] = $statVals['sinceWhen']['aTime'];
+	if ($canonical -> currentArgs['subAction'] == 'update') {
+		$admin -> checkCSRFCode ('update');
+		if (!isset ($_REQUEST['dlURL']) || !isset ($_REQUEST['hash'])) {
+			stopError ($conf['l']['admin:msg:NoData']);
+		} 
+		$packageContent = curlRetrieve ($_REQUEST['dlURL']);
+		if (!$packageContent) {
+			stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
+		} else {
+			file_put_contents (P . 'update/dlupkg_tmp.zip', $packageContent);
+			if (md5_file (P . 'update/dlupkg_tmp.zip') <> strtolower ($_REQUEST['hash'])) {
+				stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
+			}
+			require_once (P . "inc/script/pclzip/pclzip.lib.php");
+			$archive = new PclZip (P . 'update/dlupkg_tmp.zip');
+			$nowDir = date ("Ymdhis_") . rand (100, 999);
+			$updateResult = $archive -> extract (PCLZIP_OPT_SET_CHMOD, 0777, PCLZIP_OPT_PATH, P . 'update/' . $nowDir);
+			if (!$updateResult) {
+				stopError ($conf['l']['admin:msg:UpdateUnzipFail']);
+			} else {
+				fileReplaceRecursive (P . 'update/' . $nowDir . '/', P);
+				@rrmdir (P . 'update/' . $nowDir);
+				@unlink (P . 'update/dlupkg_tmp.zip');
+			}
+			header ("Location: {$conf['siteURL']}/admin.php/dashboard/?CSRFCode=" . $admin -> getCSRFCode ('navibar') . "#UpdateSuccess");
+			exit ();
+		} 
+	} else {
+		$admin -> checkCSRFCode ('navibar');
+		$statVals = array();
+		$statVals['totalArticles'] = bw :: $db -> countRows ('SELECT aID FROM articles');
+		$statVals['totalReads'] = bw :: $db -> getSingleRow ('SELECT SUM(aReads) FROM articles');
+		$statVals['totalReads'] = $statVals['totalReads']['SUM(aReads)'];
+		$statVals['totalPVs'] = bw :: $db -> getSingleRow ('SELECT SUM(sNum) FROM statistics');
+		$statVals['totalPVs'] = $statVals['totalPVs']['SUM(sNum)'];
+		$statVals['sinceWhen'] = bw :: $db -> getSingleRow ('SELECT aTime FROM articles ORDER BY aTime ASC LIMIT 0, 1');
+		$statVals['sinceWhen'] = $statVals['sinceWhen']['aTime'];
 
-	$article = new bwArticle;
-	$article -> getHottestArticles (5);
-	foreach ($article -> articleList as $row) {
-		$statVals['whatsHottest'][] = "<a href=\"{$conf['siteURL']}/{$conf['linkPrefixArticle']}/{$row['aID']}/\">{$row['aTitle']}</a>";
+		$article = new bwArticle;
+		$article -> getHottestArticles (5);
+		foreach ($article -> articleList as $row) {
+			$statVals['whatsHottest'][] = "<a href=\"{$conf['siteURL']}/{$conf['linkPrefixArticle']}/{$row['aID']}/\">{$row['aTitle']}</a>";
+		} 
+		$statVals['whatsHottest'] = '<li>' . implode('</li><li>', $statVals['whatsHottest']) . '</li>';
+
+		$recents = bw :: $db -> getRows ('SELECT * FROM statistics ORDER BY lastView DESC LIMIT 0, 5');
+		foreach ($recents as $row) {
+			$statVals['latestViews'][] = "<a href=\"{$conf['siteURL']}{$row['pageURL']}\">{$row['pageURL']}</a>";
+		} 
+		$statVals['latestViews'] = '<li>' . implode('</li><li>', $statVals['latestViews']) . '</li>';
+
+		$statVals['thisVersion'] = bwVersion;
+		$statVals['PHPVersion'] = PHP_VERSION;
+		$statVals['serverInfo'] = $_SERVER['SERVER_SOFTWARE'];
+		$view -> setMaster ('admin');
+		$view -> setPassData ($statVals);
+		$view -> setPassData (array ('newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'serviceCSRFCode' => $admin -> getCSRFCode ('services'), 'updateCSRFCode' => $admin -> getCSRFCode ('update')));
+		$view -> setWorkFlow (array ('admindashboard', 'admin'));
+		$view -> finalize ();
 	} 
-	$statVals['whatsHottest'] = '<li>' . implode('</li><li>', $statVals['whatsHottest']) . '</li>';
-
-	$recents = bw :: $db -> getRows ('SELECT * FROM statistics ORDER BY lastView DESC LIMIT 0, 5');
-	foreach ($recents as $row) {
-		$statVals['latestViews'][] = "<a href=\"{$conf['siteURL']}{$row['pageURL']}\">{$row['pageURL']}</a>";
-	} 
-	$statVals['latestViews'] = '<li>' . implode('</li><li>', $statVals['latestViews']) . '</li>';
-
-	$statVals['thisVersion'] = bwVersion;
-	$statVals['PHPVersion'] = PHP_VERSION;
-	$statVals['serverInfo'] = $_SERVER['SERVER_SOFTWARE'];
-	$view -> setMaster ('admin');
-	$view -> setPassData ($statVals);
-	$view -> setPassData (array ('newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'serviceCSRFCode' => $admin -> getCSRFCode ('services')));
-	$view -> setWorkFlow (array ('admindashboard', 'admin'));
-	$view -> finalize ();
 } 
 
 if ($canonical -> currentArgs['mainAction'] == 'extensions') {
@@ -410,7 +439,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			bw :: $db -> dbExec ('UPDATE extensions SET extActivate=? WHERE extID=?', array ($extActivate, $extID));
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-		}
+		} 
 	} elseif ($canonical -> currentArgs['subAction'] == 'remove') {
 		$admin -> checkCSRFCode ('extensions');
 		if (!isset ($_REQUEST['extID'])) {
@@ -420,7 +449,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			bw :: $db -> dbExec ('DELETE FROM extensions WHERE extID=?', array ($extID));
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-		}
+		} 
 	} elseif ($canonical -> currentArgs['subAction'] == 'add') {
 		$admin -> checkCSRFCode ('newext');
 		if (!isset ($_REQUEST['extID'])) {
@@ -431,17 +460,17 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			$extID = htmlspecialchars ($extID, ENT_QUOTES, 'UTF-8');
 			if (array_key_exists ($extID, $extList)) {
 				stopError ($conf['l']['admin:msg:Existed']);
-			}
+			} 
 			if (!file_exists (P . 'extension/' . $extID . '/define.php') || !file_exists (P . 'extension/' . $extID . '/do.php')) {
 				stopError ($conf['l']['admin:msg:ExtNotFound']);
-			}
+			} 
 			$aExt = @parse_ini_file (P . 'extension/' . $extID . '/define.php');
 			$aExt['extDesc'] = "name='{$aExt['name']}'\r\nintro='{$aExt['intro']}'\r\nauthor='{$aExt['author']}'\r\nurl='{$aExt['url']}'";
-			bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget) VALUES (?, ?, ?, 1, ?, 0)', array ($aExt['ID'], $aExt['extDesc'], $aExt['hooks'], count ($extList)+1));
+			bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget) VALUES (?, ?, ?, 1, ?, 0)', array ($aExt['ID'], $aExt['extDesc'], $aExt['hooks'], count ($extList) + 1));
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-		}
-	}  elseif ($canonical -> currentArgs['subAction'] == 'widget') {
+		} 
+	} elseif ($canonical -> currentArgs['subAction'] == 'widget') {
 		$admin -> checkCSRFCode ('newext');
 		if (!isset ($_REQUEST['wgtID']) || empty ($_REQUEST['wgtID'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
@@ -449,57 +478,53 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			$extOrder = floor ($_REQUEST['extOrder']);
 			$extList = bw :: getAllWidgets ();
 			$extID = htmlspecialchars ($_REQUEST['wgtID'], ENT_QUOTES, 'UTF-8');
-			$patternWidgetHooks = array (
-				'wghtmlhead' => 'value',
+			$patternWidgetHooks = array ('wghtmlhead' => 'value',
 				'wgheader' => 'text,url,title,target',
 				'wgsidebar' => 'title,value',
 				'wgfooter' => 'value'
-			);
+				);
 			$extHooks = $_REQUEST['extHooks'];
 			if (!array_key_exists ($extHooks, $patternWidgetHooks)) {
 				stopError ($conf['l']['admin:msg:NoContent']);
-			}
+			} 
 			$extStorage = array ();
 			foreach (@explode (',', $patternWidgetHooks[$extHooks]) as $wgtCol) {
-				$extStorage[$wgtCol] = ($wgtCol == 'value') ? $_REQUEST['wgt'.$wgtCol] : htmlspecialchars ($_REQUEST['wgt'.$wgtCol], ENT_QUOTES, 'UTF-8');
+				$extStorage[$wgtCol] = ($wgtCol == 'value') ? $_REQUEST['wgt' . $wgtCol] : htmlspecialchars ($_REQUEST['wgt' . $wgtCol], ENT_QUOTES, 'UTF-8');
 			} 
 			if ($extOrder == -1) {
 				if (array_key_exists ($extID, $extList)) {
 					stopError ($conf['l']['admin:msg:Existed']);
 				} 
-				bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget, extStorage) VALUES (?, "", ?, 1, ?, 1, ?)', array ($extID, $extHooks, count ($extList)+1, json_encode ($extStorage)));
+				bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget, extStorage) VALUES (?, "", ?, 1, ?, 1, ?)', array ($extID, $extHooks, count ($extList) + 1, json_encode ($extStorage)));
 			} else {
 				if (!array_key_exists ($extID, $extList)) {
 					stopError ($conf['l']['admin:msg:NotExist']);
-				}
+				} 
 				bw :: $db -> dbExec ('UPDATE extensions SET extStorage=? WHERE extID=? AND isWidget=1', array (json_encode ($extStorage), $extID));
-			}
+			} 
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-		}
+		} 
 	} elseif ($canonical -> currentArgs['subAction'] == 'savehooks') {
 		$admin -> checkCSRFCode ('extensions');
 		foreach ($allOpenHooks as $openHook) {
-			@file_put_contents (P. 'conf/insert_'. $openHook. '.htm', $_REQUEST['smt'][$openHook]);
-		}
+			@file_put_contents (P . 'conf/insert_' . $openHook . '.htm', $_REQUEST['smt'][$openHook]);
+		} 
 		clearCache ();
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-	}
-	else {
+	} else {
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
 		$view -> setPassData (array ('extList' => bw :: getAllExtensions (), 'newCSRFCode' => $admin -> getCSRFCode ('newext'), 'extCSRFCode' => $admin -> getCSRFCode ('extensions')));
 		$view -> setPassData (array ('wgtListHtmlhead' => bw :: getWidgets ('wghtmlhead'), 'wgtListHeader' => bw :: getWidgets ('wgheader'), 'wgtListSiderbar' => bw :: getWidgets ('wgsidebar'), 'wgtListFooter' => bw :: getWidgets ('wgfooter')));
 		foreach ($allOpenHooks as $openHook) {
-			$allHooks['insert_'.$openHook] = @file_get_contents (P. 'conf/insert_'. $openHook. '.htm');
-		}
+			$allHooks['insert_' . $openHook] = @file_get_contents (P . 'conf/insert_' . $openHook . '.htm');
+		} 
 		$view -> setPassData ($allHooks);
 		$view -> setWorkFlow (array ('adminextensions', 'admin'));
 		$view -> finalize ();
-	}
-
-}
-
+	} 
+} 
 
 if ($canonical -> currentArgs['mainAction'] == 'comments') {
 	$comment = new bwComment;
@@ -509,14 +534,14 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 		} 
 		$comment -> blockItem ($_REQUEST['comID'], $_REQUEST['aID']);
 		ajaxSuccess($conf['l']['admin:msg:ChangeSaved']);
-	}
+	} 
 	if ($canonical -> currentArgs['subAction'] == 'blockip') {
 		if (!$_REQUEST['comID']) {
 			stopError ($conf['l']['admin:msg:NotExist']);
 		} 
 		$comment -> blockIP ($_REQUEST['comID']);
 		ajaxSuccess($conf['l']['admin:msg:ChangeSaved']);
-	}
-}
+	} 
+} 
 
 hook ('newAdminCategory', 'Execute', $canonical, $admin, $view);

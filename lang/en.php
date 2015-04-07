@@ -69,6 +69,7 @@ $conf['l'] = array(
 	'admin:sect:CustomizedHTML' => 'Customized HTML',
 	'admin:sect:Modules' => 'Widgets',
 	'admin:sect:EditModules' => 'Add/Edit Widget',
+	'admin:sect:AutoUpdate' => 'Auto Update',
 
 	'admin:item:SiteName' => 'Website Name',
 	'admin:item:SiteURL' => 'Website Root URL',
@@ -192,6 +193,8 @@ $conf['l'] = array(
 	'admin:btn:NewExt' => 'Install',
 	'admin:btn:GeoLoc' => 'Location',
 	'admin:btn:NewWidget' => 'New Widget',
+	'admin:btn:CheckUpdate' => 'Check for Updates',
+	'admin:btn:DoUpdate' => 'Update Now',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',
@@ -209,6 +212,11 @@ $conf['l'] = array(
 	'admin:msg:ExtNotFound' => 'No extension found in that directory.',
 	'admin:msg:AntiSpam' => 'The comment you submitted was identified as a spam. Check if your browser cookie has been enabled.',
  	'admin:msg:AntiSpam2' => 'Please wait for another %s seconds and try again. Thanks for your understanding.',
+	'admin:msg:DoUpdate' => 'Some system files will be overwritten and cannot be recovered.',
+	'admin:msg:UpdateDownloadFail' => 'Failed to download the update package. Try another time or check the cURL Lib availability on your server.',
+	'admin:msg:UpdateUnzipFail' => 'Cannot extract the downloaded update package. Try the update once more.',
+	'admin:msg:UpdateDone' => 'Auto update succeeded.',
+	'admin:msg:CheckingUpdate' => 'Checking updates. Retry if the page does not respond for a long time.',
 
 	'admin:item:AtAGlance' => 'Your website at a glance',
 	'admin:item:xxArticles' => 'articles',
