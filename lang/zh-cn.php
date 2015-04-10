@@ -39,6 +39,8 @@ $conf['l'] = array(
 	'page:LoggedIn' => '已登录为',
 	'page:LogOut' => '退出',
 	'page:SinaError' => '新浪微博授权认证错误。',
+	'page:LoginRequired' => '请先点击右侧的按钮登录',
+	'page:LoginRequiredError' => '管理员设定了只能使用社交网站帐号登录后才能发表评论。请先登录。',
 
 
 	'js:RememberFail' => '无法记住您的登录状态，因为当前浏览器工作在私密浏览模式下。',
@@ -109,8 +111,10 @@ $conf['l'] = array(
 	'admin:item:SinaSK' => '新浪微博App Secret',
 	'admin:item:CommentFrequency' => '评论冷却期',
 	'admin:item:CommentBreak' => '每批载入评论条数',
+	'admin:item:UploadAvatar' => '上传头像',
 
 	'admin:opt:SimplifiedChinese' => '简体中文',
+	'admin:opt:TraditionalChinese' => '繁体中文',
 	'admin:opt:English' => '英语',
 	'admin:opt:VeryFew' => '很少',
 	'admin:opt:AFew' => '较少',
@@ -128,7 +132,7 @@ $conf['l'] = array(
 	'admin:msg:SiteURL' => '例如：http://name.com/path。除非你知道在修改什么，请勿改动。',
 	'admin:msg:BlankPsw' => '不填即不修改',
 	'admin:msg:LengthPsw' => '至少包含8个字符，必须含有至少1个特殊字符。',
-	'admin:msg:URLRewrite' => 'URL重写（伪静态）需要服务器支持，例如Apache。',
+	'admin:msg:URLRewrite' => '伪静态需服务器支持。 Apache的rewrite规则请参考<a href="../../inc/script/urlrewrite/apache.txt" target="_blank">这里</a>。',
 	'admin:msg:ErrorCorrection' => '请先修正出错的设定。',
 	'admin:msg:NewCate' => '分类名称',
 	'admin:msg:NewCate2' => '分类ID，仅限字母和数字',
@@ -179,6 +183,7 @@ $conf['l'] = array(
 	'admin:msg:RemoveExtension' => '确定要移除吗？删除后不可恢复。',
 	'admin:msg:CommentOpt' => '如需支持社交网站帐号登录或调用社会化评论服务，请在后台“系统服务”中设置。',
 	'admin:msg:CommentFrequency' => '首次打开文章后或提交一次评论后，多少秒时间内不允许提交评论。',
+	'admin:msg:UploadAvatar' => '点击头像上传新图片。90*90像素以上，正方形。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',

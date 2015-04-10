@@ -12,7 +12,7 @@ if (!defined ('P')) {
 $view = new bwView;
 
 if ($conf['commentOpt']<>0) {
-	loadServices (); //Load Baidu API or Duoshuo
+	loadServices ();
 	if ($conf['commentOpt'] == 1 || $conf['commentOpt'] == 2) { //Build-in comment
 		@session_start ();
 		$comment = new bwComment;
@@ -57,6 +57,9 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 		}
 		if (strtolower (trim ($smt['userName'])) == strtolower (bw :: $conf['authorName']) && $smt['socialkey'] <> 'administrator') {
 			stopError (bw :: $conf['l']['page:NameViolation']);
+		} 
+		if ($conf['commentOpt'] == 2 && !$smt['socialkey']) {
+			stopError (bw :: $conf['l']['page:LoginRequiredError']);
 		}
 		$smt = $comment -> addComment ($smt);
 		$view = new bwView;

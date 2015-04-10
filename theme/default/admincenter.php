@@ -23,7 +23,7 @@
 <select name="smt[commentOpt]" id="commentOpt" class="selectLine">
 <option value="0">[[=admin:opt:NoComment]]</option>
 <option value="1">[[=admin:opt:AllowComment]]</option>
-<option value="2">[[=admin:NotReady]] [[=admin:opt:OnlyLoginComment]]</option>
+<option value="2">[[=admin:opt:OnlyLoginComment]]</option>
 <option value="3">[[=admin:opt:ThirdPartyComment]]</option>
 </select>
 <br/><span class="adminExplain">[[=admin:msg:CommentOpt]]</span></p>
@@ -58,6 +58,9 @@
 <p id="siteKey2">
 <span class="icon-arrow-right5"></span> [[=admin:item:RepeatPsw]]<br/><input type="password" class="inputLine inputLarge" value="" id="siteKey3" placeholder="[[=admin:msg:BlankPsw]]" />
 </p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:UploadAvatar]]<br/><a href="##" onclick="$('#uploadPicFile').click();"><img src="[[::siteURL]]/conf/profile.png" style="width: 60px" id="avatarImg" /></a><br/><span class="adminExplain">[[=admin:msg:UploadAvatar]]</span>
+</p>
 
 <p><br/><br/></p>
 
@@ -71,8 +74,9 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:SiteLang]]<br/>
 <select name="smt[siteLang]" id="siteLang" class="selectLine">
-<option value="zh-cn">[[=admin:opt:SimplifiedChinese]]</option>
-<option value="en">[[=admin:opt:English]]</option>
+<option value="zh-cn">[[=admin:opt:SimplifiedChinese]] | 简体中文</option>
+<option value="zh-tw">[[=admin:opt:TraditionalChinese]] | 繁體中文</option>
+<option value="en">[[=admin:opt:English]] | English</option>
 </select>
 </p>
 
@@ -86,7 +90,7 @@
 </p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:URLRewrite]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst linkPrefixIndex" data-reflect="index.php"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast linkPrefixIndex" data-reflect="index"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::linkPrefixIndex]]" name="smt[linkPrefixIndex]" id="linkPrefixIndex"/><input type="hidden" value="[[::linkPrefixCategory]]" name="smt[linkPrefixCategory]" id="linkPrefixCategory"/><input type="hidden" value="[[::linkPrefixArticle]]" name="smt[linkPrefixArticle]" id="linkPrefixArticle"/><input type="hidden" value="[[::linkPrefixTag]]" name="smt[linkPrefixTag]" id="linkPrefixTag"/>
-<br/><span class="adminExplain">[[=admin:NotReady]] [[=admin:msg:URLRewrite]]</span>
+<br/><span class="adminExplain">[[=admin:msg:URLRewrite]]</span>
 </p>
 
 <p class="adminCommand"><br/>
@@ -98,6 +102,11 @@
 </form>
 
 </div>
+
+<form id="picForm" method="post" action="[[::siteURL]]/admin.php/center/avatarupload/?CSRFCode=[[::upCSRFCode]]" enctype="multipart/form-data" target="execPicTarget">
+<input type="file" style="display: none; height: 1px;" name="uploadFile" id="uploadPicFile" onchange="$('#picForm').submit();"/>
+</form>
+<iframe id="execPicTarget" name="execPicTarget" style="display: none;" onload="$('#avatarImg').attr('src', '[[::siteURL]]/conf/profile.png?'+Math.random());"></iframe>
 
 <script type="text/javascript">
 $("#siteTheme").val("[[::siteTheme]]");
@@ -206,6 +215,10 @@ function saveConf(formID, smtURL) {
 			else {
 				$("#adminPromptSuccess").text (data.returnMsg);
 				$("#adminPromptSuccess").fadeIn(400).delay(1500).fadeOut(600);
+				if ("[[::siteLang]]" != $('#siteLang').val())
+				{
+					window.location=window.location;
+				}
 			}
 		}, "json");
 	}

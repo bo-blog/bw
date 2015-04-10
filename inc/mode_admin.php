@@ -102,10 +102,22 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		} else {
 			stopError ($conf['l']['admin:msg:ChangeNotSaved']);
 		} 
+	} elseif ($canonical -> currentArgs['subAction'] == 'avatarupload') {
+		$admin -> checkCSRFCode ('upload');
+		if (count ($_FILES) < 1) {
+			exit ();
+		} 
+		if ($_FILES["uploadFile"]["error"] == UPLOAD_ERR_OK) {
+			$fExtName = pathinfo ($_FILES["uploadFile"]["name"], PATHINFO_EXTENSION);
+			if (in_array (strtolower ($fExtName), array('gif', 'jpg', 'png', 'bmp', 'jpeg', 'jpe'))) {
+				move_uploaded_file ($_FILES["uploadFile"]["tmp_name"], P . "conf/profile.png");
+			} 
+		}
+		exit ();
 	} else {
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('themeList' => $view -> scanForThemes (), 'CSRFCode' => $admin -> getCSRFCode ('saveconfig')));
+		$view -> setPassData (array ('themeList' => $view -> scanForThemes (), 'CSRFCode' => $admin -> getCSRFCode ('saveconfig'), 'upCSRFCode' => $admin -> getCSRFCode ('upload')));
 		$view -> setWorkFlow (array ('admincenter', 'admin'));
 		$view -> finalize ();
 	} 

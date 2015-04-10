@@ -32,7 +32,7 @@
 </script>
 <p>
 
-<span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" /></p>
+<span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" /><br/><span class="adminExplain">yyyy-mm-dd hh:mm:ss</span></p>
 
 <p class="adminCommand"><br/>
 <button type="button" class="buttonLine" id="btnSubmit" onclick="saveArticle('smtForm', '[[::siteURL]]/admin.php/articles/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
@@ -266,7 +266,7 @@ $('#eTags').keyup (function(event) {
 	}
 });
 
-if ($("#aID").val())
+if ("[[::aID]]")
 {
 	$("#aID").attr ('readonly', 'readonly');
 }

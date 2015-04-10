@@ -5,8 +5,8 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '0.9.8 alpha');
-define ('bwInternalVersion', '0980');
+define ('bwVersion', '0.9.9');
+define ('bwInternalVersion', '0990');
 define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
 
 if (!defined ('P')) {
@@ -1184,7 +1184,8 @@ class bwCanonicalization {
 			$requestedURL = explode ('/', str_replace ($siteURLTmp, '', $_SERVER['PHP_SELF']));
 		} 
 
-		$this -> currentScript = $requestedURL[0];
+		$URLRewriteBacks = array ('index' => $conf['linkPrefixIndex'], 'index.php' => $conf['linkPrefixIndex'], 'category' => $conf['linkPrefixCategory'], 'category.php' => $conf['linkPrefixCategory'], 'post' => $conf['linkPrefixArticle'], 'read.php' => $conf['linkPrefixArticle'], 'tag' => $conf['linkPrefixTag'], 'tag.php' => $conf['linkPrefixTag']);
+		$this -> currentScript = isset ($URLRewriteBacks[$requestedURL[0]]) ? $URLRewriteBacks[$requestedURL[0]] : $requestedURL[0];
 		array_shift ($requestedURL);
 		if (count ($requestedURL) > count ($this -> argsPattern)) {
 			$this -> currentArgs = array_slice ($requestedURL, 0, count ($this -> argsPattern));

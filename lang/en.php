@@ -40,6 +40,8 @@ $conf['l'] = array(
 	'page:LoggedIn' => 'Logged in as',
 	'page:LogOut' => 'Logout',
 	'page:SinaError' => 'Sina Weibo Authentication Error.',
+	'page:LoginRequired' => 'Please click the right button to login.',
+	'page:LoginRequiredError' => 'You are required to login wih a social media account before you post any comment.',
 
 	'js:RememberFail' => 'System will not remember your login status because the browser is working in Private Browsing mode.',
 	'js:AjaxFail' => 'An error occurs in Ajax communication.',
@@ -109,8 +111,10 @@ $conf['l'] = array(
 	'admin:item:SinaSK' => 'Sina Weibo App Secret',
 	'admin:item:CommentFrequency' => 'Comment Frequency',
 	'admin:item:CommentBreak' => 'Number of Comments Loaded per Batch',
+	'admin:item:UploadAvatar' => 'Upload Avatar',
 
-	'admin:opt:SimplifiedChinese' => 'Chinese (PRC)',
+	'admin:opt:SimplifiedChinese' => 'Simplified Chinese',
+	'admin:opt:TraditionalChinese' => 'Traditional Chinese',
 	'admin:opt:English' => 'English',
 	'admin:opt:VeryFew' => 'Very Few',
 	'admin:opt:AFew' => 'A Few',
@@ -128,7 +132,7 @@ $conf['l'] = array(
 	'admin:msg:SiteURL' => 'Example: http://name.com/path. Do not change unless you know what you\'re doing.',
 	'admin:msg:BlankPsw' => 'Leave blank to keep the current password',
 	'admin:msg:LengthPsw' => 'Must be at least 8 digits long, and contains at least 1 special character.',
-	'admin:msg:URLRewrite' => 'URL rewrite needs server support, for eg. Apache Rewrite Module.',
+	'admin:msg:URLRewrite' => 'Needs server support. Click <a href="../../inc/script/urlrewrite/apache.txt" target="_blank">here</a> for the rules for Apache.',
 	'admin:msg:ErrorCorrection' => 'Please correct the errors first.',
 	'admin:msg:NewCate' => 'Name',
 	'admin:msg:NewCate2' => 'ID, letters and numbers only',
@@ -179,6 +183,7 @@ $conf['l'] = array(
 	'admin:msg:RemoveExtension' => 'Do you really want to remove this item?',
 	'admin:msg:CommentOpt' => 'For social media account login and social comment services, configure in the Services page.',
 	'admin:msg:CommentFrequency' => 'After an article is loaded or a comment is sent, how many seconds the user has to wait before being able to submit a new comment.',
+	'admin:msg:UploadAvatar' => 'The picture should be a rectangle image of 90*90px or lager.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',

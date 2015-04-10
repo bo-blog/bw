@@ -16,6 +16,14 @@ if (file_exists ('../conf/info.php')) {
 	die ('Already installed.');
 }
 
+if (!isset ($_COOKIE['bwInstallLang'])) {
+	header ("Location: ./index.php");
+	exit ();
+} else {
+	$ln='./' . basename ($_COOKIE['bwInstallLang']) . '.lang.php';
+	file_exists ($ln) ? include_once ($ln) : include_once ('./en.lang.php');
+}
+
 
 if ($step == 1) {
 	$rslt2 = class_exists ('PDO') ? 1 : 0;
@@ -43,10 +51,10 @@ if ($step == 2) {
 
 		$infoConfContent = "<?php
 \$conf=array (
-  'siteName' => 'Your Blog',
+  'siteName' => '{$l['data.sitename']}',
   'siteURL' => '{$siteURL}',
   'authorName' => '{$siteAuthor}',
-  'authorIntro' => 'Yet another bW blog.',
+  'authorIntro' => '{$l['data.siteintro']}',
   'siteKey' => '{$siteKey}',
   'timeZone' => 'Asia/Shanghai',
   'pageCache' => '1',
@@ -54,7 +62,7 @@ if ($step == 2) {
   'comFrequency' => '10',
   'comPerLoad' => '20',
   'siteTheme' => 'default',
-  'siteLang' => 'zh-cn',
+  'siteLang' => '{$l['data.lang']}',
   'perPage' => '3',
   'linkPrefixIndex' => 'index.php',
   'linkPrefixCategory' => 'category.php',
@@ -86,7 +94,7 @@ if ($step == 2) {
 
 		if (!$writeResult) {
 			$rslt7 = $rslt8 = $rslt9 = 0;
-			$rslt10 = 'Please check and make sure folder "conf/" is writable.';
+			$rslt10 = $l['data.error'];
 		} else {
 			$rslt7 = 1; 
 			define ('P', '../');
@@ -101,7 +109,7 @@ if ($step == 2) {
 				}
 			}
 			$rslt8 = $rslt9 = 1;
-			$rslt10 = 'Congratulation! Installation succeeded.';
+			$rslt10 = $l['data.success'];
 		}
 		$errorStatus=$rslt7*$rslt8*$rslt9 ? 0 : 1;
 		die (json_encode (array ('error' => $errorStatus, 'rslt7' => $rslt7, 'rslt8' => $rslt8, 'rslt9' => $rslt9, 'rslt10' => $rslt10)));
@@ -152,6 +160,7 @@ function dbInit ($dbType)
 
 function dbInitBind ()
 {
+	global $l;
 	$siteURL = curPageURL ();
 	$return = array (
 		false,
@@ -161,8 +170,8 @@ function dbInitBind ()
 		false,
 		false,
 		false,
-		array ('hello-world', 'Hello, World!', 'default', date ('Y-m-d H:i:s'), null, 0, "Welcome to bW.\r\n\r\nThis is the first article that **bW** published on your behalf.\r\n\r\nbW allows you to [write in Markdown](http://daringfireball.net/projects/markdown/syntax).\r\n\r\n![]({$siteURL}/storage/firstrun.jpg)\r\n\r\nIf you need help, please do not hesitate to visit our [Official Website](http://bw.bo-blog.com)!", null, 0),
-		array ('default', 'Uncategorized', 1, 1),
+		array ('hello-world', $l['data.title'], 'default', date ('Y-m-d H:i:s'), null, 0, $l['data.content1']."![]({$siteURL}/storage/firstrun.jpg)".$l['data.content2'], null, 0),
+		array ('default', $l['data.cate'], 1, 1),
 		array ('hello_world', "name='Hello, world'\r\nintro='Test extension.'\r\nauthor='bW'\r\nurl='http://bw.bo-blog.com'", 'header,footer,textParser,generateOutputDone', 0, 1, null, 0),
 	);
 	return $return;
@@ -193,5 +202,6 @@ function curPageURL ()
 
 function stopError ($err)
 {
-	die (json_encode (array ('error'=>1, 'rslt7' => 1, 'rslt8' => 0, 'rslt9' => 0, 'rslt10' => 'Database error: '.$err)));
+	global $l;
+	die (json_encode (array ('error'=>1, 'rslt7' => 1, 'rslt8' => 0, 'rslt9' => 0, 'rslt10' => $l['data.dberror'].' '.$err)));
 }

@@ -22,7 +22,7 @@ $view -> setMaster ('page');
 
 $areaName = 'nocommentarea';
 if ($conf['commentOpt']<>0) {
-	loadServices (); //Load Baidu API or Duoshuo
+	loadServices ();
 	if ($conf['commentOpt'] == 1 || $conf['commentOpt'] == 2) { //Build-in comment
 		@session_start ();
 		$comment = new bwComment;

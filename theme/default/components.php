@@ -123,6 +123,10 @@ $parts['commentarea']=<<<eot
 <script>
 makeComUserLink ();
 commentBatches ('[[::siteURL]]/send.php/comments/load/', "[[::aID]]");
+if ([[::commentOpt]]==2) {
+	$("#comUserName").attr('placeholder', '[[=page:LoginRequired]]');
+	$("#comUserName").attr('readonly', 'readonly');
+}
 
 function errorPrompter (inputId)
 {
@@ -192,6 +196,7 @@ $.get("[[::siteURL]]/send.php/sina/check/?ajax=1", function(data) {
 			window.location="[[::siteURL]]/send.php/sina/end/?aID=[[::aID]]";
 		});
 		$('#comLoggedIn').show();
+		$('#comUserName').removeAttr ('readonly');
 		$('#comUserName').val (data.returnMsg['screen_name']);
 		$('#comUserURL').val (data.returnMsg['url']);
 		$('#comUserName').hide();
