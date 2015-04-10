@@ -1,0 +1,234 @@
+/* css reset by Tantek Celik */
+:link,:visited { text-decoration:none }
+ul,ol { list-style:none }
+h1,h2,h3,h4,h5,h6,pre,code { font-size:1em; }
+ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input
+{ margin:0; padding:0; font-weight:normal }
+a img,:link img,:visited img { border:none }
+address { font-style:normal }
+
+
+/* main style */
+body {
+background: #1B1B1B;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+height:100%;
+}
+a {
+color: #CCC;
+}
+#overallContainer {
+background: #F3F3F3;
+height: 100%;
+padding-bottom: 140px;
+}
+header {
+background: #464646;
+box-shadow: 5px 4px 5px #A4A4A4;
+padding: 10px;
+width: 100%;
+position: fixed;
+z-index: 10000;
+}
+header h1, h1 a {
+color: #D6D6D6;
+font-size: 24px;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+display: inline;
+margin-left: 5px;
+}
+.headerShrink {
+padding: 6px 20px 6px 20px;
+box-shadow: none;
+opacity: 0.9;
+}
+.headerShrink h1,  .headerShrink h1 a{
+font-size: 20px;
+}
+.iconLogo {
+font-size: 24px;
+color: #A8FF51;
+}
+header h1:hover, header h1 a:hover, .iconLogo:hover {
+color: #FFF;
+}
+nav {
+float: right;
+padding-right: 40px;
+}
+nav li {
+float: left;
+margin-left: 24px;
+}
+nav li a {
+color: #999;
+}
+nav li a:hover {
+color: #ECECEC;
+}
+nav .activeNav a {
+color: #ECECEC;
+}
+#mainArea {
+clear: both;
+padding: 90px 0 10px 0;
+text-align: center;
+background: #F6F6F6;
+}
+article {
+margin-bottom: 30px;
+}
+.details {
+text-align: center;
+width: 520px;
+height: 60px;
+margin: auto;
+}
+
+.details h2, .details h3 {
+float: left;
+width: 190px;
+border: #CCC 1px solid;
+border-radius: 20px;
+text-align: center;
+background: #A6A6A6;
+padding: 5px;
+margin-right: 30px;
+margin-left: 28px;
+}
+
+.details h2:hover, .details h3:hover {
+background: #EFEFEF;
+}
+.details h2,  .details h2 a, .details h3,  .details h3 a {
+color: #EFEFEF;
+font-size: 24px;
+font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+text-shadow: 1px 1px 2px #333;
+}
+.details h2 a:hover, .details h3 a:hover {
+color: #356A00;
+text-shadow: none;
+}
+
+
+footer {
+clear: both;
+background: #1B1B1B;
+margin-top: -140px;
+padding: 20px;
+height: 120px;
+min-height: 120px;
+box-shadow: 0 5px 5px #111 inset;
+text-align: center;
+color: #AAA;
+font-size: 14px;
+}
+#footerWrapper {
+margin: auto;
+width: 960px;
+max-width: 100%;
+padding-left: 25px;
+}
+.footerL {
+float: left;
+width: 24%;
+text-align: left;
+line-height: 160%;
+min-width: 200px;
+margin: auto;
+margin-bottom: 25px;
+}
+footer h4 {
+color: #fff;
+font-size: 16px;
+}
+footer h5 {
+font-family: "Times New Roman";
+}
+.jiathis_style_24x24 {
+opacity: 0.8!important;
+ filter: grayscale(100%);
+-webkit-filter: grayscale(100%);
+-moz-filter: grayscale(100%);
+-ms-filter: grayscale(100%);
+-o-filter: grayscale(100%);
+}
+footer a:hover {
+text-decoration: underline;
+}
+#copyright {
+clear: both;
+width: 100%;
+text-align: center;
+padding-top: 24px;
+}
+#copyright a, #copyright {
+color: #505050;
+font-size: 13px;
+font-family: Helvetica, Arial;
+}
+#keyMessage {
+display: none;
+}
+
+
+
+/* responsive */
+#menuDown {
+display: none;
+}
+
+@media only screen and (max-width:800px) {
+
+nav {
+position: absolute;
+right: 0;
+top: 80px;
+clear: both;
+float: right;
+display: none;
+}
+nav li {
+clear: both;
+background: #464646;
+padding: 6px;
+width: 200px;
+text-align: center;
+box-shadow: 1px 1px 2px #464646;
+}
+nav li:hover {
+background: #fff;
+}
+nav li a:hover {
+color: #464646;
+}
+#menuDown {
+display: inline;
+color: #fff;
+float: right;
+padding-right: 40px;
+}
+.admHeader #menuDown {
+padding-right: 0;
+}
+.details {
+width: 100%;
+text-align: center;
+height: 100px;
+}
+.details h2, .details h3 {
+float: none;
+clear: both;
+display: block;
+margin: auto;
+margin-bottom: 15px;
+}
+.menuDownIcon {
+font-size: 26px;
+}
+#mainArea {
+
+}
+
+}
