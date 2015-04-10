@@ -1,2 +1,2 @@
-$("#ins").html("有新版本可用：0.9.8 Test<br/>这是一个自动更新的测试");
-addUpdateBtn ("http://bw.bo-blog.com/bwupdate/update/upkg_0980.zip", '3DD5AB2016236F84FA0FCD261D29A48F');
+$("#ins").html("有新版本可用：<b>0.9.9</b><br/>- 新增：后台可上传替换头像。<br/>- 新增：可支持Apache的伪静态（URL重写）。<br/>- 新增：安装程序多语言化，包含中文。<br/>- 新增：繁体中文语言包。<br/>- 暂时取消了备份功能，以待进一步完善。");
+addUpdateBtn ("http://xiaofengtest.qiniudn.com/upkg0980.zip", 'bdad551569ef644391a6c57d461589d8');
