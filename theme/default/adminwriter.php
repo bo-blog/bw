@@ -16,7 +16,7 @@
 </p>
 
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:AContent]] <span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> <a href="##" id="adminGeoLoc"><span class="icon-location"> </span><span id="adminGeoLocAdd">[[=admin:btn:GeoLoc]]</span></a></span><br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea>
+<span class="icon-arrow-right5"></span> [[=admin:item:AContent]] <span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> | <a href="##" id="adminGeoLoc"><span class="icon-location"> </span><span id="adminGeoLocAdd">[[=admin:btn:GeoLoc]]</span></a> | <a href="##" id="adminPreview"><span class="icon-screen2"> </span><span id="adminPrevAdd">[[=admin:btn:StartPreview]]</span></a></span> <br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea><div id="previewArea" class="inputLine inputLarge textareaLine details"></div>
 </p>
 
 <p>
@@ -96,6 +96,35 @@ $("#aTitle").blur(function() {
 
 $("#aContent").click (function () {
 	setLeaveWarning ();
+});
+
+$("#adminPreview").click (function() {
+	if ($('#previewArea').css("display")=="none")
+	{
+		if (!$('#aContent').val())
+		{
+			return false;
+		}
+		$("#adminPrevAdd").html("[[=admin:btn:EndPreview]]");
+		$("#UI-loading").fadeIn(40);
+		var loadURL="[[::siteURL]]/admin.php/articles/getpreviewhtml/";
+		$.post(loadURL+"?ajax=1&CSRFCode=[[::articleCSRFCode]]", $('#smtForm').serialize(), function(data) {
+			$("#UI-loading").fadeOut(60);
+			if (data.error==1) {
+				alert (data.returnMsg);
+			}
+			else {
+				$('#aContent').hide();
+				$('#previewArea').html (data.returnMsg);
+				$('#previewArea').show();
+			}
+		}, "json");
+	}
+	else {
+		$("#adminPrevAdd").html("[[=admin:btn:StartPreview]]");
+		$('#previewArea').hide();
+		$('#aContent').show();
+	}
 });
 
 $(function() {

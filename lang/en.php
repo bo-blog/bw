@@ -52,6 +52,7 @@ $conf['l'] = array(
 	'admin:Articles' => 'Articles',
 	'admin:Services' => 'Services',
 	'admin:Extensions' => 'Extensions',
+	'admin:Markets' => 'Market',
 	'admin:Logout' => 'Logout',
 
 	'admin:sect:BasicInfo' => 'Basic Information',
@@ -200,6 +201,8 @@ $conf['l'] = array(
 	'admin:btn:NewWidget' => 'New Widget',
 	'admin:btn:CheckUpdate' => 'Check for Updates',
 	'admin:btn:DoUpdate' => 'Update Now',
+	'admin:btn:StartPreview' => 'Preview',
+	'admin:btn:EndPreview' => 'Stop Preview',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',
@@ -246,6 +249,14 @@ $conf['l'] = array(
 	'admin:item:LinkDes2' => 'Open Link in New Window',
 	'admin:item:LinkDes3' => 'Open Link in Parent Window',
  	'admin:item:SidebarTitle' => 'Sidebar Item Title',
+	'admin:item:GoMarket' => 'Get themes, widgets & more @Market',
+
+	'admin:market:Welcome' => 'Welcome to the Market.',
+	'admin:market:Themes' => 'Newest Featued Themes',
+	'admin:market:Extensions' => 'Newest Featured Extensions',
+	'admin:market:Bulletin' => 'Notices',
+	'admin:market:SeeAll' => 'See All',
+	'admin:market:Get' => 'Get',
 
 	'admin:NotReady' => '*To-do*',
 

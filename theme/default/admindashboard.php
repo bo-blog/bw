@@ -18,8 +18,8 @@
 <h2>[[=admin:item:StartHere]] </h2>
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/articles/new/?CSRFCode=[[::newCSRFCode]]">[[=admin:item:WriteArticle]] </a><br/>
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/center/?CSRFCode=[[::navCSRFCode]]">[[=admin:item:ChangeSetting]] </a><br/>
-<!--<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/services/backup/?CSRFCode=[[::serviceCSRFCode]]">[[=admin:item:BackupData]] </a><br/>-->
-<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/index.php/">[[=admin:item:BackHome]] </a><br/>
+<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/services/backup/?CSRFCode=[[::serviceCSRFCode]]">[[=admin:item:BackupData]] </a><br/>
+<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/market/?CSRFCode=[[::navCSRFCode]]">[[=admin:item:GoMarket]] </a><br/>
 </div>
 <div class="admStatBlock3">
 <h2>[[=admin:item:MostPopular]]</h2>
@@ -50,7 +50,7 @@
 
 function checkUpdates () {
 	$("#ins").html (" [[=admin:msg:CheckingUpdate]]");
-	$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "<?=bwUpdate?>cver/<?=bwInternalVersion?>.js"}).appendTo("head");
+	$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "<?=bwUpdate?>cver/v<?=bwInternalVersion?>.js"}).appendTo("head");
 }
 
 function addUpdateBtn (URL, md5) {

@@ -82,6 +82,11 @@ function lightboxImage (imgSrc) {
 	});
 	$('#lightboxImage').css("cursor", "pointer");
 	$('#lightboxImage').click(function (){
+		if (imgSrc.indexOf ('?imageView2/')!=-1)
+		{
+			var imgSrcs=imgSrc.split('?imageView2/');
+			imgSrc=imgSrcs[0];
+		}
 		window.open(imgSrc);
 	});
 	$('#UI-lightbox').click(function (){
@@ -201,9 +206,7 @@ function promptLoginError (oj) {
 	});
 }
 
-
-function lightboxLoader (loadURL) {
-	$(".commentArea").hide();
+function lightboxCore (VAction, URLorHTML) {
 	$("#UI-lightbox").fadeIn(500);
 	$("#UI-lightbox").append( "<div id='lightbox-message'></div>" );
 	var windowWidth=$(window).width();
@@ -216,7 +219,21 @@ function lightboxLoader (loadURL) {
 	$("#lightbox-message").css("top", Math.floor((windowHeight-finalHeight)/2));
 	$("#lightbox-message").css("left", Math.floor((windowWidth-finalWidth)/2));
 
-	$("#lightbox-message").load(loadURL);
+	if (VAction == "loader")
+	{
+		$("#lightbox-message").load(URLorHTML);
+	} else {
+		$("#lightbox-message").html(URLorHTML);
+	}
+}
+
+function lightboxLoader (loadURL) {
+	$(".commentArea").hide();
+	lightboxCore ('loader', loadURL);
+}
+
+function lightboxContent (contentHTML) {
+	lightboxCore ('HTML', contentHTML);
 }
 
 function lightboxLoaderDestroy () {

@@ -52,6 +52,7 @@ $conf['l'] = array(
 	'admin:Articles' => '文章管理',
 	'admin:Services' => '系統服務',
 	'admin:Extensions' => '外掛程式',
+	'admin:Markets' => 'bW市場',
 	'admin:Logout' => '退出登錄',
 
 	'admin:sect:BasicInfo' => '基本設置',
@@ -200,6 +201,8 @@ $conf['l'] = array(
 	'admin:btn:NewWidget' => '新建模組',
 	'admin:btn:CheckUpdate' => '點擊檢查更新',
 	'admin:btn:DoUpdate' => '立即更新',
+	'admin:btn:StartPreview' => '開啟預覽',
+	'admin:btn:EndPreview' => '結束預覽',
 
 	'admin:msg:NeedLogin' => '請先登錄。',
 	'admin:msg:ChangeSaved' => '保存成功。',
@@ -246,6 +249,14 @@ $conf['l'] = array(
 	'admin:item:LinkDes2' => '在新視窗打開',
 	'admin:item:LinkDes3' => '在父級視窗打開',
 	'admin:item:SidebarTitle' => '側邊欄項目標題',
+	'admin:item:GoMarket' => '前往bW市場獲取主題、外掛程式等',
+
+	'admin:market:Welcome' => '歡迎來到bW市場',
+	'admin:market:Themes' => '最新精選主題',
+	'admin:market:Extensions' => '最新精選外掛程式',
+	'admin:market:Bulletin' => '公告',
+	'admin:market:SeeAll' => '查看全部',
+	'admin:market:Get' => '獲取',
 
 	'admin:NotReady' => '*未實現*',
 

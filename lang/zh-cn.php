@@ -52,6 +52,7 @@ $conf['l'] = array(
 	'admin:Articles' => '文章管理',
 	'admin:Services' => '系统服务',
 	'admin:Extensions' => '插件扩展',
+	'admin:Markets' => 'bW市场',
 	'admin:Logout' => '退出登录',
 
 	'admin:sect:BasicInfo' => '基本设置',
@@ -200,6 +201,8 @@ $conf['l'] = array(
 	'admin:btn:NewWidget' => '新建模块',
 	'admin:btn:CheckUpdate' => '点击检查更新',
 	'admin:btn:DoUpdate' => '立即更新',
+	'admin:btn:StartPreview' => '开启预览',
+	'admin:btn:EndPreview' => '结束预览',
 
 	'admin:msg:NeedLogin' => '请先登录。',
 	'admin:msg:ChangeSaved' => '保存成功。',
@@ -246,6 +249,15 @@ $conf['l'] = array(
 	'admin:item:LinkDes2' => '在新窗口打开',
 	'admin:item:LinkDes3' => '在父级窗口打开',
 	'admin:item:SidebarTitle' => '侧边栏项目标题',
+	'admin:item:GoMarket' => '前往bW市场获取主题、插件等',
+
+	'admin:market:Welcome' => '欢迎来到bW市场',
+	'admin:market:Themes' => '最新精选主题',
+	'admin:market:Extensions' => '最新精选插件',
+	'admin:market:Bulletin' => '公告',
+	'admin:market:SeeAll' => '查看全部',
+	'admin:market:Get' => '获取',
+
 
 	'admin:NotReady' => '*未实现*',
 

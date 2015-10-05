@@ -205,6 +205,13 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$outTags[] = $aTag['tValue'];
 		} 
 		die (json_encode ($outTags));
+	}  elseif ($canonical -> currentArgs['subAction'] == 'getpreviewhtml') {
+		$admin -> checkCSRFCode ('articlesave');
+		if (!isset ($_REQUEST['smt'])) {
+			stopError ($conf['l']['admin:msg:NoData']);
+		} 
+		ajaxSuccess (bwView :: textFormatter ($_REQUEST['smt']['aContent']));
+
 	} elseif ($canonical -> currentArgs['subAction'] == 'delete') {
 		$admin -> checkCSRFCode ('articlesave');
 		$article -> deleteArticle ($_REQUEST['aID']);
@@ -242,7 +249,8 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
 		$uploadReturn = json_decode ($qiniuClient -> urlsafe_base64_decode($_REQUEST['upload_ret']), true);
 		if (isset ($uploadReturn['fname'])) {
-			$files[]['fileURL'] = $conf['qiniuDomain'] ? "{$conf['qiniuDomain']}/{$uploadReturn['fname']}" : "http://{$conf['qiniuBucket']}.qiniudn.com/{$uploadReturn['fname']}";
+			$qiniuThumbCall = '?imageView2/2/w/800';
+			$files[]['fileURL'] = $conf['qiniuDomain'] ? "{$conf['qiniuDomain']}/{$uploadReturn['fname']}{$qiniuThumbCall}" : "http://{$conf['qiniuBucket']}.qiniudn.com/{$uploadReturn['fname']}{$qiniuThumbCall}";
 		} 
 		$view -> setMaster ('adminuploadinsert');
 		$view -> setPassData (array ('adminuploaded' => $files));
@@ -330,6 +338,11 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		require_once (P . "inc/script/pclzip/pclzip.lib.php");
 		$ff = 'storage/backup' . date("YmdHis") . '.zip';
 		$archive = new PclZip (P . $ff);
+		if (strtolower (DBTYPE) == 'mysql') {
+			include_once (P. 'inc/dbmanage/DbManage.class.php');
+			$db = new DBManage (DBADDR, DBUSERNAME, DBPASSWORD, DBNAME, 'utf8');
+			$db->backup ('', P. 'conf/', '');
+		}
 		$v_list = DBTYPE == 'SQLite' ? $archive -> create('conf,' . DBNAME, PCLZIP_OPT_REMOVE_ALL_PATH) : $archive -> create('conf', PCLZIP_OPT_REMOVE_ALL_PATH);
 		if ($v_list == 0) {
 			stopError ($conf['l']['admin:msg:PclzipError'] . $archive -> errorInfo(true));
@@ -337,35 +350,6 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 			header ("Location: {$conf['siteURL']}/{$ff}");
 		} 
 	} 
-	/**
-	* elseif ($canonical->currentArgs['subAction']=='sync')
-	* {
-	* loadServices ();
-	* require_once (P."inc/qiniu.php");
-	* $qiniuClient=new qiniuClient (QINIU_AK, QINIU_SK);
-	* if ($conf['qiniuBucket'] && $handle=opendir (P.'data/'))
-	* {
-	* while (false!==($file=readdir ($handle)))
-	* {
-	* if (!is_dir (P.'data/'.$file))
-	* {
-	* qiniuUpload ('data/'.$file);
-	* }
-	* }
-	* }
-	* qiniuUpload ("conf/list_all.php");
-	* qiniuUpload ("conf/categories.php");
-	* foreach (bw::$cateData as $aCateURLName=>$aCateDispName)
-	* {
-	* if (file_exists (P."conf/list_{$aCateURLName}.php"))
-	* {
-	* qiniuUpload ("conf/list_{$aCateURLName}.php");
-	* }
-	* }
-	* header ("Location: https://portal.qiniu.com/");
-	* }
-	*/
-
 	else {
 		$admin -> checkCSRFCode ('navibar');
 		loadServices ();
@@ -387,20 +371,13 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 			stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
 		} else {
 			file_put_contents (P . 'update/dlupkg_tmp.zip', $packageContent);
+			@chmod (P . 'update/dlupkg_tmp.zip', 0777);
 			if (md5_file (P . 'update/dlupkg_tmp.zip') <> strtolower ($_REQUEST['hash'])) {
 				stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
 			}
-			require_once (P . "inc/script/pclzip/pclzip.lib.php");
-			$archive = new PclZip (P . 'update/dlupkg_tmp.zip');
-			$nowDir = date ("Ymdhis_") . rand (100, 999);
-			$updateResult = $archive -> extract (PCLZIP_OPT_SET_CHMOD, 0777, PCLZIP_OPT_PATH, P . 'update/' . $nowDir);
-			if (!$updateResult) {
-				stopError ($conf['l']['admin:msg:UpdateUnzipFail']);
-			} else {
-				fileReplaceRecursive (P . 'update/' . $nowDir . '/', P);
-				@rrmdir (P . 'update/' . $nowDir);
-				@unlink (P . 'update/dlupkg_tmp.zip');
-			}
+			include_once (P . "inc/bwzip.php");
+			bwZip :: zipRead (P . 'update/dlupkg_tmp.zip', 1, 1);
+			@unlink (P . 'update/dlupkg_tmp.zip');
 			header ("Location: {$conf['siteURL']}/admin.php/dashboard/?CSRFCode=" . $admin -> getCSRFCode ('navibar') . "#UpdateSuccess");
 			exit ();
 		} 
@@ -553,6 +530,17 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 		} 
 		$comment -> blockIP ($_REQUEST['comID']);
 		ajaxSuccess($conf['l']['admin:msg:ChangeSaved']);
+	} 
+} 
+
+if ($canonical -> currentArgs['mainAction'] == 'market') {
+	if ($canonical -> currentArgs['subAction'] == 'update') {
+	} else {
+		$admin -> checkCSRFCode ('navibar');
+		$view -> setMaster ('admin');
+		$view -> setPassData (array ('installCSRFCode' => $admin -> getCSRFCode ('install')));
+		$view -> setWorkFlow (array ('adminmarket', 'admin'));
+		$view -> finalize ();
 	} 
 } 
 

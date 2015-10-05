@@ -7,11 +7,12 @@
 <form id="smtForm" data-adminurl="[[::siteURL]]/admin.php/extensions/">
 <h2><span class="icon-list"></span> [[=admin:sect:InstalledExt]]</h2> 
 <p>
-[[::loop, extList]]<article>
-<h2 title="[[=admin:msg:Hook]] [[::extHooks]]">[[::extName]]</h2>
+[[::loop, extList]]<article style="float: left; clear: both;">
+<div style="float: left"><img src="[[::siteURL]]/extension/[[::extID]]/icon.png" style="width: 100px; margin-right: 20px; border-radius: 10px" alt='' /></div>
+<div style="float: left"><h2 title="[[=admin:msg:Hook]] [[::extHooks]]">[[::extName]]</h2>
 [[::extIntro]] 
 <h3>[[=admin:msg:By]] <a href="[[::extURL]]">[[::extAuthor]]</a> | <span class="extStatus[[::extActivate]]">[[=admin:msg:ExtStatus[[::extActivate]]]]</span></h3>
-<span class="details"><a href="##" onclick="makeEnabled('[[::extID]]');"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; <a href="##" onclick="makeDisabled('[[::extID]]');"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; <a href="##" onclick="removeExt('[[::extID]]');"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a></span>
+<span class="details"><a href="##" onclick="makeEnabled('[[::extID]]');"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; <a href="##" onclick="makeDisabled('[[::extID]]');"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; <a href="##" onclick="removeExt('[[::extID]]');"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a></span></div>
 </article>[[::/loop]]
 </p>
 <br/>

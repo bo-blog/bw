@@ -5,8 +5,8 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '0.9.9');
-define ('bwInternalVersion', '0990');
+define ('bwVersion', '1.0.0');
+define ('bwInternalVersion', '1000');
 define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
 
 if (!defined ('P')) {
@@ -1114,6 +1114,8 @@ class bwView {
 		$text = preg_replace ("/!~!(.+?)\[location\]/", "<span class=\"icon-location geoLocator\"></span> <span class=\"geoLocator\">$1</span>", $text); 
 		// !!URL = music
 		$text = preg_replace ("/!!<a href=\"(.+?)\">(.+?)<\/a>/", "<audio controls><source src=\"$1\" type=\"audio/mpeg\">Your browser does not support the audio element.</audio>", $text);
+		$text = str_replace ("\n", '<br/>', $text);
+		$text = preg_replace ("/<\/(.+?)><br\/>/", "</$1>", $text);
 		$text = hook ('textParser', 'Replace', $text);
 		return $text;
 	} 
