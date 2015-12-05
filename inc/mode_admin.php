@@ -204,7 +204,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		foreach ($allTags as $aTag) {
 			$outTags[] = $aTag['tValue'];
 		} 
-		die (json_encode ($outTags));
+		die ('var lastTags='.json_encode ($outTags).';');
 	}  elseif ($canonical -> currentArgs['subAction'] == 'getpreviewhtml') {
 		$admin -> checkCSRFCode ('articlesave');
 		if (!isset ($_REQUEST['smt'])) {
@@ -534,7 +534,9 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 } 
 
 if ($canonical -> currentArgs['mainAction'] == 'market') {
-	if ($canonical -> currentArgs['subAction'] == 'update') {
+	if ($canonical -> currentArgs['subAction'] == 'detail') { 
+		$admin -> checkCSRFCode ('install');
+		
 	} else {
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
@@ -545,3 +547,5 @@ if ($canonical -> currentArgs['mainAction'] == 'market') {
 } 
 
 hook ('newAdminCategory', 'Execute', $canonical, $admin, $view);
+
+stopError ($conf['l']['admin:msg:NeedLogin']);

@@ -86,7 +86,7 @@ var lng={
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>
 <div id="UI-lightbox"></div>
 <script type="text/javascript">
-$('#nav-index').addClass('activeNav');
+$('#nav-[[::activeNav]]').addClass('activeNav');
 $('.adminSign').click(function (){checkLogin('adminSign');});
 </script>
 [[::ext_beforeEnd]]

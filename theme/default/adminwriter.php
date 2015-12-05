@@ -46,11 +46,16 @@
 [[::adminqiniuupload]][[::admincommonupload]]
 </div>
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;"></iframe>
+<script type="text/javascript" src="[[::siteURL]]/admin.php/articles/getautocomplete/"></script>
 <script type="text/javascript">
+var clearAutoID=false;
+var callCustomEditor=false;
+
 if ($("#aID").val()=='')
 {
 	var myDate = new Date();
 	$("#aID").val('post-[[::aTime, dateFormat, YmdHi]]');
+	clearAutoID=true;
 }
 
 $("#admArticles").addClass("activeNav");
@@ -63,6 +68,14 @@ $("#aID").blur(function() {
 	$("#aID").click(function() {
 		$("#aID").removeClass("inputLineWarn");
 	});
+});
+
+$("#aID").click(function() {
+	if (clearAutoID)
+	{
+		$("#aID").val("");
+		clearAutoID=false;
+	}
 });
 
 function setLeaveWarning () {
@@ -272,16 +285,16 @@ if ($('#eTags').val())
 	$('#eTags').val('');
 }
 
-<!--
+
 $('#eTags').AutoComplete({
-'data': "[[::siteURL]]/admin.php/articles/getautocomplete/",
+'data': lastTags,
 'ajaxDataType': 'json',
 'afterSelectedHandler': function(data) {
 	$("#taghint").append('<span class="admSingleTag" onclick="$(this).remove();"><i>'+data.value+'</i><span class="icon-cross admSingleTagDel"></span></span>');
 	$('#eTags').val('');
 }
 });
--->
+
 
 $('#eTags').keyup (function(event) {
 	if (event.keyCode==188)
@@ -323,7 +336,9 @@ function insertGeoLoc (data) {
 	$('#aContent').insertContent (str);
 }
 
-if ($(window).width()>800)
+[[::ext_customEditor]]
+
+if ($(window).width()>800 && !callCustomEditor)
 {
 	$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/inc/script/editor/themes/default/default.css"}).appendTo("head");
 	$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "[[::siteURL]]/inc/script/editor/jquery.markbar.js"}).appendTo("head");

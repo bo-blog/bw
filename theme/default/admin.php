@@ -39,7 +39,7 @@ var lng={
 <nav>
 <ul>
 <li class="adminList" id="admPanel"><a href="[[::siteURL]]/admin.php/dashboard/?CSRFCode=[[::navCSRFCode]]" title="Dashboard"><span class="icon-gauge"></span> <span class="adminItems">[[=admin:Dashboard]]</span></a></li>
-<li class="adminList" id="admMarket"><a href="[[::siteURL]]/admin.php/market/?CSRFCode=[[::navCSRFCode]]" title="Market"><span class="icon-cd"></span> <span class="adminItems">[[=admin:Markets]]</span></a></li>
+<!-- <li class="adminList" id="admMarket"><a href="[[::siteURL]]/admin.php/market/?CSRFCode=[[::navCSRFCode]]" title="Market"><span class="icon-cd"></span> <span class="adminItems">[[=admin:Markets]]</span></a></li> -->
 <li class="adminList" id="admCenter"><a href="[[::siteURL]]/admin.php/center/?CSRFCode=[[::navCSRFCode]]" title="Settings"><span class="icon-cog3"></span> <span class="adminItems">[[=admin:Settings]]</span></a></li>
 <li class="adminList" id="admArticles"><a href="[[::siteURL]]/admin.php/articles/?CSRFCode=[[::navCSRFCode]]" title="Articles"><span class="icon-pencil"></span> <span class="adminItems">[[=admin:Articles]]</span></a></li>
 <li class="adminList" id="admServices"><a href="[[::siteURL]]/admin.php/services/?CSRFCode=[[::navCSRFCode]]" title="Services"><span class="icon-cloud2"></span> <span class="adminItems">[[=admin:Services]]</span></a></li>

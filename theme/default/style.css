@@ -650,6 +650,7 @@ float: right;
 display: block;
 margin-right: 20%;
 margin-top: 25px;
+font-size:11px;
 }
 .adminUploader a {
 color: #717171;
@@ -768,10 +769,9 @@ width: 99%;
 max-width: 1000px;
 }
 .marketFeatured {
-min-height: 210px;
 }
 .marketList {
-min-height: 140px;
+margin-bottom: 10px;
 }
 .marketBulletin {
 min-height: 80px;
@@ -782,6 +782,7 @@ margin-right: 10px;
 padding: 8px;
 line-height: 150%;
 background: #eee;
+margin-bottom: 10px;
 }
 .marketSubItem img {
 width: 100px;
@@ -820,7 +821,9 @@ background: #eee;
 font-size: 13px;
 padding: 6px 6px 6px 16px;
 }
-
+.marketLH {
+overflow: auto;
+}
 
 /* Forms */
 .inputLine {

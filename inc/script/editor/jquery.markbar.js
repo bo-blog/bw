@@ -103,6 +103,11 @@
 				html += '<a href="#code" class="code"><span class="icon-embed"></span></a>';
 			}
 
+			//bW: added on 2015/11/29
+			html += '<a href="#youkuvideo" class="youkuvideo"><span class="icon-video"></span></a>';
+			html += '<a href="#xiami" class="xiami"><span class="icon-music4"></span></a>';
+
+
 			// Close div
 			html += '</div>';
 
@@ -239,6 +244,27 @@
 		{
 			var selection = this.get();
 			this.replace('    ' + selection.text.split('\n').join('\n    '), false);
+		},
+
+		
+		youkuvideo: function()
+		{
+			var url = prompt('按下优酷视频播放器的“分享”按钮，找到“通用代码”，把iframe的src地址的最后一部分复制到下面（通常是大写字母开头，==结尾）：');
+
+			if (url)
+			{
+				this.replace(this.get().text + '!~!' + url + '[youku]');
+			}
+		},
+
+		xiami: function()
+		{
+			var url = prompt('虾米的单首歌曲页面URL形如http://www.xiami.com/song/1234567890，把最后10位数字复制到下面：');
+
+			if (url)
+			{
+				this.replace(this.get().text + '!~!' + url + '[xiami]');
+			}
 		},
 
 		get: function()
