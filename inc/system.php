@@ -2,11 +2,11 @@
 /**
 * 
 * @link http://bw.bo-blog.com
-* @copyright (c) 2014 bW Development Team
+* @copyright (c) 2015 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '1.0.1');
-define ('bwInternalVersion', '1010');
+define ('bwVersion', '1.0.2');
+define ('bwInternalVersion', '1020');
 define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
 
 if (!defined ('P')) {
@@ -957,7 +957,7 @@ class bwView {
 
 	public function finalize ()
 	{
-		header ("Content-Type: text/html; charset=UTF-8");
+		@header ("Content-Type: text/html; charset=UTF-8");
 		$this -> generateOutput ();
 		$this -> outputView ();
 		hook ('finalize', 'Execute', $this);
@@ -966,6 +966,16 @@ class bwView {
 		} 
 		exit ();
 	} 
+
+	public function getOutput ($clearAtOnce=true) 
+	{
+		$this -> generateOutput ();
+		$return = $this -> outputContent;
+		if ($clearAtOnce) {
+			$this -> outputContent = '';
+		}
+		return $return;
+	}
 
 	public function addHookIntoView ($hookInterface)
 	{
@@ -1137,7 +1147,7 @@ class bwCanonicalization {
 	{
 		global $conf;
 		$this -> perPage = &$conf['perPage'];
-
+		
 		if (!defined ('M')) {
 			define ('M', 'index');
 		} 

@@ -43,10 +43,7 @@ $parts['adminlogin']=<<<eot
 <img src="[[::siteURL]]/conf/profile.png" id="adminLoginImg"/>
 <p>[[=admin:msg:Login]]</p>
 <p>
-<input type="password" class="inputLine" id="s_token" placeholder="[[=admin:msg:PromptPsw]]" /> <button class="buttonLine" onclick="doLogin('s_token', '[[::siteURL]]/admin.php');"><span class="icon-login"></span></button>
-</p>
-<p id="adminRemember">
-<input type="checkbox"  id="s_token-rem"/> [[=page:MobileRem]]<br/>[[=page:MobileRem2]]
+<input type="password" class="inputLine" id="s_token" placeholder="[[=admin:msg:PromptPsw]]" /> <button class="buttonLine" onclick="doLogin('s_token', '[[::siteURL]]/admin.php');"><span class="icon-login"></span></button> <button class="buttonLine" onclick="window.location='[[::siteURL]]/send.php/gona/';"><span class="icon-mobile3" title="[[=page:MobileLogin]]"></span></button>
 </p>
 <p>
 <span id="s_token-failure" class="adminErrorMsg"><span class="icon-minus2"></span> [[=admin:msg:WrongPsw]]</span>
@@ -273,5 +270,94 @@ eot;
 
 $parts['nocommentarea']='';
 
+$parts['authmobile']=<<<eot
+<article><h2><span class="icon-mobile3"></span> [[=admin:item:AuthMobile]]</h2>
+<h3><p>[[=admin:msg:Login]]</p>
+<p>
+<form action="[[::siteURL]]/send.php/nado/" method="post">
+<input type="text" class="inputLine" name="s_myname" placeholder="[[=page:MobileRem]]" value="[[::deviceName]]" />
+<br/><input type="password" class="inputLine" id="s_token" name="s_token" placeholder="[[=admin:msg:PromptPsw]]" /> <br/><br/><button type="submit" class="buttonLine" id="btnSubmit"><span class="icon-login"></span></button>
+</form>
+</p>
+</h3>
+</article>
+<script type="text/javascript">
+if (!window.localStorage) {
+$("#btnSubmit").hide();
+}
+</script>
+eot;
+
+$parts['authmobilefinish']=<<<eot
+<article><h2><span class="icon-mobile3"></span> [[=admin:item:AuthMobile]]</h2>
+<h3><p>[[=page:MobileAuth1]] [[::deviceName]]</p>
+</h3>
+<h3>[[=page:MobileAuth2]]</h3>
+
+</article>
+<script type="text/javascript">
+localStorage.mobileToken="[[::deviceMobileToken]]";
+</script>
+eot;
+
+$parts['authmobilego']=<<<eot
+<article><h2><span class="icon-mobile3"></span> [[=page:MobileLogin]]</h2>
+<h3><p>[[=page:MobileAuth3]]</p>
+<p>
+<img src="http://qr.liantu.com/api.php?text=[[::siteURL]]/send.php/nalogin/[[::ipPC]]/" />
+</p>
+</h3>
+<h3>[[=page:MobileAuth4]]</h3>
+</article>
+<script type="text/javascript" src="[[::siteURL]]/inc/script/timers/jquery.timers.js"></script>
+<script type="text/javascript">
+
+function checkPermission () {
+	var chURL="[[::siteURL]]/send.php/nasearch/?ajax=1";
+	$.get(chURL, { inPC: '[[::ipPC]]' }, function (data) {
+		if (data.error==1) { //Wrong token
+		}
+		else {
+			var CSRFCode = data.returnMsg;
+			$('body').stopTime ();
+			window.location="[[::siteURL]]/admin.php/dashboard/?CSRFCode="+CSRFCode;
+		}
+	}, "json");
+} 
+$('body').everyTime('1s', checkPermission);
+</script>
+eot;
+
+$parts['authmobileconfirm']=<<<eot
+<article><h2><span class="icon-mobile3"></span> [[=page:MobileLogin]]</h2>
+<h3><p>[[=page:MobileAuth5]]</p>
+<p>
+<br/><button type="button" class="buttonLine" id="btnSubmit"><span class="icon-login"></span></button> OK
+</p>
+</h3>
+</article>
+<script type="text/javascript">
+$("#btnSubmit").click (function () {
+	if (!window.localStorage) {
+		alert (lng['RememberFail']);
+		return false;
+	}
+	if (!localStorage.mobileToken) {
+		alert (lng['RememberFail']);
+		return false;
+	}
+	$.get("[[::siteURL]]/send.php/nacheck/[[::ipPC]]/?ajax=1", { s_token: localStorage.mobileToken }, function (data) {
+		if (data.error==1) { //Wrong token
+			alert (lng['RememberFail']);
+		}
+		else {
+			alert (lng['RememberSuccess']);
+			$("#btnSubmit").fadeOut();
+		}
+	}, "json");
+});
+
+</script>
+eot;
 
 ?>

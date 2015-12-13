@@ -137,7 +137,6 @@ function checkLogin (oj) {
 
 function doLogin (oj, rootURL) {
 	var s_token= $('#'+oj).val();
-	var isRem = $('#'+oj+'-rem').is(':checked');
 
 	if (s_token=='')
 	{
@@ -146,20 +145,6 @@ function doLogin (oj, rootURL) {
 	}
 	targetURL = rootURL+"/login/verify/?ajax=1";
 
-	if (isRem)
-	{
-		try {
-			localStorage.test=1;
-		} catch (e) {
-			alert (lng['RememberFail']);
-			isRem=false;
-		}
-		targetURL=targetURL+'&isRem=1';
-	}
-	else
-	{
-		targetURL=targetURL+'&isRem=0';
-	}
 	$.get(targetURL, { s_token: s_token }, function (data) {
 		if (data.error==1) { //Wrong token
 			promptLoginError (oj);
@@ -167,11 +152,6 @@ function doLogin (oj, rootURL) {
 		}
 		else {
 			var plusCode = data.returnMsg.split ('-');
-			if (isRem && window.localStorage)
-			{
-				localStorage.clear();
-				localStorage.mobileToken=plusCode[0];
-			}
 
 			if (!In_Block_Mode)
 			{

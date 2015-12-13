@@ -18,7 +18,7 @@
 <h2>[[=admin:item:StartHere]] </h2>
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/articles/new/?CSRFCode=[[::newCSRFCode]]">[[=admin:item:WriteArticle]] </a><br/>
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/center/?CSRFCode=[[::navCSRFCode]]">[[=admin:item:ChangeSetting]] </a><br/>
-<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/services/backup/?CSRFCode=[[::serviceCSRFCode]]">[[=admin:item:BackupData]] </a><br/>
+<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/services/?CSRFCode=[[::navCSRFCode]]#admBackup">[[=admin:item:BackupData]] </a><br/>
 <!-- <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/market/?CSRFCode=[[::navCSRFCode]]">[[=admin:item:GoMarket]] </a><br/>-->
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/">[[=admin:item:BackHome]] </a><br/>
 </div>

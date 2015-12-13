@@ -16,10 +16,14 @@ $view = new bwView;
 
 if ($canonical -> currentArgs['mainAction'] == '1') {
 	if (isset ($_REQUEST['mobileToken']) && !isset($_SESSION['login-token'])) {
-		if ($_REQUEST['mobileToken'] == sha1($conf['siteKey'] . 'mobile')) {
-			$admin -> storeMobileToken ();
-			$admin -> verified = true;
-		} 
+		if (file_exists (P . 'conf/mobileauth.php')) {
+			include_once (P . 'conf/mobileauth.php');
+			if (in_array ($_REQUEST['mobileToken'], $allMobileKeys)) {
+				$admin -> storeMobileToken ();
+				$admin -> verified = true;
+				$_SESSION['authmobile'] = 1;
+			}
+		}
 	} 
 } 
 
@@ -50,6 +54,9 @@ if ($canonical -> currentArgs['mainAction'] == '1') {
 
 if ($canonical -> currentArgs['mainAction'] == 'login') {
 	if ($canonical -> currentArgs['subAction'] == 'logout') {
+		if (array_key_exists ('authmobile', $_SESSION)) {
+			stopError (bw :: $conf['l']['admin:msg:CannotLogout']);
+		}
 		$admin -> checkCSRFCode ('logout');
 		@session_destroy ();
 		header ("Location: {$conf['siteURL']}/index.php?cleartoken");
@@ -57,19 +64,13 @@ if ($canonical -> currentArgs['mainAction'] == 'login') {
 	} elseif ($canonical -> currentArgs['subAction'] == 'verify') {
 		$s_token = $_REQUEST['s_token'];
 
-		$isRem = $_REQUEST['isRem'];
-
 		$admin -> verifyToken ($s_token);
 		if (!$admin -> verified) {
 			stopError ('');
 		} else {
 			$admin -> storeSessionToken ($s_token);
 			$navCSRFCode = $admin -> getCSRFCode ('navibar');
-			if ($isRem == 1) {
-				ajaxSuccess (sha1($conf['siteKey'] . 'mobile') . '-' . $navCSRFCode);
-			} else {
-				ajaxSuccess ('-' . $navCSRFCode);
-			} 
+			ajaxSuccess ('-' . $navCSRFCode);
 		} 
 	} else {
 		$view -> setMaster ('adminlogin');
@@ -114,10 +115,32 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 			} 
 		}
 		exit ();
+	}  elseif ($canonical -> currentArgs['subAction'] == 'cancelauth') {
+		$admin -> checkCSRFCode ('saveconfig');
+		if (!isset ($_REQUEST['devID'])) {
+			stopError ('');
+		} 
+		$allMobileKeys = array ();
+		if (file_exists (P . 'conf/mobileauth.php')) {
+			include_once (P . 'conf/mobileauth.php');
+			if (isset($allMobileKeys[$_REQUEST['devID']])) {
+				unset ($allMobileKeys[$_REQUEST['devID']]);
+				$valString = "<?php\r\n\$allMobileKeys=" . var_export ($allMobileKeys, true) . ";?>";
+				$rS = file_put_contents (P . "conf/mobileauth.php", $valString);
+			}
+			ajaxSuccess ('');
+		}
 	} else {
+		$allMobileKeys = $mobileKeys = array ();
+		if (file_exists (P . 'conf/mobileauth.php')) {
+			include_once (P . 'conf/mobileauth.php');
+			foreach ($allMobileKeys as $devID => $seq) {
+				$mobileKeys[] = array ('devID' => $devID, 'seq' => $seq);
+			}
+		}
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('themeList' => $view -> scanForThemes (), 'CSRFCode' => $admin -> getCSRFCode ('saveconfig'), 'upCSRFCode' => $admin -> getCSRFCode ('upload')));
+		$view -> setPassData (array ('themeList' => $view -> scanForThemes (), 'mobileKeys' => $mobileKeys, 'CSRFCode' => $admin -> getCSRFCode ('saveconfig'), 'upCSRFCode' => $admin -> getCSRFCode ('upload')));
 		$view -> setWorkFlow (array ('admincenter', 'admin'));
 		$view -> finalize ();
 	} 
@@ -299,7 +322,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$article -> alterPerPage (20);
 		$article -> getArticleList ();
 		$canonical -> calTotalPages ($article -> totalArticles);
-		$canonical -> paginableURL = bw :: $conf['siteURL'] . '/admin.php/articles//%d?CSRFCode=' . $admin -> getCSRFCode ('navibar');
+		$canonical -> paginableURL = bw :: $conf['siteURL'] . '/admin.php/articles/list/%d?CSRFCode=' . $admin -> getCSRFCode ('navibar');
 		$view -> doPagination ();
 
 		$view -> setMaster ('admin');
@@ -333,13 +356,13 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		} else {
 			stopError ($conf['l']['admin:msg:ChangeNotSaved']);
 		} 
-	} elseif ($canonical -> currentArgs['subAction'] == 'backup') {
+	} elseif ($canonical -> currentArgs['subAction'] == 'backup' || $canonical -> currentArgs['subAction'] == 'sync') {
 		$admin -> checkCSRFCode ('services');
 		require_once (P . "inc/script/pclzip/pclzip.lib.php");
 		$ff = 'storage/backup' . date("YmdHis") . '.zip';
 		$archive = new PclZip (P . $ff);
 		if (strtolower (DBTYPE) == 'mysql') {
-			include_once (P. 'inc/dbmanage/DbManage.class.php');
+			include_once (P. 'inc/script/dbmanage/DbManage.class.php');
 			$db = new DBManage (DBADDR, DBUSERNAME, DBPASSWORD, DBNAME, 'utf8');
 			$db->backup ('', P. 'conf/', '');
 		}
@@ -347,7 +370,17 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		if ($v_list == 0) {
 			stopError ($conf['l']['admin:msg:PclzipError'] . $archive -> errorInfo(true));
 		} else {
-			header ("Location: {$conf['siteURL']}/{$ff}");
+			if ($canonical -> currentArgs['subAction'] == 'backup') {
+				header ("Location: {$conf['siteURL']}/{$ff}");
+			} 
+			else { 
+				loadServices ();
+				require_once (P . "inc/qiniu.php");
+				$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
+				$result = $qiniuClient -> uploadFile (P . $ff, $conf['qiniuBucket'], $ff);
+				@unlink (P . $ff);
+				header ("Location: {$conf['siteURL']}/admin.php/services/?CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+			} 
 		} 
 	} 
 	else {

@@ -54,7 +54,7 @@ var lng={
 [[::ext_adminMainAreaStart]]
 [[::load, admindashboard]][[::load, admincenter]][[::load, adminarticles]][[::load, adminwriter]][[::load, adminservices]][[::load, adminextensions]][[::load, adminmarket]]
 </div>
-<div id="copyright" class="admFooter"> <a href="[[::siteURL]]/admin.php/login/logout/?CSRFCode=[[::logoutCSRFCode]]" title="Logout"><span class="icon-logout"></span> [[=admin:Logout]]</a><br/><br/>Powered by bW <a href="http://bw.bo-blog.com/" target="_blank"><span class="icon-earth2"></span></a> <a href="https://github.com/bo-blog/bw" target="_blank"><span class="icon-github6"></span></a></div>
+<div id="copyright" class="admFooter"> <a href="[[::siteURL]]/admin.php/login/logout/?CSRFCode=[[::logoutCSRFCode]]" title="Logout"><span class="icon-logout"></span> [[=admin:Logout]]</a> &nbsp; <a href="#"><span class="icon-arrow-up4"></span>TOP</a><br/><br/>Powered by bW <a href="http://bw.bo-blog.com/" target="_blank"><span class="icon-earth2"></span></a> <a href="https://github.com/bo-blog/bw" target="_blank"><span class="icon-github6"></span></a></div>
 [[::ext_adminMainAreaEnd]]
 </div>
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>

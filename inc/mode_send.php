@@ -11,6 +11,140 @@ if (!defined ('P')) {
 
 $view = new bwView;
 
+if ($canonical -> currentArgs['mainAction'] == 'na') { //Authorize a mobile phone
+	$knownDevices = array(
+		'iphone'	 => $conf['l']['page:MPiPhone'],
+		'ipad'	 => $conf['l']['page:MPiPad'],
+		'android' => $conf['l']['page:MPAndroid'],
+		'windows' => $conf['l']['page:MPWindows'],
+		'blackberry' => $conf['l']['page:MPBlackberry'],
+		'symbian' => $conf['l']['page:MPSymbian'],
+		'palm' => $conf['l']['page:MPPalm'],
+		'ipod'	 => $conf['l']['page:MPiPodTouch'],
+	);
+
+	$ua = strtolower ($_SERVER['HTTP_USER_AGENT']);
+	foreach ($knownDevices as $devID => $devName) { 
+		if (strpos ($ua, $devID) !== false) {
+			$uaDev = $devName;
+			break;
+		}
+	}
+	if (!isset ($uaDev)) { 
+		$uaDev = $conf['l']['page:MPDefault'];
+	}
+	$uaDev = $conf['authorName'] . $conf['l']['page:Conj'] . $uaDev;
+
+	$view -> setMaster ('authmobile');
+	$view -> setPassData (array ('deviceName' => $uaDev));
+	$view -> setWorkFlow (array ('authmobile'));
+	$authX = $view -> getOutput ();
+	$view -> setMaster ('plainpage');
+	$view -> setPassData (array ('plainContent' => $authX));
+	$view -> setWorkFlow (array ('plainpage'));
+	$view -> finalize ();
+}
+
+elseif ($canonical -> currentArgs['mainAction'] == 'nado') {
+	if (!isset ($_POST['s_token']) || !isset ($_POST['s_myname'])) {
+		stopError (bw :: $conf['l']['page:ComError1']);
+	}
+	$admin = new bwAdmin;
+	$admin -> verifyToken ($_POST['s_token']);
+	if (!$admin -> verified) {
+		stopError (bw :: $conf['l']['page:AuthMobileError']);
+	} else {
+		$s_myname = htmlspecialchars ($_POST['s_myname']);
+		$keyNewAdd = sha1($conf['siteKey'] . 'mobile' . $s_myname);
+		$allMobileKeys = array ();
+		if (file_exists (P . 'conf/mobileauth.php')) {
+			include_once (P . 'conf/mobileauth.php');
+		}
+		$allMobileKeys[$s_myname]=$keyNewAdd;
+		$valString = "<?php\r\n\$allMobileKeys=" . var_export ($allMobileKeys, true) . ";?>";
+		$rS = file_put_contents (P . "conf/mobileauth.php", $valString);
+		if ($rS) {
+			$view -> setMaster ('authmobilefinish');
+			$view -> setPassData (array ('deviceName' => $s_myname, 'deviceMobileToken' => $keyNewAdd));
+			$view -> setWorkFlow (array ('authmobilefinish'));
+			$authX = $view -> getOutput ();
+			$view -> setMaster ('plainpage');
+			$view -> setPassData (array ('plainContent' => $authX));
+			$view -> setWorkFlow (array ('plainpage'));
+			$view -> finalize ();
+		} else {
+			stopError ($conf['l']['admin:msg:ChangeNotSaved']);
+		} 
+	} 
+}
+
+elseif ($canonical -> currentArgs['mainAction'] == 'gona') { //Authorize a mobile phone
+	$view -> setMaster ('authmobilego');
+	$myIP = getIP ();
+	$naOneTime = rand(100, 999);
+	$view -> setPassData (array ('ipPC' => substr (md5 ($myIP[0] . $naOneTime . $conf['siteKey'] . 'login'), 3, 6)));
+	$view -> setWorkFlow (array ('authmobilego'));
+	$authX = $view -> getOutput ();
+	$view -> setMaster ('plainpage');
+	$view -> setPassData (array ('plainContent' => $authX));
+	$view -> setWorkFlow (array ('plainpage'));
+	$view -> finalize ();
+}
+
+elseif ($canonical -> currentArgs['mainAction'] == 'nalogin') { //Authorize a mobile phone
+	$ipPC = $canonical -> currentArgs['subAction'];
+	if (strlen ($ipPC) <> 6) {
+		stopError (bw :: $conf['l']['page:AuthMobileError']);
+	}
+	$view -> setMaster ('authmobileconfirm');
+	$myIP = getIP ();
+	$view -> setPassData (array ('ipPC' => $ipPC));
+	$view -> setWorkFlow (array ('authmobileconfirm'));
+	$authX = $view -> getOutput ();
+	$view -> setMaster ('plainpage');
+	$view -> setPassData (array ('plainContent' => $authX));
+	$view -> setWorkFlow (array ('plainpage'));
+	$view -> finalize ();
+
+}
+
+elseif ($canonical -> currentArgs['mainAction'] == 'nacheck') { //Authorize a mobile phone
+	$ipPC = $canonical -> currentArgs['subAction'];
+	if (strlen ($ipPC) <> 6 || !isset ($_REQUEST['s_token'])) {
+		stopError ('');
+	}
+	if (file_exists (P . 'conf/mobileauth.php')) {
+		include_once (P . 'conf/mobileauth.php');
+		if (in_array ($_REQUEST['s_token'], $allMobileKeys)) {
+			bw :: $db -> dbExec ('REPLACE INTO cache (caID, caContent) VALUES (?, ?)', array ('nalogin', $ipPC));
+			ajaxSuccess($ipPC);
+		}
+	}
+	stopError ('');
+}
+
+elseif ($canonical -> currentArgs['mainAction'] == 'nasearch') { //Authorize a mobile phone
+	if (!isset ($_REQUEST['inPC'])) {
+		stopError ('6');
+	}
+	if (strlen ($_REQUEST['inPC']) <> 6) {
+		stopError ('');
+	}
+	$inPC2 = bw :: $db -> getSingleRow ('SELECT * FROM cache WHERE caID=?', array('nalogin'));
+	if ($inPC2) {
+		if ($inPC2['caContent'] == $_REQUEST['inPC']) { 
+			@session_start ();
+			$admin = new bwAdmin;
+			$admin -> storeMobileToken ();
+			bw :: $db -> dbExec ('DELETE FROM cache WHERE caID=?', array ('nalogin'));
+			ajaxSuccess ($admin -> getCSRFCode ('navibar'));
+		}
+	}
+	stopError ('');
+}
+
+//Rest is comment
+
 if ($conf['commentOpt']<>0) {
 	loadServices ();
 	if ($conf['commentOpt'] == 1 || $conf['commentOpt'] == 2) { //Build-in comment
@@ -62,7 +196,6 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 			stopError (bw :: $conf['l']['page:LoginRequiredError']);
 		}
 		$smt = $comment -> addComment ($smt);
-		$view = new bwView;
 		$view -> setMaster ('ajaxcomment');
 		$view -> setPassData ($smt);
 		$view -> setWorkFlow (array ('ajaxcomment'));

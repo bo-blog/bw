@@ -61,6 +61,12 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:UploadAvatar]]<br/><a href="##" onclick="$('#uploadPicFile').click();"><img src="[[::siteURL]]/conf/profile.png" style="width: 60px" id="avatarImg" /></a><br/><span class="adminExplain">[[=admin:msg:UploadAvatar]]</span>
 </p>
+<p id="authMobile">
+<span class="icon-arrow-right5"></span> [[=admin:item:AuthMobile]]<br/>
+[[::loop, mobileKeys]]<span id="mobLine-[[::seq]]"><span class="icon-mobile3"></span> [[::devID]] &nbsp; <a href="##" onclick="cancelAuth('[[::devID]]', '[[::siteURL]]/admin.php/center/cancelauth/', '[[::seq]]');">[[[=admin:item:CancelAuthMobile]]]</a><br/></span>[[::/loop]]
+<a href="##" onclick="$('.authMobileImg').toggle();">[+] [[=admin:item:AddAuthMobile]]</a><br/><span class="adminExplain">[[=admin:msg:AuthMobile1]]<br/>[[=admin:msg:AuthMobile2]]</span>
+<span class="authMobileImg" style=" display:none;" ><br/><img src="http://qr.liantu.com/api.php?text=[[::siteURL]]/send.php/na/" /><span class="adminExplain"><br/>[[=admin:msg:AuthMobile3]]<a href="[[::siteURL]]/send.php/na/" target="_blank">[[=admin:msg:AuthMobile4]]</a></span></span>
+</p>
 
 <p><br/><br/></p>
 
@@ -72,7 +78,7 @@
 </select>
 </p>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:SiteLang]]<br/>
+<span class="icon-arrow-right5"></span> [[=admin:item:SiteLang]] (Language)<br/>
 <select name="smt[siteLang]" id="siteLang" class="selectLine">
 <option value="zh-cn">[[=admin:opt:SimplifiedChinese]] | 简体中文</option>
 <option value="zh-tw">[[=admin:opt:TraditionalChinese]] | 繁體中文</option>
@@ -229,6 +235,19 @@ $('.adminSign').click(function (){checkLogout('adminSign');});
 function checkLogout (oj) {
 	var rootURL= $('.'+oj).data('adminurl');
 	window.location=rootURL+"/login/logout";
+}
+
+function cancelAuth (devID, smtURL, seq) {
+	$("#UI-loading").fadeIn(500);
+	$.post(smtURL+"?ajax=1&CSRFCode=[[::CSRFCode]]", {devID : devID}, function(data) {
+		$("#UI-loading").fadeOut(200);
+		if (data.error==1) {
+		}
+		else {
+			$("#mobLine-"+seq).fadeOut();
+			$("#mobLine-"+seq).remove();
+		}
+	}, "json");
 }
 
 $("#admCenter").addClass("activeNav");

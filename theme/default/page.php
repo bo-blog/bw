@@ -62,7 +62,7 @@ var lng={
 <div id="ajax-article-list">
 [[::loop, articlesummary]][[::load, summary]][[::/loop]]
 [[::load, article]]
-[[::pagination]]
+[[::pagination]][[::staticlist]]
 <script src="[[::siteURL]]/inc/script/loader.js"></script>
 </div>
 <!-- end ajax section -->

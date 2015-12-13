@@ -236,6 +236,7 @@ function fillWgtSidebar (formID, extID, title, value, extOrder, extActivate) {
 	$('#'+formID+' .wgttitle').val(title);
 	$('#'+formID+' .wgtvalue').val(value);
 	$('#'+formID+' .extOrder').val(extOrder);
+	wgtBtns (formID, extActivate);
 	$('#'+formID).fadeIn('fast');
 }
 
