@@ -35,7 +35,12 @@ if ($conf['commentOpt']<>0) {
 		$view -> setPassData (array ('totalbatches' => $totalBatches, 'currentbatch' => $canonical -> currentPage));
 		$view -> setWorkFlow (array ('ajaxcommentgroup', 'commentarea', 'article', 'page'));
 	} elseif ($conf['commentOpt'] == 3) {
-		$view -> setWorkFlow (array ('duoshuoarea', 'article', 'page'));
+		if ($conf['duoshuoID']) {
+			$view -> setWorkFlow (array ('duoshuoarea', 'article', 'page'));
+		}
+		elseif ($conf['disqusID']) {
+			$view -> setWorkFlow (array ('disqusarea', 'article', 'page'));
+		}
 	}
 }
 

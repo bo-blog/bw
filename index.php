@@ -13,6 +13,10 @@ define ('FPATH', dirname (__FILE__));
 
 include_once (P . 'inc/system.php');
 
+if (isset ($_REQUEST['list'])) { //two hidden mode, for static page mode aka "Mill" project.	
+	define ('M', 'list');
+} 
+
 $canonical = new bwCanonicalization;
 
 include_once ($canonical -> loader ());

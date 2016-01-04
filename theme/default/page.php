@@ -61,8 +61,8 @@ var lng={
 <!-- ajax loaded section -->
 <div id="ajax-article-list">
 [[::loop, articlesummary]][[::load, summary]][[::/loop]]
-[[::load, article]]
-[[::pagination]][[::staticlist]]
+[[::load, article]][[::listContent]]
+[[::pagination]]
 <script src="[[::siteURL]]/inc/script/loader.js"></script>
 </div>
 <!-- end ajax section -->

@@ -16,15 +16,23 @@ class bwZip {
 		self :: $folderFiles = array ();
 	}
 
-	public static function zipRead ($fileName, $writeNow = false, $overwrite = false) {
+	public static function zipRead ($fileName, $writeNow = false, $overwrite = false, $checkFolder = false) {
 		$output = array ();
 		$allFiles = @explode ('/#FILE#/', @file_get_contents ($fileName));
 		for ($i = 0; $i < count ($allFiles); $i++) {
 			@list ($filePath, $fileZipContent) = @explode ('/#ZIP#/', $allFiles[$i]);
+			if ($checkFolder) { 
+				if (strpos ($filePath, $checkFolder) !== 0) {
+					continue;
+				}
+			} 
 			$fileUnzipContent = gzuncompress ($fileZipContent);
 			$output[$i] = array ('path' => $filePath, 'content' => $fileUnzipContent);
 			if ($writeNow) {
 				if ($overwrite || !file_exists ($filePath)) {
+					if (!is_dir (dirname ($filePath))) {
+						@mkdir (dirname ($filePath), 0777, true);
+					}
 					@file_put_contents ($filePath, $fileUnzipContent);
 				}
 			}
@@ -44,7 +52,7 @@ class bwZip {
 		return $outputContent;
 	}
 
-	public static function zipFolder ($folderPath, $zipFilePath = false) {
+	public static function zipFolder ($folderPath, $zipFilePath = false, $addition = false) {
 		if (!is_dir ($folderPath)) {
 			return false;
 		}
@@ -57,6 +65,9 @@ class bwZip {
 					self :: zipFolder ($folderPath . $file . '/');
 				}
 			} 
+		} 
+		if (is_array ($addition)) { 
+			self :: $folderFiles = array_merge (self :: $folderFiles, $addition);
 		} 
 		if ($zipFilePath) {
 			return self :: zipWrite (self :: $folderFiles, $zipFilePath);

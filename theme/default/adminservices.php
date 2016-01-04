@@ -9,6 +9,9 @@
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:DuoshuoID]]<br/><input type="text" class="inputLine inputLarge" name="smt[duoshuoID]" value="[[::duoshuoID]]" id="duoshuoID" /><br/><span class="adminExplain">[[=admin:msg:Duoshuo]]</span>
 </p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:DisqusID]]<br/><input type="text" class="inputLine inputLarge" name="smt[disqusID]" value="[[::disqusID]]" id="disqusID" /><br/><span class="adminExplain">[[=admin:msg:Disqus]]</span>
+</p>
 <!--
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:BaiduAK]]<br/><input type="text" class="inputLine inputLarge" name="smt[baiduAKey]" value="[[::baiduAKey]]" id="baiduAKey" /><br/><span class="adminExplain">[[=admin:NotReady]] [[=admin:msg:BaiduAPI]]</span>

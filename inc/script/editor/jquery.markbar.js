@@ -259,11 +259,21 @@
 
 		xiami: function()
 		{
-			var url = prompt('虾米的单首歌曲页面URL形如http://www.xiami.com/song/1234567890，把最后10位数字复制到下面：');
+			var url = prompt("虾米：单曲URL形如http://www.xiami.com/song/1234567890，复制最后的数字加‘x’，即1234567890x。\r\n网易云：单曲URL形如http://music.163.com/#/song?id=12345678，复制等号后数字加‘w’，即12345678w。\r\n不加后缀默认视为虾米音乐。");
 
 			if (url)
 			{
-				this.replace(this.get().text + '!~!' + url + '[xiami]');
+				if (url.substr(url.length-1,1) == 'x')
+				{
+					this.replace(this.get().text + '!~!' + url.substr(0,url.length-1) + '[xiami]');
+				}
+				if (url.substr(url.length-1,1) == 'w')
+				{
+					this.replace(this.get().text + '!~!' + url.substr(0,url.length-1) + '[wangyiyun]');
+				}
+				else {
+					this.replace(this.get().text + '!~!' + url + '[xiami]');
+				}
 			}
 		},
 

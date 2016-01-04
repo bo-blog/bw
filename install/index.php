@@ -65,8 +65,8 @@ function output ()
 <ul>
 <li>{$l['env.phpver']} &gt; 5.3.0 <span id="rslt1"></span></li>
 <li>{$l['env.pdo']} <span id="rslt2"></span></li>
-<li>{$l['env.zlib']} <span id="rslt3"></span></li>
-<li>{$l['env.curl']} <span id="rslt4"></span></li>
+<!-- <li>{$l['env.zlib']} <span id="rslt3"></span></li>
+<li>{$l['env.curl']} <span id="rslt4"></span></li> -->
 <li>{$l['env.sql']} <span id="rslt5"></span></li>
 </ul>
 </p>

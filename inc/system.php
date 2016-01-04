@@ -5,8 +5,8 @@
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '1.0.2');
-define ('bwInternalVersion', '1020');
+define ('bwVersion', '1.0.3');
+define ('bwInternalVersion', '1030');
 define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
 
 if (!defined ('P')) {
@@ -116,7 +116,7 @@ class bw {
 
 	public static function getSocialLinks ()
 	{
-		$allSocial = array('sina-weibo', 'weixin', 'douban', 'instagram', 'renren', 'linkedin');
+		$allSocial = array('sina-weibo', 'twitter', 'weixin', 'facebook', 'douban', 'instagram', 'renren', 'linkedin');
 		$allSocialNames = array(self :: $conf['l']['page:social:Weibo'], self :: $conf['l']['page:social:WeChat'], self :: $conf['l']['page:social:Douban'], self :: $conf['l']['page:social:Instagram'], self :: $conf['l']['page:social:Renren'], self :: $conf['l']['page:social:Linkedin']);
 		$allSocialLinks = array();
 		foreach ($allSocial as $i => $aSocial) {
@@ -480,6 +480,7 @@ class bwArticle {
 		if (count ($allTitles) < 1) {
 			stopError (bw :: $conf['l']['admin:msg:NoContent']);
 		} 
+		$this -> articleList = array ();
 
 		foreach ($allTitles as $aID => $row) {
 			$this -> articleList[$aID] = $row;
@@ -711,16 +712,6 @@ class bwComment {
 			$allAffectedCom = array_merge_recursive ($allAffectedCom, bw :: $db -> getColumns ('SELECT * FROM comments WHERE comBlock=0 AND (comIP1=? OR comIP2=?)', array ($taID['comIP2'], $taID['comIP2'])));
 		} 
 
-		/**
-		* print_r ($allAffectedCom['comArtID']); 
-		* print ('<br>');
-		* print_r (array_count_values ($allAffectedCom['comArtID'])); 
-		* print ('<br>');
-		* print ('('.implode (',', array_unique ($allAffectedCom['comID'])).')');
-		* print ('<br>');
-		* die();
-		*/
-
 		if (count ($allAffectedCom) > 0) {
 			$allAffectedArticles = array_count_values ($allAffectedCom['comArtID']);
 			$allAffectedComments = '(' . implode (',', array_unique ($allAffectedCom['comID'])) . ')';
@@ -776,6 +767,11 @@ class bwView {
 		$this -> passData += $arrayData;
 	} 
 
+	public function resetPassData ()
+	{
+		$this -> passData = array ();
+	} 
+
 	public function setWorkFlow ($arrayWorkFlow)
 	{
 		if (is_array ($arrayWorkFlow)) {
@@ -818,7 +814,6 @@ class bwView {
 
 	private function passLoop ($param)
 	{ 
-		// print_r ($param);
 		$return = '';
 		if (isset ($this -> passData[$param[1]])) {
 			foreach ($this -> passData[$param[1]] as $this -> loopEach) {
@@ -827,6 +822,22 @@ class bwView {
 		} 
 		return ($return);
 	} 
+
+	private function passCondition ($param, $strInLoop = false)
+	{ 
+		if ($strInLoop) {
+			$param[1] = preg_replace_callback ('/\[::(.+?)\]/', array($this, 'strInLoop'), $param[1]);
+		} 
+		else {
+			$param[1] = preg_replace_callback ('/\[::(.+?)\]/', array($this, 'strInTheme'), $param[1]);
+		}
+		eval ("\$return = {$param[1]} ? \$param[2] : '';");
+		return ($return);
+	} 
+
+	private function passConditionInLoop ($param) {
+		return $this -> passCondition ($param, true);
+	}
 
 	private function loadElement ($param)
 	{
@@ -850,6 +861,7 @@ class bwView {
 	{
 		$text = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $text);
 		$text = preg_replace_callback ('/\[\[::loop, (.+?)\]\](.+?)\[\[::\/loop\]\]/s', array($this, 'passLoop'), $text);
+		$text = preg_replace_callback ('/\[\[::if, (.+?)\]\](.+?)\[\[::\/if]\]/s', array($this, 'passCondition'), $text);
 		$text = preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInTheme'), $text);
 		return $text;
 	} 
@@ -858,6 +870,7 @@ class bwView {
 	{
 		$return = '';
 		$key = $param[1];
+
 		if (strpos ($key, ', ')) {
 			@list ($key, $funcWalk, $funcParam) = explode (', ', $key);
 
@@ -873,12 +886,12 @@ class bwView {
 			$return = $this -> addHookIntoView (str_replace ('ext_', '', $key));
 		} elseif (strpos ($key, 'widget_') === 0) {
 			$return = $this -> addWidgetIntoView (str_replace ('widget_', '', $key));
+		}  elseif (array_key_exists ($key, $this -> passData)) {
+			$return = $this -> passData[$key];
 		} elseif ($isLoop) {
 			if (array_key_exists ($key, $this -> loopEach)) {
 				$return = $this -> loopEach[$key];
 			} 
-		} elseif (array_key_exists ($key, $this -> passData)) {
-			$return = $this -> passData[$key];
 		} 
 
 		if ($needWalk) {
@@ -1078,6 +1091,13 @@ class bwView {
 		} 
 	} 
 
+	private function theme_hasMore ($format, $aID)
+	{
+		if (!$this -> themeInternal['hasMore']) {
+			return $format;
+		} 
+	} 
+
 	private function theme_URLEncode ($unuse, $text)
 	{
 		return urlencode ($text);
@@ -1091,6 +1111,9 @@ class bwView {
 
 	private function theme_formatTags ($format, $aTags)
 	{
+		if (!$aTags) {
+			return '';
+		}
 		$aAllTags = @explode (',', $aTags);
 		$return = '';
 		if (count ($aAllTags) > 0) {
@@ -1118,6 +1141,8 @@ class bwView {
 		// Start customized markdown
 		// xiami music loader
 		$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text); 
+		// Wangyi Yun Yinyue loader
+		$text = preg_replace ("/!~!(.+?)\[wangyiyun]/", "<p><iframe frameborder=\"no\" border=\"0\" marginwidth=\"0\" marginheight=\"0\" width='330' height='86' src=\"http://music.163.com/outchain/player?type=2&id=$1&auto=0&height=66\"></iframe></p>", $text); 
 		// Youku loader
 		$text = preg_replace ("/!~!(.+?)\[youku\]/", "<iframe src=\"http://player.youku.com/embed/$1\"  frameborder='0' class=\"videoFrame\"></iframe>", $text); 
 		// Geolocation from Baidu
@@ -1155,35 +1180,42 @@ class bwCanonicalization {
 			case 'index':
 				$this -> argsPattern = array ('pageNum');
 				$this -> loaderID = 'cate';
+				$this -> currentScript = $conf['linkPrefixIndex'];
 				break;
 			case 'cate':
 				$this -> argsPattern = array ('cateID', 'pageNum');
 				$this -> loaderID = 'cate';
+				$this -> currentScript = $conf['linkPrefixCategory'];
 				break;
 			case 'article':
 				$this -> argsPattern = array ('aID');
 				$this -> loaderID = 'article';
+				$this -> currentScript = $conf['linkPrefixArticle'];
 				break;
 			case 'tag':
 				$this -> argsPattern = array ('tValue', 'pageNum');
 				$this -> loaderID = 'tag';
+				$this -> currentScript = $conf['linkPrefixTag'];
 				break;
 			case 'admin':
 				$this -> argsPattern = array ('mainAction', 'subAction', 'pageNum');
 				$this -> loaderID = 'admin';
+				$this -> currentScript = 'admin.php';
 				break;
 			case 'send':
 				$this -> argsPattern = array ('mainAction', 'subAction', 'pageNum');
 				$this -> loaderID = 'send';
+				$this -> currentScript = 'send.php';
 				break;
-			/**
-			* case 'page':
-			* $this -> argsPattern = array ('aID');
-			* $this -> loaderID = 'article';
-			* break;
-			*/
+			case 'list':
+				$this -> argsPattern = array ('pageNum');
+				$this -> loaderID = 'list';
+				$this -> currentScript = $conf['linkPrefixIndex'];
+				break;
 			default:
 				$this -> loaderID = 'error';
+				$this -> currentScript = $conf['linkPrefixIndex'];
+				hook ('setLoader', 'Execute', $this);
 				stopError ('Requested mode does not exist.');
 		} 
 
@@ -1196,8 +1228,6 @@ class bwCanonicalization {
 			$requestedURL = explode ('/', str_replace ($siteURLTmp, '', $_SERVER['PHP_SELF']));
 		} 
 
-		$URLRewriteBacks = array ('index' => $conf['linkPrefixIndex'], 'index.php' => $conf['linkPrefixIndex'], 'category' => $conf['linkPrefixCategory'], 'category.php' => $conf['linkPrefixCategory'], 'post' => $conf['linkPrefixArticle'], 'read.php' => $conf['linkPrefixArticle'], 'tag' => $conf['linkPrefixTag'], 'tag.php' => $conf['linkPrefixTag']);
-		$this -> currentScript = isset ($URLRewriteBacks[$requestedURL[0]]) ? $URLRewriteBacks[$requestedURL[0]] : $requestedURL[0];
 		array_shift ($requestedURL);
 		if (count ($requestedURL) > count ($this -> argsPattern)) {
 			$this -> currentArgs = array_slice ($requestedURL, 0, count ($this -> argsPattern));

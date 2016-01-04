@@ -15,6 +15,8 @@ $conf['l'] = array(
 	'page:ErrorToHome' => '返回首頁',
 	'page:social:WeChat' => '微信',
 	'page:social:Weibo' => '微博',
+	'page:social:Twitter' => 'Twitter',
+	'page:social:Facebook' => 'Facebook',
 	'page:social:Douban' => '豆瓣',
 	'page:social:Renren' => '人人',
 	'page:social:Instagram' => 'Instagram',
@@ -90,6 +92,7 @@ $conf['l'] = array(
 	'admin:sect:Modules' => '模組',
 	'admin:sect:EditModules' => '添加/編輯模組',
 	'admin:sect:AutoUpdate' => '自動更新',
+	'admin:sect:ManageThemes' => '主題管理',
 
 	'admin:item:SiteName' => '網站名',
 	'admin:item:SiteURL' => '根網址',
@@ -106,7 +109,7 @@ $conf['l'] = array(
 	'admin:item:AContent' => '內容',
 	'admin:item:ACate' => '分類',
 	'admin:item:ATime' => '日期與時間',
-	'admin:item:DuoshuoID' => '多說短功能變數名稱',
+	'admin:item:DuoshuoID' => '多說短域名',
 	'admin:item:QiniuAK' => 'Access Key',
 	'admin:item:QiniuSK' => 'Security Key',
 	'admin:item:QiniuBucket' => '七牛空間名',
@@ -133,6 +136,7 @@ $conf['l'] = array(
 	'admin:item:AuthMobile' => '關聯手機',
 	'admin:item:CancelAuthMobile' => '取消關聯',
 	'admin:item:AddAuthMobile' => '添加手機',
+	'admin:item:DisqusID' => 'Disqus短域名',
 
 	'admin:opt:SimplifiedChinese' => '簡體中文',
 	'admin:opt:TraditionalChinese' => '繁體中文',
@@ -210,6 +214,9 @@ $conf['l'] = array(
 	'admin:msg:AuthMobile2' => '關聯後手機無法退出登錄，直到在這裡取消關聯為止。',
 	'admin:msg:AuthMobile3' => '請用手機掃描二維碼。如已在手機中流覽本頁，請點擊：',
 	'admin:msg:AuthMobile4' => '開始關聯',
+	'admin:msg:Disqus' => '【Disqus】是一項由 <a href="https://disqus.com">disqus.com</a> 提供的社會化評論服務。同時設置多說和Disqus名稱時，優先載入多說服務。',
+	'admin:msg:PkgSafety' => '上傳、安裝來歷不明的安裝包是非常危險的，可能造成安全隱患或導致程式癱瘓。繼續安裝嗎？',
+ 	'admin:msg:PkgError' => '未上傳，或上傳的安裝包不符合要求。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',

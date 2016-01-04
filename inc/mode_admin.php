@@ -86,7 +86,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 			stopError ('No data is submitted.');
 		} 
 
-		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
+		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$smt = array_map ('htmlspecialchars', $smt);
 		if (empty ($smt['siteKey'])) {
@@ -338,7 +338,7 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
-		$acceptedKeys = array ('duoshuoID', 'sinaAKey', 'sinaSKey', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain');
+		$acceptedKeys = array ('duoshuoID', 'disqusID', 'sinaAKey', 'sinaSKey', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$smt = array_map ('htmlspecialchars', $smt);
 		if ($smt['qiniuBucket']) {
@@ -490,7 +490,12 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			$aExt['extDesc'] = "name='{$aExt['name']}'\r\nintro='{$aExt['intro']}'\r\nauthor='{$aExt['author']}'\r\nurl='{$aExt['url']}'";
 			bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget) VALUES (?, ?, ?, 1, ?, 0)', array ($aExt['ID'], $aExt['extDesc'], $aExt['hooks'], count ($extList) + 1));
 			clearCache ();
-			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
+			if (defined ('ajax')) {
+				ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
+			} else {
+				header ("Location: {$conf['siteURL']}/admin.php/extensions/?CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+				exit ();
+			}
 		} 
 	} elseif ($canonical -> currentArgs['subAction'] == 'widget') {
 		$admin -> checkCSRFCode ('newext');
@@ -534,10 +539,80 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		} 
 		clearCache ();
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-	} else {
+	}  elseif ($canonical -> currentArgs['subAction'] == 'exporttheme') { 
+		$admin -> checkCSRFCode ('extensions');
+		if (!isset ($_REQUEST['themeID'])) {
+			stopError ($conf['l']['admin:msg:NoData']);
+		}
+		$themeID = basename ($_REQUEST['themeID']);
+		if (!file_exists (P . "theme/{$themeID}/info.php")) {
+			stopError ($conf['l']['admin:msg:NotExist']);
+		}
+		include (P. 'inc/bwzip.php');
+		bwZip :: zipFolder (P . "theme/{$themeID}/" , P . 'storage/theme_'.$themeID.'.pkg');
+		header ("Location: {$conf['siteURL']}/storage/theme_{$themeID}.pkg");
+	}  elseif ($canonical -> currentArgs['subAction'] == 'exportextension') { 
+		$admin -> checkCSRFCode ('extensions');
+		if (!isset ($_REQUEST['extID'])) {
+			stopError ($conf['l']['admin:msg:NoData']);
+		}
+		$extID = basename ($_REQUEST['extID']);
+		if (!file_exists (P . "extension/{$extID}/define.php")) {
+			stopError ($conf['l']['admin:msg:NotExist']);
+		} else {
+			file_put_contents (P . "extension/autoinstall.txt", $extID);
+		}
+		include (P. 'inc/bwzip.php');
+		bwZip :: zipFolder (P . "extension/{$extID}/" , P . 'storage/extension_'.$extID.'.pkg', array (P . "extension/autoinstall.txt"));
+		unlink (P . "extension/autoinstall.txt");
+		header ("Location: {$conf['siteURL']}/storage/extension_{$extID}.pkg");
+	} elseif ($canonical -> currentArgs['subAction'] == 'installpkg') { 
+		$admin -> checkCSRFCode ('newext');
+		if (!isset ($_FILES['userfile']) || !isset ($_REQUEST['pkgType'])) {
+			stopError ($conf['l']['admin:msg:PkgError']);
+		} 
+		if ($_REQUEST['pkgType']!='theme' && $_REQUEST['pkgType']!='extension') {
+			stopError ($conf['l']['admin:msg:PkgError']);
+		} 
+		if (!$_FILES['userfile']['tmp_name']) {
+			stopError ($conf['l']['admin:msg:PkgError']);
+		} 
+		if (pathinfo ($_FILES["userfile"]["name"], PATHINFO_EXTENSION) != 'pkg') {
+			stopError ($conf['l']['admin:msg:PkgError']);
+		} 
+		$fName = P . 'storage/theme_' . rand (100000, 999999) . '.pkg';
+
+		if (move_uploaded_file ($_FILES['userfile']['tmp_name'],  $fName)) {
+			include (P. 'inc/bwzip.php');
+			bwZip :: zipRead ($fName, true, false, P . $_REQUEST['pkgType'] . '/');
+			if ($_REQUEST['pkgType']=='extension') {
+				if (file_exists (P . "extension/autoinstall.txt")) {
+					$extID = file_get_contents (P . "extension/autoinstall.txt");
+					unlink (P . "extension/autoinstall.txt");
+					clearCache ();
+					header ("Location: {$conf['siteURL']}/admin.php/extensions/add/?extID={$extID}&CSRFCode=" . $admin -> getCSRFCode ('newext'));
+					exit ();
+				}
+			}
+		} 
+		header ("Location: {$conf['siteURL']}/admin.php/extensions/?CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+	} elseif ($canonical -> currentArgs['subAction'] == 'selecttheme') { 
+		if (!isset ($_REQUEST['themeID'])) {
+			stopError ($conf['l']['admin:msg:NoData']);
+		} 
+		$themeID = basename ($_REQUEST['themeID']);
+		if (!file_exists (P . "theme/{$themeID}/info.php")) {
+			stopError ($conf['l']['admin:msg:NotExist']);
+		}
+		file_put_contents (P . 'conf/info.php', str_replace ("'siteTheme' => '{$conf['siteTheme']}'", "'siteTheme' => '{$themeID}'", file_get_contents (P . 'conf/info.php')));
+		clearCache ();
+		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
+	}
+	
+	else {
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('extList' => bw :: getAllExtensions (), 'newCSRFCode' => $admin -> getCSRFCode ('newext'), 'extCSRFCode' => $admin -> getCSRFCode ('extensions')));
+		$view -> setPassData (array ('themeList' => $view -> scanForThemes (), 'extList' => bw :: getAllExtensions (), 'newCSRFCode' => $admin -> getCSRFCode ('newext'), 'extCSRFCode' => $admin -> getCSRFCode ('extensions')));
 		$view -> setPassData (array ('wgtListHtmlhead' => bw :: getWidgets ('wghtmlhead'), 'wgtListHeader' => bw :: getWidgets ('wgheader'), 'wgtListSiderbar' => bw :: getWidgets ('wgsidebar'), 'wgtListFooter' => bw :: getWidgets ('wgfooter')));
 		foreach ($allOpenHooks as $openHook) {
 			$allHooks['insert_' . $openHook] = @file_get_contents (P . 'conf/insert_' . $openHook . '.htm');

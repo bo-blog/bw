@@ -4,24 +4,41 @@
 ?>
 
 <div class="adminArea">
+<form style="display: none;" id="upForm" method="post" action="[[::siteURL]]/admin.php/extensions/installpkg/?CSRFCode=[[::newCSRFCode]]" target="_self" enctype="multipart/form-data">
+<input type="file" style="display: none; height: 1px;" name="userfile" id="uploadFile" onchange="installPkgUp();"/>
+<input type="hidden" name="pkgType" value='' id="uploadType" />
+</form>
 <form id="smtForm" data-adminurl="[[::siteURL]]/admin.php/extensions/">
-<h2><span class="icon-list"></span> [[=admin:sect:InstalledExt]]</h2> 
+<h2><span class="icon-pictures"></span> [[=admin:sect:ManageThemes]]<span class="adminSANew"><a href='##' onclick="installPkgDo('theme');"><span class="icon-plus2"></span> [[=admin:btn:NewExt]]</a></span></h2> 
+<p>
+[[::loop, themeList]]<article style="float: left; clear: both;" id="theme-[[::themeDir]]">
+<div style="float: left"><img src="[[::siteURL]]/theme/[[::themeDir]]/icon.jpg" style="width: 120px; margin-right: 20px; border-radius: 10px" alt='' /></div>
+<div style="float: left"><h2>[[::themeName]]</h2>
+<h3>[[=admin:msg:By]] <a href="[[::themeUrl]]">[[::themeAuthor]]</a></h3>
+<span class="details">
+<a href="##" onclick="selectTheme('[[::themeDir]]');" id="themeID-[[::themeDir]]"><span class="icon-plus2"></span> [[=admin:opt:Enable]] &nbsp; </a> <a href="[[::siteURL]]/admin.php/extensions/exporttheme/?themeID=[[::themeDir]]&CSRFCode=[[::extCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a>
+</span></div>
+</article>[[::/loop]]
+</p>
+<br/>
+<h2><span class="icon-list"></span> [[=admin:sect:InstalledExt]]<span class="adminSANew"><a href='##' onclick="installPkgDo('extension');"><span class="icon-plus2"></span> [[=admin:btn:NewExt]]</a> <a href='##' onclick="$('#installExtBlock').fadeToggle();"><span class="icon-plus2"></span> [[=admin:sect:InstallExt]]</a></span></h2> 
 <p>
 [[::loop, extList]]<article style="float: left; clear: both;">
 <div style="float: left"><img src="[[::siteURL]]/extension/[[::extID]]/icon.png" style="width: 100px; margin-right: 20px; border-radius: 10px" alt='' /></div>
 <div style="float: left"><h2 title="[[=admin:msg:Hook]] [[::extHooks]]">[[::extName]]</h2>
 [[::extIntro]] 
 <h3>[[=admin:msg:By]] <a href="[[::extURL]]">[[::extAuthor]]</a> | <span class="extStatus[[::extActivate]]">[[=admin:msg:ExtStatus[[::extActivate]]]]</span></h3>
-<span class="details"><a href="##" onclick="makeEnabled('[[::extID]]');"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; <a href="##" onclick="makeDisabled('[[::extID]]');"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; <a href="##" onclick="removeExt('[[::extID]]');"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a></span></div>
+<span class="details"><a href="##" onclick="makeEnabled('[[::extID]]');"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; <a href="##" onclick="makeDisabled('[[::extID]]');"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; <a href="##" onclick="removeExt('[[::extID]]');"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a> &nbsp; &nbsp; <a href="[[::siteURL]]/admin.php/extensions/exportextension/?extID=[[::extID]]&CSRFCode=[[::extCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a></span></div>
 </article>[[::/loop]]
 </p>
+<div id="installExtBlock" style="display: none">
 <br/>
 <h2><span class="icon-plus2"></span> [[=admin:sect:InstallExt]]</h2>
 <article>
 <span class="icon-arrow-right5"></span> [[=admin:item:NewExtDir]]<br/> /extension/<input type="text" class="inputLine inputMiddle" id="newDir" value="" /> <br/><span class="details"><a href='##' onclick="addExt();"><span class="icon-disk"></span> [[=admin:btn:NewExt]]</a></span><br/>
 <span class="extStatus0"><span class="icon-warning"></span> [[=admin:msg:ExtSafety]]</span><br/>
 </article>
-
+</div>
 <h2><span class="icon-module"></span> [[=admin:sect:Modules]]</h2>[[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtHTMLHead]]<br/>
 [[::loop, wgtListHtmlhead]]<span class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '[[::extID]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
 <span class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
@@ -187,6 +204,8 @@
 $("#admExtensions").addClass("activeNav");
 var smtURL=$("#smtForm").data('adminurl');
 
+$("#themeID-[[::siteTheme]]").hide();
+
 function makeEnabled (extID) {
 	makeEnabledDisabled (extID, 1);
 }
@@ -334,6 +353,32 @@ function saveOpenHooks () {
 			$("#adminPromptSuccess").fadeIn(400).delay(1500).fadeOut(600);
 		}
 	}, "json");
+}
+
+function selectTheme (themeID) {
+	$("#UI-loading").fadeIn(500);
+	var targetURL=smtURL+"selecttheme/?ajax=1&CSRFCode=[[::extCSRFCode]]";
+	$.post(targetURL,  {themeID : themeID}, function(data) {
+		$("#UI-loading").fadeOut(200);
+		if (data.error==1) {
+			alert (data.returnMsg);
+		}
+		else {
+			location.reload();
+		}
+	}, "json");
+}
+
+function installPkgDo (uptype) {
+	if (confirm ("[[=admin:msg:PkgSafety]]")) {
+		$('#uploadType').val(uptype);
+		$('#uploadFile').click();
+	}
+} 
+
+function installPkgUp () {
+	$("#UI-loading").fadeIn(500);
+	$('#upForm').submit();
 }
 
 </script>

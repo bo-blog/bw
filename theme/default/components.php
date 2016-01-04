@@ -120,6 +120,9 @@ $parts['commentarea']=<<<eot
 <script>
 makeComUserLink ();
 commentBatches ('[[::siteURL]]/send.php/comments/load/', "[[::aID]]");
+if ('[[::sinaAKey]]'=='' || '[[::sinaSKey]]'=='') {
+	$('#comUseWeibo').hide();
+}
 if ([[::commentOpt]]==2) {
 	$("#comUserName").attr('placeholder', '[[=page:LoginRequired]]');
 	$("#comUserName").attr('readonly', 'readonly');
@@ -163,7 +166,6 @@ $('#comSubmitBtn').click (function () {
 	} else {
 		$("#UI-loading").fadeIn(500);
 		var smtURL="[[::siteURL]]/send.php/comments/submit";
-		//window.location=smtURL+"?ajax=1&"+$('#smtForm').serialize(); return false;
 
 		$.post(smtURL+"?ajax=1", $('#smtForm').serialize(), function(data) {
 			$("#UI-loading").fadeOut(200);
@@ -268,6 +270,29 @@ $("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/theme/
 </div>
 eot;
 
+$parts['disqusarea']=<<<eot
+<div class="commentArea">
+<!-- Disqus start -->
+<div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = "[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/"; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = "[[::aID]]"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = '//[[::disqusID]].disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<!-- Disqus end -->
+</div>
+eot;
+
 $parts['nocommentarea']='';
 
 $parts['authmobile']=<<<eot
@@ -360,4 +385,14 @@ $("#btnSubmit").click (function () {
 </script>
 eot;
 
+$parts['groupcolumn']=<<<eot
+<article id="[[::columnID]]">
+<h2>[[::columnName]] ([[::columnCount]])</h2>
+<div class="details"><ul>
+[[::loop, groupedArticles]]
+<li><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/">[[::aTitle]]</a> ([[::aTime, dateFormat, Y/m/d]])</li>
+[[::/loop]]
+</ul></div>
+</article>
+eot;
 ?>
