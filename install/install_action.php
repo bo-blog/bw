@@ -27,14 +27,15 @@ if (!isset ($_COOKIE['bwInstallLang'])) {
 
 if ($step == 1) {
 	$rslt2 = class_exists ('PDO') ? 1 : 0;
-	$rslt3 = extension_loaded ('Zlib') ? 1 : 0;
-	$rslt4 = function_exists ('curl_init') ? 1 : 0;
+	//$rslt3 = extension_loaded ('Zlib') ? 1 : 0;
+	//$rslt4 = function_exists ('curl_init') ? 1 : 0;
+	$rslt3 = $rslt4 = 1;
 
 	if ($rslt2 == 0) {
 		$rslt5 = 0;
 	} else {
-		$PDOSuppored = PDO :: getAvailableDrivers ();
-		$rslt5 = (in_array ('sqlite', $PDOSuppored) || in_array ('mysql', $PDOSuppored)) ? 1 : 0;
+		$PDOSupported = PDO :: getAvailableDrivers ();
+		$rslt5 = (in_array ('sqlite', $PDOSupported) || in_array ('mysql', $PDOSupported)) ? 1 : 0;
 	} 
 	$rslt6 = $rslt2 * $rslt3 * $rslt4 * $rslt5;
 	die (json_encode (array ('rslt2' => $rslt2, 'rslt3' => $rslt3, 'rslt4' => $rslt4, 'rslt5' => $rslt5, 'rslt6' => $rslt6)));
@@ -70,6 +71,8 @@ if ($step == 2) {
   'linkPrefixTag' => 'tag.php',
   'social-sina-weibo' => '',
   'social-weixin' => '',
+  'social-twitter' => '',
+  'social-facebook' => '',
   'social-douban' => '',
   'social-instagram' => '',
   'social-renren' => '',
@@ -81,12 +84,13 @@ if ($step == 2) {
 		$servicesConfContent = "<?php
 \$conf+=array (
   'duoshuoID' => '',
+  'disqusID' => '',
   'sinaAKey' => '',
   'sinaSKey' => '',
   'qiniuAKey' => '',
   'qiniuSKey' => '',
   'qiniuBucket' => '',
-  'qiniuSync' => '0',
+  'qiniuSync' => '',
   'qiniuUpload' => '0',
   'qiniuDomain' => '',
 );";
