@@ -1,0 +1,1067 @@
+/* css reset by Tantek Celik */
+:link,:visited { text-decoration:none }
+ul,ol { list-style:none }
+h1,h2,h3,h4,h5,h6,pre,code { font-size:1em; }
+ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input
+{ margin:0; padding:0; font-weight:normal }
+a img,:link img,:visited img { border:none }
+address { font-style:normal }
+
+
+/* main style */
+body {
+background: #1B1B1B;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+height:100%;
+}
+a {
+color: #CCC;
+}
+#overallContainer {
+background: #F3F3F3;
+height: 100%;
+padding-bottom: 140px;
+}
+header {
+background: #464646;
+box-shadow: 5px 4px 5px #A4A4A4;
+padding: 40px 20px 20px 20px;
+width: 100%;
+position: fixed;
+z-index: 10000;
+}
+header h1, h1 a {
+color: #D6D6D6;
+font-size: 26px;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+display: inline;
+margin-left: 5px;
+}
+.headerShrink {
+padding: 6px 20px 6px 20px;
+box-shadow: none;
+opacity: 0.9;
+}
+.headerShrink h1,  .headerShrink h1 a{
+font-size: 20px;
+}
+.iconLogo {
+font-size: 24px;
+color: #A8FF51;
+}
+header h1:hover, header h1 a:hover, .iconLogo:hover {
+color: #FFF;
+}
+nav {
+float: right;
+padding-right: 40px;
+}
+nav li {
+float: left;
+margin-left: 24px;
+}
+nav li a {
+color: #999;
+}
+nav li a:hover {
+color: #ECECEC;
+}
+nav .activeNav a {
+color: #ECECEC;
+}
+#profileArea {
+padding: 100px 20px 10px 20px;
+height: 90px;
+}
+#profileImg {
+border-radius: 50%;
+float: right;
+box-shadow: 1px 1px 2px #fff;
+height: 90px;
+}
+#profile {
+float: right;
+margin: 20px 40px 10px auto;
+}
+#profileAuthor {
+font-size: 18px;
+color: #555;
+}
+#profileIntro {
+font-size: 14px;
+color: #A7A7A7;
+}
+#mainArea {
+clear: both;
+padding: 10px 0 10px 0;
+text-align: center;
+}
+
+article {
+width: 92%;
+text-align: left;
+margin: 0 auto 58px auto;
+padding: 20px;
+background: #FFF;
+box-shadow: 2px 5px 7px #DDD;
+}
+.decoArticle {
+display: block;
+width: 22px;
+height: 30px;
+background: #A8FF51;
+position: absolute;
+margin-top: -50px;
+} 
+article h2, article h2 a {
+color: #000;
+font-size: 22px;
+font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+text-shadow: 3px 2px 3px #ddd;
+}
+article h2 a:hover {
+color: #356A00;
+}
+article h3 {
+color: #717171;
+font-size: 14px;
+font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+margin: 5px 0 16px 0;
+}
+article h3 a {
+color: #717171;
+}
+.details {
+line-height: 190%;
+color: #464646;
+font-size: 15px;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+}
+.details a {
+color: #464646;
+border-bottom: 1px solid #CCC;
+}
+.details a:hover {
+color: #356A00;
+border-bottom: 1px solid #fff;
+}
+.details p {
+margin-bottom: 16px;
+}
+.articleShare {
+float: right;
+font-size: 18px;
+}
+.articleShare a {
+color: #CCC;
+}
+.articleShare a:hover {
+color: #464646;
+}
+.readMore a {
+display: block;
+width: 100px;
+border: 1px solid #eee;
+font-size: 13px;
+background: #F3F3F3;
+padding-left: 8px;
+}
+.readMore a:hover {
+background: #999;
+box-shadow: none;
+color: #fff;
+}
+.shareLayer {
+position: absolute;
+display: none;
+right: 3%;
+box-shadow: 2px 5px 7px #DDD;
+}
+.shareLayer:hover {
+cursor: pointer;
+}
+.shareLayerItem {
+display: block;
+color: #464646;
+border: 1px solid #eee;
+font-size: 14px;
+background: #F3F3F3;
+padding: 8px;
+width: 86px;
+}
+.shareLayerItem a {
+color: #464646;
+}
+.shareLayerItem:hover,  .shareLayerItem a:hover {
+background: #FFF;
+color: #356A00;
+}
+.tagsRow {
+display: block;
+text-align: right;
+}
+.oneTag {
+margin-right: 8px;
+}
+.commentArea {
+width: 92%;
+text-align: left;
+margin: 0 auto 78px auto;
+padding: 20px;
+background: #FFF;
+box-shadow: 2px 5px 7px #D6D6D6;
+}
+.comAvatar {
+float: left;
+}
+.comAvatar img {
+border-radius: 50%;
+width: 48px;
+box-shadow: 2px 2px 2px #AAA;
+}
+.comName {
+margin-left: 70px;
+font-size: 14px;
+}
+.comName h6,  .comName h6 a{
+color: #356A00;
+}
+.comName h5 {
+color: #AAA;
+}
+.comSrc {
+color: #AAA;
+margin-left: 12px;
+}
+.icon-comSrc-weibo:before {
+	content: "\e8d9";
+}
+.icon-comSrc-administrator:before {
+	content: "\e7d3";
+}
+
+.comNameLink {
+cursor: pointer;
+}
+.comContent {
+clear: both;
+color: #464646;
+margin-bottom: 18px;
+}
+.comContent pre {
+font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+font-size: 13px;
+margin-left: 70px;
+white-space: pre-wrap;
+word-wrap: break-word;
+}
+.comTitle {
+color: #000;
+font-size: 22px;
+font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+text-shadow: 3px 2px 3px #ddd;
+}
+.comForm {
+margin-top: 20px;
+margin-bottom: 40px;
+}
+.comInput {
+border-radius: 5px;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+font-size: 14px;
+padding: 4px 8px 4px 8px;
+border: 1px solid #AAA;
+box-shadow: 0 0 2px #73D90C inset;
+/*display: block;*/
+}
+.comInput:hover {
+box-shadow: 1px 1px 1px #AAA inset, 1px 1px 1px #AAA;
+}
+.comInputWarn {
+border: 1px solid red;
+box-shadow: 1px 1px 1px red inset, 1px 1px 1px red;
+}
+.comInputSmall {
+height: 18px;
+width: 25%;
+min-width: 250px;
+margin: 0 0 12px 0;
+}
+.comInputLarge {
+height: 68px;
+width: 36%;
+min-width: 340px;
+margin: 0 0 12px 0;
+}
+#comSubmit {
+margin-top: -6px;
+}
+#comSubmit a {
+font-size: 14px;
+color: #356A00;
+}
+#comSubmit a:hover {
+color: #AAA;
+}
+#comPromptError {
+color: red;
+}
+#comPromptSuccess {
+color: #356A00;
+}
+.comBlockBar {
+margin-top: 3px;
+}
+.comBlockBar, .comBlockBar a {
+color: #fff;
+}
+.comBlockBar:hover,  .comBlockBar:hover a {
+color: #999;
+}
+#comUseWeibo {
+font-size: 20px;
+margin-left: -32px;
+color: #999;
+cursor: pointer;
+}
+#comLoggedIn {
+display: none;
+font-size: 14px;
+color: #666;
+}
+#comLoggedInAs {
+font-size: 16px;
+color: #356A00;
+}
+#comLogout {
+margin-left: 24px;
+cursor: pointer;
+}
+#comLoadMore a {
+display: block;
+text-align: center;
+border: 1px solid #eee;
+font-size: 14px;
+background: #F3F3F3;
+padding: 8px;
+color: #356A00;
+}
+#comLoadMore a:hover {
+color: #000;
+}
+
+
+footer {
+clear: both;
+background: #1B1B1B;
+margin-top: -140px;
+padding: 20px 40px 20px 30px;
+height: 120px;
+min-height: 120px;
+box-shadow: 0 5px 5px #111 inset;
+text-align: right;
+color: #AAA;
+font-size: 14px;
+}
+footer .fol {
+margin-left: 14px;
+font-size: 18px;
+}
+footer .lnk {
+margin-left: 28px;
+}
+footer a {
+color: #505050;
+}
+#copyright {
+width: 100%;
+text-align: center;
+padding-top: 24px;
+}
+#copyright a, #copyright {
+color: #505050;
+font-size: 13px;
+font-family: Helvetica, Arial;
+}
+#pageBar {
+width: 95%;
+font-size: 16px;
+height: 40px;
+margin: -40px auto 20px auto;
+}
+#goNextPage a,  #goPrevPage a {
+display: block;
+float: left;
+margin-right: 12px;
+width: 18px;
+height: 18px;
+padding: 3px;
+background: #73D90C;
+color: #FFF;
+border-radius: 50%;
+text-align: center;
+}
+#goNextPage a:hover, #goPrevPage a:hover {
+background: #2A2A2A;
+}
+#errorArea {
+min-height: 200px;
+padding: 100px 0 100px 0;
+}
+.errorMainArea {
+background: #F3F3F3;
+}
+.errorSign {
+font-size: 40px;
+color: #FF2626;
+}
+#adminIcon {
+margin-top: -55px;
+margin-bottom: 55px;
+text-align: right;
+width: 97%;
+color: #D8D8D8;
+}
+#adminIcon .adminSign:hover {
+color: #2A2A2A;
+cursor: pointer;
+}
+#adminRemember {
+display: none;
+}
+#UI-loading {
+display: none;
+position: fixed;
+top: 0;
+width: 100%;
+height: 100%;
+background: #FFF;
+opacity: 0.8;
+text-align: center;
+z-index: 1000001;
+}
+#UI-loading img {
+margin: auto;
+padding-top: 20%;
+}
+#UI-lightbox {
+display: none;
+position: fixed;
+top: 0;
+width: 100%;
+height: 100%;
+background: url('dark.png');
+text-align: center;
+z-index: 1000001;
+}
+#UI-lightbox #lightbox-image {
+border: 1px solid #eee;
+background: #F3F3F3;
+padding: 8px;
+border-radius: 5px;
+margin: auto;
+box-shadow: 1px 1px 4px #CCC;
+z-index: 9999999;
+}
+#UI-lightbox #lightbox-message {
+width: 60%;
+min-height: 260px;
+border: 1px solid #eee;
+background: #F3F3F3;
+padding: 20px;
+border-radius: 5px;
+margin: auto;
+box-shadow: 1px 1px 4px #CCC;
+font-size: 14px;
+z-index: 9999999;
+}
+#UI-close {
+font-size: 24px;
+position: absolute;
+right: 0;
+top: 0;
+}
+#UI-close a {
+color: #464646;
+}
+#UI-close a:hover {
+color: #333;
+}
+#plainArea {
+min-height: 200px;
+padding: 20px 20px 40px 20px;
+text-align: left;
+}
+
+
+
+
+/* Article details */
+.details img {
+max-width: 80%;
+cursor: pointer;
+}
+.details h1, .details h2, .details h3, .details h4, .details h5, .details h6 {
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+color: #464646;
+text-shadow: none;
+font-weight: bold;
+}
+.details h1 {
+font-size: 18px;
+}
+.details h2 {
+font-size: 16px;
+}
+.details .videoFrame {
+width: 640px;
+height: 360px;
+max-width: 90%;
+}
+.details .xiamiLoader {
+max-width: 90%;
+}
+.details .geoLocator {
+font-size: 16px;
+color: #356A00;
+}
+.details ul {
+list-style: inside circle;
+}
+.details blockquote {
+width: 95%;
+background: #EFEFEF;
+border-left: 5px solid #A8FF51;
+padding: 2px 2px 2px 8px;
+font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+}
+.details code {
+font-family: Consolas, Monaco, "Microsoft Yahei", "Microsoft JhengHei", "Meiryo UI"; 
+}
+.details pre {
+width: 95%;
+border-left: 5px solid #CCC;
+padding: 2px 2px 2px 8px;
+}
+.details hr {
+border: 0;
+border-bottom: 1px solid #CCC;
+margin: 23px auto 23px auto;
+}
+
+
+/* Admin */
+#adminLoginImg {
+border-radius: 50%;
+box-shadow: 1px 1px 2px #fff;
+}
+.adminWrapper p {
+margin-bottom: 20px;
+}
+.adminErrorMsg {
+display: none;
+color: #FF2626;
+text-shadow: 3px 2px 3px #ddd;
+}
+.adminArea {
+width: 92%;
+min-height: 360px;
+text-align: left;
+margin: 0 auto 0 auto;
+padding: 20px;
+background: #FFF;
+box-shadow: 2px 5px 7px #D6D6D6;
+font-family: Helvetica, Arial, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+line-height: 185%;
+}
+.adminArea h2 {
+clear: both;
+font-size: 20px;
+font-weight: bold;
+color: #346A00;
+}
+.adminArea p {
+margin-top: 16px;
+}
+.adminExplain {
+font-size: 13px;
+color: #717171;
+}
+.adminArea .smallBr {
+margin-bottom: 12px;
+}
+.adminCommand {
+text-align: center;
+}
+#adminPromptError, .wgtPromptError {
+text-align: center;
+color: #FF2626;
+display: none;
+}
+#adminPromptSuccess {
+text-align: center;
+color: #336A00;
+display: none;
+}
+.adminList {
+text-align: center;
+}
+.adminItems {
+font-size: 14px;
+display: block;
+}
+.adminSingleArticle {
+font-size: 14px;
+padding-left: 12px;
+border: 1px solid #E8E8E8;
+cursor: pointer;
+}
+.sortable-placeholder {
+padding-left: 12px;
+border: 1px solid #E8E8E8;
+min-height: 30px;
+background: #CCC;
+}
+.adminSingleArticle:hover, .adminSingleArticle:hover a, .adminSingleArticle:hover .adminSADate {
+background: #73D90C;
+color: #FFF;
+}
+.adminSingleArticle a {
+font-size: 18px;
+}
+.adminSADate {
+float: right;
+color: #717171;
+padding-right: 9px;
+}
+.adminSANew {
+display: block;
+float: right;
+font-size: 16px;
+}
+.adminSANew a {
+color: #999;
+text-shadow: 1px 1px 1px #EEE;
+margin-right: 18px;
+}
+#adminSAPage {
+margin-left: -35px;
+}
+.adminSCLModify {
+display: none;
+}
+.adminUploader {
+float: right;
+display: block;
+margin-right: 20%;
+margin-top: 25px;
+font-size:11px;
+}
+.adminUploader a {
+color: #717171;
+}
+.adminUploader a:hover {
+color: #346A00;
+}
+.adminGoSync a {
+color: #717171;
+font-weight: bold;
+}
+.adminGoSync a:hover {
+color: #346A00;
+}
+.admHeader {
+position: relative;
+width: auto;
+padding: 30px;
+}
+.admHeader nav {
+padding-right: 0;
+}
+.admFooter {
+margin-bottom: -120px;
+}
+.admStatNum {
+font-family: Georgia;
+font-size: 24px;
+font-style: italic;
+font-weight: bold;
+}
+#admStatBlock0 {
+min-height: 300px;
+clear: both;
+}
+.admStatBlock1 {
+float: left;
+padding: 17px;
+min-height: 160px;
+background: #EFEFEF;
+box-shadow: 4px 4px 4px #CCC;
+width: 33%;
+}
+.admStatBlock2 {
+float: left;
+padding: 17px;
+min-height: 160px;
+background: #DDD;
+box-shadow: 4px 4px 4px #CCC;
+width: 33%;
+}
+.admStatBlock3 {
+float: left;
+padding: 17px;
+min-height: 160px;
+background: #CDCDCD;
+box-shadow: 4px 4px 4px #CCC;
+width: 33%;
+}
+.admStatBlock1 a, .admStatBlock2 a, .admStatBlock3 a {
+color: #333;
+text-shadow: 1px 2px 1px #EEE;
+}
+.admSingleTag {
+font-size: 14px;
+padding: 4px 10px 4px 12px;
+background: #73D90C;
+color: #FFF;
+border-radius: 6px;
+margin-right: 12px;
+}
+.admSingleTag i
+{
+font-style: normal;
+}
+.admSingleTagDel {
+cursor: pointer;
+font-size: 16px;
+padding-left: 5px;
+}
+.extStatus1 {
+color: green;
+}
+.extStatus0 {
+color: red;
+}
+.adminArea article a {
+border: 0;
+}
+.adminLaidItem {
+width: 250px;
+overflow-x: auto;
+display: block;
+float: left;
+border: 1px dashed #ccc;
+cursor: pointer;
+padding: 3px;
+margin: 0 10px 3px 0;
+color: #505050;
+}
+.adminLaidItem:hover {
+background: #ccc;
+color: #000;
+}
+#previewArea {
+display: none;
+overflow: auto;
+background: #eee;
+}
+
+
+/* Market */
+.marketTop {
+overflow: auto;
+width: 99%;
+max-width: 1000px;
+}
+.marketFeatured {
+}
+.marketList {
+margin-bottom: 10px;
+}
+.marketBulletin {
+min-height: 80px;
+}
+.marketSubItem {
+float: left;
+margin-right: 10px;
+padding: 8px;
+line-height: 150%;
+background: #eee;
+margin-bottom: 10px;
+}
+.marketSubItem img {
+width: 100px;
+max-width: 90%;
+border-radius: 10px;
+}
+.marketSubItem h4 {
+font-size: 14px;
+font-weight: bold;
+}
+.marketSubItem h5 {
+font-size: 14px;
+color: #505050; 
+}
+.marketDown {
+background: #73D90C;
+padding: 2px 8px 2px 8px;
+border-radius: 6px;
+color: #000;
+}
+.marketDown a {
+color: #000;
+font-size: 12px;
+}
+.marketDown a:hover {
+color: #fff;
+}
+.marketHero img {
+width: 100%;
+}
+.marketBulletin a {
+color: #000;
+}
+.marketBulletin ul {
+background: #eee;
+font-size: 13px;
+padding: 6px 6px 6px 16px;
+}
+.marketLH {
+overflow: auto;
+}
+
+/* Forms */
+.inputLine {
+width: 250px;
+height: 16px;
+padding: 8px;
+color: #505050;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+background: #FFF;
+border: 2px solid #CCC;
+border-radius: 6px;
+text-align: center;
+}
+.inputLine:hover {
+border: 2px solid #AAA;
+}
+.inputLine:focus {
+border: 2px solid #CCC;
+box-shadow: 1px 1px 5px #DDD;
+}
+.inputLineWarn {
+border: 2px solid #FF2626;
+box-shadow: 1px 1px 5px #FF2626;
+}
+.inputLarge {
+width: 80%;
+font-size: 16px;
+text-align: left;
+}
+.inputMiddle {
+width: 50%;
+font-size: 16px;
+text-align: left;
+margin-bottom: 12px;
+}
+
+
+.buttonLine {
+display: inline;
+width: 32px;
+height: 32px;
+padding: 5px;
+color: #505050;
+text-align: center;
+border: 2px solid #CCC;
+border-radius: 50%;
+cursor: pointer;
+font-size: 16px;
+font-weight: bold;
+margin-left: 6px;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+}
+.buttonLine:hover, .buttonLine:focus {
+border: 2px solid #CCC;
+box-shadow: 1px 1px 5px #A8FF51;
+}
+.buttonGroup, .buttonGroup:hover, .buttonGroup:focus {
+height: 38px;
+border-radius: 0;
+width: auto;
+margin-left: -5px;
+border-right: 0;
+box-shadow: none;
+}
+.buttonGroupLast,  .buttonGroupLast:hover, .buttonGroupLast:focus{
+border-right: 2px solid #CCC;
+border-radius: 0 6px 6px 0;
+}
+.buttonGroupFirst,  .buttonGroupFirst:hover, .buttonGroupFirst:focus{
+border-radius: 6px 0 0 6px;
+}
+.buttonGroupSelected {
+background: #346A00;
+color: #FFF;
+}
+
+.selectLine {
+width: 80%;
+padding: 4px 8px 4px 8px;
+color: #505050;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+background: #FFF;
+border: 2px solid #CCC;
+border-radius: 6px;
+text-align: center;
+}
+
+.textareaLine {
+height: 400px;
+font-size: 14px;
+line-height: 150%;
+}
+.textareaMiddle {
+height: 120px;
+font-size: 12px;
+}
+.textareaSmall {
+height: 40px;
+font-size: 11px;
+}
+
+/* responsive */
+#menuDown {
+display: none;
+}
+
+@media only screen and (max-width:800px) {
+
+nav {
+position: absolute;
+right: 0;
+top: 80px;
+clear: both;
+float: right;
+display: none;
+}
+nav li {
+clear: both;
+background: #464646;
+padding: 6px;
+width: 200px;
+text-align: center;
+box-shadow: 1px 1px 2px #464646;
+}
+nav li:hover {
+background: #fff;
+}
+nav li a:hover {
+color: #464646;
+}
+#menuDown {
+display: inline;
+color: #fff;
+float: right;
+padding-right: 40px;
+}
+.admHeader #menuDown {
+padding-right: 0;
+}
+.menuDownIcon {
+font-size: 26px;
+}
+#profileArea {
+display:none;
+}
+#mainArea {
+padding-top: 120px;
+}
+.admMainArea {
+padding-top: 10px!important;
+}
+article, .commentArea, .adminArea{
+width: 90%;
+text-align: left;
+margin: 0 auto 16px auto;
+padding: 15px;
+background: #FFF;
+box-shadow: 2px 3px 5px #DDD;
+}
+.decoArticle {
+display: none;
+}
+.articleShare {
+font-size: 23px;
+}
+#pageBar {
+margin: 0 auto 20px auto;
+}
+.shareLayerItem {
+font-size: 16px;
+background: #F3F3F3;
+padding: 10px;
+width: 150px;
+}
+.commentArea {
+margin: 0 auto 68px auto;
+}
+footer {
+text-align: left;
+font-size: 16px;
+}
+footer .fol {
+text-align: left;
+padding-right: 8px;
+margin-left: 0;
+font-size: 22px;
+}
+footer .lnk {
+display: block;
+margin-left: 0;
+font-size: 16px;
+}
+#copyright {
+font-size: 14px;
+color: #505050;
+}
+#adminRemember {
+display: block;
+}
+#UI-lightbox #lightbox-message {
+width: 100%;
+height: 100%;
+box-shadow: none;
+padding: 80px 0 30px 0;
+}
+#UI-close {
+font-size: 28px;
+position: absolute;
+right: 6px;
+top: 60px;
+}
+.adminItems {
+font-size: 16px;
+display: block;
+}
+.adminSADate {
+float: none;
+color: #717171;
+display: block;
+}
+.adminSANew {
+float: none;
+}
+.admStatBlock1,
+.admStatBlock2,
+.admStatBlock3 {
+float: none;
+padding: 17px;
+min-height: 10px;
+width: 85%;
+}
+.adminUploader {
+margin-top: 0;
+}
+
+}

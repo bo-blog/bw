@@ -1,4 +1,5 @@
 .htaccess
-conf/
-storage/
+_zip.php
+_test.php
 trash/
+Thumbs.db
