@@ -1,0 +1,88 @@
+/* css reset by Tantek Celik */
+:link,:visited { text-decoration:none }
+ul { list-style:none }
+h1,h2,h3,h4,h5,h6,pre,code { font-size:1em; }
+ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input
+{ margin:0; padding:0; font-weight:normal }
+a img,:link img,:visited img { border:none }
+address { font-style:normal }
+
+
+body {
+background: #FFF;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+height:100%;
+}
+html {
+height: 100%;
+}
+.layer {
+height: 100%;
+text-align: center;
+padding: 60px 0 60px 0;
+}
+#layer1 {
+background: #65CA00;
+color: #FFF;
+}
+#layer2 {
+background: #00698C;
+color: #FFF;
+}
+#layer3 {
+background: #444;
+color: #FFF;
+}
+#layer4 {
+background: #0080FF;
+color: #FFF;
+}
+p {
+margin-bottom: 20px;
+}
+.wL {
+font-size: 3em;
+}
+.wXM {
+font-size: 2em;
+}
+.wM {
+font-size: 1.2em;
+}
+.wS {
+font-size: 0.8em;
+}
+.wBox {
+border: 1px solid #EFEFEF;
+border-radius: 5px;
+padding: 6px;
+cursor: pointer;
+}
+.wBox:hover {
+background: #FFF;
+color: #333;
+}
+.wRed {
+color: #D93600;
+}
+.wGreen {
+color: #7AFF4D;
+}
+.inp {
+padding: 10px;
+background: #E8E8E8;
+color: #000;
+font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+font-size: 16px;
+border: 1px solid #FFF;
+border-radius: 8px;
+margin-right: 20px;
+margin-bottom: 12px;
+}
+.inp:focus {
+box-shadow: 3px 3px 2px #111;
+}
+.inpL {
+width: 40%;
+height: 20px;
+}

@@ -1,0 +1,46 @@
+.markbar
+{
+	overflow: hidden;
+}
+
+.markbar a
+{
+	display: block;
+	float: left;
+	width: 30px;
+	height: 24px;
+	margin: 0 3px 3px 0;
+	background: #fff;
+	text-indent: 8px;
+	border: #dddddd solid 1px;
+	border-radius: 6px;
+	color: #000;
+	font-size: 14px;
+}
+
+.markbar a:hover
+{
+	background: #73D90C;
+	color: #FFF;
+}
+
+.markbar a.em { background-position: -30px 0; }
+.markbar a.em:hover { background-position: -30px -24px; }
+.markbar a.h1 { background-position: -60px 0; }
+.markbar a.h1:hover { background-position: -60px -24px; }
+.markbar a.h2 { background-position: -90px 0; }
+.markbar a.h2:hover { background-position: -90px -24px; }
+.markbar a.h3 { background-position: -120px 0; }
+.markbar a.h3:hover { background-position: -120px -24px; }
+.markbar a.ul { background-position: -150px 0; }
+.markbar a.ul:hover { background-position: -150px -24px; }
+.markbar a.ol { background-position: -180px 0; }
+.markbar a.ol:hover { background-position: -180px -24px; }
+.markbar a.a { background-position: -210px 0; }
+.markbar a.a:hover { background-position: -210px -24px; }
+.markbar a.img { background-position: -240px 0; }
+.markbar a.img:hover { background-position: -240px -24px; }
+.markbar a.blockquote { background-position: -270px 0; }
+.markbar a.blockquote:hover { background-position: -270px -24px; }
+.markbar a.code { background-position: -300px 0; }
+.markbar a.code:hover { background-position: -300px -24px; }
