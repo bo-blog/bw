@@ -267,12 +267,14 @@
 				{
 					this.replace(this.get().text + '!~!' + url.substr(0,url.length-1) + '[xiami]');
 				}
-				if (url.substr(url.length-1,1) == 'w')
-				{
-					this.replace(this.get().text + '!~!' + url.substr(0,url.length-1) + '[wangyiyun]');
-				}
 				else {
-					this.replace(this.get().text + '!~!' + url + '[xiami]');
+					if (url.substr(url.length-1,1) == 'w')
+					{
+						this.replace(this.get().text + '!~!' + url.substr(0,url.length-1) + '[wangyiyun]');
+					}
+					else {
+						this.replace(this.get().text + '!~!' + url + '[xiami]');
+					}
 				}
 			}
 		},

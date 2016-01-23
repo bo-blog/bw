@@ -16,7 +16,7 @@
 <div style="float: left"><h2>[[::themeName]]</h2>
 <h3>[[=admin:msg:By]] <a href="[[::themeUrl]]">[[::themeAuthor]]</a></h3>
 <span class="details">
-<a href="##" onclick="selectTheme('[[::themeDir]]');" id="themeID-[[::themeDir]]"><span class="icon-plus2"></span> [[=admin:opt:Enable]] &nbsp; </a> <a href="[[::siteURL]]/admin.php/extensions/exporttheme/?themeID=[[::themeDir]]&CSRFCode=[[::extCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a>
+<a href="##" onclick="selectTheme('[[::themeDir]]');" id="themeID-[[::themeDir]]"><span class="icon-plus2"></span> [[=admin:opt:Enable]] &nbsp; </a> <a href="##" onclick="expTheme('[[::themeDir]]');"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a>
 </span></div>
 </article>[[::/loop]]
 </p>
@@ -368,6 +368,11 @@ function selectTheme (themeID) {
 		}
 	}, "json");
 }
+
+function expTheme (themeID) {
+	window.location="[[::siteURL]]/admin.php/extensions/exporttheme/?themeID="+themeID+"&CSRFCode=[[::extCSRFCode]]";
+}
+
 
 function installPkgDo (uptype) {
 	if (confirm ("[[=admin:msg:PkgSafety]]")) {

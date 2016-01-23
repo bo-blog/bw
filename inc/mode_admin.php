@@ -98,7 +98,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		$valString = "<?php\r\n\$conf=" . var_export ($smt, true) . ";?>";
 		$rS = file_put_contents (P . "conf/info.php", $valString);
 		if ($rS) {
-			clearCache ();
+			clearCache (false, true);
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 		} else {
 			stopError ($conf['l']['admin:msg:ChangeNotSaved']);

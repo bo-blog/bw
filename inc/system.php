@@ -5,8 +5,8 @@
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '1.0.3');
-define ('bwInternalVersion', '1030');
+define ('bwVersion', '1.0.4');
+define ('bwInternalVersion', '1040');
 define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
 
 if (!defined ('P')) {
@@ -381,15 +381,6 @@ class bwArticle {
 		$old = $this -> articleList[$smt['originID']];
 
 		if ($smt['aID'] <> $old['aID']) {
-			/**
-			* Do we really want the user to change the ID? Cause a lot of problems, like Tags
-			* 2014/6/1: The decision is NO.
-			* $taID=bw::$db->getSingleRow ('SELECT * FROM articles WHERE aID=?', array($smt['aID']));
-			* if (isset ($taID['aID']))
-			* {
-			* stopError (bw::$conf['l']['admin:msg:Existed']);
-			* }
-			*/
 			stopError (bw :: $conf['l']['admin:msg:NoChangeID']);
 		} 
 
@@ -401,7 +392,6 @@ class bwArticle {
 			$deleteTags = array_diff ($oldTags, $currentTags);
 			$this -> addArticleIntoTags ($smt['aID'], $newTags);
 			$this -> deleteArticleFromTags ($smt['aID'], $deleteTags); 
-			// stopError ('New: '.implode (', ', $newTags).' Remove: '.implode (', ', $deleteTags));
 		} 
 
 		bw :: $db -> dbExec ('UPDATE articles SET aTitle=?, aCateURLName=?, aTime=?, aContent=?, aTags=? WHERE aID=?', array ($smt['aTitle'], $smt['aCateURLName'], $smt['aTime'], $smt['aContent'], $smt['aTags'], $smt['aID']));
@@ -886,13 +876,13 @@ class bwView {
 			$return = $this -> addHookIntoView (str_replace ('ext_', '', $key));
 		} elseif (strpos ($key, 'widget_') === 0) {
 			$return = $this -> addWidgetIntoView (str_replace ('widget_', '', $key));
-		}  elseif (array_key_exists ($key, $this -> passData)) {
-			$return = $this -> passData[$key];
 		} elseif ($isLoop) {
 			if (array_key_exists ($key, $this -> loopEach)) {
 				$return = $this -> loopEach[$key];
 			} 
-		} 
+		}  elseif (array_key_exists ($key, $this -> passData)) {
+			$return = $this -> passData[$key];
+		}
 
 		if ($needWalk) {
 			$return = call_user_func (array($this, 'theme_' . $funcWalk), $funcParam, $return);
@@ -1062,6 +1052,55 @@ class bwView {
 			$timestamp = strtotime ($timestamp);
 		} 
 		return date ($format, $timestamp);
+	} 
+
+	private function theme_datePast ($format, $timestamp)
+	{
+		if (!$timestamp) {
+			$timestamp = time ();
+			$past = 0;
+		} else {
+			$timestamp = strtotime ($timestamp);
+			$past = time () - $timestamp;
+		} 
+		if ($past < 120) {
+			$return = 'Just now';
+		} elseif ($past < 3600) {
+			$return = floor ($past / 60) . ' minutes ago';
+		} elseif ($past < 86400) {
+			$int1 = floor ($past / 3600);
+			$int2 = floor ($past % 3600 / 60);
+			$return = $int1 == 1 ? $int1 . ' hour' : $int1 . ' hours';
+			if ($int2 > 0) {
+				$return.= $int2 == 1 ? $int2 . ' minute' : $int1 . ' minutes';
+			}
+			$return.= ' ago';
+		} elseif ($past < 259200) {
+			$int1 = floor ($past / 86400);
+			$int2 = floor ($past % 86400 / 3600);
+			$return = $int1 == 1 ? $int1 . ' day' : $int1 . ' days';
+			if ($int2 > 0) {
+				$return.= $int2 == 1 ? $int2 . ' hour' : $int1 . ' hours';
+			}
+			$return.= ' ago';
+		} elseif ($past < 31536000) {
+			$int1 = floor ($past / 259200);
+			$int2 = floor ($past % 259200 / 86400);
+			$return = $int1 == 1 ? $int1 . ' month' : $int1 . ' months';
+			if ($int2 > 0) {
+				$return.= $int2 == 1 ? $int2 . ' day' : $int1 . ' days';
+			}
+			$return.= ' ago';
+		} else {
+			$int1 = floor ($past / 31536000);
+			$int2 = floor ($past % 31536000 / 259200);
+			$return = $int1 == 1 ? $int1 . ' year' : $int1 . ' years';
+			if ($int2 > 0) {
+				$return.= $int2 == 1 ? $int2 . ' month' : $int1 . ' months';
+			}
+			$return.= ' ago';
+		}
+		return $return;
 	} 
 
 	private function theme_formatText ($mode, $text)
@@ -1462,18 +1501,21 @@ function qiniuUpload ($filePath)
 	return $result;
 } 
 
-function clearCache ($caID = false)
+function clearCache ($caID = false, $forced = false)
 {
-	if ($caID) {
-		bw :: $db -> dbExec ('DELETE FROM cache WHERE caID=?', array ($caID));
-	} else {
-		if (DBTYPE == 'MySQL') {
-			bw :: $db -> dbExec ('TRUNCATE TABLE cache');
+	global $conf;
+	if ($conf['pageCache'] || $forced) {
+		if ($caID) {
+			bw :: $db -> dbExec ('DELETE FROM cache WHERE caID=?', array ($caID));
 		} else {
-			bw :: $db -> dbExec ('DROP TABLE cache');
-			bw :: $db -> dbExec ('CREATE TABLE cache (caID CHAR (32) PRIMARY KEY NOT NULL, caContent TEXT)');
+			if (DBTYPE == 'MySQL') {
+				bw :: $db -> dbExec ('TRUNCATE TABLE cache');
+			} else {
+				bw :: $db -> dbExec ('DROP TABLE cache');
+				bw :: $db -> dbExec ('CREATE TABLE cache (caID CHAR (32) PRIMARY KEY NOT NULL, caContent TEXT)');
+			} 
 		} 
-	} 
+	}
 } 
 
 function hook ()

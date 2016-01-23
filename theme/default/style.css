@@ -527,6 +527,7 @@ color: #356A00;
 }
 .details ul {
 list-style: inside circle;
+margin: 16px;
 }
 .details blockquote {
 width: 95%;
@@ -534,14 +535,19 @@ background: #EFEFEF;
 border-left: 5px solid #A8FF51;
 padding: 2px 2px 2px 8px;
 font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+word-break: break-word;
+margin-bottom: 16px;
 }
 .details code {
+width: 95%;
 font-family: Consolas, Monaco, "Microsoft Yahei", "Microsoft JhengHei", "Meiryo UI"; 
+word-break: break-word;
 }
 .details pre {
 width: 95%;
 border-left: 5px solid #CCC;
 padding: 2px 2px 2px 8px;
+margin-bottom: 16px;
 }
 .details hr {
 border: 0;

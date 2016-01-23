@@ -9,10 +9,11 @@ if (!defined ('P')) {
 
 <!DOCTYPE html>
 <html lang="[[=page:code]]">
-<head>
+<head profile="http://www.w3.org/2005/10/profile">
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<link rel="icon" type="image/png" href="[[::siteURL]]/theme/default/logo.png" />
 <link rel="canonical" href="[[::canonicalURL]]" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/style.css" media="all" rel="stylesheet" type="text/css" />
