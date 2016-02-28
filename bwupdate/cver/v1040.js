@@ -1,1 +1,2 @@
-$("#ins").html("当前版本为最新。<br/>");
+$("#ins").html("有新版本可用：<b>1.0.5</b><br/>- 更改：对目录结构进行了调整，使程序目录结构和文件用途更清晰。<br/>- 改进：支持传统的Ugly URL传参，兼容未做rewrite设置的nginx服务器和某些特殊的环境。<br/>- 改进：改善了友情链接的设置方式，提高了特殊URL的兼容性。<br/>- 改进：将Markdown解析器替换为HyperDown，取代代码较为陈旧的Parsedown。<br/>- 新增：访问 admin.php 可直接访问后台，不再需要从前台点击按钮进入。<br/>- 新增：自动更新机制中增加了数据库结构自动更新的能力。<br/>- 改进：编辑文章时新建分类；更方便地选择日期。<br/>");
+addUpdateBtn ("http://xiaofengtest.qiniudn.com/upkg1040.txt", '14747e2ebc6d12199dd90cf95462f7c4');
