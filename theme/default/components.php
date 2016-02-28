@@ -43,7 +43,7 @@ $parts['adminlogin']=<<<eot
 <img src="[[::siteURL]]/conf/profile.png" id="adminLoginImg"/>
 <p>[[=admin:msg:Login]]</p>
 <p>
-<input type="password" class="inputLine" id="s_token" placeholder="[[=admin:msg:PromptPsw]]" /> <button class="buttonLine" onclick="doLogin('s_token', '[[::siteURL]]/admin.php');"><span class="icon-login"></span></button> <button class="buttonLine" onclick="window.location='[[::siteURL]]/send.php/gona/';"><span class="icon-mobile3" title="[[=page:MobileLogin]]"></span></button>
+<input type="password" class="inputLine" id="s_token" placeholder="[[=admin:msg:PromptPsw]]" /> <button class="buttonLine" onclick="doLogin('s_token', '[[::siteURL]]/admin.php');"><span class="icon-login"></span></button> <button class="buttonLine" onclick="window.location='[[::siteURL]]/[[::linkPrefixSend]]/gona/';"><span class="icon-mobile3" title="[[=page:MobileLogin]]"></span></button>
 </p>
 <p>
 <span id="s_token-failure" class="adminErrorMsg"><span class="icon-minus2"></span> [[=admin:msg:WrongPsw]]</span>
@@ -52,8 +52,21 @@ $parts['adminlogin']=<<<eot
 </div>
 eot;
 
+$parts['adminloginpage']=<<<eot
+<script src="[[::siteURL]]/inc/script/main.js"></script>
+<article><h2>[[=admin:msg:Login]]</h2>
+<h3><p>
+<input type="password" class="inputLine" id="s_token" placeholder="[[=admin:msg:PromptPsw]]" /> <button class="buttonLine" onclick="doLogin('s_token', '[[::siteURL]]/admin.php');"><span class="icon-login"></span></button> <button class="buttonLine" onclick="window.location='[[::siteURL]]/[[::linkPrefixSend]]/gona/';"><span class="icon-mobile3" title="[[=page:MobileLogin]]"></span></button>
+</p>
+<p>
+<span id="s_token-failure" class="adminErrorMsg"><span class="icon-minus2"></span> [[=admin:msg:WrongPsw]]</span>
+</p>
+</h3>
+</article>
+eot;
+
 $parts['admincommonupload']=<<<eot
-<form id="picForm" method="post" action="[[::siteURL]]/admin.php/articles/uploader/?CSRFCode=[[::upCSRFCode]]" target="execPicTarget" enctype="multipart/form-data">
+<form id="picForm" method="post" action="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/uploader/[[::linkConj]]CSRFCode=[[::upCSRFCode]]" target="execPicTarget" enctype="multipart/form-data">
 <input type="file" style="display: none; height: 1px;" name="uploadFile[]" id="uploadPicFile" multiple="true" onchange="doPicUp();"/>
 </form>
 eot;
@@ -119,7 +132,7 @@ $parts['commentarea']=<<<eot
 </div>
 <script>
 makeComUserLink ();
-commentBatches ('[[::siteURL]]/send.php/comments/load/', "[[::aID]]");
+commentBatches ('[[::siteURL]]/[[::linkPrefixSend]]/comments/load/', "[[::aID]]");
 if ('[[::sinaAKey]]'=='' || '[[::sinaSKey]]'=='') {
 	$('#comUseWeibo').hide();
 }
@@ -165,9 +178,9 @@ $('#comSubmitBtn').click (function () {
 		$("#comPromptError").fadeIn(400).delay(1500).fadeOut(600);
 	} else {
 		$("#UI-loading").fadeIn(500);
-		var smtURL="[[::siteURL]]/send.php/comments/submit";
+		var smtURL="[[::siteURL]]/[[::linkPrefixSend]]/comments/submit";
 
-		$.post(smtURL+"?ajax=1", $('#smtForm').serialize(), function(data) {
+		$.post(smtURL+"[[::linkConj]]ajax=1", $('#smtForm').serialize(), function(data) {
 			$("#UI-loading").fadeOut(200);
 			if (data.error==1) {
 				$("#comPromptError").text (data.returnMsg);
@@ -185,14 +198,14 @@ $('#comSubmitBtn').click (function () {
 });
 
 $('#comUseWeibo').click (function () {
-window.location="[[::siteURL]]/send.php/sina/start/?aID=[[::aID]]";
+window.location=conj ("[[::siteURL]]/[[::linkPrefixSend]]/sina/start/", "aID=[[::aID]]");
 });
 
-$.get("[[::siteURL]]/send.php/sina/check/?ajax=1", function(data) {
+$.get(conj ("[[::siteURL]]/[[::linkPrefixSend]]/sina/check/", "ajax=1"), function(data) {
 	if (data.error==0) { //Logged in with Sina Weibo
 		$('#comLoggedInAs').html ('<span class="icon-sina-weibo"></span> '+data.returnMsg['screen_name']);
 		$('#comLogout').click(function () {
-			window.location="[[::siteURL]]/send.php/sina/end/?aID=[[::aID]]";
+			window.location=conj ("[[::siteURL]]/[[::linkPrefixSend]]/sina/end/", "aID=[[::aID]]");
 		});
 		$('#comLoggedIn').show();
 		$('#comUserName').removeAttr ('readonly');
@@ -206,7 +219,7 @@ $.get("[[::siteURL]]/send.php/sina/check/?ajax=1", function(data) {
 	}
 }, "json");
 
-$.get("[[::siteURL]]/send.php/comments/check/?ajax=1", function(data) {
+$.get(conj ("[[::siteURL]]/[[::linkPrefixSend]]/comments/check/", "ajax=1"), function(data) {
 	if (data.error==0) { //Logged in 
 		$('#comLoggedInAs').html ("[[::authorName]]");
 		$('#comLogout').hide();
@@ -299,7 +312,7 @@ $parts['authmobile']=<<<eot
 <article><h2><span class="icon-mobile3"></span> [[=admin:item:AuthMobile]]</h2>
 <h3><p>[[=admin:msg:Login]]</p>
 <p>
-<form action="[[::siteURL]]/send.php/nado/" method="post">
+<form action="[[::siteURL]]/[[::linkPrefixSend]]/nado/" method="post">
 <input type="text" class="inputLine" name="s_myname" placeholder="[[=page:MobileRem]]" value="[[::deviceName]]" />
 <br/><input type="password" class="inputLine" id="s_token" name="s_token" placeholder="[[=admin:msg:PromptPsw]]" /> <br/><br/><button type="submit" class="buttonLine" id="btnSubmit"><span class="icon-login"></span></button>
 </form>
@@ -329,7 +342,7 @@ $parts['authmobilego']=<<<eot
 <article><h2><span class="icon-mobile3"></span> [[=page:MobileLogin]]</h2>
 <h3><p>[[=page:MobileAuth3]]</p>
 <p>
-<img src="http://qr.liantu.com/api.php?text=[[::siteURL]]/send.php/nalogin/[[::ipPC]]/" />
+<img src="http://qr.liantu.com/api.php?text=[[::siteURL]]/[[::linkPrefixSend]]/nalogin/[[::ipPC]]/" />
 </p>
 </h3>
 <h3>[[=page:MobileAuth4]]</h3>
@@ -338,14 +351,14 @@ $parts['authmobilego']=<<<eot
 <script type="text/javascript">
 
 function checkPermission () {
-	var chURL="[[::siteURL]]/send.php/nasearch/?ajax=1";
+	var chURL=conj("[[::siteURL]]/[[::linkPrefixSend]]/nasearch/", "ajax=1");
 	$.get(chURL, { inPC: '[[::ipPC]]' }, function (data) {
 		if (data.error==1) { //Wrong token
 		}
 		else {
 			var CSRFCode = data.returnMsg;
 			$('body').stopTime ();
-			window.location="[[::siteURL]]/admin.php/dashboard/?CSRFCode="+CSRFCode;
+			window.location="[[::siteURL]]/[[::linkPrefixAdmin]]/dashboard/[[::linkConj]]CSRFCode="+CSRFCode;
 		}
 	}, "json");
 } 
@@ -371,7 +384,7 @@ $("#btnSubmit").click (function () {
 		alert (lng['RememberFail']);
 		return false;
 	}
-	$.get("[[::siteURL]]/send.php/nacheck/[[::ipPC]]/?ajax=1", { s_token: localStorage.mobileToken }, function (data) {
+	$.get(conj ("[[::siteURL]]/[[::linkPrefixSend]]/nacheck/[[::ipPC]]/", "ajax=1"), { s_token: localStorage.mobileToken }, function (data) {
 		if (data.error==1) { //Wrong token
 			alert (lng['RememberFail']);
 		}
@@ -395,4 +408,9 @@ $parts['groupcolumn']=<<<eot
 </ul></div>
 </article>
 eot;
-?>
+
+$parts['marketdetail']=<<<eot
+<article>
+[[::externalContent]]
+</article>
+eot;

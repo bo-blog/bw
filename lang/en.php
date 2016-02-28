@@ -217,6 +217,10 @@ $conf['l'] = array(
 	'admin:msg:Disqus' => 'Disqus is a social comment service provided by <a href="https://disqus.com">disqus.com</a>. Leave Duoshuo Short Name empty if you want to load Disqus by default.',
  	'admin:msg:PkgSafety' => 'Third party package could be dangerous and might deteriorate the system. Continue the installation on your own risk. ',
  	'admin:msg:PkgError' => 'Package not uploaded or not valid.',
+	'admin:msg:Select' => 'Select',
+	'admin:msg:Modify' => 'Modify',
+	'admin:msg:DeleteBatch' => 'Do you really want to delete these articles?',
+	'admin:msg:DeleteBatch2' => 'Please confirm again that you really want to delete these article.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',
@@ -235,6 +239,10 @@ $conf['l'] = array(
 	'admin:btn:DoUpdate' => 'Update Now',
 	'admin:btn:StartPreview' => 'Preview',
 	'admin:btn:EndPreview' => 'Stop Preview',
+	'admin:btn:ExportTheme' => 'Export as Package',
+	'admin:btn:Batch' => 'Batch',
+	'admin:btn:SelectAll' => 'Select All',
+	'admin:btn:DeSelectAll' => 'Deselect All',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',

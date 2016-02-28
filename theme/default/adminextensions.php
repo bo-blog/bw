@@ -4,11 +4,11 @@
 ?>
 
 <div class="adminArea">
-<form style="display: none;" id="upForm" method="post" action="[[::siteURL]]/admin.php/extensions/installpkg/?CSRFCode=[[::newCSRFCode]]" target="_self" enctype="multipart/form-data">
+<form style="display: none;" id="upForm" method="post" action="[[::siteURL]]/[[::linkPrefixAdmin]]/extensions/installpkg/[[::linkConj]]CSRFCode=[[::newCSRFCode]]" target="_self" enctype="multipart/form-data">
 <input type="file" style="display: none; height: 1px;" name="userfile" id="uploadFile" onchange="installPkgUp();"/>
 <input type="hidden" name="pkgType" value='' id="uploadType" />
 </form>
-<form id="smtForm" data-adminurl="[[::siteURL]]/admin.php/extensions/">
+<form id="smtForm" data-adminurl="[[::siteURL]]/[[::linkPrefixAdmin]]/extensions/">
 <h2><span class="icon-pictures"></span> [[=admin:sect:ManageThemes]]<span class="adminSANew"><a href='##' onclick="installPkgDo('theme');"><span class="icon-plus2"></span> [[=admin:btn:NewExt]]</a></span></h2> 
 <p>
 [[::loop, themeList]]<article style="float: left; clear: both;" id="theme-[[::themeDir]]">
@@ -28,7 +28,7 @@
 <div style="float: left"><h2 title="[[=admin:msg:Hook]] [[::extHooks]]">[[::extName]]</h2>
 [[::extIntro]] 
 <h3>[[=admin:msg:By]] <a href="[[::extURL]]">[[::extAuthor]]</a> | <span class="extStatus[[::extActivate]]">[[=admin:msg:ExtStatus[[::extActivate]]]]</span></h3>
-<span class="details"><a href="##" onclick="makeEnabled('[[::extID]]');"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; <a href="##" onclick="makeDisabled('[[::extID]]');"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; <a href="##" onclick="removeExt('[[::extID]]');"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a> &nbsp; &nbsp; <a href="[[::siteURL]]/admin.php/extensions/exportextension/?extID=[[::extID]]&CSRFCode=[[::extCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a></span></div>
+<span class="details"><a href="##" onclick="makeEnabled('[[::extID]]');"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; <a href="##" onclick="makeDisabled('[[::extID]]');"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; <a href="##" onclick="removeExt('[[::extID]]');"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a> &nbsp; &nbsp; <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/extensions/exportextension/[[::linkConj]]extID=[[::extID]]&CSRFCode=[[::extCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a></span></div>
 </article>[[::/loop]]
 </p>
 <div id="installExtBlock" style="display: none">
@@ -216,7 +216,7 @@ function makeDisabled (extID) {
 
 function makeEnabledDisabled (extID, extActivate) {
 	$("#UI-loading").fadeIn(500);
-	var targetURL=smtURL+"modify/?ajax=1&CSRFCode=[[::extCSRFCode]]";
+	var targetURL=smtURL+"modify/[[::linkConj]]ajax=1&CSRFCode=[[::extCSRFCode]]";
 
 	$.post(targetURL, {extID : extID, extActivate : extActivate}, function(data) {
 		$("#UI-loading").fadeOut(200);
@@ -287,7 +287,7 @@ function wgtBtns (formID, extActivate) {
 function addWidget (formID) {
 	$("#UI-loading").fadeIn(500);
 	var finalResult='';
-	var targetURL=smtURL+"widget/?ajax=1&CSRFCode=[[::newCSRFCode]]";
+	var targetURL=smtURL+"widget/[[::linkConj]]ajax=1&CSRFCode=[[::newCSRFCode]]";
 	$('#'+formID+' .wgtCol').each (function () {
 		finalResult+=$(this).attr('name')+'='+encodeURIComponent($(this).val())+"&";
 	});
@@ -307,7 +307,7 @@ function removeExt (extID) {
 	if (confirm("[[=admin:msg:RemoveExtension]]"))
 	{
 		$("#UI-loading").fadeIn(500);
-		var targetURL=smtURL+"remove/?ajax=1&CSRFCode=[[::extCSRFCode]]";
+		var targetURL=smtURL+"remove/[[::linkConj]]ajax=1&CSRFCode=[[::extCSRFCode]]";
 
 		$.post(targetURL, {extID : extID}, function(data) {
 			$("#UI-loading").fadeOut(200);
@@ -324,7 +324,7 @@ function removeExt (extID) {
 
 function addExt () {
 	$("#UI-loading").fadeIn(500);
-	var targetURL=smtURL+"add/?ajax=1&CSRFCode=[[::newCSRFCode]]";
+	var targetURL=smtURL+"add/[[::linkConj]]ajax=1&CSRFCode=[[::newCSRFCode]]";
 
 	$.post(targetURL, {extID : $('#newDir').val()}, function(data) {
 		$("#UI-loading").fadeOut(200);
@@ -333,14 +333,14 @@ function addExt () {
 			$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
 		}
 		else {
-			window.location=smtURL+"?CSRFCode=[[::navCSRFCode]]";
+			window.location=smtURL+"[[::linkConj]]CSRFCode=[[::navCSRFCode]]";
 		}
 	}, "json");
 }
 
 function saveOpenHooks () {
 	$("#UI-loading").fadeIn(500);
-	var targetURL=smtURL+"savehooks/?ajax=1&CSRFCode=[[::extCSRFCode]]";
+	var targetURL=smtURL+"savehooks/[[::linkConj]]ajax=1&CSRFCode=[[::extCSRFCode]]";
 
 	$.post(targetURL, $("#smtForm").serialize(), function(data) {
 		$("#UI-loading").fadeOut(200);
@@ -357,7 +357,7 @@ function saveOpenHooks () {
 
 function selectTheme (themeID) {
 	$("#UI-loading").fadeIn(500);
-	var targetURL=smtURL+"selecttheme/?ajax=1&CSRFCode=[[::extCSRFCode]]";
+	var targetURL=smtURL+"selecttheme/[[::linkConj]]ajax=1&CSRFCode=[[::extCSRFCode]]";
 	$.post(targetURL,  {themeID : themeID}, function(data) {
 		$("#UI-loading").fadeOut(200);
 		if (data.error==1) {
@@ -370,7 +370,7 @@ function selectTheme (themeID) {
 }
 
 function expTheme (themeID) {
-	window.location="[[::siteURL]]/admin.php/extensions/exporttheme/?themeID="+themeID+"&CSRFCode=[[::extCSRFCode]]";
+	window.location="[[::siteURL]]/[[::linkPrefixAdmin]]/extensions/exporttheme/[[::linkConj]]themeID="+themeID+"&CSRFCode=[[::extCSRFCode]]";
 }
 
 

@@ -106,6 +106,7 @@
 			//bW: added on 2015/11/29
 			html += '<a href="#youkuvideo" class="youkuvideo"><span class="icon-video"></span></a>';
 			html += '<a href="#xiami" class="xiami"><span class="icon-music4"></span></a>';
+			html += '<a href="#readmore" class="readmore"><span class="icon-ellipsis"></span></a>';
 
 
 			// Close div
@@ -277,6 +278,11 @@
 					}
 				}
 			}
+		},
+
+		readmore: function()
+		{
+			this.replace(this.get().text + '+++');
 		},
 
 		get: function()

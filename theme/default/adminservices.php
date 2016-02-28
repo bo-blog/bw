@@ -52,19 +52,19 @@
 </p>
 <!--
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:Sync]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/admin.php/services/sync/" target="_blank"><span class="icon-cycle"></span> [[=admin:btn:Sync]] </a></span>
+<span class="icon-arrow-right5"></span> [[=admin:item:Sync]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/sync/" target="_blank"><span class="icon-cycle"></span> [[=admin:btn:Sync]] </a></span>
 </p>
 -->
 
 <p id="admBackup"><br/><br/></p>
 <h2><span class="icon-cone"></span> [[=admin:sect:OtherServices]]</h2>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:Backup]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/admin.php/services/backup/?CSRFCode=[[::serviceCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:Backup]] </a></span>
-<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/admin.php/services/sync/?CSRFCode=[[::serviceCSRFCode]]"><span class="icon-export"></span> [[=admin:btn:Sync]] </a></span>
+<span class="icon-arrow-right5"></span> [[=admin:item:Backup]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/backup/[[::linkConj]]CSRFCode=[[::serviceCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:Backup]] </a></span>
+<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/sync/[[::linkConj]]CSRFCode=[[::serviceCSRFCode]]"><span class="icon-export"></span> [[=admin:btn:Sync]] </a></span>
 </p>
 
 <p class="adminCommand"><br/>
-<button type="button" class="buttonLine" id="btnSubmit" onclick="saveConf('smtForm', '[[::siteURL]]/admin.php/services/store/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
+<button type="button" class="buttonLine" id="btnSubmit" onclick="saveConf('smtForm', '[[::siteURL]]/[[::linkPrefixAdmin]]/services/store/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
 <button type="button" class="buttonLine" onclick="window.location=window.location;"><span class="icon-ccw"></span></button> [[=admin:btn:Restore]]
 <p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
 </p>
@@ -118,7 +118,7 @@ goQiniuUpload();
 
 function saveConf(formID, smtURL) {
 	$("#UI-loading").fadeIn(500);
-	$.post(smtURL+"?ajax=1&CSRFCode=[[::serviceCSRFCode]]", $('#'+formID).serialize(), function(data) {
+	$.post(smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::serviceCSRFCode]]", $('#'+formID).serialize(), function(data) {
 		$("#UI-loading").fadeOut(200);
 		if (data.error==1) {
 			$("#adminPromptError").text (data.returnMsg);

@@ -6,6 +6,9 @@
 * @license MIT
 */
 
+//Only modify the below line manually when necessary.
+define ('FORCE_UGLY_URL', 0); 
+
 if (!defined ('P')) {
 	define ('P', './');
 } 

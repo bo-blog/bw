@@ -16,10 +16,10 @@
 </div>
 <div class="admStatBlock2">
 <h2>[[=admin:item:StartHere]] </h2>
-<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/articles/new/?CSRFCode=[[::newCSRFCode]]">[[=admin:item:WriteArticle]] </a><br/>
-<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/center/?CSRFCode=[[::navCSRFCode]]">[[=admin:item:ChangeSetting]] </a><br/>
-<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/services/?CSRFCode=[[::navCSRFCode]]#admBackup">[[=admin:item:BackupData]] </a><br/>
-<!-- <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/admin.php/market/?CSRFCode=[[::navCSRFCode]]">[[=admin:item:GoMarket]] </a><br/>-->
+<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]">[[=admin:item:WriteArticle]] </a><br/>
+<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/center/[[::linkConj]]CSRFCode=[[::navCSRFCode]]">[[=admin:item:ChangeSetting]] </a><br/>
+<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/[[::linkConj]]CSRFCode=[[::navCSRFCode]]#admBackup">[[=admin:item:BackupData]] </a><br/>
+<!-- <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/market/[[::linkConj]]CSRFCode=[[::navCSRFCode]]">[[=admin:item:GoMarket]] </a><br/>-->
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/">[[=admin:item:BackHome]] </a><br/>
 </div>
 <div class="admStatBlock3">
@@ -55,7 +55,7 @@ function checkUpdates () {
 }
 
 function addUpdateBtn (URL, md5) {
-	$("#ins").append("<div><span class='adminGoSync'><a id='dlURL' href='##' onclick=\"gotoUpdate('[[::siteURL]]/admin.php/dashboard/update/?CSRFCode=[[::updateCSRFCode]]&dlURL=', '"+URL+"', '"+md5+"');\"><span class=\"icon-arrow-right5\"></span> [[=admin:btn:DoUpdate]] </a></span><br/></div>");
+	$("#ins").append("<div><span class='adminGoSync'><a id='dlURL' href='##' onclick=\"gotoUpdate('[[::siteURL]]/[[::linkPrefixAdmin]]/dashboard/update/[[::linkConj]]CSRFCode=[[::updateCSRFCode]]&dlURL=', '"+URL+"', '"+md5+"');\"><span class=\"icon-arrow-right5\"></span> [[=admin:btn:DoUpdate]] </a></span><br/></div>");
 }
 
 function gotoUpdate (desAddr, dlURL, md5) {
