@@ -5,6 +5,7 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
+chdir ('../');
 if (isset ($_REQUEST['step'])) {
 	$step = floor ($_REQUEST['step']);
 } else {
@@ -12,7 +13,7 @@ if (isset ($_REQUEST['step'])) {
 }
 
 
-if (file_exists ('../conf/info.php')) {
+if (file_exists ('./conf/info.php')) {
 	die ('Already installed.');
 }
 
@@ -20,8 +21,8 @@ if (!isset ($_COOKIE['bwInstallLang'])) {
 	header ("Location: ./index.php");
 	exit ();
 } else {
-	$ln='./' . basename ($_COOKIE['bwInstallLang']) . '.lang.php';
-	file_exists ($ln) ? include_once ($ln) : include_once ('./en.lang.php');
+	$ln='./install/' . basename ($_COOKIE['bwInstallLang']) . '.lang.php';
+	file_exists ($ln) ? include_once ($ln) : include_once ('./install/en.lang.php');
 }
 
 
@@ -45,7 +46,7 @@ if ($step == 2) {
 	if (isset ($_POST['instd'])) {
 		$instd = dataFilter (array('siteAuthor', 'siteKey', 'dbType', 'dbName', 'dbAddr', 'dbUser', 'dbPass'), $_POST['instd']);
 		$dbConfContent = $instd['dbType'] == 'SQLite' ? "<?php \r\ndefine ('DBTYPE', 'SQLite');\r\ndefine ('DBNAME', '{$instd['dbName']}');" : "<?php \r\ndefine ('DBTYPE', 'MySQL');\r\ndefine ('DBNAME', '{$instd['dbName']}');\r\ndefine ('DBADDR', '{$instd['dbAddr']}');\r\ndefine ('DBUSERNAME', '{$instd['dbUser']}');\r\ndefine ('DBPASSWORD', '{$instd['dbPass']}');";
-		$writeResult = @file_put_contents ('../conf/dbcon.php', $dbConfContent);
+		$writeResult = @file_put_contents ('./conf/dbcon.php', $dbConfContent);
 		$siteURL = curPageURL ();
 		$siteAuthor = htmlspecialchars ($instd['siteAuthor'], ENT_QUOTES, 'UTF-8');
 		$siteKey = sha1 ($instd['siteKey']);
@@ -79,7 +80,7 @@ if ($step == 2) {
   'social-linkedin' => '',
   'externalLinks' => 'http://bw.bo-blog.com=bW Home',
 );";
-		$writeResult = $writeResult && @file_put_contents ('../conf/info.php', $infoConfContent);
+		$writeResult = $writeResult && @file_put_contents ('./conf/info.php', $infoConfContent);
 
 		$servicesConfContent = "<?php
 \$conf+=array (
@@ -94,15 +95,15 @@ if ($step == 2) {
   'qiniuUpload' => '0',
   'qiniuDomain' => '',
 );";
-		$writeResult = $writeResult && @file_put_contents ('../conf/services.php', $servicesConfContent);
+		$writeResult = $writeResult && @file_put_contents ('./conf/services.php', $servicesConfContent);
 
 		if (!$writeResult) {
 			$rslt7 = $rslt8 = $rslt9 = 0;
 			$rslt10 = $l['data.error'];
 		} else {
 			$rslt7 = 1; 
-			define ('P', '../');
-			include (P . 'inc/db.php');
+			define ('P', './');
+			include (P . 'inc/database.inc.php');
 			$db = new bwDatabase;
 			$dbInitBind=dbInitBind ();
 			foreach (dbInit ($instd['dbType']) as $i=>$dbInit) {
