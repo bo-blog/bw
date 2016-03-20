@@ -1,1 +1,2 @@
-$("#ins").html("当前版本为最新。<br/>");
+$("#ins").html("有新版本可用：<b>1.0.6</b><br/>- 新增：草稿箱功能。<br>- 新增：独立于任何分类之外的单页功能，用于创建一些非日志页面。<br>- 修复：安装时选择SQLite3数据库无法使用相对路径的问题。<br>- 修复：友情链接特殊字符偶尔会导致崩溃。<br>- 修复：文章管理界面无法列出发布时间在未来的文章。<br>- 更改：将Markdown解析器重新换回兼容性更好的Parsedown，因为HyperDown解析器需要最低PHP 5.4的支持。<br>- 修复：RSS和google sitemap的XML错误。<br>- 改进：上传器终于可以上传图片以外的文件了。<br>- 改进：文章数为零的分类和首页打开也不会报错了。<br/>");
+addUpdateBtn ("http://xiaofengtest.qiniudn.com/upkg1050.txt", '1f605683ccf5e547e075f5bda0c34f1f');
