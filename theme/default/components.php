@@ -85,7 +85,8 @@ $parts['admincategorylist']=<<<eot
 eot;
 
 $parts['adminuploadinsert']=<<<eot
-<html><head></head><body><span id="upVals">[[::loop, adminuploaded]]![]([[::fileURL]]) [[::/loop]]</span>
+<html><head></head><body><span id="upVals">[[::loop, adminuploadedpic]]![]([[::fileURL]]) [[::/loop]][[::loop, adminuploadedfile]][[::fileURL]]
+[[::/loop]]</span>
 <script type="text/javascript">
 parent.insertUpURLs(document.getElementById('upVals').innerHTML);</script>
 </body></html>

@@ -97,6 +97,9 @@ padding: 10px 0 10px 0;
 text-align: center;
 }
 
+#ajax-article-list {
+min-height: 280px;
+}
 article {
 width: 92%;
 text-align: left;
@@ -675,7 +678,7 @@ float: right;
 display: block;
 margin-right: 20%;
 margin-top: 25px;
-font-size:11px;
+font-size:13px;
 }
 .adminUploader a {
 color: #717171;

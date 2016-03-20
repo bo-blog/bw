@@ -14,6 +14,7 @@ class bwArticle {
 	public $totalArticles;
 	private $pageNum;
 	private $listCate;
+	private $cutTime;
 
 	public function __construct ()
 	{
@@ -22,17 +23,18 @@ class bwArticle {
 		$this -> articleList = array();
 		$this -> listCate = 'all';
 		$this -> totalArticles = 0;
+		$this -> cutTime = date ('Y-m-d H:i:s');
 	} 
 
 	public function getArticleList ()
 	{
 		$currentTitleStart = ($this -> pageNum-1) * bw :: $conf['perPage'];
 
-		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>"0" AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?';
+		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>"_trash" AND aCateURLName<>"_page" AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?';
 		if ($this -> listCate != 'all') {
-			$qBind = array ($this -> listCate, date ('Y-m-d H:i:s'), $currentTitleStart, bw :: $conf['perPage']);
+			$qBind = array ($this -> listCate, $this -> cutTime, $currentTitleStart, bw :: $conf['perPage']);
 		} else {
-			$qBind = array (date ('Y-m-d H:i:s'), $currentTitleStart, bw :: $conf['perPage']);
+			$qBind = array ($this -> cutTime, $currentTitleStart, bw :: $conf['perPage']);
 		} 
 		$allTitles = bw :: $db -> getRows ($qStr, $qBind);
 
@@ -41,16 +43,30 @@ class bwArticle {
 		$this -> getTotalArticles ();
 	} 
 
+	public function getTrashedList ()
+	{
+		$this -> listCate = '_trash';
+		hook ('getTrashedList', 'Execute', $this);
+		$this -> getArticleList ();
+	} 
+
+	public function getSinglePageList ()
+	{
+		$this -> listCate = '_page';
+		hook ('getSinglePageList', 'Execute', $this);
+		$this -> getArticleList ();
+	} 
+
 	public function getHottestArticles ($howMany)
 	{
-		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>"0" AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany;
-		$qBind = $this -> listCate == 'all' ? array(date ('Y-m-d H:i:s')) : array($this -> listCate, date ('Y-m-d H:i:s'));
+		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>"_trash" AND aCateURLName<>"_page" AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aReads DESC LIMIT 0, ' . $howMany;
+		$qBind = $this -> listCate == 'all' ? array($this -> cutTime) : array($this -> listCate, $this -> cutTime);
 
 		$allTitles = bw :: $db -> getRows ($qStr, $qBind);
 
 		$this -> parseArticleList ($allTitles);
 		hook ('getHottestArticles', 'Execute', $this);
-		$this -> getTotalArticles ();
+		$this -> totalArticles = $howMany;
 	} 
 
 	public function getArticleListByTag ($tValue)
@@ -63,11 +79,11 @@ class bwArticle {
 
 		$allIDs = str_replace (']', '', substr ($tagList['tList'], 1));
 
-		$allTitles = bw :: $db -> getRows ("SELECT * FROM articles WHERE aID IN ({$allIDs})  AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?", array (date ('Y-m-d H:i:s'), $currentTitleStart, bw :: $conf['perPage']));
+		$allTitles = bw :: $db -> getRows ("SELECT * FROM articles WHERE aID IN ({$allIDs}) AND aCateURLName<>\"_trash\" AND aCateURLName<>\"_page\" AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?", array ($this -> cutTime, $currentTitleStart, bw :: $conf['perPage']));
 
 		$this -> parseArticleList ($allTitles);
 		hook ('getArticleListByTag', 'Execute', $this);
-		$this -> totalArticles = $tagList['tCount'];
+		$this -> totalArticles = bw :: $db -> countRows ("SELECT aID FROM articles WHERE aID IN ({$allIDs}) AND aCateURLName<>\"_trash\" AND aTime<=?", array ($this -> cutTime));
 	} 
 
 	public function alterCate ($cateID)
@@ -80,14 +96,19 @@ class bwArticle {
 		hook ('alterCate', 'Execute', $this);
 	} 
 
-	public function fetchArticle ($aID)
+	public function fetchArticle ($aID, $inTrash = false)
 	{
-		$this -> articleList[$aID] = bw :: $db -> getSingleRow ('SELECT * FROM articles WHERE aID=?', array($aID));
+		$this -> articleList[$aID] = $inTrash ? bw :: $db -> getSingleRow ('SELECT * FROM articles WHERE aID=?', array($aID)) : bw :: $db -> getSingleRow ('SELECT * FROM articles WHERE aID=? AND aCateURLName<>"_trash" AND aCateURLName<>"_page"', array($aID));
 
 		if (!isset ($this -> articleList[$aID]['aID'])) {
 			stopError (bw :: $conf['l']['admin:msg:NotExist']);
 		} 
-		$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$this -> articleList[$aID]['aCateURLName']];
+		if ($inTrash) {//Draft or single page
+			$this -> articleList[$aID]['aCateDispName'] = $this -> articleList[$aID]['aCateURLName'] == '_trash' ? bw :: $conf['l']['admin:item:TrashBin'] : bw :: $conf['l']['page:SinglePage'];
+		}
+		else {
+			$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$this -> articleList[$aID]['aCateURLName']];
+		}
 		$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $this -> articleList[$aID]['aTags']), 'tagValue');
 		if (isset (bw :: $conf['commentOpt'])) {
 			if (bw :: $conf['commentOpt'] == 0 || bw :: $conf['commentOpt'] == 3) { // If using non-built-in comment system, give an empty string instead of 0 for the attribute aComments
@@ -100,6 +121,11 @@ class bwArticle {
 	public function alterPerPage ($num)
 	{
 		bw :: $conf['perPage'] = floor ($num);
+	} 
+
+	public function setCutTime ($timeStamp)
+	{
+		$this -> cutTime = $timeStamp == 0 ? '9999-12-31 23:59:59' : date ('Y-m-d H:i:s', $timeStamp);
 	} 
 
 	public function addArticle ($smt)
@@ -125,7 +151,7 @@ class bwArticle {
 	public function updateArticle ($smt)
 	{
 		$smt = $this -> checkArticleData ($smt);
-		$this -> fetchArticle ($smt['originID']);
+		$this -> fetchArticle ($smt['originID'], true);
 		$old = $this -> articleList[$smt['originID']];
 
 		if ($smt['aID'] <> $old['aID']) {
@@ -191,6 +217,26 @@ class bwArticle {
 		return true;
 	} 
 
+	public function changeAsDraft ($aIDList)
+	{
+		if (is_array ($aIDList)) {
+			$countChangedCate = array ();
+			foreach ($aIDList as $aID) {
+				$taID = bw :: $db -> getSingleRow ('SELECT * FROM articles WHERE aID=?', array($aID));
+				if (!isset ($taID['aID'])) {
+					continue;
+				} 
+				if ($taID['aCateURLName'] <> '_trash') {
+					bw :: $db -> dbExec ('UPDATE articles SET aCateURLName="_trash" WHERE aID=?', array ($taID['aID']));
+					$this -> updateCateCount ($taID['aCateURLName'], -1);
+				} 
+			}
+		} 
+		clearCache (); //Clear all cache
+		hook ('changeAsDraft', 'Execute', $aIDList);
+		return true;
+	} 
+
 	public static function addArticleIntoTags ($aID, $allTags)
 	{
 		if (is_string ($allTags)) {
@@ -236,13 +282,20 @@ class bwArticle {
 	private function parseArticleList ($allTitles)
 	{
 		if (count ($allTitles) < 1) {
-			stopError (bw :: $conf['l']['admin:msg:NoContent']);
+			$this -> articleList = array ();
+			return;
 		} 
 		$this -> articleList = array ();
 
 		foreach ($allTitles as $aID => $row) {
 			$this -> articleList[$aID] = $row;
-			$this -> articleList[$aID]['aCateDispName'] = bw :: $cateData[$row['aCateURLName']];
+			if ($row['aCateURLName'] == '_trash') {
+				$this -> articleList[$aID]['aCateDispName'] =  bw :: $conf['l']['admin:item:TrashBin'];
+			} elseif ($row['aCateURLName'] == '_page') {
+				$this -> articleList[$aID]['aCateDispName'] =  bw :: $conf['l']['page:SinglePage'];
+			} else {
+				$this -> articleList[$aID]['aCateDispName'] =  bw :: $cateData[$row['aCateURLName']];
+			}
 			$this -> articleList[$aID]['aAllTags'] = stringToArray (@explode (',', $row['aTags']), 'tagValue');
 			if (isset (bw :: $conf['commentOpt'])) {
 				if (bw :: $conf['commentOpt'] == 0 || bw :: $conf['commentOpt'] == 3) { // If using non-built-in comment system, give an empty string instead of 0 for the attribute aComments
@@ -255,18 +308,20 @@ class bwArticle {
 	private function getTotalArticles ()
 	{
 		if ($this -> listCate == 'all') {
-			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName<>"0" AND aTime<=?', array (date ('Y-m-d H:i:s')));
+			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName<>"_trash" AND aCateURLName<>"_page" AND aTime<=?', array ($this -> cutTime));
 		} else {
-			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName=? AND aTime<=?', array ($this -> listCate, date ('Y-m-d H:i:s')));
+			$this -> totalArticles = bw :: $db -> countRows ('SELECT aID FROM articles WHERE aCateURLName=? AND aTime<=?', array ($this -> listCate, $this -> cutTime));
 		} 
 		hook ('getTotalArticles', 'Execute', $this);
 	} 
 
 	private function updateCateCount ($aCateURLName, $var)
 	{
-		$qStr = $var > 0 ? 'UPDATE categories SET aCateCount=aCateCount+?' : 'UPDATE categories SET aCateCount=aCateCount-?';
-		$qStr .= ' WHERE aCateURLName=?';
-		bw :: $db -> dbExec ($qStr, array (abs(floor ($var)), $aCateURLName));
+		if ($aCateURLName != '_trash') { 
+			$qStr = $var > 0 ? 'UPDATE categories SET aCateCount=aCateCount+?' : 'UPDATE categories SET aCateCount=aCateCount-?';
+			$qStr .= ' WHERE aCateURLName=?';
+			bw :: $db -> dbExec ($qStr, array (abs(floor ($var)), $aCateURLName));
+		}
 		hook ('updateCateCount', 'Execute', $aCateURLName, $var);
 	} 
 
@@ -277,14 +332,14 @@ class bwArticle {
 			$acceptedKeys[] = 'originID';
 		} 
 		$smt = dataFilter ($acceptedKeys, $smt);
-		if (empty ($smt['aTitle']) || $smt['aID'] === '' || empty ($smt['aContent']) || $smt['aCateURLName'] === '') {
+		if (empty ($smt['aTitle']) || $smt['aID'] === '' || empty ($smt['aContent'])) {
 			stopError (bw :: $conf['l']['admin:msg:NoData']);
 		} 
-		if (!array_key_exists ($smt['aCateURLName'], bw :: $cateData)) {
-			stopError (bw :: $conf['l']['admin:msg:NotExist']);
+		if (!array_key_exists ($smt['aCateURLName'], bw :: $cateData) && $smt['aCateURLName'] != '_trash' && $smt['aCateURLName'] != '_page') {
+			stopError (bw :: $conf['l']['admin:msg:NotExist'] . ': ' . $smt['aCateURLName']);
 		} 
 		if (empty ($smt['aTime'])) {
-			$smt['aTime'] = date ('Y-m-d H:i:s');
+			$smt['aTime'] = $this -> cutTime;
 		} else {
 			$smt['aTime'] = date ('Y-m-d H:i:s', strtotime ($smt['aTime']));
 		} 

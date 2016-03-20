@@ -5,8 +5,8 @@
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '1.0.5');
-define ('bwInternalVersion', '1050');
+define ('bwVersion', '1.0.6');
+define ('bwInternalVersion', '1060');
 define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
 
 if (!defined ('P')) {
@@ -26,7 +26,7 @@ bw :: init ();
 
 function  __autoload ($class) {
 	$classFile = P. 'inc/' . strtolower (substr ($class, 2) . '.inc.php');
-	file_exists ($classFile) ? require_once ($classFile) : stopError ('System damaged.');
+	file_exists ($classFile) ? require_once ($classFile) : stopError ("System damaged. File missing: $classFile .");
 }
 
 function stopError ($errMsg)
@@ -241,17 +241,6 @@ function fileReplaceRecursive ($readDir, $destDir)
 		}
 	} 
 } 
-
-function rrmdir ($dir) {
-	foreach (glob ($dir . '/*') as $file) {
-		if (is_dir ($file)) {
-			rrmdir ($file);
-		} else {
-			unlink ($file);
-		}
-	}
-	rmdir ($dir);
-}
 
 if (@get_magic_quotes_gpc()) {
 	function stripslashes_deep($value)

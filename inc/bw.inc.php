@@ -24,19 +24,35 @@ class bw {
 		self :: $db = new bwDatabase;
 		self :: $cateData = self :: $cateList = self :: $extList = self :: $extData = array();
 
+		if (!defined ('FORCE_UGLY_URL')) {
+			define ('FORCE_UGLY_URL', 0);
+		}
 		if (FORCE_UGLY_URL == 1 || (self :: $conf['linkPrefixIndex'] == 'index.php' && false !==stripos ($_SERVER['SERVER_SOFTWARE'], 'nginx'))) { 
-			self :: $conf['linkPrefixIndex'].= '?go=';
-			self :: $conf['linkPrefixCategory'].= '?go=';
-			self :: $conf['linkPrefixArticle'].= '?go=';
-			self :: $conf['linkPrefixTag'].= '?go=';
+			self :: $conf['linkPrefixIndex'] = 'index.php?go=';
+			self :: $conf['linkPrefixCategory'] = 'category.php?go=';
+			self :: $conf['linkPrefixArticle'] = 'read.php?go=';
+			self :: $conf['linkPrefixTag'] = 'tag.php?go=';
 			self :: $conf['linkPrefixSend'] = 'send.php?go=';
 			self :: $conf['linkPrefixAdmin'] = 'admin.php?go=';
+			self :: $conf['linkPrefixPage'] = 'page.php?go=';
 			self :: $conf['linkConj'] = '&';
-		} else { 
+		} elseif (self :: $conf['linkPrefixIndex'] == 'index.php') { 
+			self :: $conf['linkPrefixCategory'] = 'category.php';
+			self :: $conf['linkPrefixArticle'] = 'read.php';
+			self :: $conf['linkPrefixTag'] = 'tag.php';
 			self :: $conf['linkPrefixSend'] = 'send.php';
 			self :: $conf['linkPrefixAdmin'] = 'admin.php';
+			self :: $conf['linkPrefixPage'] = 'page.php';
 			self :: $conf['linkConj'] = '?';
-		} 
+		} else {
+			self :: $conf['linkPrefixCategory'] = 'category';
+			self :: $conf['linkPrefixArticle'] = 'post';
+			self :: $conf['linkPrefixTag'] = 'tag';
+			self :: $conf['linkPrefixSend'] = 'send.php';
+			self :: $conf['linkPrefixAdmin'] = 'admin.php';
+			self :: $conf['linkPrefixPage'] = 'page';
+			self :: $conf['linkConj'] = '?';
+		}
 	} 
 
 	public static function initCategories ()

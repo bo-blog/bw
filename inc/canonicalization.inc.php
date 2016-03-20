@@ -45,6 +45,11 @@ class bwCanonicalization {
 				$this -> loaderID = 'article';
 				$this -> currentScript = $conf['linkPrefixArticle'];
 				break;
+			case 'page':
+				$this -> argsPattern = array ('aID');
+				$this -> loaderID = 'page';
+				$this -> currentScript = $conf['linkPrefixPage'];
+				break;
 			case 'tag':
 				$this -> argsPattern = array ('tValue', 'pageNum');
 				$this -> loaderID = 'tag';

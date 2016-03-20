@@ -15,7 +15,7 @@ if (!defined ('P')) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
 <meta name="robots" content="none" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
-<link href="[[::siteURL]]/theme/default/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="[[::siteURL]]/theme/default/style.css?ver=02282016" media="all" rel="stylesheet" type="text/css" />
 <title>[[=page:Admin]] | [[::siteName]]</title>
 <script src="http://lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
 <script>

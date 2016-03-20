@@ -131,7 +131,7 @@ function checkLogin (oj) {
 			}
 			else {
 				var cact=location.pathname;
-				if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php")!=-1)
+				if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php")!=-1 || cact.indexOf("page/")!=-1 || cact.indexOf("page.php")!=-1)
 				{
 					var aID=$('.'+oj).data('adminid');
 					window.location=rootURL+"/articles/modify/&aID="+aID+"&CSRFCode="+data.returnMsg;

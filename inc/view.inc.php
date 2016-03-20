@@ -141,7 +141,7 @@ class bwView {
 		return $obContent;
 	} 
 
-	private function commonParser ($text)
+	public function commonParser ($text)
 	{
 		$text = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $text);
 		$text = preg_replace_callback ('/\[\[::loop, (.+?)\]\](.+?)\[\[::\/loop\]\]/s', array($this, 'passLoop'), $text);
@@ -467,10 +467,10 @@ class bwView {
 	public static function textFormatter ($text)
 	{
 		if (!is_object (self :: $markdownParser)) {
-			include_once (P . 'inc/script/hyperdown/Parser.php');
-			self :: $markdownParser = new HyperDown\Parser;
+			include_once (P . 'inc/script/parsedown/Parsedown.php');
+			self :: $markdownParser = new Parsedown;
 		} 
-		$text = self :: $markdownParser -> makeHtml ($text); 
+		$text = self :: $markdownParser -> text ($text); 
 		// Start customized markdown
 		// xiami music loader
 		$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text); 
