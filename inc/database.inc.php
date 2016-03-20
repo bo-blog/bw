@@ -10,6 +10,7 @@ if (!defined ('P')) {
 } 
 
 class bwDatabase extends PDO {
+	private $silent;
 	private $errorMsg;
 	public $qNum;
 	private $dbh;
@@ -17,6 +18,7 @@ class bwDatabase extends PDO {
 	{
 		include_once (P . 'conf/dbcon.php');
 		$errorMsg = array();
+		$this -> silent = false;
 		$this -> qNum = 0;
 
 		try {
@@ -105,7 +107,6 @@ class bwDatabase extends PDO {
 		$stmt = $this -> prepare ($queryStr);
 		if ($stmt) {
 			$return = $stmt -> execute ($bindarray);
-			//print ($stmt -> queryString.'<br>');
 			$this -> qNum++;
 		} else {
 			$this -> errorMsg = $this -> errorInfo();
@@ -146,7 +147,14 @@ class bwDatabase extends PDO {
 
 	private function throwError ()
 	{
-		stopError ('Database Error: ' . implode(', ', $this -> errorMsg));
-		exit ();
+		if (!$this -> silent) {
+			stopError ('Database Error: ' . implode(', ', $this -> errorMsg));
+			exit ();
+		}
+	} 
+
+	public function silentError ($status) 
+	{
+		$this -> silent = $status ? true : false;
 	} 
 } 

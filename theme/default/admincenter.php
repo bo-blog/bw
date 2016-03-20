@@ -65,9 +65,9 @@
 </p>
 <p id="authMobile">
 <span class="icon-arrow-right5"></span> [[=admin:item:AuthMobile]]<br/>
-[[::loop, mobileKeys]]<span id="mobLine-[[::seq]]"><span class="icon-mobile3"></span> [[::devID]] &nbsp; <a href="##" onclick="cancelAuth('[[::devID]]', '[[::siteURL]]/admin.php/center/cancelauth/', '[[::seq]]');">[[[=admin:item:CancelAuthMobile]]]</a><br/></span>[[::/loop]]
-<a href="##" onclick="$('.authMobileImg').toggle();">[+] [[=admin:item:AddAuthMobile]]</a><br/><span class="adminExplain">[[=admin:msg:AuthMobile1]]<br/>[[=admin:msg:AuthMobile2]]</span>
-<span class="authMobileImg" style=" display:none;" ><br/><img src="http://qr.liantu.com/api.php?text=[[::siteURL]]/send.php/na/" /><span class="adminExplain"><br/>[[=admin:msg:AuthMobile3]]<a href="[[::siteURL]]/send.php/na/" target="_blank">[[=admin:msg:AuthMobile4]]</a></span></span>
+[[::loop, mobileKeys]]<span id="mobLine-[[::seq]]"><span class="icon-mobile3"></span> [[::devID]] &nbsp; <a href="##" onclick="cancelAuth('[[::devID]]', '[[::siteURL]]/[[::linkPrefixAdmin]]/center/cancelauth/', '[[::seq]]');">[[[=admin:item:CancelAuthMobile]]]</a><br/></span>[[::/loop]]
+<a href="##" onclick="$('.authMobileImg').toggle();"><span class="icon-plus2"></span> [[=admin:item:AddAuthMobile]]</a><br/><span class="adminExplain">[[=admin:msg:AuthMobile1]]<br/>[[=admin:msg:AuthMobile2]]</span>
+<span class="authMobileImg" style=" display:none;" ><br/><img src="http://qr.liantu.com/api.php?text=[[::siteURL]]/[[::linkPrefixSend]]/na/" /><span class="adminExplain"><br/>[[=admin:msg:AuthMobile3]]<a href="[[::siteURL]]/[[::linkPrefixSend]]/na/" target="_blank">[[=admin:msg:AuthMobile4]]</a></span></span>
 </p>
 
 <p><br/><br/></p>
@@ -94,7 +94,12 @@
 <script type="text/javascript">
 </script>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:Links]]<br class="smallBr"/><textarea type="text" class="inputLine inputLarge textareaLine textareaMiddle" name="smt[externalLinks]" id="externalLinks" />[[::externalLinks]]</textarea>
+<span class="icon-arrow-right5"></span> [[=admin:item:Links]]<br class="smallBr"/>
+[[::loop, allLinks]]
+<span id="lnkItem-[[::linkID]]"><span class="icon-keyboard2"></span> <input type="text" class="inputLine inputSmall lnk" name="smt[externalLinks][lnkname][]" value="[[::linkName]]" placeholder="[[=admin:item:LinkText]]" /> <span class="icon-link2"></span><input type="text" class="inputLine inputSmall lnk" name="smt[externalLinks][lnkurl][]" value="[[::linkURL]]" placeholder="[[=admin:item:LinkURL]]" /> <a href="##" onclick="$('#lnkItem-[[::linkID]]').remove();"><span class="icon-cross2"></span></a><br/></span>
+[[::/loop]]
+<div	id="newLink"></div><div	id="newLinkTpl" style="display:none;"><span id="lnkItem-rndid"><span class="icon-keyboard2"></span> <input type="text" class="inputLine inputSmall lnk" name="smt[externalLinks][lnkname][]" value="" placeholder="[[=admin:item:LinkText]]" /> <span class="icon-link2"></span><input type="text" class="inputLine inputSmall lnk" name="smt[externalLinks][lnkurl][]" value="" placeholder="[[=admin:item:LinkURL]]" /> <a href="##" onclick="$('#lnkItem-rndid').remove();"><span class="icon-cross2"></span></a><br/></span></div>
+<a href="##" onclick="$('#newLink').append($('#newLinkTpl').html().replace(/rndid/g, Math.floor(Math.random() * 8999 + 1000)));"><span class="icon-plus2"></span> [[=admin:btn:NewCate]]</a>
 </p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:URLRewrite]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst linkPrefixIndex" data-reflect="index.php"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast linkPrefixIndex" data-reflect="index"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::linkPrefixIndex]]" name="smt[linkPrefixIndex]" id="linkPrefixIndex"/><input type="hidden" value="[[::linkPrefixCategory]]" name="smt[linkPrefixCategory]" id="linkPrefixCategory"/><input type="hidden" value="[[::linkPrefixArticle]]" name="smt[linkPrefixArticle]" id="linkPrefixArticle"/><input type="hidden" value="[[::linkPrefixTag]]" name="smt[linkPrefixTag]" id="linkPrefixTag"/>
@@ -102,7 +107,7 @@
 </p>
 
 <p class="adminCommand"><br/>
-<button type="button" class="buttonLine" id="btnSubmit" onclick="saveConf('smtForm', '[[::siteURL]]/admin.php/center/store/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
+<button type="button" class="buttonLine" id="btnSubmit" onclick="saveConf('smtForm', '[[::siteURL]]/[[::linkPrefixAdmin]]/center/store/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
 <button type="button" class="buttonLine" onclick="window.location=window.location;"><span class="icon-ccw"></span></button> [[=admin:btn:Restore]]
 <p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
 </p>
@@ -111,7 +116,7 @@
 
 </div>
 
-<form id="picForm" method="post" action="[[::siteURL]]/admin.php/center/avatarupload/?CSRFCode=[[::upCSRFCode]]" enctype="multipart/form-data" target="execPicTarget">
+<form id="picForm" method="post" action="[[::siteURL]]/[[::linkPrefixAdmin]]/center/avatarupload/[[::linkConj]]CSRFCode=[[::upCSRFCode]]" enctype="multipart/form-data" target="execPicTarget">
 <input type="file" style="display: none; height: 1px;" name="uploadFile" id="uploadPicFile" onchange="$('#picForm').submit();"/>
 </form>
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;" onload="$('#avatarImg').attr('src', '[[::siteURL]]/conf/profile.png?'+Math.random());"></iframe>
@@ -180,9 +185,10 @@ function goSelector(selID) {
 }
 
 goSelector ('perPage');
-goSelector ('linkPrefixIndex');
 goSelector ('pageCache');
-
+var tmpLinkPrefixIndex = $("#linkPrefixIndex").val().split('?');
+$("#linkPrefixIndex").val(tmpLinkPrefixIndex[0]);
+goSelector ('linkPrefixIndex');
 function syncPrefix() {
 	var linkPrefixD=$("#linkPrefixIndex").val();
 	if (linkPrefixD=='index.php')
@@ -210,11 +216,22 @@ function saveConf(formID, smtURL) {
 			stopSubmit=true;
 		}
 	});
+ 	$('.lnk:visible').each(function() {
+		if ($(this).val() == '')
+		{
+			$(this).focus();
+			$("#adminPromptError").text ('[[=admin:msg:ErrorCorrection]]');
+			$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
+			stopSubmit=true;
+			return false;
+		}
+	});
 
 	if (!stopSubmit)
 	{
 		$("#UI-loading").fadeIn(500);
-		$.post(smtURL+"?ajax=1&CSRFCode=[[::CSRFCode]]", $('#'+formID).serialize(), function(data) {
+		//window.location=smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::CSRFCode]]&"+$('#'+formID).serialize();
+		$.post(smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::CSRFCode]]", $('#'+formID).serialize(), function(data) {
 			$("#UI-loading").fadeOut(200);
 			if (data.error==1) {
 				$("#adminPromptError").text (data.returnMsg);
@@ -241,7 +258,7 @@ function checkLogout (oj) {
 
 function cancelAuth (devID, smtURL, seq) {
 	$("#UI-loading").fadeIn(500);
-	$.post(smtURL+"?ajax=1&CSRFCode=[[::CSRFCode]]", {devID : devID}, function(data) {
+	$.post(smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::CSRFCode]]", {devID : devID}, function(data) {
 		$("#UI-loading").fadeOut(200);
 		if (data.error==1) {
 		}

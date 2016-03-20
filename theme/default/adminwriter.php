@@ -8,7 +8,7 @@
 <input type="hidden" name="smt[originID]" id="originID" value="[[::aID]]" />
 <h2><span class="icon-book2"></span> [[=admin:sect:Writer]]</h2>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:ATitle]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTitle]" value="[[::aTitle]]" id="aTitle" />
+<span class="icon-arrow-right5"></span> [[=admin:item:ATitle]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTitle]" value="[[::aTitle]]" id="aTitle" /> <span id="gotoAID"></span>
 </p>
 
 <p>
@@ -16,44 +16,53 @@
 </p>
 
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:AContent]] <span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> | <a href="##" id="adminGeoLoc"><span class="icon-location"> </span><span id="adminGeoLocAdd">[[=admin:btn:GeoLoc]]</span></a> | <a href="##" id="adminPreview"><span class="icon-screen2"> </span><span id="adminPrevAdd">[[=admin:btn:StartPreview]]</span></a></span> <br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea><div id="previewArea" class="inputLine inputLarge textareaLine details"></div>
+<span class="icon-arrow-right5"></span> [[=admin:item:AContent]] <span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> | <a href="##" id="adminPreview"><span class="icon-screen2"> </span><span id="adminPrevAdd">[[=admin:btn:StartPreview]]</span></a></span> <br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea><div id="previewArea" class="inputLine inputLarge textareaLine details"></div>
 </p>
 
-<p>
+<p class="articleOnly">
 <span class="icon-arrow-right5"></span> [[=admin:item:SetTag]]<br/><input type="text" id='eTags' class="inputLine inputLarge" name="smt[aTags]" value="[[::aTags]]" placeholder="[[=admin:msg:SetTag]]" /><div id="taghint"></div></p>
 
-<p>
+<p class="articleOnly">
 <span class="icon-arrow-right5"></span> [[=admin:item:ACate]]<br/>
 <select name="smt[aCateURLName]" id="aCateURLName" class="selectLine">
 [[::loop, admincatelist]]<option value="[[::aCateURLName]]">[[::aCateDispName]]</option>[[::/loop]]
+<option value="_trash">[[=admin:item:TrashBin]]</option><option value="<new>">[+] [[=admin:btn:NewCate]]</option>
 </select>
+<div id="adminSCInputNew" style="display:none;">
+<input type="text" class="inputLine inputSmall" value="" placeholder="[[=admin:msg:NewCate]]"  id="adminSCInputNewItemName" /> <input type="text" class="inputLine inputSmall" value="" placeholder="ID"  id="adminSCInputNewItemID" />
+<a href='##' onclick="addCategory('[[::siteURL]]/[[::linkPrefixAdmin]]/articles/newcatenow/');"><span class="icon-disk"></span> [[=admin:btn:Add]]</a><br/>
+</div>
 </p>
 <script type="text/javascript">
 </script>
 <p>
 
-<span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" /><br/><span class="adminExplain">yyyy-mm-dd hh:mm:ss</span></p>
+<span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" id="aTime" /><br/>
+<div id="floatATime">
+<select id="timesY" class="selectLine2"></select> - <select id="timesM" class="selectLine2"></select> - <select id="timesD" class="selectLine2"></select> &nbsp; &nbsp; <select id="timesH" class="selectLine2"> : </select> : <select id="timesMM" class="selectLine2"></select> : <select id="timesS" class="selectLine2"></select> <a href="##"><span class="icon-newspaper2" id="aTimeUp"></span></a>
+</div>
+<span class="adminExplain">yyyy-mm-dd hh:mm:ss</span></p>
 
 <p class="adminCommand"><br/>
-<button type="button" class="buttonLine" id="btnSubmit" onclick="saveArticle('smtForm', '[[::siteURL]]/admin.php/articles/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
+<button type="button" class="buttonLine" id="btnSubmit" onclick="saveArticle('smtForm', '[[::siteURL]]/[[::linkPrefixAdmin]]/articles/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
 <button type="button" class="buttonLine" onclick="document.getElementById('smtForm').reset(); $('#aCateURLName').val('[[::aCateURLName]]');"><span class="icon-ccw"></span></button> [[=admin:btn:Restore]]
-<span id="btnDel"><button type="button" class="buttonLine" onclick="deleteArticle('[[::siteURL]]/admin.php/articles/delete/');"><span class="icon-cross"></span></button> <span style="color: #FF2626">[[=admin:btn:Delete]]</span></span>
+<span class="articleOnly"><button type="button" class="buttonLine" onclick="$('#aCateURLName').val('_trash'); $('#btnSubmit').click();"><span class="icon-suitcase"></span></button> [[=admin:btn:SaveAsDraft]]</span>
+<span id="btnDel"><button type="button" class="buttonLine" onclick="deleteArticle('[[::siteURL]]/[[::linkPrefixAdmin]]/articles/delete/');"><span class="icon-cross"></span></button> <span style="color: #FF2626">[[=admin:btn:Delete]]</span></span>
 <p id="adminPromptError"></p><p id="adminPromptSuccess"></p>
 </p>
 [[::ext_adminWriter]]
 </form>
-<div id="adminUploadContainer" data-upurl="[[::siteURL]]/admin.php/articles/getqiniuuploadpart/?CSRFCode=[[::upCSRFCode]]">
+<div id="adminUploadContainer" data-upurl="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/getqiniuuploadpart/[[::linkConj]]CSRFCode=[[::upCSRFCode]]">
 [[::adminqiniuupload]][[::admincommonupload]]
 </div>
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;"></iframe>
-<script type="text/javascript" src="[[::siteURL]]/admin.php/articles/getautocomplete/"></script>
+<script type="text/javascript" src="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/getautocomplete/"></script>
 <script type="text/javascript">
 var clearAutoID=false;
 var callCustomEditor=false;
 
 if ($("#aID").val()=='')
 {
-	var myDate = new Date();
 	$("#aID").val('post-[[::aTime, dateFormat, YmdHi]]');
 	clearAutoID=true;
 }
@@ -77,6 +86,68 @@ $("#aID").click(function() {
 		clearAutoID=false;
 	}
 });
+
+function padAZero (i) {
+	i=i<10 ? '0'+i.toString() : i;
+	return i;
+}
+if ($("#aID").val()=='')
+{
+	var ddate = new Date();
+	var cYYYY = ddate.getFullYear ();
+	var cMM = ddate.getMonth () + 1;
+	var cDD = ddate.getDate ();
+	var cHH = ddate.getHours ();
+	var cMMM = ddate.getMinutes ();
+	var cSS = ddate.getSeconds ();
+} else {
+	var cYYYY = [[::aTime, dateFormat, Y]];
+	var cMM = [[::aTime, dateFormat, m]];
+	var cDD = [[::aTime, dateFormat, d]];
+	var cHH = [[::aTime, dateFormat, H]];
+	var cMMM = [[::aTime, dateFormat, i]];
+	var cSS = [[::aTime, dateFormat, s]];
+}
+for (var i=cYYYY-20; i<cYYYY+21; i++)
+{
+	$('#timesY').append ('<option value="'+i+'">'+i+'</option>');
+}
+$('#timesY').val(cYYYY);
+for (var i=1; i<13; i++)
+{
+	i=padAZero (i);
+	$('#timesM').append ('<option value="'+i+'">'+i+'</option>');
+}
+cMM=padAZero (cMM);
+$('#timesM').val(cMM);
+for (var i=1; i<31; i++)
+{
+	i=padAZero (i);
+	$('#timesD').append ('<option value="'+i+'">'+i+'</option>');
+}
+cDD=padAZero (cDD);
+$('#timesD').val(cDD);
+for (var i=0; i<24; i++)
+{
+	i=padAZero (i);
+	$('#timesH').append ('<option value="'+i+'">'+i+'</option>');
+}
+cHH=padAZero (cHH);
+$('#timesH').val(cHH);
+for (var i=0; i<60; i++)
+{
+	i=padAZero (i);
+	$('#timesMM').append ('<option value="'+i+'">'+i+'</option>');
+}
+cMMM=padAZero (cMMM);
+$('#timesMM').val(cMMM);
+for (var i=0; i<60; i++)
+{
+	i=padAZero (i);
+	$('#timesS').append ('<option value="'+i+'">'+i+'</option>');
+}
+cSS=padAZero (cSS);
+$('#timesS').val(cSS);
 
 function setLeaveWarning () {
 	window.onbeforeunload=function (){
@@ -120,8 +191,8 @@ $("#adminPreview").click (function() {
 		}
 		$("#adminPrevAdd").html("[[=admin:btn:EndPreview]]");
 		$("#UI-loading").fadeIn(40);
-		var loadURL="[[::siteURL]]/admin.php/articles/getpreviewhtml/";
-		$.post(loadURL+"?ajax=1&CSRFCode=[[::articleCSRFCode]]", $('#smtForm').serialize(), function(data) {
+		var loadURL="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/getpreviewhtml/";
+		$.post(loadURL+"[[::linkConj]]ajax=1&CSRFCode=[[::articleCSRFCode]]", $('#smtForm').serialize(), function(data) {
 			$("#UI-loading").fadeOut(60);
 			if (data.error==1) {
 				alert (data.returnMsg);
@@ -235,12 +306,12 @@ function saveArticle(formID, smtURL) {
 		});
 		$('#eTags').val(allTags.join(','));
 
-		var pURL=($("#originID").val()=='')  ? "store/" : "update/"
-		/*
-		$('#'+formID).attr("action", smtURL+pURL);
-		$('#'+formID).submit();
-		*/
-		$.post(smtURL+pURL+"?ajax=1&CSRFCode=[[::articleCSRFCode]]", $('#'+formID).serialize(), function(data) {
+		var pURL=($("#originID").val()=='')  ? "store/" : "update/";
+		smtURL=smtURL+pURL+"[[::linkConj]]ajax=1&CSRFCode=[[::articleCSRFCode]]";
+		if ("[[::writermode]]" == "singlepage") {
+			smtURL+='&ispage=1';
+		}
+		$.post(smtURL, $('#'+formID).serialize(), function(data) {
 			$("#UI-loading").fadeOut(200);
 			if (data.error==1) {
 				$("#adminPromptError").text (data.returnMsg);
@@ -251,7 +322,7 @@ function saveArticle(formID, smtURL) {
 				clearLeaveWarning ();
 				if ($("#originID").val()=='')
 				{
-					window.location="[[::siteURL]]/[[::linkPrefixArticle]]/"+$("#aID").val()+"/";
+					window.location="[[::writermode]]" == "singlepage" ? "[[::siteURL]]/[[::linkPrefixArticle]]/"+$("#aID").val()+"/" : "[[::siteURL]]/[[::linkPrefixPage]]/"+$("#aID").val()+"/";
 				}
 				else
 				{
@@ -270,7 +341,7 @@ function deleteArticle (smtURL)
 	if (confirm("[[=admin:msg:Delete]]"))
 	{
 		clearLeaveWarning ();
-		window.location=smtURL+"?aID="+$("#originID").val()+"&CSRFCode=[[::articleCSRFCode]]";
+		window.location=smtURL+"[[::linkConj]]aID="+$("#originID").val()+"&CSRFCode=[[::articleCSRFCode]]";
 	}
 }
 
@@ -311,6 +382,11 @@ $('#eTags').keyup (function(event) {
 if ("[[::aID]]")
 {
 	$("#aID").attr ('readonly', 'readonly');
+	if ("[[::writermode]]" == "singlepage") {
+		$("#gotoAID").html ('<a href="[[::siteURL]]/[[::linkPrefixPage]]/[[::aID]]/" title="[[=admin:msg:Open]]" target="_blank"><span class="icon-export"></span></a>');
+	} else {
+		$("#gotoAID").html ('<a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" title="[[=admin:msg:Open]]" target="_blank"><span class="icon-export"></span></a>');
+	}
 }
 
 $("#adminGeoLoc").click(function() {
@@ -348,6 +424,67 @@ if ($(window).width()>800 && !callCustomEditor)
 	});
 }
 
+if ($(window).width()>800) {
+	$('#aTime').click (function (){
+		$('#floatATime').toggle(500);
+	});
+	$('#aTimeUp').click (function (){
+		var uYYYY=$('#timesY').val();
+		var uMM=$('#timesM').val();
+		var uDD=$('#timesD').val();
+		var uHH=$('#timesH').val();
+		var uMMM=$('#timesMM').val();
+		var uSS=$('#timesS').val();
+		$('#aTime').val(uYYYY+'-'+uMM+'-'+uDD+' '+uHH+':'+uMMM+':'+uSS);
+		$('#floatATime').hide(500);
+	});
+}
+
+$('#aCateURLName').change (function() {
+	if ($('#aCateURLName').val() == '<new>') {
+		$('#adminSCInputNew').show(300);
+	} else {
+		$('#adminSCInputNew').hide();
+	}
+});
+
+function addCategory(smtURL) {
+	if ($("#adminSCInputNewItemName").val()=='')
+	{
+		alert ("[[=admin:msg:ErrorCorrection]]");
+		$("#adminSCInputNewItemName").focus();
+		return false;
+	}
+	if ($("#adminSCInputNewItemID").val()=='')
+	{
+		alert ("[[=admin:msg:ErrorCorrection]]");
+		$("#adminSCInputNewItemID").focus();
+		return false;
+	}
+
+	var newList=$("#adminSCInputNewItemID").val()+'='+$("#adminSCInputNewItemName").val();
+	var nList=newList.split('=');
+	var smtURL=smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::cateCSRFCode]]";	
+	var sVal=encodeURI("smt[aCateURLName]="+nList[0]+"&smt[aCateDispName]="+nList[1]);
+	$.post(smtURL, sVal, function(data) {
+		if (data.error==1) {
+			alert (data.returnMsg);
+		}
+		else {
+			$("#adminSCInputNewItemID").val('');
+			$("#adminSCInputNewItemName").val('');
+			$("#adminSCInputNew").hide();
+			$('#aCateURLName').prepend('<option value="'+nList[0]+'">'+nList[1]+'</option>');
+			$('#aCateURLName').val(nList[0]);
+		}
+	}, "json");
+}
+
+if ("[[::writermode]]" == "singlepage") {
+	$('.articleOnly').hide();
+} else {
+	$('.spOnly').hide();
+}
 </script>
 
 </div>

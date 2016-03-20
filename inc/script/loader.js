@@ -1,5 +1,5 @@
-$( document ).ajaxError(function() {
-	alert (lng['AjaxFail']);
+$( document ).ajaxError(function(event, jqxhr, settings, thrownError) {
+	alert (lng['AjaxFail']+'\r'+jqxhr.responseText);
 });
 
 $('.pageLink').click(function () {
@@ -9,7 +9,7 @@ $('.pageLink').click(function () {
 		history.pushState(null, document.title, targetURL);
 	}
 
-	targetURL=targetURL+'?ajax=1';
+	targetURL=conj (targetURL, 'ajax=1');
 
 	$.get(targetURL, function (data) {
 		if (data.error==1) {

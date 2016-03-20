@@ -97,6 +97,9 @@ padding: 10px 0 10px 0;
 text-align: center;
 }
 
+#ajax-article-list {
+min-height: 280px;
+}
 article {
 width: 92%;
 text-align: left;
@@ -389,6 +392,12 @@ font-size: 16px;
 height: 40px;
 margin: -40px auto 20px auto;
 }
+#adminSAPage #pageBar {
+width: 100%;
+font-size: 16px;
+height: 50px;
+margin: -30px auto 10px auto;
+}
 #goNextPage a,  #goPrevPage a {
 display: block;
 float: left;
@@ -650,8 +659,16 @@ color: #999;
 text-shadow: 1px 1px 1px #EEE;
 margin-right: 18px;
 }
-#adminSAPage {
-margin-left: -35px;
+.adminSAChosen {
+background: #EEE;
+}
+#adminSAB {
+text-align: right;
+padding: 5px 8px 0 0;
+display: none;
+font-size: 14px;
+margin-bottom: -10px;
+font-weight: bold;
 }
 .adminSCLModify {
 display: none;
@@ -661,7 +678,7 @@ float: right;
 display: block;
 margin-right: 20%;
 margin-top: 25px;
-font-size:11px;
+font-size:13px;
 }
 .adminUploader a {
 color: #717171;
@@ -836,6 +853,16 @@ padding: 6px 6px 6px 16px;
 overflow: auto;
 }
 
+#floatATime {
+position: absolute;
+display: none;
+width: 50%;
+height: 30px;
+padding: 5px;
+background: #fff;
+border: 1px solid #ccc;
+}
+
 /* Forms */
 .inputLine {
 width: 250px;
@@ -867,6 +894,13 @@ text-align: left;
 .inputMiddle {
 width: 50%;
 font-size: 16px;
+text-align: left;
+margin-bottom: 12px;
+}
+.inputSmall {
+width: 10%;
+min-width: 60px;
+font-size: 12px;
 text-align: left;
 margin-bottom: 12px;
 }
@@ -921,6 +955,16 @@ border: 2px solid #CCC;
 border-radius: 6px;
 text-align: center;
 }
+
+.selectLine2 {
+padding: 4px 8px 4px 8px;
+color: #505050;
+background: #FFF;
+border: 2px solid #CCC;
+border-radius: 6px;
+text-align: center;
+}
+
 
 .textareaLine {
 height: 400px;
@@ -1002,6 +1046,9 @@ font-size: 23px;
 }
 #pageBar {
 margin: 0 auto 20px auto;
+}
+#adminSAPage #pageBar {
+margin: -30px auto 10px auto;
 }
 .shareLayerItem {
 font-size: 16px;

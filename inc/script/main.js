@@ -96,6 +96,15 @@ function lightboxImage (imgSrc) {
 	});
 }
 
+function conj (old, appendix) {
+	if (old.indexOf('?') == -1)
+	{
+		return old+'?'+appendix;
+	}
+	else {
+		return old+'&'+appendix;
+	}
+}
 
 function checkLogin (oj) {
 	if(window !=parent) {
@@ -103,12 +112,14 @@ function checkLogin (oj) {
 		return false;
 	}
 	var rootURL= $('.'+oj).data('adminurl');
-	var targetURL = rootURL+"?ajax=1";
+	var targetURL = conj (rootURL ,"ajax=1");
 
 	if (window.localStorage)
 	{
 		targetURL=targetURL+"&mobileToken="+localStorage.mobileToken;
 	}
+
+	rootURL=rootURL+"?go=";
 
 	$.ajax({
 		type: "GET",
@@ -120,14 +131,14 @@ function checkLogin (oj) {
 			}
 			else {
 				var cact=location.pathname;
-				if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php/")!=-1)
+				if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php")!=-1 || cact.indexOf("page/")!=-1 || cact.indexOf("page.php")!=-1)
 				{
 					var aID=$('.'+oj).data('adminid');
-					window.location=rootURL+"/articles/modify/?aID="+aID+"&CSRFCode="+data.returnMsg;
+					window.location=rootURL+"/articles/modify/&aID="+aID+"&CSRFCode="+data.returnMsg;
 				}
 				else
 				{
-					window.location=rootURL+"/dashboard/?CSRFCode="+data.returnMsg;
+					window.location=conj (rootURL+"/dashboard/", "CSRFCode="+data.returnMsg);
 				}
 			}
 		},
@@ -143,7 +154,8 @@ function doLogin (oj, rootURL) {
 		promptLoginError (oj);
 		return false;
 	}
-	targetURL = rootURL+"/login/verify/?ajax=1";
+	rootURL=rootURL+"?go=";
+	targetURL = rootURL+"/login/verify/&ajax=1";
 
 	$.get(targetURL, { s_token: s_token }, function (data) {
 		if (data.error==1) { //Wrong token
@@ -156,14 +168,14 @@ function doLogin (oj, rootURL) {
 			if (!In_Block_Mode)
 			{
 				var cact=location.pathname;
-				if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php/")!=-1)
+				if (cact.indexOf("post/")!=-1 || cact.indexOf("read.php")!=-1)
 				{
 					var aID=$('.adminSign').data('adminid');
-					window.location=rootURL+"/articles/modify/?aID="+aID+"&CSRFCode="+plusCode[1];
+					window.location=rootURL+"/articles/modify/&aID="+aID+"&CSRFCode="+plusCode[1];
 				}
 				else
 				{
-					window.location=rootURL+"/dashboard/?CSRFCode="+plusCode[1];
+					window.location=rootURL+"/dashboard/&CSRFCode="+plusCode[1];
 				}
 			}
 			else {
@@ -268,7 +280,8 @@ function blockComment (oj, mode, comID, aID) {
 	}
 
 	var rootURL= $('#'+oj).data('adminurl');
-	var targetURL = rootURL+"/comments/"+mode+"/?ajax=1";
+	rootURL=rootURL+"?go=";
+	var targetURL = rootURL+"/comments/"+mode+"/&ajax=1";
 
 	targetURL=targetURL+"&comID="+comID+"&aID="+aID;
 
@@ -304,7 +317,7 @@ function commentBatches (rootURL, aID) {
 	{
 		$("#comLoadMoreA").click(function (){
 			$("#UI-loading").fadeIn(500);
-			$.get (rootURL+(currentbatch+1)+'/?ajax=1', {aID: aID}, function (data) 	{
+			$.get (conj (rootURL+(currentbatch+1)+'/', 'ajax=1'), {aID: aID}, function (data) 	{
 				$("#UI-loading").fadeOut(200);
 				if (data.error==0)
 				{

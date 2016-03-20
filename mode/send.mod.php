@@ -164,8 +164,8 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 			if ($smt['socialkey'] == 'sina'  && isset ($_SESSION['sina_token'])) {
 				define ("WB_AKEY" , bw :: $conf['sinaAKey']);
 				define ("WB_SKEY" , bw :: $conf['sinaSKey']);
-				define ("WB_CALLBACK_URL" , bw :: $conf['siteURL'] . '/send.php/sina/callback/');
-				include_once (P . 'inc/sdk/sina-weibo/saetv2.ex.class.php');
+				define ("WB_CALLBACK_URL" , bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixSend'] . '/sina/callback/');
+				include_once (P . 'inc/script/sina-weibo/saetv2.ex.class.php');
 				$c = new SaeTClientV2 (WB_AKEY, WB_SKEY, $_SESSION['sina_token']['access_token']);
 				$uid_get = $c -> get_uid ();
 				$user_message = $c-> show_user_by_id ($uid_get['uid']);
@@ -229,8 +229,8 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 if ($canonical -> currentArgs['mainAction'] == 'sina') {
 	define ("WB_AKEY" , bw :: $conf['sinaAKey']);
 	define ("WB_SKEY" , bw :: $conf['sinaSKey']);
-	define ("WB_CALLBACK_URL" , bw :: $conf['siteURL'] . '/send.php/sina/callback/');
-	include_once (P . 'inc/sdk/sina-weibo/saetv2.ex.class.php');
+	define ("WB_CALLBACK_URL" , bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixSend'] . '/sina/callback/');
+	include_once (P . 'inc/script/sina-weibo/saetv2.ex.class.php');
 	if ($canonical -> currentArgs['subAction'] == 'start') {
 		$o = new SaeTOAuthV2 (WB_AKEY, WB_SKEY);
 		if (!isset ($_REQUEST['aID'])) {

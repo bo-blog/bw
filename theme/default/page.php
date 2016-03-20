@@ -16,7 +16,7 @@ if (!defined ('P')) {
 <link rel="icon" type="image/png" href="[[::siteURL]]/theme/default/logo.png" />
 <link rel="canonical" href="[[::canonicalURL]]" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
-<link href="[[::siteURL]]/theme/default/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="[[::siteURL]]/theme/default/style.css?ver=02282016" media="all" rel="stylesheet" type="text/css" />
 <link  href="[[::siteURL]]/rss.php" rel="alternate" type="application/rss+xml" title="RSS 2.0" />
 <title>[[::pageTitle]][[::siteName]]</title>
 <script src="http://lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
@@ -62,7 +62,7 @@ var lng={
 <!-- ajax loaded section -->
 <div id="ajax-article-list">
 [[::loop, articlesummary]][[::load, summary]][[::/loop]]
-[[::load, article]][[::listContent]]
+[[::load, article]][[::load, singlepage]][[::listContent]]
 [[::pagination]]
 <script src="[[::siteURL]]/inc/script/loader.js"></script>
 </div>
@@ -89,6 +89,7 @@ var lng={
 <script type="text/javascript">
 $('#nav-[[::activeNav]]').addClass('activeNav');
 $('.adminSign').click(function (){checkLogin('adminSign');});
+if ($("#ajax-article-list article").length==0) {$("#ajax-article-list").html("[[=page:NoArticleAtAll]]");}
 </script>
 [[::ext_beforeEnd]]
 </body>

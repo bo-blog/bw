@@ -29,7 +29,16 @@ if ($canonical -> currentArgs['mainAction'] == '1') {
 
 if ($canonical -> currentArgs['mainAction'] <> 'login') {
 	if (!array_key_exists ('login-token', $_SESSION)) {
-		stopError ($conf['l']['admin:msg:NeedLogin']);
+		if (defined ('ajax')) {
+			stopError ($conf['l']['admin:msg:NeedLogin']);
+		}
+		$view -> setMaster ('adminloginpage');
+		$view -> setWorkFlow (array ('adminloginpage'));
+		$authX = $view -> getOutput ();
+		$view -> setMaster ('plainpage');
+		$view -> setPassData (array ('plainContent' => $authX));
+		$view -> setWorkFlow (array ('plainpage'));
+		$view -> finalize ();
 	} else {
 		$admin -> verifySessionToken ($_SESSION['login-token']);
 	} 
@@ -41,15 +50,19 @@ if ($canonical -> currentArgs['mainAction'] <> 'login') {
 } 
 
 if ($canonical -> currentArgs['mainAction'] == '1') {
-	if (isset ($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-		if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-			ajaxSuccess ($admin -> getCSRFCode ('navibar'));
+	if (defined ('ajax')) {
+		if (isset ($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+			if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+				ajaxSuccess ($admin -> getCSRFCode ('navibar'));
+			} else {
+				stopError (bw :: $conf['l']['admin:msg:CSRF']);
+			} 
 		} else {
 			stopError (bw :: $conf['l']['admin:msg:CSRF']);
 		} 
 	} else {
-		stopError (bw :: $conf['l']['admin:msg:CSRF']);
-	} 
+		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/dashboard/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+	}
 } 
 
 if ($canonical -> currentArgs['mainAction'] == 'login') {
@@ -85,17 +98,25 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ('No data is submitted.');
 		} 
-
 		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
+		$outputExternal = '';
+		for ($i = 0; $i < count ($smt['externalLinks']['lnkname']); $i++) {
+			if ($smt['externalLinks']['lnkname'][$i] != '' && $smt['externalLinks']['lnkurl'][$i] != '') {
+				$outputExternal.= urlencode ($smt['externalLinks']['lnkurl'][$i]) . '="' . htmlspecialchars ($smt['externalLinks']['lnkname'][$i], ENT_QUOTES, 'UTF-8') . "\"\r\n";
+			}
+		}
+		$smt['externalLinks'] = '';
 		$smt = array_map ('htmlspecialchars', $smt);
+		$smt['externalLinks'] = trim ($outputExternal);
 		if (empty ($smt['siteKey'])) {
 			$smt['siteKey'] = $conf['siteKey'];
 		} else {
 			$admin -> storeSessionToken ($smt['siteKey']);
 			$smt['siteKey'] = sha1 ($smt['siteKey']);
 		} 
-		$valString = "<?php\r\n\$conf=" . var_export ($smt, true) . ";?>";
+		$smt['siteURL'] = substr ($smt['siteURL'], -1) == '/' ? substr ($smt['siteURL'], 0, strlen ($smt['siteURL']) - 1) : $smt['siteURL'];
+		$valString = "<?php\r\n\$conf=" . var_export ($smt, true) . ";";
 		$rS = file_put_contents (P . "conf/info.php", $valString);
 		if ($rS) {
 			clearCache (false, true);
@@ -138,9 +159,18 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 				$mobileKeys[] = array ('devID' => $devID, 'seq' => $seq);
 			}
 		}
+		$allLinks2 = array ();
+		if (isset ($conf['externalLinks'])) {
+			$allLinks = parse_ini_string ($conf['externalLinks']);
+		} 
+		foreach ($allLinks as $linkURL => $linkName) {
+			$allLinks2[] = array ('linkURL' => urldecode ($linkURL), 'linkName' => $linkName, 'linkID' => rand (10000, 99999));
+		} 
+
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
 		$view -> setPassData (array ('themeList' => $view -> scanForThemes (), 'mobileKeys' => $mobileKeys, 'CSRFCode' => $admin -> getCSRFCode ('saveconfig'), 'upCSRFCode' => $admin -> getCSRFCode ('upload')));
+		$view -> setPassData (array ('allLinks' => $allLinks2));
 		$view -> setWorkFlow (array ('admincenter', 'admin'));
 		$view -> finalize ();
 	} 
@@ -153,6 +183,9 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
+		if (isset ($_REQUEST['ispage'])) {
+			$_REQUEST['smt']['aCateURLName'] = '_page';
+		}
 		$article -> addArticle ($_REQUEST['smt']);
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 	} elseif ($canonical -> currentArgs['subAction'] == 'update') {
@@ -160,6 +193,9 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
+		if (isset ($_REQUEST['ispage'])) {
+			$_REQUEST['smt']['aCateURLName'] = '_page';
+		}
 		$article -> updateArticle ($_REQUEST['smt']);
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 	} elseif ($canonical -> currentArgs['subAction'] == 'modify') {
@@ -167,17 +203,17 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		if (!isset ($_REQUEST['aID'])) {
 			stopError ($conf['l']['admin:msg:NotExist']);
 		} 
-		$article -> fetchArticle ($_REQUEST['aID']);
+		$article -> fetchArticle ($_REQUEST['aID'], true);
 		$view -> setMaster ('admin');
 		$view -> setPassData ($article -> articleList[$_REQUEST['aID']]);
-		$view -> setPassData (array ('admincatelist' => bw :: $cateList, 'upCSRFCode' => $admin -> getCSRFCode ('upload'), 'articleCSRFCode' => $admin -> getCSRFCode ('articlesave')));
+		$view -> setPassData (array ('writermode' => $article -> articleList[$_REQUEST['aID']]['aCateURLName'] != '_page' ? 'article' : 'singlepage', 'admincatelist' => bw :: $cateList, 'upCSRFCode' => $admin -> getCSRFCode ('upload'), 'articleCSRFCode' => $admin -> getCSRFCode ('articlesave'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
 
 		loadServices ();
 		if ($conf['qiniuBucket'] && $conf['qiniuUpload'] == '1') {
-			require_once (P . "inc/qiniu.php");
+			require_once (P . "inc/script/qiniu/QiniuClient.php");
 			$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
 			$fStoreName = 'storage/' . substr (md5 (rand (1, 99999) . time()), 10, 8);
-			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/admin.php/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)')));
+			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/{$conf['linkPrefixAdmin']}/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)')));
 
 			$qiniuFileToken = $qiniuClient -> uploadToken($flags);
 			$view -> setPassData (array ('qiniuFileToken' => $qiniuFileToken, 'qiniuKey' => $fStoreName));
@@ -187,14 +223,14 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		} 
 		$view -> setWorkFlow (array ($uploader, 'adminwriter', 'admin'));
 		$view -> finalize ();
-	} elseif ($canonical -> currentArgs['subAction'] == 'new') {
+	} elseif ($canonical -> currentArgs['subAction'] == 'new' || $canonical -> currentArgs['subAction'] == 'newpage') {
 		$admin -> checkCSRFCode ('newarticle');
 		loadServices ();
 		if ($conf['qiniuBucket'] && $conf['qiniuUpload'] == '1') {
-			require_once (P . "inc/qiniu.php");
+			require_once (P . "inc/script/qiniu/QiniuClient.php");
 			$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
 			$fStoreName = 'storage/' . substr (md5 (rand (1, 99999) . time()), 10, 8);
-			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/admin.php/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)')));
+			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/{$conf['linkPrefixAdmin']}/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)', 'ftype' => '$(mimeType)')));
 			$qiniuFileToken = $qiniuClient -> uploadToken($flags);
 			$view -> setPassData (array ('qiniuFileToken' => $qiniuFileToken, 'qiniuKey' => $fStoreName));
 			$uploader = 'adminqiniuupload';
@@ -203,17 +239,17 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		} 
 
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('admincatelist' => bw :: $cateList, 'upCSRFCode' => $admin -> getCSRFCode ('upload'), 'articleCSRFCode' => $admin -> getCSRFCode ('articlesave')));
+		$view -> setPassData (array ('writermode' => $canonical -> currentArgs['subAction'] == 'new' ? 'article' : 'singlepage', 'admincatelist' => bw :: $cateList, 'upCSRFCode' => $admin -> getCSRFCode ('upload'), 'articleCSRFCode' => $admin -> getCSRFCode ('articlesave'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
 		$view -> setWorkFlow (array ($uploader, 'adminwriter', 'admin'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'getqiniuuploadpart') {
 		$admin -> checkCSRFCode ('upload');
 		loadServices ();
 		if ($conf['qiniuBucket'] && $conf['qiniuUpload'] == '1') {
-			require_once (P . "inc/qiniu.php");
+			require_once (P . "inc/script/qiniu/QiniuClient.php");
 			$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
 			$fStoreName = 'storage/' . substr (md5 (rand (1, 99999) . time()), 10, 8);
-			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/admin.php/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)')));
+			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/{$conf['linkPrefixAdmin']}/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)', 'ftype' => '$(mimeType)')));
 			$qiniuFileToken = $qiniuClient -> uploadToken($flags);
 			$view -> setPassData (array ('qiniuFileToken' => $qiniuFileToken, 'qiniuKey' => $fStoreName));
 			$uploader = 'adminqiniuupload';
@@ -238,14 +274,24 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 	} elseif ($canonical -> currentArgs['subAction'] == 'delete') {
 		$admin -> checkCSRFCode ('articlesave');
 		$article -> deleteArticle ($_REQUEST['aID']);
-		header ("Location: {$conf['siteURL']}/admin.php/articles/?CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/articles/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+	} elseif ($canonical -> currentArgs['subAction'] == 'batchdel') {
+		$admin -> checkCSRFCode ('navibar');
+		$aIDList = @explode ('<', $_REQUEST['aID']);
+		$article -> deleteArticleBatch ($aIDList);
+		ajaxSuccess ('');
+	}  elseif ($canonical -> currentArgs['subAction'] == 'batchdraft') {
+		$admin -> checkCSRFCode ('navibar');
+		$aIDList = @explode ('<', $_REQUEST['aID']);
+		$article -> changeAsDraft ($aIDList);
+		ajaxSuccess ('');
 	} elseif ($canonical -> currentArgs['subAction'] == 'uploader') {
 		$admin -> checkCSRFCode ('upload');
 		if (count ($_FILES) < 1) {
 			exit ();
 		} 
 
-		$files = array();
+		$picfiles = $files = array();
 
 		foreach ($_FILES["uploadFile"]["error"] as $key => $error) {
 			if ($error == UPLOAD_ERR_OK) {
@@ -256,27 +302,34 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 
 				if (in_array (strtolower ($fExtName), array('gif', 'jpg', 'png', 'bmp', 'jpeg', 'jpe'))) {
 					move_uploaded_file ($tmp_name, P . "storage/{$fStoreName}");
+					$picfiles[]['fileURL'] = "{$conf['siteURL']}/storage/{$fStoreName}";
+				} elseif (!in_array (strtolower ($fExtName), array('php', 'php3', 'asp', 'aspx', 'jsp', 'cgi', 'py', 'cf'))) {
+					move_uploaded_file ($tmp_name, P . "storage/{$fStoreName}");
 					$files[]['fileURL'] = "{$conf['siteURL']}/storage/{$fStoreName}";
-				} 
+				}
 			} 
 		} 
 
 		$view -> setMaster ('adminuploadinsert');
-		$view -> setPassData (array ('adminuploaded' => $files));
+		$view -> setPassData (array ('adminuploadedpic' => $picfiles, 'adminuploadedfile' => $files));
 		$view -> setWorkFlow (array ('adminuploadinsert'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'qiniuuploader') {
-		$files = array();
+		$picfiles = $files = array();
 		loadServices ();
-		require_once (P . "inc/qiniu.php");
+		require_once (P . "inc/script/qiniu/QiniuClient.php");
 		$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
 		$uploadReturn = json_decode ($qiniuClient -> urlsafe_base64_decode($_REQUEST['upload_ret']), true);
 		if (isset ($uploadReturn['fname'])) {
 			$qiniuThumbCall = '?imageView2/2/w/800';
-			$files[]['fileURL'] = $conf['qiniuDomain'] ? "{$conf['qiniuDomain']}/{$uploadReturn['fname']}{$qiniuThumbCall}" : "http://{$conf['qiniuBucket']}.qiniudn.com/{$uploadReturn['fname']}{$qiniuThumbCall}";
+			if (strpos ($uploadReturn['ftype'], 'image') !== false) {
+				$picfiles[]['fileURL'] = $conf['qiniuDomain'] ? "{$conf['qiniuDomain']}/{$uploadReturn['fname']}{$qiniuThumbCall}" : "http://{$conf['qiniuBucket']}.qiniudn.com/{$uploadReturn['fname']}{$qiniuThumbCall}";
+			} else {
+				$files[]['fileURL'] = $conf['qiniuDomain'] ? "{$conf['qiniuDomain']}/{$uploadReturn['fname']}" : "http://{$conf['qiniuBucket']}.qiniudn.com/{$uploadReturn['fname']}";
+			}
 		} 
 		$view -> setMaster ('adminuploadinsert');
-		$view -> setPassData (array ('adminuploaded' => $files));
+		$view -> setPassData (array ('adminuploadedpic' => $picfiles, 'adminuploadedfile' => $files));
 		$view -> setWorkFlow (array ('adminuploadinsert'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'savecategories') {
@@ -299,34 +352,59 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$cates -> orderCategories (array_keys ($_REQUEST['smt']));
 		$cates -> endBufferCache ();
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-	} elseif ($canonical -> currentArgs['subAction'] == 'validatecategory') {
+	} elseif ($canonical -> currentArgs['subAction'] == 'validatecategory' || $canonical -> currentArgs['subAction'] == 'newcatenow') {
 		$admin -> checkCSRFCode ('category');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
-		if (empty ($_REQUEST['smt']['aCateURLName']) || empty ($_REQUEST['smt']['aCateDispName'])) {
+		if (empty ($_REQUEST['smt']['aCateDispName'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
-		$smt['aCateURLName'] = urlencode ($_REQUEST['smt']['aCateURLName']);
+		if (empty ($_REQUEST['smt']['aCateURLName'])) { 
+			$smt['aCateURLName'] = urlencode ($_REQUEST['smt']['aCateDispName']);
+		} 
+		else { 
+			$smt['aCateURLName'] = urlencode ($_REQUEST['smt']['aCateURLName']);
+		} 
+		if ($smt['aCateURLName'] == '_trash' || $smt['aCateURLName'] == '_page') {
+			stopError ($conf['l']['admin:msg:NoData']);
+		}
 		$smt['aCateDispName'] = htmlspecialchars ($_REQUEST['smt']['aCateDispName']);
 		if (array_key_exists ($smt['aCateURLName'], bw :: $cateData)) {
 			stopError ($conf['l']['admin:msg:Existed']);
 		} 
-		$view -> setMaster ('admincategorylist');
-		$view -> setPassData ($smt);
-		$view -> setWorkFlow (array ('admincategorylist'));
-		$view -> finalize ();
+		if ($canonical -> currentArgs['subAction'] == 'validatecategory') {
+			$view -> setMaster ('admincategorylist');
+			$view -> setPassData ($smt);
+			$view -> setWorkFlow (array ('admincategorylist'));
+			$view -> finalize ();
+		} else {
+			$cates = new bwCategory;
+			$cates -> addCategories (array ($smt['aCateURLName'] => $smt['aCateDispName']));
+			$cates -> endBufferCache ();
+			ajaxSuccess ('');
+		}
 	} else {
 		$admin -> checkCSRFCode ('navibar'); 
+		$article -> setCutTime (0);
 		// Pagination
 		$article -> alterPerPage (20);
 		$article -> getArticleList ();
 		$canonical -> calTotalPages ($article -> totalArticles);
-		$canonical -> paginableURL = bw :: $conf['siteURL'] . '/admin.php/articles/list/%d?CSRFCode=' . $admin -> getCSRFCode ('navibar');
+		$canonical -> paginableURL = bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixAdmin'] . '/articles/list/%d' . bw :: $conf['linkConj'] . 'CSRFCode=' . $admin -> getCSRFCode ('navibar');
 		$view -> doPagination ();
+		$adminarticlelist = $article -> articleList;
+
+		$article -> alterPerPage (10000000);
+		$article -> getTrashedList ();
+		$admindraftlist = $article -> articleList;
+
+		$article -> getSinglePageList ();
+		$adminsinglepagelist = $article -> articleList;
+
 
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('adminarticlelist' => $article -> articleList, 'admincatelist' => bw :: $cateList, 'newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'oldCSRFCode' => $admin -> getCSRFCode ('navibar'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
+		$view -> setPassData (array ('adminarticlelist' => $adminarticlelist, 'admindraftlist' => $admindraftlist, 'adminsinglepagelist' => $adminsinglepagelist, 'admincatelist' => bw :: $cateList, 'newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'oldCSRFCode' => $admin -> getCSRFCode ('navibar'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
 		$view -> setWorkFlow (array ('adminarticlelist', 'admincategorylist', 'adminarticles', 'admin'));
 		$view -> finalize ();
 	} 
@@ -342,7 +420,7 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$smt = array_map ('htmlspecialchars', $smt);
 		if ($smt['qiniuBucket']) {
-			require_once (P . "inc/qiniu.php");
+			require_once (P . "inc/script/qiniu/QiniuClient.php");
 			$qiniuClient = new qiniuClient ($smt['qiniuAKey'], $smt['qiniuSKey']);
 			$result = $qiniuClient -> listFiles($smt['qiniuBucket'], $limit = 1);
 			if (!$result) {
@@ -375,11 +453,11 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 			} 
 			else { 
 				loadServices ();
-				require_once (P . "inc/qiniu.php");
+				require_once (P . "inc/script/qiniu/QiniuClient.php");
 				$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
 				$result = $qiniuClient -> uploadFile (P . $ff, $conf['qiniuBucket'], $ff);
 				@unlink (P . $ff);
-				header ("Location: {$conf['siteURL']}/admin.php/services/?CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+				header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/services/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
 			} 
 		} 
 	} 
@@ -408,10 +486,19 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 			if (md5_file (P . 'update/dlupkg_tmp.zip') <> strtolower ($_REQUEST['hash'])) {
 				stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
 			}
-			include_once (P . "inc/bwzip.php");
+			include_once (P . "inc/zip.inc.php");
 			bwZip :: zipRead (P . 'update/dlupkg_tmp.zip', 1, 1);
 			@unlink (P . 'update/dlupkg_tmp.zip');
-			header ("Location: {$conf['siteURL']}/admin.php/dashboard/?CSRFCode=" . $admin -> getCSRFCode ('navibar') . "#UpdateSuccess");
+			$sqlUpdater = P . 'update/update.' . strtolower (DBTYPE) . '.sql';
+			if (file_exists ($sqlUpdater)) { 
+				$allSqls = @file ($sqlUpdater);
+				bw :: $db -> silentError (true);
+				foreach ($allSqls as $sql) {
+					bw :: $db -> dbExec ($sql);
+				}
+				@unlink ($sqlUpdater);
+			}
+			header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/dashboard/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar') . "#UpdateSuccess");
 			exit ();
 		} 
 	} else {
@@ -493,7 +580,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			if (defined ('ajax')) {
 				ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 			} else {
-				header ("Location: {$conf['siteURL']}/admin.php/extensions/?CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+				header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/extensions/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
 				exit ();
 			}
 		} 
@@ -548,7 +635,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		if (!file_exists (P . "theme/{$themeID}/info.php")) {
 			stopError ($conf['l']['admin:msg:NotExist']);
 		}
-		include (P. 'inc/bwzip.php');
+		include (P. 'inc/zip.inc.php');
 		bwZip :: zipFolder (P . "theme/{$themeID}/" , P . 'storage/theme_'.$themeID.'.pkg');
 		header ("Location: {$conf['siteURL']}/storage/theme_{$themeID}.pkg");
 	}  elseif ($canonical -> currentArgs['subAction'] == 'exportextension') { 
@@ -562,7 +649,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		} else {
 			file_put_contents (P . "extension/autoinstall.txt", $extID);
 		}
-		include (P. 'inc/bwzip.php');
+		include (P. 'inc/zip.inc.php');
 		bwZip :: zipFolder (P . "extension/{$extID}/" , P . 'storage/extension_'.$extID.'.pkg', array (P . "extension/autoinstall.txt"));
 		unlink (P . "extension/autoinstall.txt");
 		header ("Location: {$conf['siteURL']}/storage/extension_{$extID}.pkg");
@@ -583,19 +670,19 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		$fName = P . 'storage/theme_' . rand (100000, 999999) . '.pkg';
 
 		if (move_uploaded_file ($_FILES['userfile']['tmp_name'],  $fName)) {
-			include (P. 'inc/bwzip.php');
+			include (P. 'inc/zip.inc.php');
 			bwZip :: zipRead ($fName, true, false, P . $_REQUEST['pkgType'] . '/');
 			if ($_REQUEST['pkgType']=='extension') {
 				if (file_exists (P . "extension/autoinstall.txt")) {
 					$extID = file_get_contents (P . "extension/autoinstall.txt");
 					unlink (P . "extension/autoinstall.txt");
 					clearCache ();
-					header ("Location: {$conf['siteURL']}/admin.php/extensions/add/?extID={$extID}&CSRFCode=" . $admin -> getCSRFCode ('newext'));
+					header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/extensions/add/{$conf['linkConj']}extID={$extID}&CSRFCode=" . $admin -> getCSRFCode ('newext'));
 					exit ();
 				}
 			}
 		} 
-		header ("Location: {$conf['siteURL']}/admin.php/extensions/?CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/extensions/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
 	} elseif ($canonical -> currentArgs['subAction'] == 'selecttheme') { 
 		if (!isset ($_REQUEST['themeID'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
@@ -643,12 +730,32 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 
 if ($canonical -> currentArgs['mainAction'] == 'market') {
 	if ($canonical -> currentArgs['subAction'] == 'detail') { 
-		$admin -> checkCSRFCode ('install');
-		
+		if (!isset ($_SESSION['enable_load_market'])) {
+			stopError ($conf['l']['admin:msg:NotExist']);
+		}
+		$admin -> checkCSRFCode ('install' . $_SESSION['enable_load_market']);
+		if (!isset ($_REQUEST['dlu'])) {
+			stopError ($conf['l']['admin:msg:NotExist']);
+		}
+		$ttf = curlRetrieve ($_REQUEST['dlu']);
+		$view -> setMaster ('marketdetail');
+		$view -> setPassData (array ('externalContent' => $ttf));
+		$view -> setWorkFlow (array ('marketdetail'));
+		$authX = $view -> getOutput ();
+		$view -> setMaster ('plainpage');
+		$view -> setPassData (array ('plainContent' => $authX));
+		$view -> setWorkFlow (array ('plainpage'));
+		$view -> finalize ();
 	} else {
+		if (!isset ($_SESSION['enable_load_market'])) {
+			$_SESSION['enable_load_market'] = $rndCode = rand (1000, 9999);
+		}
+		else {
+			$rndCode = $_SESSION['enable_load_market'];
+		}
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('installCSRFCode' => $admin -> getCSRFCode ('install')));
+		$view -> setPassData (array ('installCSRFCode' => $admin -> getCSRFCode ('install' . $rndCode)));
 		$view -> setWorkFlow (array ('adminmarket', 'admin'));
 		$view -> finalize ();
 	} 
