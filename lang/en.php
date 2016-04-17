@@ -157,6 +157,8 @@ $conf['l'] = array(
 	'admin:opt:AllowComment' => 'Everyone can comment',
 	'admin:opt:OnlyLoginComment' => 'Require login with social media accounts',
 	'admin:opt:ThirdPartyComment' => 'Hosted by social comment services',
+	'admin:opt:NoCustomTheme' => 'Use the global theme',
+	'admin:opt:CustomTheme' => 'Use theme: ',
 
 	'admin:msg:SiteURL' => 'Example: http://name.com/path. Do not change unless you know what you\'re doing.',
 	'admin:msg:BlankPsw' => 'Leave blank to keep the current password',

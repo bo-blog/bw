@@ -5,8 +5,8 @@
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '1.0.6');
-define ('bwInternalVersion', '1060');
+define ('bwVersion', '1.0.7');
+define ('bwInternalVersion', '1070');
 define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
 
 if (!defined ('P')) {

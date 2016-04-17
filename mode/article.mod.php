@@ -15,7 +15,11 @@ $article -> fetchArticle ($canonical -> currentArgs['aID']);
 
 $view = new bwView;
 $view -> setPageTitle ($article -> articleList[$canonical -> currentArgs['aID']]['aTitle']);
-$view -> setActiveNav ($article -> articleList[$canonical -> currentArgs['aID']]['aCateURLName']);
+$aCateURLName = $article -> articleList[$canonical -> currentArgs['aID']]['aCateURLName'];
+$view -> setActiveNav ($aCateURLName);
+if (bw :: $cateList[$aCateURLName]['aCateTheme']) {
+	$view -> setTheme (bw :: $cateList[$aCateURLName]['aCateTheme']);
+}
 $view -> setPassData ($article -> articleList[$canonical -> currentArgs['aID']]);
 $view -> setPassData (array ('navigation' => bw :: $cateList, 'sociallink' => bw :: getSocialLinks (), 'externallink' => bw :: getExternalLinks (), 'tagClound' => bw :: getTagCloud ()));
 $view -> setMaster ('page');

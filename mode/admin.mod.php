@@ -337,18 +337,23 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
+		//stopError (print_r($_REQUEST['smt2'], true));
+		$smt2 = isset ($_REQUEST['smt2']) ? $_REQUEST['smt2'] : array ();
 		$cates = new bwCategory;
 		$cates -> bufferCacheClear ();
 		$newCates = array_diff_key ($_REQUEST['smt'], bw :: $cateData);
-		$cates -> addCategories ($newCates);
+
+		$cates -> addCategories ($newCates, $smt2);
 		$deletedCates = array_diff_key (bw :: $cateData, $_REQUEST['smt']);
 		$cates -> deleteCategories ($deletedCates);
 		$remainedCates = array_diff_key (bw :: $cateData, $deletedCates);
-		$remainedAsNewCates = array ();
+		$remainedAsNewCates = $remainedNewCatesTheme = array ();
 		foreach ($remainedCates as $k => $aRemainedCate) {
 			$remainedAsNewCates[] = $_REQUEST['smt'][$k];
+			$remainedNewCatesTheme[] = isset ($smt2[$k]) ? $smt2[$k] : '';
 		} 
 		$cates -> renameCategories (array_keys ($remainedCates), array_values ($remainedCates), $remainedAsNewCates);
+		$cates -> updateCategoryThemes (array_keys ($remainedCates), $remainedNewCatesTheme);
 		$cates -> orderCategories (array_keys ($_REQUEST['smt']));
 		$cates -> endBufferCache ();
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
@@ -370,6 +375,13 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			stopError ($conf['l']['admin:msg:NoData']);
 		}
 		$smt['aCateDispName'] = htmlspecialchars ($_REQUEST['smt']['aCateDispName']);
+		if (isset ($_REQUEST['smt']['aCateTheme'])) {
+			if (!empty ($_REQUEST['smt']['aCateTheme'])) {
+				$smt['aCateTheme'] = htmlspecialchars ($_REQUEST['smt']['aCateTheme']);
+			}
+		} else {
+			$smt['aCateTheme'] = null;
+		}
 		if (array_key_exists ($smt['aCateURLName'], bw :: $cateData)) {
 			stopError ($conf['l']['admin:msg:Existed']);
 		} 
@@ -404,7 +416,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 
 
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('adminarticlelist' => $adminarticlelist, 'admindraftlist' => $admindraftlist, 'adminsinglepagelist' => $adminsinglepagelist, 'admincatelist' => bw :: $cateList, 'newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'oldCSRFCode' => $admin -> getCSRFCode ('navibar'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
+		$view -> setPassData (array ('adminarticlelist' => $adminarticlelist, 'admindraftlist' => $admindraftlist, 'adminsinglepagelist' => $adminsinglepagelist, 'admincatelist' => bw :: $cateList, 'themeList' => $view -> scanForThemes (), 'newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'oldCSRFCode' => $admin -> getCSRFCode ('navibar'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
 		$view -> setWorkFlow (array ('adminarticlelist', 'admincategorylist', 'adminarticles', 'admin'));
 		$view -> finalize ();
 	} 

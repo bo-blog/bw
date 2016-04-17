@@ -16,6 +16,9 @@ if (isset ($canonical -> currentArgs['cateID'])) {
 	$article -> alterCate($canonical -> currentArgs['cateID']);
 	$view -> setPageTitle (bw :: $cateData[$canonical -> currentArgs['cateID']]);
 	$view -> setActiveNav ($canonical -> currentArgs['cateID']);
+	if (bw :: $cateList[$canonical -> currentArgs['cateID']]['aCateTheme']) {
+		$view -> setTheme (bw :: $cateList[$canonical -> currentArgs['cateID']]['aCateTheme']);
+	}
 } else {
 	$view -> setActiveNav ('index');
 } 

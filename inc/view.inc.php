@@ -25,9 +25,8 @@ class bwView {
 	{
 		global $conf;
 		$this -> viewWorkFlow = $this -> modContent = $this -> loopData = $this -> loopEach = $this -> themeInternal = $this -> parts = $this -> viewHooks = $this -> passData = array();
-		$this -> outputContent = $this -> masterMod = '';
+		$this -> outputContent = $this -> masterMod = $this -> themeDir = '';
 		self :: $markdownParser = null;
-		$this -> setTheme ($conf['siteTheme']);
 		$this -> passData['pageTitle'] = '';
 	} 
 
@@ -65,6 +64,10 @@ class bwView {
 
 	public function generateOutput ()
 	{
+		if (!$this -> themeDir) {
+			global $conf;
+			$this -> setTheme ($conf['siteTheme']);
+		}
 		include_once (P . "theme/default/components.php");
 		if (file_exists ($this -> themeDir . "/components.php")) {
 			include_once ($this -> themeDir . "/components.php");
@@ -482,6 +485,8 @@ class bwView {
 		$text = preg_replace ("/!~!(.+?)\[location\]/", "<span class=\"icon-location geoLocator\"></span> <span class=\"geoLocator\">$1</span>", $text); 
 		// !!URL = music
 		$text = preg_replace ("/!!<a href=\"(.+?)\">(.+?)<\/a>/", "<audio controls><source src=\"$1\" type=\"audio/mpeg\">Your browser does not support the audio element.</audio>", $text);
+		$text = str_replace ("\n", '<br/>', $text);
+		$text = preg_replace ("/<\/(.+?)><br\/>/", "</$1>", $text);
 		$text = hook ('textParser', 'Replace', $text);
 		return $text;
 	} 

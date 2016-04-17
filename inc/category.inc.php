@@ -22,7 +22,7 @@ class bwCategory {
 		bw :: initCategories ();
 	} 
 
-	public function addCategories ($smt)
+	public function addCategories ($smt, $smt2 = array ())
 	{
 		if (is_array ($smt)) {
 			$dataLine = array();
@@ -32,12 +32,12 @@ class bwCategory {
 				if (array_key_exists ($aCateURLName, bw :: $cateData)) {
 					stopError (bw :: $conf['l']['admin:msg:Existed']);
 				} else {
-					$dataLine[] = array(':aCateURLName' => $aCateURLName, ':aCateDispName' => $aCateDispName);
+					$dataLine[] = array(':aCateURLName' => $aCateURLName, ':aCateDispName' => $aCateDispName, ':aCateTheme' => isset ($smt2[$aCateURLName]) ? $smt2[$aCateURLName] : null);
 				} 
 			} 
 			$dataLineCounter = count ($dataLine);
 			if ($dataLineCounter > 0) {
-				bw :: $db -> dbExecBatch ("INSERT INTO categories (aCateURLName, aCateDispName, aCateCount, aCateOrder) VALUES (:aCateURLName, :aCateDispName, 0, {$dataLineCounter})", $dataLine);
+				bw :: $db -> dbExecBatch ("INSERT INTO categories (aCateURLName, aCateDispName, aCateCount, aCateOrder, aCateTheme) VALUES (:aCateURLName, :aCateDispName, 0, {$dataLineCounter}, :aCateTheme)", $dataLine);
 				if ($this -> cacheClear) {
 					$this -> getCategories (); //Refresh immediately
 					clearCache (); //Clear all cache
@@ -97,6 +97,23 @@ class bwCategory {
 			clearCache (); //Clear all cache
 		} 
 		hook ('renameCategories', 'Execute', array ($arrayCateID, $arrayOldNames, $arrayNewNames));
+	} 
+
+	public function updateCategoryThemes ($arrayCateID, $arrayNewThemes)
+	{
+		if (count ($arrayCateID) <> count ($arrayNewThemes)) {
+			return;
+		} 
+		for ($i = 0; $i < count ($arrayCateID); $i++) {
+			if ($arrayNewThemes[$i] <> bw :: $cateList[$arrayCateID[$i]]['aCateTheme']) {
+				bw :: $db -> dbExec ('UPDATE categories SET aCateTheme=? WHERE aCateURLName=?', array ($arrayNewThemes[$i], $arrayCateID[$i]));
+			} 
+		} 
+		if ($this -> cacheClear) {
+			$this -> getCategories (); //Refresh immediately
+			clearCache (); //Clear all cache
+		} 
+		hook ('updateCategoryThemes', 'Execute', array ($arrayCateID, $arrayNewThemes));
 	} 
 
 	public function bufferCacheClear ()
