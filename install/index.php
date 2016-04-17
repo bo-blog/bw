@@ -7,7 +7,7 @@
 */
 define ('P', '../');
 
-if (file_exists ('../conf/info.php')) {
+if (file_exists ('./conf/info.php')) {
 	die ('Already installed.');
 }
 

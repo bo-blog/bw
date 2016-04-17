@@ -1,0 +1,1 @@
+ALTER TABLE categories ADD COLUMN aCateTheme VARCHAR (255)

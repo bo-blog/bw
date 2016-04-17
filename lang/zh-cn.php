@@ -156,6 +156,8 @@ $conf['l'] = array(
 	'admin:opt:AllowComment' => '允许所有人评论',
 	'admin:opt:OnlyLoginComment' => '仅限社交帐号登录后评论',
 	'admin:opt:ThirdPartyComment' => '由第三方服务接管评论功能',
+	'admin:opt:NoCustomTheme' => '不单独设置主题',
+	'admin:opt:CustomTheme' => '主题设置为：',
 
 	'admin:msg:SiteURL' => '例如：http://name.com/path。除非你知道在修改什么，请勿改动。',
 	'admin:msg:BlankPsw' => '不填即不修改',

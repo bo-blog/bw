@@ -387,6 +387,9 @@ if ("[[::aID]]")
 	} else {
 		$("#gotoAID").html ('<a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" title="[[=admin:msg:Open]]" target="_blank"><span class="icon-export"></span></a>');
 	}
+	if ($("#aCateURLName").val()=="_trash") {
+		$("#gotoAID").hide();
+	}
 }
 
 $("#adminGeoLoc").click(function() {
