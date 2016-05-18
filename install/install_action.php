@@ -134,7 +134,7 @@ function dbInit ($dbType)
 		$return=array (
 			'CREATE TABLE IF NOT EXISTS articles (aID VARCHAR(255) PRIMARY KEY  NOT NULL , aTitle VARCHAR(255) NOT NULL , aCateURLName VARCHAR(255) NOT NULL , aTime DATETIME NOT NULL , aTags TEXT, aReads INTEGER NOT NULL  DEFAULT 0, aContent TEXT, aCustom TEXT, aComments INTEGER DEFAULT 0)',
 			'CREATE TABLE IF NOT EXISTS cache (caID CHAR (32) PRIMARY KEY  NOT NULL , caContent TEXT)',
-			'CREATE TABLE IF NOT EXISTS categories (aCateURLName VARCHAR (255) NOT NULL  UNIQUE , aCateDispName TEXT NOT NULL , aCateCount INTEGER NOT NULL  DEFAULT 0, aCateOrder INTEGER)',
+			'CREATE TABLE IF NOT EXISTS categories (aCateURLName VARCHAR (255) NOT NULL  UNIQUE , aCateDispName TEXT NOT NULL , aCateCount INTEGER NOT NULL  DEFAULT 0, aCateOrder INTEGER, aCateTheme VARCHAR (255))',
 			'CREATE TABLE IF NOT EXISTS extensions (extID VARCHAR (255) PRIMARY KEY  NOT NULL , extDesc TEXT , extHooks TEXT NOT NULL , extActivate BOOL NOT NULL , extOrder INTEGER, extStorage TEXT , isWidget BOOL)',
 			'CREATE TABLE IF NOT EXISTS statistics (pageURL TEXT PRIMARY KEY  NOT NULL  UNIQUE , sNum INTEGER DEFAULT 0, lastView DATETIME)',
 			'CREATE TABLE IF NOT EXISTS tags (tValue VARCHAR (255) PRIMARY KEY  NOT NULL  UNIQUE , tList TEXT, tCount INTEGER NOT NULL  DEFAULT 0)',
@@ -145,7 +145,7 @@ function dbInit ($dbType)
 		$return=array (
 			'CREATE TABLE IF NOT EXISTS articles (aID VARCHAR(255) PRIMARY KEY  NOT NULL , aTitle VARCHAR(255) NOT NULL , aCateURLName VARCHAR(255) NOT NULL , aTime DATETIME NOT NULL , aTags TEXT, aReads INTEGER UNSIGNED  DEFAULT 0, aContent TEXT, aCustom TEXT, aComments INTEGER DEFAULT 0) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 			'CREATE TABLE IF NOT EXISTS cache (caID CHAR (32) PRIMARY KEY  NOT NULL , caContent TEXT) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
-			'CREATE TABLE IF NOT EXISTS categories (aCateURLName VARCHAR (255) NOT NULL  UNIQUE , aCateDispName TEXT NOT NULL , aCateCount INTEGER NOT NULL  DEFAULT 0, aCateOrder INTEGER) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+			'CREATE TABLE IF NOT EXISTS categories (aCateURLName VARCHAR (255) NOT NULL  UNIQUE , aCateDispName TEXT NOT NULL , aCateCount INTEGER NOT NULL  DEFAULT 0, aCateOrder INTEGER, aCateTheme VARCHAR (255)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 			'CREATE TABLE IF NOT EXISTS extensions (extID VARCHAR (255) PRIMARY KEY  NOT NULL , extDesc TEXT, extHooks TEXT NOT NULL , extActivate TINYINT NOT NULL , extOrder INTEGER UNSIGNED, extStorage TEXT , isWidget TINYINT NOT NULL) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 			'CREATE TABLE IF NOT EXISTS statistics (pageURL VARCHAR(255) PRIMARY KEY  NOT NULL , sNum INTEGER UNSIGNED DEFAULT 0, lastView DATETIME) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 			'CREATE TABLE IF NOT EXISTS tags (tValue VARCHAR (255) PRIMARY KEY  NOT NULL  UNIQUE , tList TEXT, tCount INTEGER UNSIGNED  DEFAULT 0) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
@@ -154,7 +154,7 @@ function dbInit ($dbType)
 	}
 	if ($dbType=='SQLite' || $dbType=='MySQL') {
 		$return[]='INSERT INTO articles VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?)';
-		$return[]='INSERT INTO categories VALUES (? ,?, ?, ?)';
+		$return[]='INSERT INTO categories VALUES (? ,?, ?, ?, ?)';
 		$return[]='INSERT INTO extensions VALUES (? ,?, ?, ?, ?, ?, ?)';
 	}
 	else {
@@ -176,7 +176,7 @@ function dbInitBind ()
 		false,
 		false,
 		array ('hello-world', $l['data.title'], 'default', date ('Y-m-d H:i:s'), null, 0, $l['data.content1']."![]({$siteURL}/storage/firstrun.jpg)".$l['data.content2'], null, 0),
-		array ('default', $l['data.cate'], 1, 1),
+		array ('default', $l['data.cate'], 1, 1, null),
 		array ('hello_world', "name='Hello, world'\r\nintro='Test extension.'\r\nauthor='bW'\r\nurl='http://bw.bo-blog.com'", 'header,footer,textParser,generateOutputDone', 0, 1, null, 0),
 	);
 	return $return;

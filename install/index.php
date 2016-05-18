@@ -5,9 +5,8 @@
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
-define ('P', '../');
 
-if (file_exists ('./conf/info.php')) {
+if (file_exists ('../conf/info.php')) {
 	die ('Already installed.');
 }
 
