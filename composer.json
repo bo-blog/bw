@@ -1,0 +1,14 @@
+{
+    "name": "bo-blog/bw",
+    "description": "A light-weight blog system",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "bo-blog",
+            "email": "info@bo-blog.com"
+        }
+    ],
+    "require": {
+		"php": ">=5.3.0"
+	}
+}
