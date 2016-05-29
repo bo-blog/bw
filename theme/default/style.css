@@ -681,6 +681,11 @@ font-size: 12px;
 height: 40px;
 font-size: 11px;
 }
+.adminErrorMsg {
+display: none;
+color: #FF2626;
+text-shadow: 3px 2px 3px #ddd;
+}
 
 /* responsive */
 #menuDown {
