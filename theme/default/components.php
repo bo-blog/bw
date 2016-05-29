@@ -67,15 +67,15 @@ eot;
 
 $parts['admincommonupload']=<<<eot
 <form id="picForm" method="post" action="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/uploader/[[::linkConj]]CSRFCode=[[::upCSRFCode]]" target="execPicTarget" enctype="multipart/form-data">
-<input type="file" style="display: none; height: 1px;" name="uploadFile[]" id="uploadPicFile" multiple="true" onchange="doPicUp();"/>
+<input type="file" style="display: none; height: 1px;" name="uploadFile[]" id="uploadPicFile" multiple="true" onchange="doPicUp2();"/>
 </form>
 eot;
 
 $parts['adminqiniuupload']=<<<eot
 <form id="picForm" method="post" action="http://up.qiniu.com/" target="execPicTarget" enctype="multipart/form-data">
 <input type="file" style="display: none; height: 1px;" name="file" id="uploadPicFile" onchange="doPicUp();"/>
-<input name="token" type="hidden" value="[[::qiniuFileToken]]">
-<input name="key" type="hidden" value="[[::qiniuKey]]">
+<input id="picFormToken" name="token" type="hidden" value="[[::qiniuFileToken]]">
+<input id="picFormFname"  name="key" type="hidden" value="[[::qiniuKey]]">
 </form>
 eot;
 
@@ -414,7 +414,59 @@ $parts['groupcolumn']=<<<eot
 eot;
 
 $parts['marketdetail']=<<<eot
-<article>
-[[::externalContent]]
-</article>
+<div class="adminArea" id="marketTpl" style="display:none;">
+<h2><span class="icon-disc"></span> [::tn]</h2><span class="adminSANew"><a href='##' onclick="installPkgDo('[::tpkg]');" id="doInstall"><span class="icon-plus2"></span> [[=admin:btn:NewExt]]</a> <a href="javascript: history.go(-1)"><span class="icon-ccw"></span> [[=page:ErrorBack]]</a></span>
+<div class="marketDetail"><h4>[[=admin:msg:By]] [::ta]</h4>
+</div>
+<div>
+<img src="[::tpr]" alt='Preview' style="max-width: 90%">
+</div>
+<p>[::tint]</p>
+</div>
+<iframe id="installWindow" style="display: none;"></iframe>
+<script type="text/javascript">
+$("#admMarket").addClass("activeNav");
+$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "/bw/trash/update/featured/details/[[::itemID]].js"}).appendTo("body");
+
+function parseNow () {
+	if (typeof (detailList)!='undefined') {
+		var patternHTML=$("#marketTpl").html();
+		var output='';
+		$.each (detailList, function (i, val) {
+			output+=patternHTML.replace(/\[\:\:(\w+)\]/g, function (word, kk) {
+				return val[kk];
+			});
+		});
+		$("#marketTpl").html(output);
+		$("#marketTpl").fadeIn();
+	}
+	if ([[::owned]]==1) {
+		$("#doInstall").html ('<span class="icon-checkmark"></span> [[=admin:btn:Owned]]');
+	}
+}
+
+function installPkgDo (url) {
+	if ([[::owned]]!=1) {
+		if (confirm ("[[=admin:market:ConfirmInstall]]")) {
+			$("#doInstall").html ('Loading...');
+			$('#installWindow').attr('src', "[[::siteURL]]/[[::linkPrefixAdmin]]/market/installpkg/[[::linkConj]]dl="+encodeURIComponent(url)+"&CSRFCode=[[::installCSRFCode]]");
+		}
+	}
+} 
+
+</script>
+eot;
+
+$parts['marketinstallsuccess']=<<<eot
+<html><head></head><body>
+<script type="text/javascript">
+parent.document.getElementById('doInstall').innerHTML='<span class="icon-checkmark"></span> [[=admin:btn:Owned]]';</script>
+Finish</body></html>
+eot;
+
+$parts['marketinstallfailure']=<<<eot
+<html><head></head><body>
+<script type="text/javascript">
+alert('[[=admin:msg:NotExist]]');</script>
+</body></html>
 eot;

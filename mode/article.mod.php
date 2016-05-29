@@ -8,7 +8,6 @@
 if (!defined ('P')) {
 	die ('Access Denied.');
 } 
-
 $article = new bwArticle;
 
 $article -> fetchArticle ($canonical -> currentArgs['aID']);
@@ -24,7 +23,6 @@ $view -> setPassData ($article -> articleList[$canonical -> currentArgs['aID']])
 $view -> setPassData (array ('navigation' => bw :: $cateList, 'sociallink' => bw :: getSocialLinks (), 'externallink' => bw :: getExternalLinks (), 'tagClound' => bw :: getTagCloud ()));
 $view -> setMaster ('page');
 
-$areaName = 'nocommentarea';
 if ($conf['commentOpt']<>0) {
 	loadServices ();
 	if ($conf['commentOpt'] == 1 || $conf['commentOpt'] == 2) { //Build-in comment
@@ -44,8 +42,12 @@ if ($conf['commentOpt']<>0) {
 		}
 		elseif ($conf['disqusID']) {
 			$view -> setWorkFlow (array ('disqusarea', 'article', 'page'));
+		} else {
+			$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));
 		}
-	}
+	} 
+}  else {
+	$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));
 }
 
 $view -> finalize ();

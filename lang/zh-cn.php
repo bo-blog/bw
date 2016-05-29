@@ -61,6 +61,7 @@ $conf['l'] = array(
 	'page:MobileAuth5' => '是否确认登录？',
 	'page:NoArticleAtAll' => '暂未发布任何文章',
 	'page:SinglePage' => '单页',
+	'page:Search' => '搜索',
 
 	'js:RememberFail' => '验证不成功。可能手机浏览器工作在私密浏览模式下或者未被关联。',
 	'js:RememberSuccess' => '验证成功，可关闭本页',
@@ -162,7 +163,7 @@ $conf['l'] = array(
 	'admin:msg:SiteURL' => '例如：http://name.com/path。除非你知道在修改什么，请勿改动。',
 	'admin:msg:BlankPsw' => '不填即不修改',
 	'admin:msg:LengthPsw' => '至少包含8个字符，必须含有至少1个特殊字符。',
-	'admin:msg:URLRewrite' => '伪静态需服务器支持。 Apache的rewrite规则请参考<a href="../../inc/script/urlrewrite/apache.txt" target="_blank">这里</a>。',
+	'admin:msg:URLRewrite' => '伪静态需服务器支持。 Rewrite规则参考: <a href="../../inc/script/urlrewrite/apache.txt" target="_blank">Apache</a> | <a href="../../inc/script/urlrewrite/nginx.txt" target="_blank">nginx</a>',
 	'admin:msg:ErrorCorrection' => '请先修正出错的设定。',
 	'admin:msg:NewCate' => '分类名称',
 	'admin:msg:NewCate2' => '分类ID，仅限字母和数字',
@@ -253,6 +254,7 @@ $conf['l'] = array(
 	'admin:btn:SaveAsDraft' => '存为草稿',
 	'admin:btn:MoveDraft' => '放入草稿箱',
 	'admin:btn:NewPage' => '创建新页',
+	'admin:btn:Owned' => '已拥有',
 
 	'admin:msg:NeedLogin' => '请先登录。',
 	'admin:msg:ChangeSaved' => '保存成功。',
@@ -307,6 +309,7 @@ $conf['l'] = array(
 	'admin:market:Bulletin' => '公告',
 	'admin:market:SeeAll' => '查看全部',
 	'admin:market:Get' => '获取',
+	'admin:market:ConfirmInstall' => '确定下载并安装吗？',
 
 
 	'admin:NotReady' => '*未实现*',

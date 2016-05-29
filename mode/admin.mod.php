@@ -248,14 +248,10 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		if ($conf['qiniuBucket'] && $conf['qiniuUpload'] == '1') {
 			require_once (P . "inc/script/qiniu/QiniuClient.php");
 			$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
-			$fStoreName = 'storage/' . substr (md5 (rand (1, 99999) . time()), 10, 8);
+			$fStoreName = 'storage/' . substr (md5 (rand (1, 99999) . time()), 10, 8) . '_' . basename ($_REQUEST['fname']);
 			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/{$conf['linkPrefixAdmin']}/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)', 'ftype' => '$(mimeType)')));
-			$qiniuFileToken = $qiniuClient -> uploadToken($flags);
-			$view -> setPassData (array ('qiniuFileToken' => $qiniuFileToken, 'qiniuKey' => $fStoreName));
-			$uploader = 'adminqiniuupload';
-			$view -> setMaster ('adminqiniuupload');
-			$view -> setWorkFlow (array ('adminqiniuupload'));
-			$view -> finalize ();
+			$qiniuFileToken = $qiniuClient -> uploadToken($flags) . '<<<' . $fStoreName;
+			ajaxSuccess ($qiniuFileToken);
 		} 
 	} elseif ($canonical -> currentArgs['subAction'] == 'getautocomplete') {
 		$allTags = bw :: $db -> getRows ('SELECT tValue FROM tags ORDER BY tCount DESC LIMIT 0, 100');
@@ -264,6 +260,13 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$outTags[] = $aTag['tValue'];
 		} 
 		die ('var lastTags='.json_encode ($outTags).';');
+	}  elseif ($canonical -> currentArgs['subAction'] == 'gettitlelist') {
+		$allTitles = $article -> getTitleList (1000);
+		$outTitles = array();
+		foreach ($allTitles as $aID => $aTitle) {
+			$outTitles[] = $aTitle;
+		} 
+		die ('var allTitles='.json_encode ($outTitles).';var allFullList='.json_encode (array_flip ($allTitles)).';');
 	}  elseif ($canonical -> currentArgs['subAction'] == 'getpreviewhtml') {
 		$admin -> checkCSRFCode ('articlesave');
 		if (!isset ($_REQUEST['smt'])) {
@@ -746,18 +749,40 @@ if ($canonical -> currentArgs['mainAction'] == 'market') {
 			stopError ($conf['l']['admin:msg:NotExist']);
 		}
 		$admin -> checkCSRFCode ('install' . $_SESSION['enable_load_market']);
-		if (!isset ($_REQUEST['dlu'])) {
+		if (!isset ($_REQUEST['dlu']) || !isset ($_REQUEST['dir']) || !isset ($_REQUEST['guid'])) {
 			stopError ($conf['l']['admin:msg:NotExist']);
 		}
-		$ttf = curlRetrieve ($_REQUEST['dlu']);
 		$view -> setMaster ('marketdetail');
-		$view -> setPassData (array ('externalContent' => $ttf));
+		$tDir = basename ($_REQUEST['dir']);
+		if (file_exists (P . "theme/{$tDir}/info.php")) {
+			include (P . "theme/{$tDir}/info.php");
+			$owned = $theme['guid'] == $_REQUEST['guid'] ? 1 : 0;
+		}
+		else {
+			$owned = 0;
+		}
+		$view -> setPassData (array ('itemID' => $_REQUEST['dlu'], 'owned' => $owned, 'installCSRFCode' => $admin -> getCSRFCode ('install' . $_SESSION['enable_load_market'])));
 		$view -> setWorkFlow (array ('marketdetail'));
 		$authX = $view -> getOutput ();
-		$view -> setMaster ('plainpage');
-		$view -> setPassData (array ('plainContent' => $authX));
-		$view -> setWorkFlow (array ('plainpage'));
+		$view -> setMaster ('admin');
+		$view -> setPassData (array ('adminplainpage' => $authX));
+		$view -> setWorkFlow (array ('admin'));
 		$view -> finalize ();
+	} elseif ($canonical -> currentArgs['subAction'] == 'installpkg') { 
+		$returnError = true;
+		if (isset ($_SESSION['enable_load_market']) && $admin -> getCSRFCode ('install' . $_SESSION['enable_load_market']) == $_REQUEST['CSRFCode'] && isset ($_REQUEST['dl'])) {
+			$returnError = false;
+		}
+		if ($returnError) {
+			$view -> setMaster ('marketinstallfailure');
+			$view -> setWorkFlow (array ('marketinstallfailure'));
+			$view -> finalize ();
+		} else {
+
+			$view -> setMaster ('marketinstallsuccess');
+			$view -> setWorkFlow (array ('marketinstallsuccess'));
+			$view -> finalize ();
+		}
 	} else {
 		if (!isset ($_SESSION['enable_load_market'])) {
 			$_SESSION['enable_load_market'] = $rndCode = rand (1000, 9999);

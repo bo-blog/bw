@@ -5,8 +5,9 @@
 
 <div class="adminArea">
 <form id="smtForm" action="post">
-<h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a> <a href='##' onclick="shBatch();"><span class="icon-wrench"></span> [[=admin:btn:Batch]]</a></span></h2> 
+<h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a> <a href='##' onclick="shBatch();"><span class="icon-wrench"></span> [[=admin:btn:Batch]]</a> <a href='##' onclick="shSearch();"><span class="icon-help"></span> [[=page:Search]]</a></span></h2> 
 <div id="adminSAB"><a href='##' onclick="shSelAll();">[[=admin:btn:SelectAll]]</a> &nbsp; <a href='##' onclick="shDeSelAll();">[[=admin:btn:DeSelectAll]]</a> &nbsp; <a href='##' onclick="shDel();">[[=admin:btn:Delete]]</a> &nbsp; <a href='##' onclick="shDraft();">[[=admin:btn:MoveDraft]]</a></div>
+<div id="adminSAS"><input type="text" id='eTags' class="inputLine inputMiddle" value="[[::aTags]]" /><div id="taghint"></div></div>
 <p>
 <ul id="artList">
 [[::loop, adminarticlelist]]<li class="adminSingleArticle adminSAL" title="[[=admin:msg:Select]]" data-aid="[[::aID]]"><a href="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" title="[[=admin:msg:Open]]"><span class="icon-export"></span></a> <span class="adminSAT" data-aid="[[::aID]]" title="[[=admin:msg:Modify]]">[[::aTitle]]</span> <span class="adminSADate">[[::aTime]]</span> </li>
@@ -61,6 +62,7 @@
 </ul>
 </p>
 
+<script type="text/javascript" src="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/gettitlelist/"></script>
 
 <script type="text/javascript">
 
@@ -75,8 +77,12 @@ $("#artList .adminSAL").click(function(){
 $("#admArticles").addClass("activeNav");
 
 function shBatch() {
-	$('#adminSAB').fadeToggle (500);
+	$('#adminSAB').fadeToggle (200);
 }
+function shSearch() {
+	$('#adminSAS').fadeToggle (200);
+}
+
 function shSelAll() {
 	$("#artList .adminSAL").addClass("adminSAChosen");
 }
@@ -229,6 +235,22 @@ function createEdit () {
 			addCategory('[[::siteURL]]/[[::linkPrefixAdmin]]/articles/validatecategory/');
 		});
 }
+
+$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/inc/script/autocomplete/jquery.autocomplete.css"}).appendTo("head");
+$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "[[::siteURL]]/inc/script/autocomplete/jquery.autocomplete.min.js"}).appendTo("head");
+
+$('#eTags').AutoComplete({
+'data': allTitles,
+'ajaxDataType': 'json',
+'afterSelectedHandler': function(data) {
+	var aID=allFullList[data.value];
+	if (aID != 'undefined')
+	{
+		window.location="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/modify/[[::linkConj]]aID="+aID+"&CSRFCode=[[::oldCSRFCode]]";
+	}
+}
+});
+
 </script>
 </form>
 

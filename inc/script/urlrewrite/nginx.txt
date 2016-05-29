@@ -1,0 +1,12 @@
+  if (!-e $request_filename)
+   {
+      rewrite ^/YOUR_PATH_HERE/index/([0-9]+)?/$ /YOUR_PATH_HERE/index.php?go=/$1 last;
+      rewrite ^/YOUR_PATH_HERE/post/(.+)?/$ /YOUR_PATH_HERE/read.php?go=/$1 last;
+      rewrite ^/YOUR_PATH_HERE/category/(.+)?/$ /YOUR_PATH_HERE/category.php?go=/$1 last;
+      rewrite ^/YOUR_PATH_HERE/category/(.+)/([0-9]+)?/$ /YOUR_PATH_HERE/category.php?go=/$1/$2 last;
+      rewrite ^/YOUR_PATH_HERE/tag/(.+)?/$ /YOUR_PATH_HERE/tag.php?go=/$1 last;
+      rewrite ^/YOUR_PATH_HERE/tag/(.+)/([0-9]+)?/$ /YOUR_PATH_HERE/tag.php?go=/$1/$2 last;
+      rewrite ^/YOUR_PATH_HERE/send.php/(.+)$ /YOUR_PATH_HERE/send.php?go=/$1 last;
+      rewrite ^/YOUR_PATH_HERE/admin.php/(.+)$ /YOUR_PATH_HERE/admin.php?go=/$1 last;
+      rewrite ^/YOUR_PATH_HERE/page/(.+)?/$ /YOUR_PATH_HERE/page.php?go=/$1 last;
+ }

@@ -39,7 +39,7 @@
 
 <span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" id="aTime" /><br/>
 <div id="floatATime">
-<select id="timesY" class="selectLine2"></select> - <select id="timesM" class="selectLine2"></select> - <select id="timesD" class="selectLine2"></select> &nbsp; &nbsp; <select id="timesH" class="selectLine2"> : </select> : <select id="timesMM" class="selectLine2"></select> : <select id="timesS" class="selectLine2"></select> <a href="##"><span class="icon-newspaper2" id="aTimeUp"></span></a>
+<select id="timesY" class="selectLine2"></select> - <select id="timesM" class="selectLine2"></select> - <select id="timesD" class="selectLine2"></select> &nbsp; &nbsp; <br class="brATime"/><select id="timesH" class="selectLine2"> : </select> : <select id="timesMM" class="selectLine2"></select> : <select id="timesS" class="selectLine2"></select> <a href="##"><span class="icon-newspaper2" id="aTimeUp"></span></a>
 </div>
 <span class="adminExplain">yyyy-mm-dd hh:mm:ss</span></p>
 
@@ -55,6 +55,7 @@
 <div id="adminUploadContainer" data-upurl="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/getqiniuuploadpart/[[::linkConj]]CSRFCode=[[::upCSRFCode]]">
 [[::adminqiniuupload]][[::admincommonupload]]
 </div>
+
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;"></iframe>
 <script type="text/javascript" src="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/getautocomplete/"></script>
 <script type="text/javascript">
@@ -264,17 +265,33 @@ function insertUpURLs (str)
 	str=str.replace(/ /g, "\r\n");
 	$('#aContent').insertContent (str);
 	$('#adminUpAdd').html("[[=admin:btn:AddPic]]");
-	var targetURL=$('#adminUploadContainer').data('upurl');
+/*	var targetURL=$('#adminUploadContainer').data('upurl');
 
 	$.get(targetURL+"&ajax=1", function (data){
 		if (data.error!=1) {
 			$("#adminUploadContainer").html (data.returnMsg);
 		}
-	}, "json");
+	}, "json");*/
 	$("#UI-loading").fadeOut(200);
 }
 
 function doPicUp() {
+	if($("#uploadPicFile").val() != '') {
+		$("#UI-loading").fadeIn(500);
+		var targetURL=$('#adminUploadContainer').data('upurl');
+		$.get(targetURL+"&ajax=1&fname="+encodeURI($("#uploadPicFile").val()), function (data){
+			if (data.error!=1) {
+				var dp = data.returnMsg.split ('<<<');
+				$("#picFormToken").val (dp[0]);
+				$("#picFormFname").val (dp[1]);
+				$('#picForm').submit();
+			}
+		}, "json");
+		$('#adminUpAdd').html("[[=admin:btn:Uploading]]");
+	}
+}
+
+function doPicUp2() {
 	if($("#uploadPicFile").val() != '') {
 		$("#UI-loading").fadeIn(500);
 		$('#picForm').submit();
@@ -417,31 +434,33 @@ function insertGeoLoc (data) {
 
 [[::ext_customEditor]]
 
-if ($(window).width()>800 && !callCustomEditor)
+if ($(window).width()>800)
 {
-	$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/inc/script/editor/themes/default/default.css"}).appendTo("head");
-	$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "[[::siteURL]]/inc/script/editor/jquery.markbar.js"}).appendTo("head");
+	if (!callCustomEditor)
+	{
+		$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/inc/script/editor/themes/default/default.css"}).appendTo("head");
+		$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "[[::siteURL]]/inc/script/editor/jquery.markbar.js"}).appendTo("head");
 
-	$(function() {
-		$('#aContent').markbar();
-	});
+		$(function() {
+			$('#aContent').markbar();
+		});
+	}
+} else {
 }
 
-if ($(window).width()>800) {
-	$('#aTime').click (function (){
-		$('#floatATime').toggle(500);
-	});
-	$('#aTimeUp').click (function (){
-		var uYYYY=$('#timesY').val();
-		var uMM=$('#timesM').val();
-		var uDD=$('#timesD').val();
-		var uHH=$('#timesH').val();
-		var uMMM=$('#timesMM').val();
-		var uSS=$('#timesS').val();
-		$('#aTime').val(uYYYY+'-'+uMM+'-'+uDD+' '+uHH+':'+uMMM+':'+uSS);
-		$('#floatATime').hide(500);
-	});
-}
+$('#aTime').click (function (){
+	$('#floatATime').toggle(500);
+});
+$('#aTimeUp').click (function (){
+	var uYYYY=$('#timesY').val();
+	var uMM=$('#timesM').val();
+	var uDD=$('#timesD').val();
+	var uHH=$('#timesH').val();
+	var uMMM=$('#timesMM').val();
+	var uSS=$('#timesS').val();
+	$('#aTime').val(uYYYY+'-'+uMM+'-'+uDD+' '+uHH+':'+uMMM+':'+uSS);
+	$('#floatATime').hide(500);
+});
 
 $('#aCateURLName').change (function() {
 	if ($('#aCateURLName').val() == '<new>') {

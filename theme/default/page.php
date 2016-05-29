@@ -19,7 +19,7 @@ if (!defined ('P')) {
 <link href="[[::siteURL]]/theme/default/style.css?ver=02282016" media="all" rel="stylesheet" type="text/css" />
 <link  href="[[::siteURL]]/rss.php" rel="alternate" type="application/rss+xml" title="RSS 2.0" />
 <title>[[::pageTitle]][[::siteName]]</title>
-<script src="http://lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
+<script src="//lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
 <script>
 !window.jQuery && document.write ('<script src="[[::siteURL]]/inc/script/jquery.min.js"><\/script>');
 var lng={
@@ -36,7 +36,7 @@ var lng={
 <div id="overallContainer">
 <header>
 <span class="icon-newicon iconLogo"><h1><a href="[[::siteURL]]/">[[::siteName]]</a></h1></span>
-<span id="menuDown"><a href="#" onclick="$('nav').toggle('fast');"><span class="icon-list menuDownIcon"></span> </a></span>
+<span id="menuDown"><a href="#" onclick="scrollToTop(); $('nav').toggle('fast');"><span class="icon-list menuDownIcon"></span> </a></span>
 <nav>
 <ul>
 <li id="nav-index"><a href="[[::siteURL]]/">[[=page:Home]]</a></li>
@@ -44,6 +44,7 @@ var lng={
 <li id="nav-[[::aCateURLName]]"><a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a></li>
 [[::/loop]]
 [[::widget_wgheader]]
+<li class="admLastList"></li>
 </ul>
 </nav>
 [[::ext_header]]

@@ -70,7 +70,7 @@ if ($listMode == 'category') {
 		isset ($columnCount[$cate]) ?  $columnCount[$cate]++ : $columnCount[$cate] = 1;
 	} 
 	foreach (bw :: $cateList as $onecate) {
-		if ($groupedArticles[$onecate['aCateURLName']]) {
+		if (isset ($groupedArticles[$onecate['aCateURLName']])) {
 			$returnGroupArticles[$onecate['aCateURLName']] = $groupedArticles[$onecate['aCateURLName']] ;
 		}
 	}

@@ -61,6 +61,7 @@ $conf['l'] = array(
 	'page:MobileAuth5' => '是否確認登錄？',
 	'page:NoArticleAtAll' => '暫未發佈任何文章',
 	'page:SinglePage' => '單頁',
+	'page:Search' => '檢索',
 
 	'js:RememberFail' => '驗證不成功。可能手機流覽器工作在私密流覽模式下或者未被關聯。',
 	'js:RememberSuccess' => '驗證成功，可關閉本頁',
@@ -162,7 +163,7 @@ $conf['l'] = array(
 	'admin:msg:SiteURL' => '例如：http://name.com/path。除非你知道在修改什麼，請勿改動。',
 	'admin:msg:BlankPsw' => '不填即不修改',
 	'admin:msg:LengthPsw' => '至少包含8個字元，必須含有至少1個特殊字元。',
-	'admin:msg:URLRewrite' => '偽靜態需伺服器支援。 Apache的rewrite規則請參考<a href="../../inc/script/urlrewrite/apache.txt" target="_blank">這裡</a>。',
+	'admin:msg:URLRewrite' => '偽靜態需伺服器支援。 Rewrite規則請參考：<a href="../../inc/script/urlrewrite/apache.txt" target="_blank">Apache</a> | <a href="../../inc/script/urlrewrite/nginx.txt" target="_blank">nginx</a>',
 	'admin:msg:ErrorCorrection' => '請先修正出錯的設定。',
 	'admin:msg:NewCate' => '分類名稱',
 	'admin:msg:NewCate2' => '分類ID，僅限字母和數位',
@@ -253,6 +254,7 @@ $conf['l'] = array(
 	'admin:btn:SaveAsDraft' => '存為草稿',
 	'admin:btn:MoveDraft' => '放入草稿箱',
 	'admin:btn:NewPage' => '創建新頁',
+	'admin:btn:Owned' => '已擁有',
 
 	'admin:msg:NeedLogin' => '請先登錄。',
 	'admin:msg:ChangeSaved' => '保存成功。',
@@ -307,6 +309,7 @@ $conf['l'] = array(
 	'admin:market:Bulletin' => '公告',
 	'admin:market:SeeAll' => '查看全部',
 	'admin:market:Get' => '獲取',
+	'admin:market:ConfirmInstall' => '確定下載並安裝嗎？',
 
 	'admin:NotReady' => '*未實現*',
 

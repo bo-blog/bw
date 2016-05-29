@@ -62,6 +62,7 @@ $conf['l'] = array(
 	'page:MobileAuth5' => 'Do you want to login?',
 	'page:NoArticleAtAll' => 'No article has been published.',
 	'page:SinglePage' => 'Custom Page',
+	'page:Search' => 'Search',
 
 	'js:RememberFail' => 'Authentication failed. ',
 	'js:RememberSuccess' => 'Authentication finished. Please close this window.',
@@ -163,7 +164,7 @@ $conf['l'] = array(
 	'admin:msg:SiteURL' => 'Example: http://name.com/path. Do not change unless you know what you\'re doing.',
 	'admin:msg:BlankPsw' => 'Leave blank to keep the current password',
 	'admin:msg:LengthPsw' => 'Must be at least 8 digits long, and contains at least 1 special character.',
-	'admin:msg:URLRewrite' => 'Needs server support. Click <a href="../../inc/script/urlrewrite/apache.txt" target="_blank">here</a> for the rules for Apache.',
+	'admin:msg:URLRewrite' => 'Needs server support. Click <a href="../../inc/script/urlrewrite/apache.txt" target="_blank">Apache</a> or <a href="../../inc/script/urlrewrite/nginx.txt" target="_blank">nginx</a> for the rules.',
 	'admin:msg:ErrorCorrection' => 'Please correct the errors first.',
 	'admin:msg:NewCate' => 'Name',
 	'admin:msg:NewCate2' => 'ID, letters and numbers only',
@@ -254,6 +255,7 @@ $conf['l'] = array(
 	'admin:btn:SaveAsDraft' => 'Save as Draft',
 	'admin:btn:MoveDraft' => 'Change to Draft',
 	'admin:btn:NewPage' => 'New Page',
+	'admin:btn:Owned' => 'Owned',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',
@@ -308,6 +310,7 @@ $conf['l'] = array(
 	'admin:market:Bulletin' => 'Notices',
 	'admin:market:SeeAll' => 'See All',
 	'admin:market:Get' => 'Get',
+	'admin:market:ConfirmInstall' => 'Continue to download and install?',
 
 	'admin:NotReady' => '*To-do*',
 

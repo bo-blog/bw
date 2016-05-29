@@ -279,6 +279,28 @@ class bwArticle {
 		} 
 	} 
 
+	public function getTitleList ($howmany)
+	{
+		$qStr = $this -> listCate == 'all' ? 'SELECT aID FROM articles WHERE aCateURLName<>"_trash" AND aCateURLName<>"_page" AND aTime<=? ORDER BY aTime DESC LIMIT 0, ?' : 'SELECT aID FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aTime DESC LIMIT 0, ?';
+		if ($this -> listCate != 'all') {
+			$qBind = array ($this -> listCate, $this -> cutTime, $howmany);
+		} else {
+			$qBind = array ($this -> cutTime, $howmany);
+		} 
+		$allTitles = bw :: $db -> getColumns ($qStr, $qBind);
+		$qStr = $this -> listCate == 'all' ? 'SELECT aTitle FROM articles WHERE aCateURLName<>"_trash" AND aCateURLName<>"_page" AND aTime<=? ORDER BY aTime DESC LIMIT 0, ?' : 'SELECT aTitle FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aTime DESC LIMIT 0, ?';
+		if ($this -> listCate != 'all') {
+			$qBind = array ($this -> listCate, $this -> cutTime, $howmany);
+		} else {
+			$qBind = array ($this -> cutTime, $howmany);
+		} 
+		$allTitles2 = bw :: $db -> getColumns ($qStr, $qBind);
+		if (isset ($allTitles['aID'])) {
+			return array_combine ($allTitles['aID'], $allTitles2['aTitle']);
+		}
+		hook ('getTitleList', 'Execute', $this);
+	} 
+
 	private function parseArticleList ($allTitles)
 	{
 		if (count ($allTitles) < 1) {

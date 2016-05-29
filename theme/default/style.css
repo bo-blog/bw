@@ -564,305 +564,6 @@ border-bottom: 1px solid #CCC;
 margin: 23px auto 23px auto;
 }
 
-
-/* Admin */
-#adminLoginImg {
-border-radius: 50%;
-box-shadow: 1px 1px 2px #fff;
-}
-.adminWrapper p {
-margin-bottom: 20px;
-}
-.adminErrorMsg {
-display: none;
-color: #FF2626;
-text-shadow: 3px 2px 3px #ddd;
-}
-.adminArea {
-width: 92%;
-min-height: 360px;
-text-align: left;
-margin: 0 auto 0 auto;
-padding: 20px;
-background: #FFF;
-box-shadow: 2px 5px 7px #D6D6D6;
-font-family: Helvetica, Arial, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
-line-height: 185%;
-}
-.adminArea h2 {
-clear: both;
-font-size: 20px;
-font-weight: bold;
-color: #346A00;
-}
-.adminArea p {
-margin-top: 16px;
-}
-.adminExplain {
-font-size: 13px;
-color: #717171;
-}
-.adminArea .smallBr {
-margin-bottom: 12px;
-}
-.adminCommand {
-text-align: center;
-}
-#adminPromptError, .wgtPromptError {
-text-align: center;
-color: #FF2626;
-display: none;
-}
-#adminPromptSuccess {
-text-align: center;
-color: #336A00;
-display: none;
-}
-.adminList {
-text-align: center;
-}
-.adminItems {
-font-size: 14px;
-display: block;
-}
-.adminSingleArticle {
-font-size: 14px;
-padding-left: 12px;
-border: 1px solid #E8E8E8;
-cursor: pointer;
-}
-.sortable-placeholder {
-padding-left: 12px;
-border: 1px solid #E8E8E8;
-min-height: 30px;
-background: #CCC;
-}
-.adminSingleArticle:hover, .adminSingleArticle:hover a, .adminSingleArticle:hover .adminSADate {
-background: #73D90C;
-color: #FFF;
-}
-.adminSingleArticle a {
-font-size: 18px;
-}
-.adminSADate {
-float: right;
-color: #717171;
-padding-right: 9px;
-}
-.adminSANew {
-display: block;
-float: right;
-font-size: 16px;
-}
-.adminSANew a {
-color: #999;
-text-shadow: 1px 1px 1px #EEE;
-margin-right: 18px;
-}
-.adminSAChosen {
-background: #EEE;
-}
-#adminSAB {
-text-align: right;
-padding: 5px 8px 0 0;
-display: none;
-font-size: 14px;
-margin-bottom: -10px;
-font-weight: bold;
-}
-.adminSCLModify {
-display: none;
-}
-.adminUploader {
-float: right;
-display: block;
-margin-right: 20%;
-margin-top: 25px;
-font-size:13px;
-}
-.adminUploader a {
-color: #717171;
-}
-.adminUploader a:hover {
-color: #346A00;
-}
-.adminGoSync a {
-color: #717171;
-font-weight: bold;
-}
-.adminGoSync a:hover {
-color: #346A00;
-}
-.admHeader {
-position: relative;
-width: auto;
-padding: 30px;
-}
-.admHeader nav {
-padding-right: 0;
-}
-.admFooter {
-margin-bottom: -120px;
-}
-.admStatNum {
-font-family: Georgia;
-font-size: 24px;
-font-style: italic;
-font-weight: bold;
-}
-#admStatBlock0 {
-min-height: 300px;
-clear: both;
-}
-.admStatBlock1 {
-float: left;
-padding: 17px;
-min-height: 160px;
-background: #EFEFEF;
-box-shadow: 4px 4px 4px #CCC;
-width: 33%;
-}
-.admStatBlock2 {
-float: left;
-padding: 17px;
-min-height: 160px;
-background: #DDD;
-box-shadow: 4px 4px 4px #CCC;
-width: 33%;
-}
-.admStatBlock3 {
-float: left;
-padding: 17px;
-min-height: 160px;
-background: #CDCDCD;
-box-shadow: 4px 4px 4px #CCC;
-width: 33%;
-}
-.admStatBlock1 a, .admStatBlock2 a, .admStatBlock3 a {
-color: #333;
-text-shadow: 1px 2px 1px #EEE;
-}
-.admSingleTag {
-font-size: 14px;
-padding: 4px 10px 4px 12px;
-background: #73D90C;
-color: #FFF;
-border-radius: 6px;
-margin-right: 12px;
-}
-.admSingleTag i
-{
-font-style: normal;
-}
-.admSingleTagDel {
-cursor: pointer;
-font-size: 16px;
-padding-left: 5px;
-}
-.extStatus1 {
-color: green;
-}
-.extStatus0 {
-color: red;
-}
-.adminArea article a {
-border: 0;
-}
-.adminLaidItem {
-width: 250px;
-overflow-x: auto;
-display: block;
-float: left;
-border: 1px dashed #ccc;
-cursor: pointer;
-padding: 3px;
-margin: 0 10px 3px 0;
-color: #505050;
-}
-.adminLaidItem:hover {
-background: #ccc;
-color: #000;
-}
-#previewArea {
-display: none;
-overflow: auto;
-background: #eee;
-}
-
-
-/* Market */
-.marketTop {
-overflow: auto;
-width: 99%;
-max-width: 1000px;
-}
-.marketFeatured {
-}
-.marketList {
-margin-bottom: 10px;
-}
-.marketBulletin {
-min-height: 80px;
-}
-.marketSubItem {
-float: left;
-margin-right: 10px;
-padding: 8px;
-line-height: 150%;
-background: #eee;
-margin-bottom: 10px;
-}
-.marketSubItem img {
-width: 100px;
-max-width: 90%;
-border-radius: 10px;
-}
-.marketSubItem h4 {
-font-size: 14px;
-font-weight: bold;
-}
-.marketSubItem h5 {
-font-size: 14px;
-color: #505050; 
-}
-.marketDown {
-background: #73D90C;
-padding: 2px 8px 2px 8px;
-border-radius: 6px;
-color: #000;
-}
-.marketDown a {
-color: #000;
-font-size: 12px;
-}
-.marketDown a:hover {
-color: #fff;
-}
-.marketHero img {
-width: 100%;
-}
-.marketBulletin a {
-color: #000;
-}
-.marketBulletin ul {
-background: #eee;
-font-size: 13px;
-padding: 6px 6px 6px 16px;
-}
-.marketLH {
-overflow: auto;
-}
-
-#floatATime {
-position: absolute;
-display: none;
-width: 50%;
-height: 30px;
-padding: 5px;
-background: #fff;
-border: 1px solid #ccc;
-}
-
 /* Forms */
 .inputLine {
 width: 250px;
@@ -954,6 +655,7 @@ background: #FFF;
 border: 2px solid #CCC;
 border-radius: 6px;
 text-align: center;
+height: 32px;
 }
 
 .selectLine2 {
@@ -986,7 +688,6 @@ display: none;
 }
 
 @media only screen and (max-width:800px) {
-
 nav {
 position: absolute;
 right: 0;
@@ -994,6 +695,7 @@ top: 80px;
 clear: both;
 float: right;
 display: none;
+height: 100%;
 }
 nav li {
 clear: both;
@@ -1002,6 +704,7 @@ padding: 6px;
 width: 200px;
 text-align: center;
 box-shadow: 1px 1px 2px #464646;
+font-size: 20px;
 }
 nav li:hover {
 background: #fff;
@@ -1015,9 +718,6 @@ color: #fff;
 float: right;
 padding-right: 40px;
 }
-.admHeader #menuDown {
-padding-right: 0;
-}
 .menuDownIcon {
 font-size: 26px;
 }
@@ -1026,9 +726,6 @@ display:none;
 }
 #mainArea {
 padding-top: 120px;
-}
-.admMainArea {
-padding-top: 10px!important;
 }
 article, .commentArea, .adminArea{
 width: 90%;
@@ -1046,9 +743,6 @@ font-size: 23px;
 }
 #pageBar {
 margin: 0 auto 20px auto;
-}
-#adminSAPage #pageBar {
-margin: -30px auto 10px auto;
 }
 .shareLayerItem {
 font-size: 16px;
@@ -1093,28 +787,4 @@ position: absolute;
 right: 6px;
 top: 60px;
 }
-.adminItems {
-font-size: 16px;
-display: block;
-}
-.adminSADate {
-float: none;
-color: #717171;
-display: block;
-}
-.adminSANew {
-float: none;
-}
-.admStatBlock1,
-.admStatBlock2,
-.admStatBlock3 {
-float: none;
-padding: 17px;
-min-height: 10px;
-width: 85%;
-}
-.adminUploader {
-margin-top: 0;
-}
-
 }
