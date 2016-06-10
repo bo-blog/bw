@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<link href="../skin/font.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../skin/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../skin/github-markdown.css" media="all" rel="stylesheet" type="text/css" />
+<title>bW文档 | Bo-Blog Wind</title>
+<script src="http://lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+
+<div id="overallContainer">
+<header>
+<span class="icon-newicon iconLogo"><h1><a href="http://bw.bo-blog.com">bW 官方站</a></h1></span>
+<span id="menuDown"><a href="#" onclick="$('nav').fadeToggle('fast');"><span class="icon-list menuDownIcon"></span> </a></span>
+<nav>
+<ul>
+<li id="nav-index"><a href="http://bw.bo-blog.com">首页</a></li>
+
+<li id="nav-download"><a href="http://bw.bo-blog.com/download/">下载</a></li>
+
+<li id="nav-document"><a href="http://bw.bo-blog.com/manual/">文档</a></li>
+
+<li id="nav-customize"><a href="http://bw.bo-blog.com/customize/">个性化</a></li>
+
+<li id="nav-forum"><a href="http://bw.bo-blog.com/forum/" target="_blank">论坛</a></li>
+
+<li id="nav-blog"><a href="http://www.bo-blog.com/bw/" target="_blank">日志</a></li>
+
+</ul>
+</nav>
+
+</header>
+
+<div id="mainArea">
+	<article id="contents">
+		<div id="contentsB">
+			<a href="#" onclick="$('#contentsC').fadeToggle('fast');"><span class="icon-list4"></span> 文档目录</a>
+		</div>
+		<div id="contentsC">
+			<h2>快速上手</h2><ul><li><p><a href="./index.html">概述</a></p></li><li><p><a href="./setup.html">安装指南</a></p></li><li><p><a href="./write-with-markdown.html">采用 MarkDown 撰写日志</a></p></li><li><p><a href="./cloud-services.html">使用云服务</a></p></li><li><p><a href="./url-rewrite.html">URL Rewrite 伪静态</a></p></li><li><p><a href="#">升级和备份</a></p></li></ul><hr><h2>个性化和自定义</h2><ul><li><p><a href="#">自定义 HTML</a></p></li><li><p><a href="#">自定义模块</a></p></li><li><p><a href="#">获取与安装主题</a></p></li><li><p><a href="#">获取与安装插件</a></p></li></ul><hr><h2>设计和开发</h2><ul><li><p><a href="#">主题制作手册</a></p></li><li><p><a href="#">插件制作手册</a></p></li><li><p><a href="#">数据库结构</a></p></li><li><p><a href="#">多语言</a></p></li><li><p><a href="#">欢迎参与开发</a></p></li></ul>
+		</div>
+
+	</article>
+	<article id="document" class="markdown-body">
+		<h1>使用云服务</h1><p>借助七牛等云存储服务和多说等社会化评论工具，可以让站点负荷进一步减轻，迁移更便捷。</p><h2>设置七牛云存储</h2><p>首先，您需要在 <strong>七牛云存储</strong> 注册帐号并获得 Access Key 和 Security Key，然后创建一个可供公开访问的空间（bucket）。七牛云存储官网： <a href="http://www.qiniu.com/">http://www.qiniu.com/</a></p><p>然后，登陆 bW 后台，进入“系统服务”页面设置。填写必要信息，打开“附件上传到七牛”来启用日志编辑器的附件云存储功能。<br><img src="http://xiaofengtest.qiniudn.com/storage/73b0a6c3?imageView2/2/w/500" alt="" title=""></p><p>设置完毕后，也可随时将博客完整数据备份上传到七牛。点击该页相应按钮即可完成。上传的文件在七牛空间里，是一个文件名以 storage/ 开头的 zip 文件。</p><h2>设置多说</h2><p>多说的设置更加简单。首先到<a href="http://duoshuo.com/">多说官网</a>注册登录，然后点击导航条上的 “后台管理”。</p><p>稍加自定义设置以使显示效果更美观。“自定义文本”中，对无评论、1条评论和N条评论的文字做如下设置：<br><img src="http://xiaofengtest.qiniudn.com/storage/c08c71fe?imageView2/2/w/500" alt="" title=""></p><p>然后到 bW 后台进入“系统服务”页面，在 <strong>多说短域名</strong> 中，填入您在多说上设置的短域名。也可在下面的界面上找到（.duoshuo.com 前的部分）。<br><img src="http://xiaofengtest.qiniudn.com/storage/e7267a05?imageView2/2/w/500" alt="" title=""></p><h2>设置Disqus</h2><p>Disqus 的设置与多说基本一致。只需到 <a href="https://disqus.com">https://disqus.com</a> 注册并至 <a href="https://disqus.com/admin/create/">https://disqus.com/admin/create/</a> 页面开通个人 Disqus 服务。然后，到 bW 的后台“系统服务”中做相应的设置即可。</p><p>请注意，如果您同时填写了多说短域名和 Disqus 短域名，则将优先载入多说服务。如果要使用 Disqus 的服务，请将多说短域名留空即可。</p><h2>其他云服务</h2><p>会在后期视情况增加其他云服务的支持。</p>
+	</article>
+</div>
+
+<footer>
+<div id="footerWrapper">
+<div class="footerL">
+<h4>常用链接</h4>
+<h5><a href="http://bw.bo-blog.com/download/">程序下载</a></h5>
+<h5>主题</h5>
+<h5>插件扩展</h5>
+</div>
+
+<div class="footerL">
+<h4>使用支持</h4>
+<h5><a href="http://bw.bo-blog.com/manual/">文档</a></h5>
+<h5><a href="http://bw.bo-blog.com/forum/" target="_blank">论坛</a></h5>
+<h5><a href="https://github.com/bo-blog/bw/issues" target="_blank">报告Bug</a></h5>
+</div>
+
+<div class="footerL">
+<h4>项目相关</h4>
+<h5><a href="https://github.com/bo-blog/bw">bW on GitHub</a></h5>
+<h5><a href="https://coding.net/u/bo-blog/p/bw/git">bW在Coding.net</a></h5>
+<h5><a href="http://www.bo-blog.com/index.php">Bo-Blog 2 [旧版]</a></h5>
+</div>
+
+<div class="footerL">
+<h4>分享</h4>
+<h5>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+<a class="jiathis_button_tsina"></a>
+<a class="jiathis_button_weixin"></a>
+<a class="jiathis_button_tqq"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+	summary:"",
+	shortUrl:false,
+	hideMore:true
+}
+</script>
+<!-- JiaThis Button END -->
+</h5>
+</div>
+
+<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">&copy; Bo-blog Wind</a></div>
+
+</div>
+</footer>
+<script type="text/javascript">
+$('#nav-document').addClass('activeNav');
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+</div>
+
+</body>
+</html>

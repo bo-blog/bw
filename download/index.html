@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<link href="../skin/font.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../skin/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../skin/github-markdown.css" media="all" rel="stylesheet" type="text/css" />
+<title>下载bW | Bo-Blog Wind</title>
+<script src="http://lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+
+<div id="overallContainer">
+<header>
+<span class="icon-newicon iconLogo"><h1><a href="http://bw.bo-blog.com">bW 官方站</a></h1></span>
+<span id="menuDown"><a href="#" onclick="$('nav').fadeToggle('fast');"><span class="icon-list menuDownIcon"></span> </a></span>
+<nav>
+<ul>
+<li id="nav-index"><a href="http://bw.bo-blog.com">首页</a></li>
+
+<li id="nav-download"><a href="http://bw.bo-blog.com/download/">下载</a></li>
+
+<li id="nav-document"><a href="http://bw.bo-blog.com/manual/">文档</a></li>
+
+<li id="nav-customize"><a href="http://bw.bo-blog.com/customize/">个性化</a></li>
+
+<li id="nav-forum"><a href="http://bw.bo-blog.com/forum/" target="_blank">论坛</a></li>
+
+<li id="nav-blog"><a href="http://www.bo-blog.com/bw/" target="_blank">日志</a></li>
+
+</ul>
+</nav>
+
+</header>
+
+<div id="mainArea">
+	<article id="contents">
+		<div id="contentsB">
+			<a href="#" onclick="$('#contentsC').fadeToggle('fast');"><span class="icon-list4"></span> 下载方式</a>
+		</div>
+		<div id="contentsC">
+			<h2>下载方式</h2><ul>
+			<li><p><a href="#url_url">直接下载</a></p></li>
+			<li><p><a href="#url_gh">GitHub</a></p></li>
+			<li><p><a href="#url_coding">Coding.net</a></p></li>
+			<li><p><a href="#url_composer">Composer</a></p></li>
+			</ul>
+		</div>
+
+	</article>
+	<article id="document" class="markdown-body">
+		<h1 id="url_url">直接下载</h1>
+		<p>请从下列地址中选择一个，直接下载完整程序。</p>
+		<p>地址1和2始终为已发布的最新版，而地址3可能不是最新版。</p>
+		<ul><li><a href="https://coding.net/u/bo-blog/p/bw/git/archive/master" target="_blank">下载链接一（国内）</a></li>
+		<li><a href="https://github.com/bo-blog/bw/archive/master.zip" target="_blank">下载链接二（国外）</a></li>
+		<li><a href="http://xiaofengtest.qiniudn.com/bw-master.zip" target="_blank">下载链接三（七牛云）</a></li>
+		</ul>
+		</p>
+		<h1 id="url_gh">GitHub</h1>
+		<p>
+		<code><span class="getURL">$ git clone https://github.com/bo-blog/bw.git</span></code>
+		</p>
+		<h1 id="url_coding">Coding.net</h1>
+		<p>
+		<code><span class="getURL">$ git clone https://git.coding.net/bo-blog/bw.git</span></code>
+		</p>
+		<h1 id="url_composer">Composer</h1>
+		<p>
+		<code><span class="getURL">composer create-project bo-blog/bw /intall_path/</span></code>
+		</p>
+	</article>
+</div>
+
+<footer>
+<div id="footerWrapper">
+<div class="footerL">
+<h4>常用链接</h4>
+<h5><a href="http://bw.bo-blog.com/download/">程序下载</a></h5>
+<h5>主题</h5>
+<h5>插件扩展</h5>
+</div>
+
+<div class="footerL">
+<h4>使用支持</h4>
+<h5><a href="http://bw.bo-blog.com/manual/">文档</a></h5>
+<h5><a href="http://bw.bo-blog.com/forum/" target="_blank">论坛</a></h5>
+<h5><a href="https://github.com/bo-blog/bw/issues" target="_blank">报告Bug</a></h5>
+</div>
+
+<div class="footerL">
+<h4>项目相关</h4>
+<h5><a href="https://github.com/bo-blog/bw">bW on GitHub</a></h5>
+<h5><a href="https://coding.net/u/bo-blog/p/bw/git">bW在Coding.net</a></h5>
+<h5><a href="http://www.bo-blog.com/index.php">Bo-Blog 2 [旧版]</a></h5>
+</div>
+
+<div class="footerL">
+<h4>分享</h4>
+<h5>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+<a class="jiathis_button_tsina"></a>
+<a class="jiathis_button_weixin"></a>
+<a class="jiathis_button_tqq"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+	summary:"",
+	shortUrl:false,
+	hideMore:true
+}
+</script>
+<!-- JiaThis Button END -->
+</h5>
+</div>
+
+<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">&copy; Bo-blog Wind</a></div>
+
+</div>
+</footer>
+<script type="text/javascript">
+$('#nav-download').addClass('activeNav');
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+</div>
+
+</body>
+</html>

@@ -18,9 +18,8 @@ a {
 color: #CCC;
 }
 #overallContainer {
-background: #F3F3F3;
+background: #1B1B1B;
 height: 100%;
-padding-bottom: 140px;
 }
 header {
 background: #464646;
@@ -33,7 +32,6 @@ z-index: 10000;
 header h1, h1 a {
 color: #D6D6D6;
 font-size: 24px;
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 display: inline;
 margin-left: 5px;
 }
@@ -71,12 +69,11 @@ color: #ECECEC;
 }
 #mainArea {
 clear: both;
-padding: 90px 0 10px 0;
+padding: 90px 0 0 0;
 text-align: center;
 background: #F6F6F6;
-}
-article {
-margin-bottom: 30px;
+float: left;
+width: 100%;
 }
 .details {
 text-align: center;
@@ -103,7 +100,6 @@ background: #EFEFEF;
 .details h2,  .details h2 a, .details h3,  .details h3 a {
 color: #EFEFEF;
 font-size: 24px;
-font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 text-shadow: 1px 1px 2px #333;
 }
 .details h2 a:hover, .details h3 a:hover {
@@ -115,7 +111,6 @@ text-shadow: none;
 footer {
 clear: both;
 background: #1B1B1B;
-margin-top: -140px;
 padding: 20px;
 height: 120px;
 min-height: 120px;
@@ -171,29 +166,63 @@ font-family: Helvetica, Arial;
 #keyMessage {
 display: none;
 }
+#contents, #document {
+text-align: left;
+padding: 20px;
+}
+#contents {
+width: 15%;
+float: left;
+line-height: 180%;
+}
+#contents a {
+color: #000;
+}
+#contents h2 {
+font-size: 24px;
+padding-bottom: 14px;
+}
+#contents h2 a,  #contents h2 {
+color: #356A00;
+}
+#contents li {
+font-size: 16px;
+}
+#contents hr {
+margin: 40px 0 40px 0;
+}
+#document {
+width: 75%;
+float: right;
+}
 
+.getURL {
+font-size: 22px;
+border-left: 4px solid #356A00;
+padding-left: 10px;
+}
 
 
 /* responsive */
-#menuDown {
+#menuDown, #contentsB {
 display: none;
 }
 
 @media only screen and (max-width:800px) {
-
 nav {
 position: absolute;
 right: 0;
-top: 80px;
+top: 52px;
 clear: both;
-float: right;
 display: none;
+height: 100%;
+width: 100%;
 }
 nav li {
 clear: both;
 background: #464646;
 padding: 6px;
-width: 200px;
+width: 100%;
 text-align: center;
 box-shadow: 1px 1px 2px #464646;
 }
@@ -202,6 +231,9 @@ background: #fff;
 }
 nav li a:hover {
 color: #464646;
+}
+nav li {
+border-bottom: 1px solid #fff;
 }
 #menuDown {
 display: inline;
@@ -227,8 +259,23 @@ margin-bottom: 15px;
 .menuDownIcon {
 font-size: 26px;
 }
-#mainArea {
-
+#contents {
+width: auto;
+float: none;
 }
-
+#document {
+width: auto;
+float: none;
+}
+#contentsB {
+display: block;
+font-size: 22px;
+text-align: center;
+}
+#contentsB a {
+color: #000;
+}
+#contentsC {
+display: none;
+}
 }

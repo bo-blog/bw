@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<link href="../skin/font.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../skin/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../skin/github-markdown.css" media="all" rel="stylesheet" type="text/css" />
+<title>bW文档 | Bo-Blog Wind</title>
+<script src="http://lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+
+<div id="overallContainer">
+<header>
+<span class="icon-newicon iconLogo"><h1><a href="http://bw.bo-blog.com">bW 官方站</a></h1></span>
+<span id="menuDown"><a href="#" onclick="$('nav').fadeToggle('fast');"><span class="icon-list menuDownIcon"></span> </a></span>
+<nav>
+<ul>
+<li id="nav-index"><a href="http://bw.bo-blog.com">首页</a></li>
+
+<li id="nav-download"><a href="http://bw.bo-blog.com/download/">下载</a></li>
+
+<li id="nav-document"><a href="http://bw.bo-blog.com/manual/">文档</a></li>
+
+<li id="nav-customize"><a href="http://bw.bo-blog.com/customize/">个性化</a></li>
+
+<li id="nav-forum"><a href="http://bw.bo-blog.com/forum/" target="_blank">论坛</a></li>
+
+<li id="nav-blog"><a href="http://www.bo-blog.com/bw/" target="_blank">日志</a></li>
+
+</ul>
+</nav>
+
+</header>
+
+<div id="mainArea">
+	<article id="contents">
+		<div id="contentsB">
+			<a href="#" onclick="$('#contentsC').fadeToggle('fast');"><span class="icon-list4"></span> 文档目录</a>
+		</div>
+		<div id="contentsC">
+			<h2>快速上手</h2><ul><li><p><a href="./index.html">概述</a></p></li><li><p><a href="./setup.html">安装指南</a></p></li><li><p><a href="./write-with-markdown.html">采用 MarkDown 撰写日志</a></p></li><li><p><a href="./cloud-services.html">使用云服务</a></p></li><li><p><a href="./url-rewrite.html">URL Rewrite 伪静态</a></p></li><li><p><a href="#">升级和备份</a></p></li></ul><hr><h2>个性化和自定义</h2><ul><li><p><a href="#">自定义 HTML</a></p></li><li><p><a href="#">自定义模块</a></p></li><li><p><a href="#">获取与安装主题</a></p></li><li><p><a href="#">获取与安装插件</a></p></li></ul><hr><h2>设计和开发</h2><ul><li><p><a href="#">主题制作手册</a></p></li><li><p><a href="#">插件制作手册</a></p></li><li><p><a href="#">数据库结构</a></p></li><li><p><a href="#">多语言</a></p></li><li><p><a href="#">欢迎参与开发</a></p></li></ul>
+		</div>
+
+	</article>
+	<article id="document" class="markdown-body">
+		<h1>概述</h1><p>欢迎使用 bW，本文档将帮助您快速上手，了解 bW 的使用方法。您也可以通过在 Github 上 fork 本文档工作包，帮助完善本文档。</p><h2>什么是 bW</h2><p>bW (a.k.a. Bo-blog Wind) 是一款轻量级个人博客程序，旨在为追求便捷的写作者提供一个简单、轻巧的文章发布工具。bW 使用 PHP 为运行脚本，采用 SQLite3 或 MySQL 数据库，并可在撰写中采用 Markdown 进行排版。</p><h2>bW 有哪些特色？</h2><p>bW正在做的、准备做到的有哪些特点呢？</p><p><strong>首先，它是便携的。</strong>它可以很好地通过手机更新和维护，随身带好你的私人手机，无论是直接在手机上打开，还是扫一扫二维码、在别人的PC上临时登录，都能方便地使用bW。在安装时默认的选项是SQLite，也是出于迁移数据的便捷考虑。</p><p><strong>其次，它不需要太多设置。</strong>bW在安装完成后，就可以直接拿来使用了，可能只要改一下博客的名字和描述而已。</p><p><strong>此外，它不会频繁更新。</strong>bW将保持简洁、相对稳定。它的目标是够用，不至于周周升级月月更新，而违背了搭建一个博客的初衷。</p><p><strong>当然，它也是可以扩展的。</strong>bW还是为插件、主题留出了相当大的发挥空间。</p><h2>我听说过 bo-blog 2.0 甚至 1.0，它们和 bW 有什么关系？</h2><p>bW是完全推到重写的，所以和bo-blog 2.0没有直接的关系，除了名字。前作固然有非常完善的功能和设置选项，但想要兼顾太多人的需求，导致了自身的臃肿和难以维护，出差错和漏洞也难免。所以 bW 并没有在前作的基础上进行升级，而是选择了全部重写。</p><p>如果您有兴趣知道创建 bW 这个程序的初衷，可以阅读<a href="http://www.bo-blog.com/bw/post/what-is-bw/">这篇日志</a>。</p><hr><h1>参与完善本文档</h1><p>本文档在 GitHub 上进行托管。所有的文档页面都采用 MarkDown 撰写。</p><p>手册的项目地址在 <a href="https://github.com/bo-blog/bw-manual">https://github.com/bo-blog/bw-manual</a> 。您可以 fork 它或 clone 到本地进行修改。</p><h2>修改文档</h2><p>您只需做的是修改 src/manual 目录下的相关 md 文件就可修改文档的内容。</p><h2>新增文档</h2><p>要新建一篇文档，在 src/manual 目录下创建新的 md 文件，输入新文档的内容即可。然后，请在 contents.md 文件中，增加新文档的链接。</p><h2>预览</h2><p>修改完毕后，可以在浏览器中运行项目根目录下的 generator.php。 这样就可以在 manual 目录下重新生成所有的 html 静态文件。请不要直接改动这些 html 文件，而是通过修改 src/manual 下的 md 文件来编写文档。 html 文件不会被 commit 到改动中。</p><h2>提交修改</h2><p>在完成修改后，可以提交并发起 pull 请求。审核通过的文档改动将被合并到 master 版本中。</p>
+	</article>
+</div>
+
+<footer>
+<div id="footerWrapper">
+<div class="footerL">
+<h4>常用链接</h4>
+<h5><a href="http://bw.bo-blog.com/download/">程序下载</a></h5>
+<h5>主题</h5>
+<h5>插件扩展</h5>
+</div>
+
+<div class="footerL">
+<h4>使用支持</h4>
+<h5><a href="http://bw.bo-blog.com/manual/">文档</a></h5>
+<h5><a href="http://bw.bo-blog.com/forum/" target="_blank">论坛</a></h5>
+<h5><a href="https://github.com/bo-blog/bw/issues" target="_blank">报告Bug</a></h5>
+</div>
+
+<div class="footerL">
+<h4>项目相关</h4>
+<h5><a href="https://github.com/bo-blog/bw">bW on GitHub</a></h5>
+<h5><a href="https://coding.net/u/bo-blog/p/bw/git">bW在Coding.net</a></h5>
+<h5><a href="http://www.bo-blog.com/index.php">Bo-Blog 2 [旧版]</a></h5>
+</div>
+
+<div class="footerL">
+<h4>分享</h4>
+<h5>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+<a class="jiathis_button_tsina"></a>
+<a class="jiathis_button_weixin"></a>
+<a class="jiathis_button_tqq"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+	summary:"",
+	shortUrl:false,
+	hideMore:true
+}
+</script>
+<!-- JiaThis Button END -->
+</h5>
+</div>
+
+<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">&copy; Bo-blog Wind</a></div>
+
+</div>
+</footer>
+<script type="text/javascript">
+$('#nav-document').addClass('activeNav');
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+</div>
+
+</body>
+</html>

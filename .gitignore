@@ -2,3 +2,6 @@
 conf/
 storage/
 trash/
+src/
+CNAME
+bwupdate/
