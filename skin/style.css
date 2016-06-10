@@ -78,7 +78,7 @@ width: 100%;
 .details {
 text-align: center;
 width: 520px;
-height: 60px;
+height: 80px;
 margin: auto;
 }
 
@@ -247,7 +247,7 @@ padding-right: 0;
 .details {
 width: 100%;
 text-align: center;
-height: 100px;
+height: 170px;
 }
 .details h2, .details h3 {
 float: none;
