@@ -1,5 +1,13 @@
 <?php
-//Copyright: Byke
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
+if (!defined ('P')) {
+	die ('Access Denied.');
+}
 
 ?>
 
@@ -15,7 +23,7 @@
 <span class="icon-arrow-right5"></span> [[=admin:item:AID]]<br/><input type="text" class="inputLine inputLarge" name="smt[aID]" value="[[::aID]]" placeholder="[[=admin:msg:AID]]" id="aID" /><br/><span class="adminExplain">[[=admin:msg:AID2]]</span>
 </p>
 
-<p>
+<p id="editorBody">
 <span class="icon-arrow-right5"></span> [[=admin:item:AContent]] <span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> | <a href="##" id="adminPreview"><span class="icon-screen2"> </span><span id="adminPrevAdd">[[=admin:btn:StartPreview]]</span></a></span> <br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea><div id="previewArea" class="inputLine inputLarge textareaLine details"></div>
 </p>
 
@@ -265,13 +273,6 @@ function insertUpURLs (str)
 	str=str.replace(/ /g, "\r\n");
 	$('#aContent').insertContent (str);
 	$('#adminUpAdd').html("[[=admin:btn:AddPic]]");
-/*	var targetURL=$('#adminUploadContainer').data('upurl');
-
-	$.get(targetURL+"&ajax=1", function (data){
-		if (data.error!=1) {
-			$("#adminUploadContainer").html (data.returnMsg);
-		}
-	}, "json");*/
 	$("#UI-loading").fadeOut(200);
 }
 
@@ -434,18 +435,16 @@ function insertGeoLoc (data) {
 
 [[::ext_customEditor]]
 
-if ($(window).width()>800)
+if (!callCustomEditor)
 {
-	if (!callCustomEditor)
-	{
-		$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/inc/script/editor/themes/default/default.css"}).appendTo("head");
-		$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "[[::siteURL]]/inc/script/editor/jquery.markbar.js"}).appendTo("head");
-
-		$(function() {
-			$('#aContent').markbar();
-		});
+	$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/inc/script/editor/themes/default/default.css"}).appendTo("head");
+	$("<sc"+"ript>"+"</sc"+"ript>").attr({src: "[[::siteURL]]/inc/script/editor/jquery.markbar.js"}).appendTo("head");
+	$(function() {
+		$('#aContent').markbar();
+	});
+	if ($(window).width()<=800) {
+		$('#editorBody').click (function() {$('.markbar').show();});
 	}
-} else {
 }
 
 $('#aTime').click (function (){

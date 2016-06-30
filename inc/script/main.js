@@ -246,7 +246,7 @@ function changeNav ()
 	else {
 		$("header").removeClass('headerShrink');
 	}
-	t=setTimeout ("changeNav()", 600);
+	t=setTimeout ("changeNav()", 200);
 }
 
 function makeComUserLink ()

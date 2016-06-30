@@ -14,6 +14,8 @@ $article -> fetchArticle ($canonical -> currentArgs['aID']);
 
 $view = new bwView;
 $view -> setPageTitle ($article -> articleList[$canonical -> currentArgs['aID']]['aTitle']);
+$view -> setMetaData ($article -> articleList[$canonical -> currentArgs['aID']]['aTags']);
+
 $aCateURLName = $article -> articleList[$canonical -> currentArgs['aID']]['aCateURLName'];
 $view -> setActiveNav ($aCateURLName);
 if (bw :: $cateList[$aCateURLName]['aCateTheme']) {
@@ -26,6 +28,11 @@ $view -> setMaster ('page');
 if ($conf['commentOpt']<>0) {
 	loadServices ();
 	if ($conf['commentOpt'] == 1 || $conf['commentOpt'] == 2) { //Build-in comment
+
+		//Discarded on 2016/6/22
+		$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));
+
+		/*
 		@session_start ();
 		$comment = new bwComment;
 		$comment -> alterAID ($canonical -> currentArgs['aID']);
@@ -36,6 +43,7 @@ if ($conf['commentOpt']<>0) {
 		$totalBatches = ceil ($comment -> totalCom / bw :: $conf['comPerLoad']);
 		$view -> setPassData (array ('totalbatches' => $totalBatches, 'currentbatch' => $canonical -> currentPage));
 		$view -> setWorkFlow (array ('ajaxcommentgroup', 'commentarea', 'article', 'page'));
+		*/
 	} elseif ($conf['commentOpt'] == 3) {
 		if ($conf['duoshuoID']) {
 			$view -> setWorkFlow (array ('duoshuoarea', 'article', 'page'));

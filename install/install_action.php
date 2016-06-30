@@ -28,9 +28,8 @@ if (!isset ($_COOKIE['bwInstallLang'])) {
 
 if ($step == 1) {
 	$rslt2 = class_exists ('PDO') ? 1 : 0;
-	//$rslt3 = extension_loaded ('Zlib') ? 1 : 0;
-	//$rslt4 = function_exists ('curl_init') ? 1 : 0;
-	$rslt3 = $rslt4 = 1;
+	$rslt3 = checkWritable () ? 1 : 0;
+	$rslt4 = 1;
 
 	if ($rslt2 == 0) {
 		$rslt5 = 0;
@@ -209,4 +208,16 @@ function stopError ($err)
 {
 	global $l;
 	die (json_encode (array ('error'=>1, 'rslt7' => 1, 'rslt8' => 0, 'rslt9' => 0, 'rslt10' => $l['data.dberror'].' '.$err)));
+}
+
+function checkWritable () {
+	$mustBeWritable = array ('conf', 'storage', 'extension', 'theme', 'update');
+	foreach ($mustBeWritable as $aFolder) {
+		if (!is_dir ('./' . $aFolder . '/')) {
+			return false;
+		} elseif (!is_writable ('./' . $aFolder . '/')) {
+			return false;
+		}
+	} 
+	return true;
 }

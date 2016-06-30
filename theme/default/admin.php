@@ -1,6 +1,10 @@
 <?php
-//Copyright: Byke
-
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
 if (!defined ('P')) {
 	die ('Access Denied.');
 }
@@ -61,5 +65,8 @@ var lng={
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>
 <div id="UI-lightbox"></div>
 [[::ext_adminfooter]]
+<script>
+$("#mainArea").fadeIn (500);
+</script>
 </body>
 </html>

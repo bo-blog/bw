@@ -1,4 +1,7 @@
 /* Admin */
+#mainArea {
+display: none;
+}
 #adminLoginImg {
 border-radius: 50%;
 box-shadow: 1px 1px 2px #fff;
@@ -345,5 +348,12 @@ height: 60px;
 }
 .inAdmin, .inAdmin body, .inAdmin a, .inAdmin li {
 font-size: 17px!important;
+}
+.adminUploader {
+float: none;
+margin-bottom: -27px;
+}
+#aContent, #previewArea{
+height: 190px;
 }
 }

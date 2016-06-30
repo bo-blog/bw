@@ -5,9 +5,9 @@
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '1.0.8');
-define ('bwInternalVersion', '1080');
-define ('bwUpdate', 'http://bw.bo-blog.com/bwupdate/');
+define ('bwVersion', '1.0.9');
+define ('bwInternalVersion', '1090');
+define ('bwUpdate', 'https://bo-blog.github.io/bw-update/');
 
 if (!defined ('P')) {
 	die ('Access Denied.');
@@ -20,14 +20,15 @@ if (!file_exists (P . 'conf/info.php')) {
 
 include_once (P . 'conf/info.php');
 date_default_timezone_set ($conf['timeZone']);
+
+spl_autoload_register (function ($class) {
+	$classFile = P. 'inc/' . strtolower (substr ($class, 2) . '.inc.php');
+	file_exists ($classFile) && require_once ($classFile);
+});
+
 include_once (P . 'inc/bw.inc.php');
 
 bw :: init ();
-
-function  __autoload ($class) {
-	$classFile = P. 'inc/' . strtolower (substr ($class, 2) . '.inc.php');
-	file_exists ($classFile) ? require_once ($classFile) : stopError ("System damaged. File missing: $classFile .");
-}
 
 function stopError ($errMsg)
 {
@@ -47,31 +48,43 @@ function ajaxSuccess ($successMsg)
 	$view -> haltWithSuccess ($successMsg);
 } 
 
-function getIP ()
-{
+function getIp () {
 	$realip = $realip2 = '';
-	if (isset ($_SERVER)) {
-		if (isset ($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-			$realip2 = $_SERVER["HTTP_X_FORWARDED_FOR"];
-		} else if (isset($_SERVER["HTTP_CLIENT_IP"])) {
-			$realip2 = $_SERVER["HTTP_CLIENT_IP"];
-		} 
-		$realip = $_SERVER["REMOTE_ADDR"];
-	} else {
-		if (getenv ("HTTP_X_FORWARDED_FOR")) {
-			$realip2 = getenv ("HTTP_X_FORWARDED_FOR");
-		} else if (getenv ("HTTP_CLIENT_IP")) {
-			$realip2 = getenv ("HTTP_CLIENT_IP");
-		} 
-		$realip = getenv ("REMOTE_ADDR");
+	if (isset ($_SERVER["HTTP_CLIENT_IP"])) {
+		$realip = filterIP ($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : false;
 	} 
-	if (!$realip) {
+	if (!$realip && isset ($_SERVER['REMOTE_ADDR'])) {
+		$realip = filterIP ($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : false;
+	} 
+	if (isset ($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+		$realip2 = filterIP ($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $realip;
+	}
+	if (!$realip && $realip2) {
 		$realip = $realip2;
 	} 
-	$realip = basename ($realip);
-	$realip2 = basename ($realip2);
+	if (!$realip) {
+		$realip = 'unknown';
+	}
+	if (!$realip2) {
+		$realip2 = $realip;
+	} 
 	return array ($realip, $realip2);
-} 
+}
+
+function filterIP ($str){
+	$ipc = 0;
+	$ipm = array ();
+	$ip = @explode (',', $str);
+	for($i=0; $i<count ($ip); $i++) {  
+		$ipc = preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', trim ($ip[$i]), $ips);
+		isset ($ips[0]) && $ipm[] = $ips[0];
+	} 
+	if ($ipc > 0) {
+		return (@implode (', ', $ipm));
+	} else {
+		return '';
+	}
+}  
 
 function dataFilter ($reservedKeys, $submitData)
 {
@@ -241,6 +254,24 @@ function fileReplaceRecursive ($readDir, $destDir)
 		}
 	} 
 } 
+
+function rrmdir ($src) {
+	$dir = opendir ($src);
+	while(false !== ( $file = readdir ($dir))) {
+		if (($file != '.' ) && ($file != '..' )) {
+			$full = $src . '/' . $file;
+			if (is_dir ($full) ) {
+				rrmdir ($full);
+			}
+			else {
+				@unlink ($full);
+			}
+		}
+	}
+	closedir ($dir);
+	@rmdir ($src);
+}
+
 
 if (@get_magic_quotes_gpc()) {
 	function stripslashes_deep($value)

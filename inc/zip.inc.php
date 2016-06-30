@@ -34,6 +34,7 @@ class bwZip {
 						@mkdir (dirname ($filePath), 0777, true);
 					}
 					@file_put_contents ($filePath, $fileUnzipContent);
+					@chmod ($filePath, 0777);
 				}
 			}
 		}

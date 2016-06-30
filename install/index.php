@@ -64,9 +64,10 @@ function output ()
 <ul>
 <li>{$l['env.phpver']} &gt; 5.3.0 <span id="rslt1"></span></li>
 <li>{$l['env.pdo']} <span id="rslt2"></span></li>
-<!-- <li>{$l['env.zlib']} <span id="rslt3"></span></li>
-<li>{$l['env.curl']} <span id="rslt4"></span></li> -->
 <li>{$l['env.sql']} <span id="rslt5"></span></li>
+<li>{$l['env.writable']} <span id="rslt3"></span></li>
+<p class="wS"> (conf, storage, extension, theme, update)
+</p>
 </ul>
 </p>
 <p class="wS" id="rslt6" style="display: none;">
@@ -153,6 +154,10 @@ function checkEnv ()
 					$.scrollTo('#layer3', 500);
 				});
 				$('#btn3').show();
+			}
+			if (data.rslt6 == 0) {
+				$('#rslt6').html("{$l['env.failure']}");
+				$('#rslt6').fadeIn();
 			}
 		}, 'JSON');
 	}

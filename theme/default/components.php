@@ -1,10 +1,13 @@
 <?php
-//Copyright: Byke
-
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
 if (!defined ('P')) {
 	die ('Access Denied.');
 }
-
 
 $parts['pagination']=<<<eot
 <div id="pageBar">

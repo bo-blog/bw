@@ -65,8 +65,12 @@ class bwView {
 	public function generateOutput ()
 	{
 		if (!$this -> themeDir) {
-			global $conf;
-			$this -> setTheme ($conf['siteTheme']);
+			if (defined ('M')) {
+				global $conf;
+				M == 'admin' ? $this -> setTheme ('default') : $this -> setTheme ($conf['siteTheme']);
+			} else {
+				$this -> setTheme ('default');
+			}
 		}
 		include_once (P . "theme/default/components.php");
 		if (file_exists ($this -> themeDir . "/components.php")) {
@@ -238,6 +242,12 @@ class bwView {
 	{
 		$this -> passData['pageTitle'] = $mainTitle . ' | ';
 		$this -> passData['pageTitle'] = hook ('setPageTitle', 'Replace', $this -> passData['pageTitle']);
+	} 
+
+	public function setMetaData ($meta)
+	{
+		$this -> passData['metaData'] = $meta;
+		$this -> passData['metaData'] = hook ('setMetaData', 'Replace', $this -> passData['metaData']);
 	} 
 
 	public function setActiveNav ($navID)

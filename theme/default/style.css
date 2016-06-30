@@ -726,6 +726,9 @@ padding-right: 40px;
 .menuDownIcon {
 font-size: 26px;
 }
+.menuLastList {
+height: 5000px;
+}
 #profileArea {
 display:none;
 }
@@ -791,5 +794,8 @@ font-size: 28px;
 position: absolute;
 right: 6px;
 top: 60px;
+}
+header {
+box-shadow: none;
 }
 }

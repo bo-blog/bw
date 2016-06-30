@@ -1,5 +1,13 @@
 <?php
-//Copyright: Byke
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
+if (!defined ('P')) {
+	die ('Access Denied.');
+}
 
 ?>
 
@@ -22,17 +30,17 @@
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentOpt]]<br class="smallBr"/>
 <select name="smt[commentOpt]" id="commentOpt" class="selectLine">
 <option value="0">[[=admin:opt:NoComment]]</option>
-<option value="1">[[=admin:opt:AllowComment]]</option>
-<option value="2">[[=admin:opt:OnlyLoginComment]]</option>
+<!--<option value="1">[[=admin:opt:AllowComment]]</option>
+<option value="2">[[=admin:opt:OnlyLoginComment]]</option>-->
 <option value="3">[[=admin:opt:ThirdPartyComment]]</option>
 </select>
 <br/><span class="adminExplain">[[=admin:msg:CommentOpt]]</span></p>
-<p>
+<!-- <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentFrequency]]<br/><input type="text" class="inputLine inputLarge" name="smt[comFrequency]" value="[[::comFrequency]]" /><br/><span class="adminExplain">[[=admin:msg:CommentFrequency]]</span>
 </p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentBreak]]<br/><input type="text" class="inputLine inputLarge" name="smt[comPerLoad]" value="[[::comPerLoad]]" />
-</p>
+</p> -->
 
 <p><br/><br/></p>
 

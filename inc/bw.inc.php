@@ -132,7 +132,7 @@ class bw {
 	public static function getSocialLinks ()
 	{
 		$allSocial = array('sina-weibo', 'twitter', 'weixin', 'facebook', 'douban', 'instagram', 'renren', 'linkedin');
-		$allSocialNames = array(self :: $conf['l']['page:social:Weibo'], self :: $conf['l']['page:social:WeChat'], self :: $conf['l']['page:social:Douban'], self :: $conf['l']['page:social:Instagram'], self :: $conf['l']['page:social:Renren'], self :: $conf['l']['page:social:Linkedin']);
+		$allSocialNames = array(self :: $conf['l']['page:social:Weibo'], self :: $conf['l']['page:social:Twitter'], self :: $conf['l']['page:social:WeChat'], self :: $conf['l']['page:social:Facebook'], self :: $conf['l']['page:social:Douban'], self :: $conf['l']['page:social:Instagram'], self :: $conf['l']['page:social:Renren'], self :: $conf['l']['page:social:Linkedin']);
 		$allSocialLinks = array();
 		foreach ($allSocial as $i => $aSocial) {
 			if (isset (self :: $conf['social-' . $aSocial])) {

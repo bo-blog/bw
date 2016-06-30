@@ -12,9 +12,9 @@
 	{
 		strong: true,
 		em: true,
-		h1: false,
-		h2: false,
-		h3: false,
+		h1: true,
+		h2: true,
+		h3: true,
 		ul: true,
 		ol: true,
 		a: true,
@@ -29,9 +29,16 @@
 		this.options = $.extend({}, defaults, options);
 		this.init();
 	}
+	var PairStatus =
+		{
+			strong: false,
+			em: false,
+			code: false
+		};
 
 	Plugin.prototype =
 	{
+
 		init: function()
 		{
 			// Open div
@@ -40,31 +47,31 @@
 			// Add strong
 			if (this.options.strong)
 			{
-				html += '<a href="#strong" class="strong"><span class="icon-bold"></span></a>';
+				html += '<a href="#strong" class="strong" id="mbtn_strong"><span class="icon-bold"></span></a>';
 			}
 
 			// Add em
 			if (this.options.em)
 			{
-				html += '<a href="#em" class="em"><span class="icon-italic"></span></a>';
+				html += '<a href="#em" class="em" id="mbtn_em"><span class="icon-italic"></span></a>';
 			}
 
 			// Add h1
 			if (this.options.h1)
 			{
-				html += '';
+				html += '<a href="#h1" class="h1"><strong>H1</strong></a>';
 			}
 
 			// Add h2
 			if (this.options.h2)
 			{
-				html += '';
+				html += '<a href="#h2" class="h2"><strong>H2</strong></a>';
 			}
 
 			// Add h3
 			if (this.options.h3)
 			{
-				html += '';
+				html += '<a href="#h3" class="h3"><strong>H3</strong></a>';
 			}
 
 			// Add ul
@@ -94,13 +101,13 @@
 			// Add blockquote
 			if (this.options.blockquote)
 			{
-				html += '<a href="#blockquote" class="blockquote"><span class="icon-quote"></span></a>';
+				html += '<a href="#blockquote" class="blockquote" id="mbtn_blockquote"><span class="icon-quote"></span></a>';
 			}
 
 			// Add code
 			if (this.options.code)
 			{
-				html += '<a href="#code" class="code"><span class="icon-embed"></span></a>';
+				html += '<a href="#code" class="code" id="mbtn_code"><span class="icon-embed"></span></a>';
 			}
 
 			//bW: added on 2015/11/29
@@ -114,7 +121,6 @@
 
 			// Insert
 			this.toolbar = $(html).insertBefore(this.element);
-
 			// Setup events
 			var self = this;
 
@@ -138,77 +144,119 @@
 
 		strong: function()
 		{
-			this.replace('**' + this.get().text + '**');
+			if (this.get().text.length==0)
+			{
+				this.insertContent('**');
+				this.toggleButton('strong');
+			}
+			else {
+				this.insertContent('**' + this.get().text + '**');
+			}
 		},
 
 		em: function()
 		{
-			this.replace('*' + this.get().text + '*');
+			if (this.get().text.length==0)
+			{
+				this.insertContent('*');
+				this.toggleButton('em');
+			}
+			else {
+				this.insertContent('*' + this.get().text + '*');
+			}
 		},
 
 		h1: function()
 		{
-			var text = this.get().text;
-			text += '\n' + new Array(text.length + 1).join('-');
-			this.replace(text);
+			if (this.get().text.length==0)
+			{
+				this.insertContent('# ');
+			}
+			else {
+				this.insertContent('# ' + this.get().text);
+			}
 		},
 
 		h2: function()
 		{
-			this.replace('## ' + this.get().text);
+			if (this.get().text.length==0)
+			{
+				this.insertContent('## ');
+			}
+			else {
+				this.insertContent('## ' + this.get().text);
+			}
 		},
 
 		h3: function()
 		{
-			this.replace('### ' + this.get().text);
+			if (this.get().text.length==0)
+			{
+				this.insertContent('### ');
+			}
+			else {
+				this.insertContent('### ' + this.get().text);
+			}
 		},
 
 		ul: function()
 		{
-			var rows = this.get().text.split('\n');
-			var replace = '';
-
-			$.each(rows, function(index, value)
+			if (this.get().text.length==0)
 			{
-				if (value.length)
-				{
-					replace += '- ' + value + '\n';
-				}
-				else
-				{
-					if (replace === '' || rows.slice(index).join('').replace(/^\s+|\s+$/g, '').length === 0)
-					{
-						replace += '\n';
-					}
-				}
-			});
+				this.insertContent('- ');
+			}
+			else {
+				var rows = this.get().text.split('\n');
+				var replace = '';
 
-			this.replace(replace.slice(0, -1));
+				$.each(rows, function(index, value)
+				{
+					if (value.length)
+					{
+						replace += '- ' + value + '\n';
+					}
+					else
+					{
+						if (replace === '' || rows.slice(index).join('').replace(/^\s+|\s+$/g, '').length === 0)
+						{
+							replace += '\n';
+						}
+					}
+				});
+
+				this.insertContent(replace.slice(0, -1));
+			}
 		},
 
 		ol: function()
 		{
-			var rows = this.get().text.split('\n');
-			var replace = '';
-			var number = 1;
-
-			$.each(rows, function(index, value)
+			if (this.get().text.length==0)
 			{
-				if (value.length)
-				{
-					replace += number + '. ' + value + '\n';
-					number++;
-				}
-				else
-				{
-					if (replace === '' || rows.slice(index).join('').replace(/^\s+|\s+$/g, '').length === 0)
-					{
-						replace += '\n';
-					}
-				}
-			});
+				this.insertContent('1. ');
+			}
+			else {
+				var rows = this.get().text.split('\n');
+				var replace = '';
+				var number = 1;
 
-			this.replace(replace.slice(0, -1));
+				$.each(rows, function(index, value)
+				{
+					if (value.length)
+					{
+						replace += number + '. ' + value + '\n';
+						number++;
+					}
+					else
+					{
+						if (replace === '' || rows.slice(index).join('').replace(/^\s+|\s+$/g, '').length === 0)
+						{
+							replace += '\n';
+						}
+					}
+				});
+
+				this.insertContent(replace.slice(0, -1));
+			}
 		},
 
 		a: function()
@@ -217,7 +265,14 @@
 
 			if (url)
 			{
-				this.replace('[' + this.get().text + '](' + url + ')');
+				if (this.get().text.length==0)
+				{
+					this.insertContent('[](' + url + ')');
+				}
+
+				else {
+					this.insertContent('[' + this.get().text + '](' + url + ')');
+				}
 			}
 		},
 
@@ -227,24 +282,37 @@
 
 			if (url)
 			{
-				this.replace('![' + this.get().text + '](' + url + ')');
+				this.insertContent('![' + this.get().text + '](' + url + ')');
 			}
 		},
 
 		blockquote: function()
 		{
-			this.replace('> ' + this.get().text.split('\n').join('\n> '));
+			if (this.get().text.length==0)
+			{
+				this.insertContent('> ');
+			}
+			else {
+				this.insertContent('> ' + this.get().text.split('\n').join('\n> '));
+			}
 		},
 
 		code: function()
 		{
-			this.replace('    ' + this.get().text.split('\n').join('\n    '));
+			if (this.get().text.length==0)
+			{
+				this.insertContent('\n```\n');
+				this.toggleButton('code');
+			}
+			else {
+				this.insertContent('```\n' + this.get().text+('\n```'));
+			}
 		},
 
 		tab: function()
 		{
 			var selection = this.get();
-			this.replace('    ' + selection.text.split('\n').join('\n    '), false);
+			this.insertContent('    ' + selection.text.split('\n').join('\n    '), false);
 		},
 
 		
@@ -254,7 +322,7 @@
 
 			if (url)
 			{
-				this.replace(this.get().text + '!~!' + url + '[youku]');
+				this.insertContent(this.get().text + '!~!' + url + '[youku]');
 			}
 		},
 
@@ -266,15 +334,15 @@
 			{
 				if (url.substr(url.length-1,1) == 'x')
 				{
-					this.replace(this.get().text + '!~!' + url.substr(0,url.length-1) + '[xiami]');
+					this.insertContent(this.get().text + '!~!' + url.substr(0,url.length-1) + '[xiami]');
 				}
 				else {
 					if (url.substr(url.length-1,1) == 'w')
 					{
-						this.replace(this.get().text + '!~!' + url.substr(0,url.length-1) + '[wangyiyun]');
+						this.insertContent(this.get().text + '!~!' + url.substr(0,url.length-1) + '[wangyiyun]');
 					}
 					else {
-						this.replace(this.get().text + '!~!' + url + '[xiami]');
+						this.insertContent(this.get().text + '!~!' + url + '[xiami]');
 					}
 				}
 			}
@@ -282,7 +350,21 @@
 
 		readmore: function()
 		{
-			this.replace(this.get().text + '+++');
+			this.insertContent(this.get().text + '+++');
+		},
+
+		toggleButton: function (btn)
+		{
+			if (!PairStatus[btn])
+			{
+				$("#mbtn_"+btn).prepend('/');
+				PairStatus[btn]=true;
+			} 
+			else {
+				var ttBtn = $("#mbtn_"+btn).html();
+				$("#mbtn_"+btn).html(ttBtn.substr(1));
+				PairStatus[btn]=false;
+			}
 		},
 
 		get: function()
@@ -365,7 +447,6 @@
 					{
 						e.selectionStart = e.selectionEnd = start + text.length;
 					}
-
 					return this;
 
 				}) ||
@@ -386,7 +467,50 @@
 				}
 
 			)();
+		},
+
+		insertContent : function(myValue, t) {
+			var $t = $(this.element)[0];
+			if (document.selection) { // ie
+				this.element.focus();
+				var sel = document.selection.createRange();
+				sel.text = myValue;
+				this.element.focus();
+				sel.moveStart('character', -l);
+				var wee = sel.text.length;
+				if (arguments.length == 2) {
+					var l = $t.value.length;
+					sel.moveEnd("character", wee + t);
+					t <= 0 ? sel.moveStart("character", wee - 2 * t
+							- myValue.length) : sel.moveStart(
+							"character", wee - t - myValue.length);
+					sel.select();
+				}
+			} else if ($t.selectionStart
+					|| $t.selectionStart == '0') {
+				var startPos = $t.selectionStart;
+				var endPos = $t.selectionEnd;
+				var scrollTop = $t.scrollTop;
+				$t.value = $t.value.substring(0, startPos)
+						+ myValue
+						+ $t.value.substring(endPos,
+								$t.value.length);
+				this.element.focus();
+				$t.selectionStart = startPos + myValue.length;
+				$t.selectionEnd = startPos + myValue.length;
+				$t.scrollTop = scrollTop;
+				if (arguments.length == 2) {
+					$t.setSelectionRange(startPos - t,
+							$t.selectionEnd + t);
+					this.element.focus();
+				}
+			} else {
+				this.value += myValue;
+				this.element.focus();
+			}
 		}
+
+
 	};
 
 	$.fn.markbar = function(options)

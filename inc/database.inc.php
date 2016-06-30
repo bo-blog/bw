@@ -36,7 +36,7 @@ class bwDatabase extends PDO {
 		catch (PDOException $e) {
 			$this -> errorMsg[] = $e -> getCode();
 			$this -> errorMsg[] = $e -> getMessage();
-			$this -> throwError ();
+			stopError ('Database Error: ' . implode(', ', $this -> errorMsg));
 		} 
 	} 
 

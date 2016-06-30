@@ -13,6 +13,7 @@ $l=array (
 'env.zlib' => 'Zlib extension',
 'env.curl' => 'cURL extension',
 'env.sql' => 'PDO SQLite or PDO MySQL',
+'env.writable' => 'Key folders writable',
 'env.failure' => 'Environment check failed. bW cannot run with the current server configuration.',
 'env.success' => 'Congratulations! Environment check passed.',
 'env.btn' => 'CONTINUE',

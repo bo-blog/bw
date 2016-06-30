@@ -13,6 +13,7 @@ $l=array (
 'env.zlib' => 'Zlib 擴展庫',
 'env.curl' => 'cURL 擴展庫',
 'env.sql' => 'PDO SQLite 或 PDO MySQL 支持',
+'env.writable' => '關鍵文件夾寫入權限',
 'env.failure' => '環境檢查失敗。bW 不能運行在當前伺服器上。',
 'env.success' => '恭喜！環境檢查通過。',
 'env.btn' => '下一步',

@@ -86,6 +86,7 @@ if ($canonical -> currentArgs['mainAction'] == 'login') {
 			ajaxSuccess ('-' . $navCSRFCode);
 		} 
 	} else {
+		$view -> setTheme (bw :: $conf['siteTheme']);
 		$view -> setMaster ('adminlogin');
 		$view -> setWorkFlow (array ('adminlogin'));
 		$view -> finalize ();
@@ -248,7 +249,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		if ($conf['qiniuBucket'] && $conf['qiniuUpload'] == '1') {
 			require_once (P . "inc/script/qiniu/QiniuClient.php");
 			$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
-			$fStoreName = 'storage/' . substr (md5 (rand (1, 99999) . time()), 10, 8) . '_' . basename ($_REQUEST['fname']);
+			$fStoreName = 'storage/' . substr (md5 (rand (1, 99999) . time()), 10, 8) . '_' . basename (str_replace ('\\', '/', $_REQUEST['fname']));
 			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/{$conf['linkPrefixAdmin']}/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)', 'ftype' => '$(mimeType)')));
 			$qiniuFileToken = $qiniuClient -> uploadToken($flags) . '<<<' . $fStoreName;
 			ajaxSuccess ($qiniuFileToken);
@@ -569,8 +570,28 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		if (!isset ($_REQUEST['extID'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} else {
-			$extID = basename ($_REQUEST['extID']);
+			$extID = urldecode (basename ($_REQUEST['extID']));
 			bw :: $db -> dbExec ('DELETE FROM extensions WHERE extID=?', array ($extID));
+			if (file_exists (P . 'extension/' . $extID . '/do.php')) {
+				include (P . 'extension/' . $extID . '/do.php');
+				$callableClass = 'ext_' . $extID;
+				if (method_exists ($callableClass , 'uninstall')) {
+					$callableClass :: uninstall (); 
+				}
+			}
+			clearCache ();
+			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
+		} 
+	} elseif ($canonical -> currentArgs['subAction'] == 'removetheme') {
+		$admin -> checkCSRFCode ('extensions');
+		if (!isset ($_REQUEST['themeID'])) {
+			stopError ($conf['l']['admin:msg:NoData']);
+		} else {
+			$themeID = urldecode (basename ($_REQUEST['themeID']));
+			if ($themeID == 'default' || $themeID == bw :: $conf['siteTheme']) {
+				stopError ('Cannot remove default theme or the theme in use.');
+			}
+			@rrmdir (P . 'theme/' . basename ($themeID) . '/');
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 		} 
@@ -580,7 +601,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} else {
 			$extList = bw :: getAllExtensions ();
-			$extID = basename ($_REQUEST['extID']);
+			$extID = urldecode (basename ($_REQUEST['extID']));
 			$extID = htmlspecialchars ($extID, ENT_QUOTES, 'UTF-8');
 			if (array_key_exists ($extID, $extList)) {
 				stopError ($conf['l']['admin:msg:Existed']);
@@ -591,6 +612,11 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			$aExt = @parse_ini_file (P . 'extension/' . $extID . '/define.php');
 			$aExt['extDesc'] = "name='{$aExt['name']}'\r\nintro='{$aExt['intro']}'\r\nauthor='{$aExt['author']}'\r\nurl='{$aExt['url']}'";
 			bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget) VALUES (?, ?, ?, 1, ?, 0)', array ($aExt['ID'], $aExt['extDesc'], $aExt['hooks'], count ($extList) + 1));
+			include (P . 'extension/' . basename ($extID) . '/do.php');
+			$callableClass = 'ext_' . $extID;
+			if (method_exists ($callableClass , 'setup')) {
+				$callableClass :: setup (); 
+			}
 			clearCache ();
 			if (defined ('ajax')) {
 				ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);

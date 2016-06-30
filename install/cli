@@ -1,0 +1,167 @@
+<?php 
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2016 bW Development Team
+* @license MIT
+*/
+
+if (!isset ($argv[1])) {
+	printHelpMsg ();
+	exit ();
+}
+
+if ($argv[1] == 'install' || $argv[1] == 'check') {
+	define ('P', realpath (dirname (__FILE__) . '/../') . '/');
+
+	if (file_exists (P . 'conf/info.php')) {
+		die ('Error: Already installed.');
+	}
+	
+	PHP_VERSION < '5.3.0' && die ('Error: Requires at least PHP 5.3.0.');
+	!class_exists ('PDO') && die ('Error: Requires PHP PDO library.');
+
+	$PDOSupported = PDO :: getAvailableDrivers ();
+	if (!in_array ('sqlite', $PDOSupported) && !in_array ('mysql', $PDOSupported)) { 
+		die ('Error: Requires PDO Sqlite support or MySQL support.');
+	} 
+
+	!checkWritable () && die ('Error: All of the following folders must be writable: conf, storage, extension, theme, update.');
+
+	if ($argv[1] == 'check') {
+		die ('Environment passed. Use cli install to start installation.');
+	}
+
+	if (!isset ($argv[2])) {
+		die ('Error: Please provide a valid base URL.');
+	}
+	if (!strlen ($argv[2]) || !filter_var ($argv[2], FILTER_VALIDATE_URL)) {
+		die ('Error: Please provide a valid base URL.');
+	}
+
+	$dbConfContent = "<?php \r\ndefine ('DBTYPE', 'SQLite');\r\ndefine ('DBNAME', '" . P ."storage/" . md5 (uniqid ()). ".sq3');";
+	file_put_contents (P . 'conf/dbcon.php', $dbConfContent);
+	$tmpPass = rand (100000, 999999);
+	$siteKey = sha1 ($tmpPass);
+
+	$infoConfContent = "<?php
+\$conf=array (
+  'siteName' => 'Your Blog',
+  'siteURL' => '{$argv[2]}',
+  'authorName' => 'admin',
+  'authorIntro' => 'Yet another bW blog.',
+  'siteKey' => '{$siteKey}',
+  'timeZone' => 'Asia/Shanghai',
+  'pageCache' => '1',
+  'commentOpt' => '1',
+  'comFrequency' => '10',
+  'comPerLoad' => '20',
+  'siteTheme' => 'default',
+  'siteLang' => 'en',
+  'perPage' => '3',
+  'linkPrefixIndex' => 'index.php',
+  'linkPrefixCategory' => 'category.php',
+  'linkPrefixArticle' => 'read.php',
+  'linkPrefixTag' => 'tag.php',
+  'social-sina-weibo' => '',
+  'social-weixin' => '',
+  'social-twitter' => '',
+  'social-facebook' => '',
+  'social-douban' => '',
+  'social-instagram' => '',
+  'social-renren' => '',
+  'social-linkedin' => '',
+  'externalLinks' => 'http://bw.bo-blog.com=bW Home',
+);";
+	file_put_contents (P . 'conf/info.php', $infoConfContent);
+
+	$servicesConfContent = "<?php
+\$conf+=array (
+  'duoshuoID' => '',
+  'disqusID' => '',
+  'sinaAKey' => '',
+  'sinaSKey' => '',
+  'qiniuAKey' => '',
+  'qiniuSKey' => '',
+  'qiniuBucket' => '',
+  'qiniuSync' => '',
+  'qiniuUpload' => '0',
+  'qiniuDomain' => '',
+);";
+	file_put_contents (P . 'conf/services.php', $servicesConfContent);
+
+	include (P . 'inc/database.inc.php');
+	$db = new bwDatabase;
+	$dbInitBind=array (
+			'CREATE TABLE IF NOT EXISTS articles (aID VARCHAR(255) PRIMARY KEY  NOT NULL , aTitle VARCHAR(255) NOT NULL , aCateURLName VARCHAR(255) NOT NULL , aTime DATETIME NOT NULL , aTags TEXT, aReads INTEGER NOT NULL  DEFAULT 0, aContent TEXT, aCustom TEXT, aComments INTEGER DEFAULT 0)',
+			'CREATE TABLE IF NOT EXISTS cache (caID CHAR (32) PRIMARY KEY  NOT NULL , caContent TEXT)',
+			'CREATE TABLE IF NOT EXISTS categories (aCateURLName VARCHAR (255) NOT NULL  UNIQUE , aCateDispName TEXT NOT NULL , aCateCount INTEGER NOT NULL  DEFAULT 0, aCateOrder INTEGER, aCateTheme VARCHAR (255))',
+			'CREATE TABLE IF NOT EXISTS extensions (extID VARCHAR (255) PRIMARY KEY  NOT NULL , extDesc TEXT , extHooks TEXT NOT NULL , extActivate BOOL NOT NULL , extOrder INTEGER, extStorage TEXT , isWidget BOOL)',
+			'CREATE TABLE IF NOT EXISTS statistics (pageURL TEXT PRIMARY KEY  NOT NULL  UNIQUE , sNum INTEGER DEFAULT 0, lastView DATETIME)',
+			'CREATE TABLE IF NOT EXISTS tags (tValue VARCHAR (255) PRIMARY KEY  NOT NULL  UNIQUE , tList TEXT, tCount INTEGER NOT NULL  DEFAULT 0)',
+			'CREATE TABLE IF NOT EXISTS comments (comID INTEGER PRIMARY KEY  NOT NULL , comName TEXT, comTime DATETIME, comIP1 TEXT, comIP2 TEXT, comAvatar TEXT, comContent TEXT, comArtID TEXT, comParentID INTEGER, comSource TEXT, comURL TEXT, comBlock BOOL)',
+			'INSERT INTO articles VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?)',
+			'INSERT INTO categories VALUES (? ,?, ?, ?, ?)',
+			'INSERT INTO extensions VALUES (? ,?, ?, ?, ?, ?, ?)',
+	);
+	$dbInitBind2=array (
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		array ('hello-world', 'Hello, World!', 'default', date ('Y-m-d H:i:s'), null, 0, "Welcome to bW.\r\n\r\nThis is the first article that **bW** published on your behalf.\r\n\r\nbW allows you to [write in Markdown](http://daringfireball.net/projects/markdown/syntax).\r\n\r\nIf you need help, please do not hesitate to visit our [Official Website](http://bw.bo-blog.com)!", null, 0),
+		array ('default', 'Uncategorized', 1, 1, null),
+		array ('hello_world', "name='Hello, world'\r\nintro='Test extension.'\r\nauthor='bW'\r\nurl='http://bw.bo-blog.com'", 'header,footer,textParser,generateOutputDone', 0, 1, null, 0),
+	);
+
+	foreach ($dbInitBind as $i=>$dbInit) {
+		if ($dbInitBind2[$i]) {
+			$db->dbExec ($dbInit, $dbInitBind2[$i]);
+		} else {
+			$db->dbExec ($dbInit);
+		}
+	}
+
+		
+	die ('Installation done. Visit ' . $argv[2] . ' and use tmp password ' . $tmpPass . ' to login.');
+
+} 
+
+else {
+	printHelpMsg ();
+	exit ();
+}
+
+function printHelpMsg () 
+{
+	print "
+	(c) 2016 bW
+
+	Usage:  php <path>/cli [help] [install <base url>] [check]
+	help:  Display help message.
+	install <base url>:   Start silent setup process. Root of the site URL, like name.site/bw, must be given.
+	check: Check the running enviornment.
+
+	";
+}
+
+function checkWritable () {
+	$mustBeWritable = array ('conf', 'storage', 'extension', 'theme', 'update');
+	foreach ($mustBeWritable as $aFolder) {
+		if (!is_dir (P . $aFolder . '/')) {
+			die ('Error: '. P . $aFolder . '/ is not writable!');
+			return false;
+		} elseif (!is_writable (P . $aFolder . '/')) {
+			die ('Error: '. P . $aFolder . '/ is not writable!');
+			return false;
+		}
+	} 
+	return true;
+}
+
+function stopError ($msg) {
+	die ($msg);
+}

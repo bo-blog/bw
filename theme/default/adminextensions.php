@@ -1,5 +1,13 @@
 <?php
-//Copyright: Byke
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
+if (!defined ('P')) {
+	die ('Access Denied.');
+}
 
 ?>
 
@@ -16,7 +24,7 @@
 <div style="float: left"><h2>[[::themeName]]</h2>
 <h3>[[=admin:msg:By]] <a href="[[::themeUrl]]">[[::themeAuthor]]</a></h3>
 <span class="details">
-<a href="##" onclick="selectTheme('[[::themeDir]]');" id="themeID-[[::themeDir]]"><span class="icon-plus2"></span> [[=admin:opt:Enable]] &nbsp; </a> <a href="##" onclick="expTheme('[[::themeDir]]');"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a>
+<a href="##" onclick="selectTheme('[[::themeDir]]');" id="themeID-[[::themeDir]]"><span class="icon-plus2"></span> [[=admin:opt:Enable]] &nbsp; </a> <a href="##" onclick="expTheme('[[::themeDir]]');"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a> &nbsp; &nbsp; <a href="##" onclick="removeTheme('[[::themeDir]]');"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a>
 </span></div>
 </article>[[::/loop]]
 </p>
@@ -309,7 +317,7 @@ function removeExt (extID) {
 		$("#UI-loading").fadeIn(500);
 		var targetURL=smtURL+"remove/[[::linkConj]]ajax=1&CSRFCode=[[::extCSRFCode]]";
 
-		$.post(targetURL, {extID : extID}, function(data) {
+		$.post(targetURL, {extID : encodeURIComponent(extID)}, function(data) {
 			$("#UI-loading").fadeOut(200);
 			if (data.error==1) {
 				$("#adminPromptError").text (data.returnMsg);
@@ -371,6 +379,24 @@ function selectTheme (themeID) {
 
 function expTheme (themeID) {
 	window.location="[[::siteURL]]/[[::linkPrefixAdmin]]/extensions/exporttheme/[[::linkConj]]themeID="+themeID+"&CSRFCode=[[::extCSRFCode]]";
+}
+
+function removeTheme (themeID) {
+	if (confirm("[[=admin:msg:RemoveExtension]]"))
+	{
+		$("#UI-loading").fadeIn(500);
+		var targetURL=smtURL+"removetheme/[[::linkConj]]ajax=1&CSRFCode=[[::extCSRFCode]]";
+
+		$.post(targetURL, {themeID : encodeURIComponent(themeID)}, function(data) {
+			$("#UI-loading").fadeOut(200);
+			if (data.error==1) {
+				alert (data.returnMsg);
+			}
+			else {
+				location.reload();
+			}
+		}, "json");
+	}
 }
 
 

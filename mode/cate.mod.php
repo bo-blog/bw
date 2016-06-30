@@ -22,6 +22,7 @@ if (isset ($canonical -> currentArgs['cateID'])) {
 } else {
 	$view -> setActiveNav ('index');
 } 
+$view -> setMetaData (bw :: $conf['siteName']);
 $article -> getArticleList ();
 
 // Pagination

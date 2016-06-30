@@ -1,6 +1,10 @@
 <?php
-//Copyright: Byke
-
+/**
+* 
+* @link http://bw.bo-blog.com
+* @copyright (c) 2014 bW Development Team
+* @license MIT
+*/
 if (!defined ('P')) {
 	die ('Access Denied.');
 }
@@ -13,6 +17,8 @@ if (!defined ('P')) {
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<meta name="description" content="[[::authorIntro]]" />
+<meta name="keywords" content="[[::metaData]]" />
 <link rel="icon" type="image/png" href="[[::siteURL]]/theme/default/logo.png" />
 <link rel="canonical" href="[[::canonicalURL]]" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
@@ -44,7 +50,7 @@ var lng={
 <li id="nav-[[::aCateURLName]]"><a href="[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/">[[::aCateDispName]]</a></li>
 [[::/loop]]
 [[::widget_wgheader]]
-<li class="admLastList"></li>
+<li class="menuLastList"></li>
 </ul>
 </nav>
 [[::ext_header]]
