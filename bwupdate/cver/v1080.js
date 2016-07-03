@@ -1,2 +1,2 @@
 $("#ins").html("有新版本可用：<b>1.0.9</b><br/>- 改进：对编辑器进行了一些改进，使用更顺手。<br/>- 改进：自动更新脚本启用了 HTTPS 地址。<br/>- 修复：windows下上传文件到云存储后的文件名错误。<br/>- 修复：模块名称为中文时不能移除或停用。<br/>- 新增：通过后台直接移除主题。<br/>- 新增：可在命令行下静默安装。运行 php &lt;bw所在目录&gt;/install/cli install &lt;URL根地址&gt; 进行安装。<br/>- 屏蔽了内置评论功能。专注在将写作做好，把评论交给第三方去支持更方便和安全。<br/>");
-addUpdateBtn ("http://xiaofengtest.qiniudn.com/upkg1080.txt", '5e73ad846f3cf829fa9e75b2814919f1');
+addUpdateBtn ("http://xiaofengtest.qiniudn.com/upkg1080.txt", '90f1241bd288baea220980b372ea833b');
