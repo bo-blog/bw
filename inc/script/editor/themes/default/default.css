@@ -44,3 +44,15 @@
 .markbar a.blockquote:hover { background-position: -270px -24px; }
 .markbar a.code { background-position: -300px 0; }
 .markbar a.code:hover { background-position: -300px -24px; }
+
+@media only screen and (max-width:800px) {
+.markbar {
+position: fixed;
+width: 36px;
+top: 440px;
+right: 20px;
+height: 180px;
+overflow-y: scroll;
+display: none;
+}
+}
