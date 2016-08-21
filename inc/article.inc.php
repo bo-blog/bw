@@ -369,5 +369,25 @@ class bwArticle {
 		$smt['aID'] = urlencode ($smt['aID']);
 		return $smt;
 	} 
+
+	public function getArticleTemplateList ()
+	{
+		$l = bw :: $conf['siteLang'];
+		$templateSets = array();
+		if ($handle = opendir (P . 'inc/template/')) {
+			while (false !== ($file = readdir ($handle))) {
+				if (strstr (P . 'inc/template/' . $file, '.tpl.php')) {
+					$tpl = file_get_contents (P . 'inc/template/' . $file);
+					//$tplValid = preg_match ("/<{$l}: name>(.+?)<\/{$l}: name>([\s\S]+?)<{$l}: definition>([\s\S]+?)<\/{$l}: definition>/", $tpl, $tplDefs);
+					$tplValid = preg_match ("/<{$l}: name>(.+?)<\/{$l}: name>/", $tpl, $tplDefs);
+					if ($tplValid == 1) {
+						$templateSets[$tplDefs[1]] = array ('name' => $tplDefs[1], 'file' => str_replace ('.tpl.php', '', $file));
+					}
+				} 
+			} 
+		} 
+		return $templateSets;
+
+	}
 } 
 

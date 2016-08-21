@@ -296,7 +296,10 @@ border: 1px solid #ccc;
 #floatATime .brATime {
 display: none;
 }
-
+#UI-lightbox #lightbox-message {
+width: 70%;
+min-height: 100%;
+}
 
 /* responsive */
 
@@ -355,5 +358,9 @@ margin-bottom: -27px;
 }
 #aContent, #previewArea{
 height: 190px;
+}
+#UI-lightbox #lightbox-message {
+width: 100%;
+min-height: 100%;
 }
 }

@@ -222,6 +222,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		} else {
 			$uploader = 'admincommonupload';
 		} 
+		$view -> setPassData (array ('articleTemplate' => $article -> getArticleTemplateList()));
 		$view -> setWorkFlow (array ($uploader, 'adminwriter', 'admin'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'new' || $canonical -> currentArgs['subAction'] == 'newpage') {
@@ -241,6 +242,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 
 		$view -> setMaster ('admin');
 		$view -> setPassData (array ('writermode' => $canonical -> currentArgs['subAction'] == 'new' ? 'article' : 'singlepage', 'admincatelist' => bw :: $cateList, 'upCSRFCode' => $admin -> getCSRFCode ('upload'), 'articleCSRFCode' => $admin -> getCSRFCode ('articlesave'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
+		$view -> setPassData (array ('articleTemplate' => $article -> getArticleTemplateList()));
 		$view -> setWorkFlow (array ($uploader, 'adminwriter', 'admin'));
 		$view -> finalize ();
 	} elseif ($canonical -> currentArgs['subAction'] == 'getqiniuuploadpart') {
@@ -261,6 +263,19 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$outTags[] = $aTag['tValue'];
 		} 
 		die ('var lastTags='.json_encode ($outTags).';');
+	} elseif ($canonical -> currentArgs['subAction'] == 'loadtpl') {
+		if (isset ($_REQUEST['tpl'])) {
+			$tplFile = P . 'inc/template/' . basename ($_REQUEST['tpl']) . '.tpl.php';
+			if (file_exists ($tplFile)) {
+				$tplContent = file_get_contents ($tplFile);
+				$l = bw :: $conf['siteLang'];
+				preg_match ("/<{$l}: definition>([\s\S]+?)<\/{$l}: definition>/", $tplContent, $tplInsert);
+				if (isset ($tplInsert[1])) {
+					die ($tplInsert[1]);
+				}
+			} 
+		}
+		exit ();
 	}  elseif ($canonical -> currentArgs['subAction'] == 'gettitlelist') {
 		$allTitles = $article -> getTitleList (1000);
 		$outTitles = array();
@@ -474,9 +489,15 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 				$result = $qiniuClient -> uploadFile (P . $ff, $conf['qiniuBucket'], $ff);
 				@unlink (P . $ff);
 				header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/services/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+				exit ();
 			} 
 		} 
-	} 
+	}  elseif ($canonical -> currentArgs['subAction'] == 'reset') {
+		$admin -> checkCSRFCode ('services');
+		dochmod ('.');
+		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/services/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
+		exit ();
+	}
 	else {
 		$admin -> checkCSRFCode ('navibar');
 		loadServices ();
@@ -488,35 +509,47 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 } 
 
 if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
-	if ($canonical -> currentArgs['subAction'] == 'update') {
+	if ($canonical -> currentArgs['subAction'] == 'update' || $canonical -> currentArgs['subAction'] == 'updatedirect') {
 		$admin -> checkCSRFCode ('update');
-		if (!isset ($_REQUEST['dlURL']) || !isset ($_REQUEST['hash'])) {
-			stopError ($conf['l']['admin:msg:NoData']);
-		} 
-		$packageContent = curlRetrieve ($_REQUEST['dlURL']);
-		if (!$packageContent) {
-			stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
-		} else {
-			file_put_contents (P . 'update/dlupkg_tmp.zip', $packageContent);
-			@chmod (P . 'update/dlupkg_tmp.zip', 0777);
-			if (md5_file (P . 'update/dlupkg_tmp.zip') <> strtolower ($_REQUEST['hash'])) {
+		if ($canonical -> currentArgs['subAction'] == 'update') {
+			if (!isset ($_REQUEST['dlURL']) || !isset ($_REQUEST['hash'])) {
+				stopError ($conf['l']['admin:msg:NoData']);
+			} 
+			$packageContent = curlRetrieve ($_REQUEST['dlURL']);
+			if (!$packageContent) {
 				stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
-			}
-			include_once (P . "inc/zip.inc.php");
-			bwZip :: zipRead (P . 'update/dlupkg_tmp.zip', 1, 1);
-			@unlink (P . 'update/dlupkg_tmp.zip');
-			$sqlUpdater = P . 'update/update.' . strtolower (DBTYPE) . '.sql';
-			if (file_exists ($sqlUpdater)) { 
-				$allSqls = @file ($sqlUpdater);
-				bw :: $db -> silentError (true);
-				foreach ($allSqls as $sql) {
-					bw :: $db -> dbExec ($sql);
+			} 
+			else {
+				file_put_contents (P . 'update/dlupkg_tmp.zip', $packageContent);
+				@chmod (P . 'update/dlupkg_tmp.zip', 0777);
+				if (md5_file (P . 'update/dlupkg_tmp.zip') <> strtolower ($_REQUEST['hash'])) {
+					stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
 				}
-				@unlink ($sqlUpdater);
 			}
-			header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/dashboard/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar') . "#UpdateSuccess");
-			exit ();
-		} 
+			$pkgName = P . 'update/dlupkg_tmp.zip';
+		}
+		
+		else {
+			if (!file_exists (P . 'update/manual_update.zip')) {
+				stopError ($conf['l']['admin:msg:UpdatePackageMissing']);
+			}
+			$pkgName = P . 'update/manual_update.zip';
+		}
+
+		include_once (P . "inc/zip.inc.php");
+		bwZip :: zipRead ($pkgName, 1, 1);
+		@unlink ($pkgName);
+		$sqlUpdater = P . 'update/update.' . strtolower (DBTYPE) . '.sql';
+		if (file_exists ($sqlUpdater)) { 
+			$allSqls = @file ($sqlUpdater);
+			bw :: $db -> silentError (true);
+			foreach ($allSqls as $sql) {
+				bw :: $db -> dbExec ($sql);
+			}
+			@unlink ($sqlUpdater);
+		}
+		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/dashboard/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar') . "#UpdateSuccess");
+		exit ();
 	} else {
 		$admin -> checkCSRFCode ('navibar');
 		$statVals = array();

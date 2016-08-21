@@ -336,7 +336,7 @@ class bwView {
 	// Theme functions
 	public function scanForThemes ()
 	{
-		$themes = array();
+		$themes = array ();
 		if ($handle = opendir (P . 'theme/')) {
 			while (false !== ($file = readdir ($handle))) {
 				if (is_dir (P . 'theme/' . $file)) {
@@ -497,6 +497,15 @@ class bwView {
 		$text = preg_replace ("/!!<a href=\"(.+?)\">(.+?)<\/a>/", "<audio controls><source src=\"$1\" type=\"audio/mpeg\">Your browser does not support the audio element.</audio>", $text);
 		$text = str_replace ("\n", '<br/>', $text);
 		$text = preg_replace ("/<\/(.+?)><br\/>/", "</$1>", $text);
+
+		//Image aligned to left or right
+		$text = preg_replace ("/<img (.+?) alt=\"-R\"/", "<img $1 class=\"RImg\" alt=\"\"", $text); 
+		$text = preg_replace ("/<img (.+?) alt=\"-L\"/", "<img $1 class=\"LImg\" alt=\"\"", $text); 
+
+		//Image Gallery
+		$varAlbumID = rand (100000, 999999);
+		$text = preg_replace ("/<img (.+?) alt=\"-Album:(.+?)\"/", "<img $1 class=\"ImgAlbum Alb" . $varAlbumID . "\" data-desc=\"$2\" data-album=\"" . $varAlbumID . "\"", $text); 
+
 		$text = hook ('textParser', 'Replace', $text);
 		return $text;
 	} 

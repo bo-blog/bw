@@ -13,7 +13,7 @@ if (location.href.indexOf('?cleartoken')!=-1)
 }
 
 
-function lightboxImage (imgSrc) {
+function lightboxImage (imgSrc, inAlbum=false) {
 	$("#UI-lightbox").fadeIn();
 	var winH=$(window).height();
 	var img=new Image;
@@ -77,22 +77,67 @@ function lightboxImage (imgSrc) {
 		$("#lightboxImage").css("width", finalWidth+"px");
 		$("#lightboxImage").css("height", finalHeight+"px");
 		$("#lightbox-image").css("position", "fixed");
-		$("#lightbox-image").css("top", Math.floor((windowHeight-finalHeight)/2));
+		if (inAlbum) {
+			$("#lightbox-image").css("top", Math.max (Math.floor((windowHeight-finalHeight)/2-55), 0));
+			$("#imgDesc").css("width", finalWidth+"px");
+			$("#imgRightArrow").css("margin-left", finalWidth-25+"px");
+		} 
+		else {
+			$("#lightbox-image").css("top", Math.floor((windowHeight-finalHeight)/2));
+		}
 		$("#lightbox-image").css("left", Math.floor((windowWidth-finalWidth)/2));
 	});
 	$('#lightboxImage').css("cursor", "pointer");
-	$('#lightboxImage').click(function (){
-		if (imgSrc.indexOf ('?imageView2/')!=-1)
-		{
-			var imgSrcs=imgSrc.split('?imageView2/');
-			imgSrc=imgSrcs[0];
-		}
-		window.open(imgSrc);
-	});
-	$('#UI-lightbox').click(function (){
-		$('#UI-lightbox').fadeOut();
+	if (!inAlbum) {
+		$('#lightboxImage').click(function (){
+			if (imgSrc.indexOf ('?imageView2/')!=-1)
+			{
+				var imgSrcs=imgSrc.split('?imageView2/');
+				imgSrc=imgSrcs[0];
+			}
+			window.open(imgSrc);
+		});
+		$('#UI-lightbox').click(function (){
+			$("#UI-lightbox").fadeOut();
+			$("#UI-lightbox").html('');
+			$("#UI-lightbox").unbind();
+		});
+	} 
+	else {
+		$('#lightboxImage').click(function (){
+			$("#UI-lightbox").fadeOut();
+			$("#UI-lightbox").html('');
+			$("#UI-lightbox").unbind();
+		});
+	}
+}
+
+function lightboxImageAlbum (picURL, ImgGroups, ImgDesc, ImgSeq) {
+	var finalWidth=lightboxImage (picURL, true);
+	var totalImgs = ImgGroups.length;
+	if (ImgSeq==0) {
+		var ImgPrev = totalImgs-1;
+	} 
+	else {
+		var ImgPrev = ImgSeq-1;
+	}
+	if (ImgSeq==totalImgs-1) {
+		var ImgNext = 0;
+	} 
+	else {
+		var ImgNext = ImgSeq+1;
+	}
+
+	$("#lightbox-image").append ("<div style='height: 50px; width: 0px; overflow-y: auto;' id='imgDesc'>["+(ImgSeq+1)+"/"+totalImgs+"] "+ImgDesc[ImgSeq]+"</div>");
+	$("#lightbox-image").append ("<div  id='imgLeftArrow' style='position: fixed; cursor: pointer; top: "+($(window).height()/2-45)+"px; width: 25px; height: 56px; font-size: 48px; background: #fff; opacity: 0.6;'>&#139;</div>");
+	$("#lightbox-image").append ("<div id='imgRightArrow' style='position: fixed; cursor: pointer; top: "+($(window).height()/2-45)+"px; width: 25px; height: 56px; font-size: 48px; background: #fff; opacity: 0.6;'>&#155;</div>");
+	$("#imgLeftArrow").click (function() {
 		$("#UI-lightbox").html('');
-		$("#UI-lightbox").unbind();
+		$("#UI-lightbox").fadeOut(function() {lightboxImageAlbum (ImgGroups[ImgPrev], ImgGroups, ImgDesc, ImgPrev);});
+	});
+	$("#imgRightArrow").click (function() {
+		$("#UI-lightbox").html('');
+		$("#UI-lightbox").fadeOut(function() {lightboxImageAlbum (ImgGroups[ImgNext], ImgGroups, ImgDesc, ImgNext);});
 	});
 }
 

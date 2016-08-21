@@ -75,7 +75,6 @@ var lng={
 </div>
 <!-- end ajax section -->
 [[::ext_mainAreaEnd]]
-<div id="adminIcon"><span class="adminSign" data-adminurl="[[::siteURL]]/admin.php" data-adminid="[[::aID]]"><span class="icon-cog"></span> [[=page:Admin]]</span></div>
 </div>
 </div>
 
@@ -87,7 +86,7 @@ var lng={
 [[=page:Links]]<br/>
 [[::loop, externallink]]<span class="lnk"><a href="[[::linkURL]]" target="_blank">[[::linkName]]</a></span>[[::/loop]]
 [[::ext_footer]]
-<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">Powered by bW</a></div>
+<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">Powered by Bo-blog Wind</a> | <span class="adminSign" data-adminurl="[[::siteURL]]/admin.php" data-adminid="[[::aID]]"><a href="##">[[=page:Admin]]</a></span></div>
 [[::widget_wgfooter]]
 </footer>
 

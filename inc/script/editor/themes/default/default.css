@@ -24,35 +24,9 @@
 	color: #FFF;
 }
 
-.markbar a.em { background-position: -30px 0; }
-.markbar a.em:hover { background-position: -30px -24px; }
-.markbar a.h1 { background-position: -60px 0; }
-.markbar a.h1:hover { background-position: -60px -24px; }
-.markbar a.h2 { background-position: -90px 0; }
-.markbar a.h2:hover { background-position: -90px -24px; }
-.markbar a.h3 { background-position: -120px 0; }
-.markbar a.h3:hover { background-position: -120px -24px; }
-.markbar a.ul { background-position: -150px 0; }
-.markbar a.ul:hover { background-position: -150px -24px; }
-.markbar a.ol { background-position: -180px 0; }
-.markbar a.ol:hover { background-position: -180px -24px; }
-.markbar a.a { background-position: -210px 0; }
-.markbar a.a:hover { background-position: -210px -24px; }
-.markbar a.img { background-position: -240px 0; }
-.markbar a.img:hover { background-position: -240px -24px; }
-.markbar a.blockquote { background-position: -270px 0; }
-.markbar a.blockquote:hover { background-position: -270px -24px; }
-.markbar a.code { background-position: -300px 0; }
-.markbar a.code:hover { background-position: -300px -24px; }
 
 @media only screen and (max-width:800px) {
-.markbar {
-position: fixed;
-width: 36px;
-top: 440px;
-right: 20px;
-height: 180px;
-overflow-y: scroll;
+.markbar a.em, .markbar a.h3, .markbar a.ol, .markbar a.code, .markbar a.youkuvideo,  .markbar a.xiami {
 display: none;
 }
 }

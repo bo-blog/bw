@@ -15,10 +15,10 @@ if (!defined ('P')) {
 <form id="smtForm" action="post">
 <h2><span class="icon-chat"></span> [[=admin:sect:CommentServices]]</h2> 
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:DuoshuoID]]<br/><input type="text" class="inputLine inputLarge" name="smt[duoshuoID]" value="[[::duoshuoID]]" id="duoshuoID" /><br/><span class="adminExplain">[[=admin:msg:Duoshuo]]</span>
+<span class="icon-arrow-right5"></span> [[=admin:item:DuoshuoID]]<br/><input type="text" class="inputLine inputSmall" name="smt[duoshuoID]" value="[[::duoshuoID]]" id="duoshuoID" />.duoshuo.com<br/><span class="adminExplain">[[=admin:msg:Duoshuo]]</span>
 </p>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:DisqusID]]<br/><input type="text" class="inputLine inputLarge" name="smt[disqusID]" value="[[::disqusID]]" id="disqusID" /><br/><span class="adminExplain">[[=admin:msg:Disqus]]</span>
+<span class="icon-arrow-right5"></span> [[=admin:item:DisqusID]]<br/><input type="text" class="inputLine inputSmall" name="smt[disqusID]" value="[[::disqusID]]" id="disqusID" />.disqus.com<br/><span class="adminExplain">[[=admin:msg:Disqus]]</span>
 </p>
 <!--
 <p>
@@ -62,6 +62,8 @@ if (!defined ('P')) {
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:Backup]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/backup/[[::linkConj]]CSRFCode=[[::serviceCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:Backup]] </a></span>
 <br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/sync/[[::linkConj]]CSRFCode=[[::serviceCSRFCode]]"><span class="icon-export"></span> [[=admin:btn:Sync]] </a></span>
+<br/><div id="resetPermission" style="display: none;"><br/>
+<span class="icon-arrow-right5"></span> [[=admin:item:ResetPermission]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/reset/[[::linkConj]]CSRFCode=[[::serviceCSRFCode]]"><span class="icon-export"></span> [[=admin:btn:DoReset]] </a></span></div>
 </p>
 
 <p class="adminCommand"><br/>
@@ -130,6 +132,11 @@ function saveConf(formID, smtURL) {
 			$("#adminPromptSuccess").fadeIn(400).delay(1500).fadeOut(600);
 		}
 	}, "json");
+}
+
+if (window.location.hash == '#reset')
+{
+	$("#resetPermission").show();
 }
 
 </script>

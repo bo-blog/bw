@@ -564,6 +564,17 @@ border-bottom: 1px solid #CCC;
 margin: 23px auto 23px auto;
 }
 
+.RImg {
+float: right;
+max-width: 40%!important;
+margin-left: 20px;
+}
+.LImg {
+float: left;
+max-width: 40%!important;
+margin-right: 20px;
+}
+
 /* Forms */
 .inputLine {
 width: 250px;
@@ -797,5 +808,10 @@ top: 60px;
 }
 header {
 box-shadow: none;
+}
+.RImg, .LImg {
+float: none;
+display: block;
+max-width: 90%!important;
 }
 }

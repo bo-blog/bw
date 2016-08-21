@@ -40,7 +40,26 @@ $('.shareLayer').click(function () {
 
 $('article img').click(function () {
 	var picURL=$(this).attr('src');
-	lightboxImage (picURL);
+	if ($(this).hasClass ('ImgAlbum'))
+	{
+		var AlbumID = $(this).data('album');
+		var ImgGroups=new Array();
+		var ImgDesc=new Array();
+		var i = 0;
+		var ImgSeq = 0;
+		$('article .Alb'+AlbumID).each (function () {
+			ImgGroups[i] = $(this).attr('src');
+			ImgDesc[i] = $(this).data ('desc');
+			if ($(this).attr('src') == picURL) {
+				ImgSeq = i;
+			}
+			i++;
+		});
+		lightboxImageAlbum (picURL, ImgGroups, ImgDesc, ImgSeq);
+	}
+	else {
+		lightboxImage (picURL);
+	}
 });
 
 $('article .videoFrame').each (function () {

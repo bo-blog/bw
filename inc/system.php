@@ -5,8 +5,8 @@
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '1.0.9');
-define ('bwInternalVersion', '1090');
+define ('bwVersion', '1.1.0');
+define ('bwInternalVersion', '1100');
 define ('bwUpdate', 'https://bo-blog.github.io/bw-update/');
 
 if (!defined ('P')) {
@@ -272,6 +272,15 @@ function rrmdir ($src) {
 	@rmdir ($src);
 }
 
+function dochmod ($dir) { 
+	$openDir = opendir ($dir);
+	while ($readDir = @readdir ($openDir))
+	{
+		if ($readDir != "." && $readDir != "..") { 
+			is_dir ("$dir/$readDir") ? dochmod ("$dir/$readDir") : chmod ("$dir/$readDir", 0777); 
+		} 
+	}
+} 
 
 if (@get_magic_quotes_gpc()) {
 	function stripslashes_deep($value)

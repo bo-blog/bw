@@ -24,7 +24,8 @@ if (!defined ('P')) {
 </p>
 
 <p id="editorBody">
-<span class="icon-arrow-right5"></span> [[=admin:item:AContent]] <span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> | <a href="##" id="adminPreview"><span class="icon-screen2"> </span><span id="adminPrevAdd">[[=admin:btn:StartPreview]]</span></a></span> <br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea><div id="previewArea" class="inputLine inputLarge textareaLine details"></div>
+<span class="icon-arrow-right5"></span> [[=admin:item:AContent]]<span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> <a href="##" id="adminPreview"><span class="icon-screen2"> </span><span id="adminPrevAdd">[[=admin:btn:StartPreview]]</span></a> <select id="tplSel" class="selectLine inputLine inputMiddle" style="width: 90px; font-size: 12px"><option value="">[[=admin:btn:TextHelper]]</option>[[::loop, articleTemplate]]<option value="[[::file]]">[[::name]]</option>[[::/loop]]</select>
+</span> <br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea><div id="previewArea" class="inputLine inputLarge textareaLine details"></div>
 </p>
 
 <p class="articleOnly">
@@ -41,8 +42,6 @@ if (!defined ('P')) {
 <a href='##' onclick="addCategory('[[::siteURL]]/[[::linkPrefixAdmin]]/articles/newcatenow/');"><span class="icon-disk"></span> [[=admin:btn:Add]]</a><br/>
 </div>
 </p>
-<script type="text/javascript">
-</script>
 <p>
 
 <span class="icon-arrow-right5"></span> [[=admin:item:ATime]]<br/><input type="text" class="inputLine inputLarge" name="smt[aTime]" value="[[::aTime]]" placeholder="[[=admin:msg:ATime]]" id="aTime" /><br/>
@@ -66,6 +65,7 @@ if (!defined ('P')) {
 
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;"></iframe>
 <script type="text/javascript" src="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/getautocomplete/"></script>
+<script type="text/javascript" src="[[::siteURL]]/inc/script/main.js"></script>
 <script type="text/javascript">
 var clearAutoID=false;
 var callCustomEditor=false;
@@ -340,7 +340,7 @@ function saveArticle(formID, smtURL) {
 				clearLeaveWarning ();
 				if ($("#originID").val()=='')
 				{
-					window.location="[[::writermode]]" == "singlepage" ? "[[::siteURL]]/[[::linkPrefixArticle]]/"+$("#aID").val()+"/" : "[[::siteURL]]/[[::linkPrefixPage]]/"+$("#aID").val()+"/";
+					window.location="[[::writermode]]" == "article" ? "[[::siteURL]]/[[::linkPrefixArticle]]/"+$("#aID").val()+"/" : "[[::siteURL]]/[[::linkPrefixPage]]/"+$("#aID").val()+"/";
 				}
 				else
 				{
@@ -442,9 +442,6 @@ if (!callCustomEditor)
 	$(function() {
 		$('#aContent').markbar();
 	});
-	if ($(window).width()<=800) {
-		$('#editorBody').click (function() {$('.markbar').show();});
-	}
 }
 
 $('#aTime').click (function (){
@@ -506,6 +503,16 @@ if ("[[::writermode]]" == "singlepage") {
 } else {
 	$('.spOnly').hide();
 }
+
+$("#tplSel").change (function() {
+	var selTpl = $("#tplSel").val();
+	if (selTpl == '')
+	{
+	} else {
+		lightboxLoader ("[[::siteURL]]/[[::linkPrefixAdmin]]/articles/loadtpl/[[::linkConj]]tpl="+selTpl);
+		$("#tplSel").val('');
+	}
+});
 </script>
 
 </div>

@@ -53,6 +53,10 @@ if (!defined ('P')) {
 <h2><span class="icon-upload2"></span> [[=admin:sect:AutoUpdate]]</h2>
 <div id="ins"><span class="adminGoSync"><a href="##" onclick="checkUpdates();"><span class="icon-export"></span> [[=admin:btn:CheckUpdate]] </a></span><br/>
 </div>
+<p style="clear:both"><br/></p>
+<h2><span class="icon-target2"></span> [[=admin:msg:ManualUpdate]]</h2>
+<span class="adminExplain">[[=admin:msg:ManualUpdate2]]<br/></span>
+<span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/dashboard/updatedirect/[[::linkConj]]CSRFCode=[[::updateCSRFCode]]"><span class="icon-reply2"></span> [[=admin:btn:DoUpdate]] </a></span>
 </div>
 [[::ext_adminDashboard]]
 <script type="text/javascript">
