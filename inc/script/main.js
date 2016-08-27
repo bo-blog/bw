@@ -13,7 +13,7 @@ if (location.href.indexOf('?cleartoken')!=-1)
 }
 
 
-function lightboxImage (imgSrc, inAlbum=false) {
+function lightboxImage (imgSrc, inAlbum) {
 	$("#UI-lightbox").fadeIn();
 	var winH=$(window).height();
 	var img=new Image;

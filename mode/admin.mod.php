@@ -548,6 +548,7 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 			}
 			@unlink ($sqlUpdater);
 		}
+		clearCache ();
 		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/dashboard/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar') . "#UpdateSuccess");
 		exit ();
 	} else {
@@ -563,10 +564,11 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 
 		$article = new bwArticle;
 		$article -> getHottestArticles (5);
+		$statVals['whatsHottest'] = array ();
 		foreach ($article -> articleList as $row) {
 			$statVals['whatsHottest'][] = "<a href=\"{$conf['siteURL']}/{$conf['linkPrefixArticle']}/{$row['aID']}/\">{$row['aTitle']}</a>";
 		} 
-		$statVals['whatsHottest'] = '<li>' . implode('</li><li>', $statVals['whatsHottest']) . '</li>';
+		$statVals['whatsHottest'] = '<li>' . @implode('</li><li>', $statVals['whatsHottest']) . '</li>';
 
 		$recents = bw :: $db -> getRows ('SELECT * FROM statistics ORDER BY lastView DESC LIMIT 0, 5');
 		foreach ($recents as $row) {

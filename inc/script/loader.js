@@ -58,7 +58,7 @@ $('article img').click(function () {
 		lightboxImageAlbum (picURL, ImgGroups, ImgDesc, ImgSeq);
 	}
 	else {
-		lightboxImage (picURL);
+		lightboxImage (picURL, false);
 	}
 });
 
