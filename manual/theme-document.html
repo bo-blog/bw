@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<link href="../skin/font.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../skin/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../skin/github-markdown.css" media="all" rel="stylesheet" type="text/css" />
+<title>bW文档 | Bo-Blog Wind</title>
+<script src="http://lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+
+<div id="overallContainer">
+<header>
+<span class="icon-newicon iconLogo"><h1><a href="http://bw.bo-blog.com">bW 官方站</a></h1></span>
+<span id="menuDown"><a href="#" onclick="$('nav').fadeToggle('fast');"><span class="icon-list menuDownIcon"></span> </a></span>
+<nav>
+<ul>
+<li id="nav-index"><a href="http://bw.bo-blog.com">首页</a></li>
+
+<li id="nav-download"><a href="http://bw.bo-blog.com/download/">下载</a></li>
+
+<li id="nav-document"><a href="http://bw.bo-blog.com/manual/">文档</a></li>
+
+<li id="nav-customize"><a href="http://bw.bo-blog.com/customize/">个性化</a></li>
+
+<li id="nav-forum"><a href="http://bw.bo-blog.com/forum/" target="_blank">论坛</a></li>
+
+<li id="nav-blog"><a href="http://www.bo-blog.com/bw/" target="_blank">日志</a></li>
+
+</ul>
+</nav>
+
+</header>
+
+<div id="mainArea">
+	<article id="contents">
+		<div id="contentsB">
+			<a href="#" onclick="$('#contentsC').fadeToggle('fast');"><span class="icon-list4"></span> 文档目录</a>
+		</div>
+		<div id="contentsC">
+			<h2>快速上手</h2><ul><li><p><a href="./index.html">概述</a></p></li><li><p><a href="./setup.html">安装指南</a></p></li><li><p><a href="./write-with-markdown.html">采用 MarkDown 撰写日志</a></p></li><li><p><a href="./cloud-services.html">使用云服务</a></p></li><li><p><a href="./url-rewrite.html">URL Rewrite 伪静态</a></p></li><li><p><a href="./upload-and-backup.html">升级和备份</a></p></li></ul><hr><h2>个性化和自定义</h2><ul><li><p><a href="#">自定义 HTML</a></p></li><li><p><a href="#">自定义模块</a></p></li><li><p><a href="#">获取与安装主题</a></p></li><li><p><a href="#">获取与安装插件</a></p></li></ul><hr><h2>开发</h2><ul><li><p><a href="./theme-document.html">主题制作手册</a></p></li><li><p><a href="#">插件原理</a></p></li><li><p><a href="#">数据库结构</a></p></li><li><p><a href="#">多语言</a></p></li><li><p><a href="#">欢迎参与开发</a></p></li></ul>
+		</div>
+
+	</article>
+	<article id="document" class="markdown-body">
+		<h1>主题制作手册</h1><p>本文档将帮助您了解 bW 的主题制作方法。您需掌握HTML和CSS的基本知识，并对PHP的语法有一点了解。</p><h2>主题包结构</h2><p>一个主题由若干文件组成，并存放于 theme/ 文件夹下的一个<strong>自定义文件夹</strong>内，例如 mytheme 。该文件夹名称建议只采用字母和数字。所有PHP、CSS、JS等文本文件必须采用无BOM的UTF-8编码。<br>每个主题文件包含若干 .php 文件，这些文件定义了前后台界面中的页面呈现（下称区块）。一个区块可以是整个页面结构（如page.php），也可以是页面中的一个组成部分。</p><p>一个主题的文件夹结构如下：<br><strong>&lt;定义&gt;</strong><br>info.php - 主题的描述文件<br>icon.jpg - 主题的预览缩略图，尺寸规定为260*220px</p><p><strong>&lt;区块文件&gt;</strong><br>article.php - 阅读文章时展示的区块<br>page.php - 前台页面的主框架<br>summary.php - 文章摘要展示的区块<br>plainpage.php - 手机扫码登陆等简单页面的主框架<br>singlepage.php - 单页的区块<br>components.php - 主题调用的一些杂项区块<br>error.php - 出错提示页主框架</p><p><strong>&lt;后台区块文件，default主题专用&gt;</strong><br>admin.php - 后台页面的主框架<br>adminarticles.php - 后台文章管理页区块<br>admincenter.php - 后台设置页区块<br>admindashboard.php - 后台首页区块<br>adminextensions.php - 后台扩展管理页区块<br>adminservices.php - 后台服务管理页区块<br>adminwriter.php - 编辑器区块</p><p><strong>&lt;其他文件&gt;</strong><br>主题还可以包含其他必要的文件，比如字体、CSS、JS、图片、Flash文件等。</p><p>请注意，上述所有的文件，<strong>只有</strong>描述文件 info.php是必需的。当bW程序需要载入一个主题下的某个指定的区块文件时，如果所需的文件不存在，程序将载入default主题下的相应区块文件。所以，在大多数情况下，你只需要制作一个包含所要修改的区块文件的主题，而其他文件都可以忽略。<br>为了确保随着程序升级，后台的功能可以正常使用而不需要同步升级主题，不允许第三方主题修改后台区块文件。无论主题文件夹中是否包含后台区块文件，程序都将且只会载入 default 主题下的后台区块文件。</p><h2>区块文件语法</h2><h3>变量引用</h3><p>不同的区块支持不同的变量。在bW主题中，我们使用以下方法引用一个变量：<br><code>[[::变量名]]</code><br>（两个前中括号，两个冒号，变量名，两个后中括号）</p><p>例如，在任何区块里，你想要引用表示网站名的变量 <code>[[::siteName]]</code>，假如你的网站叫“新的冒险”，那么代码</p><pre><code>&lt;h1&gt;[[::siteName]]&lt;/h1&gt;</code></pre><p>将让你得到</p><pre><code>&lt;h1&gt;新的冒险&lt;/h1&gt;</code></pre><p>bW中一些常用的变量是全局性的，意味着在任何区块文件中都能被引用（例如网站名，网站的根网址等），另一些变量则只在适用的区块中有效（例如，某篇文章的阅读次数只在文章的阅读页区块和摘要区块有效）。</p><p>全局变量和各区块的特定变量，请参阅后续的章节。</p><h3>变量计算</h3><p>一些变量可以进行一些基本的运算，形式如下：</p><pre><code>[[::变量名, 运算方法, 参数]]</code></pre><p>例如，我们可以对表示某篇日志的发布时间的变量（<code>[[::aTime]]</code>）进行时间日期格式化运算，该运算的方法名为<code>dateFormat</code>，接受的参数是我们指定的时间日期格式。代码：</p><pre><code>&lt;span&gt;发布时间：[[::aTime, dateFormat, Y年m月d日 H:i]]&lt;/span&gt;</code></pre><p>可以得到：</p><pre><code>&lt;span&gt;发布时间：2015年1月1日 20:12&lt;/span&gt;</code></pre><p>可用的运算方法，请参阅后续的章节。</p><h3>循环</h3><p>部分变量是一个数组，我们需要通过循环将这个数组转换为一组结构相似的HTML代码，例如一个列表，若干篇日志摘要等。</p><p>循环结构语法如下：</p><pre><code>[[::loop, 可供循环的数组名]]
+需要循环的代码
+[[::/loop]]</code></pre><p>比如，<code>[[::navigation]]</code>是一个数组变量，该数组表示了由所有分类组成的导航条，其每个成员都拥有<code>[[::aCateURLName]]</code> （分类ID）、<code>[[::aCateDispName]]</code> （分类名）等变量。</p><p>代码：</p><pre><code>&lt;ul&gt;
+[[::loop, navigation]]
+&lt;li id=&quot;nav-[[::aCateURLName]]&quot;&gt;[[::aCateDispName]]&lt;/li&gt;
+[[/loop]]
+&lt;/ul&gt;</code></pre><p>将生成一组无序列表，形如：</p><pre><code>&lt;ul&gt;
+&lt;li id=&quot;nav-category1&quot;&gt;分类1&lt;/li&gt;
+&lt;li id=&quot;nav-category2&quot;&gt;分类2&lt;/li&gt;
+&lt;li id=&quot;nav-category3&quot;&gt;分类3&lt;/li&gt;
+&lt;/ul&gt;</code></pre><h3>载入区块</h3><p>在一个区块中常常需要载入另一个区块。载入的方法是：</p><pre><code>[[::load, 要载入的区块名]]</code></pre><p>比如在default主题的page.php里，你可以看到我们用</p><pre><code>[[::load, article]]</code></pre><p>载入了一个叫做article的区块并将其全部内容插入到这里。</p><p>载入的区块可以存在于一个独立的区块文件中，也可以在杂项文件 components.php中定义。</p><p>在读取到 <code>[[::load, abc]]</code> 时，如果在当前的主题文件夹下不存在abc.php，那么程序将尝试载入default主题下的同名文件。当default主题下也没有abc.php时，程序将分别在当前文件夹和default的 components.php 中寻找 <code>$parts['abc']</code> 的值作为区块的代码。</p><p>换言之，一个abc区块的载入优先顺序是这样的：<br>主题下的abc.php &gt; default/abc.php &gt; 主题下 components.php 中的  $parts['abc'] &gt; default/components.php 中的 $parts['abc'] &gt; 找不到该区块（载入失败）</p><h3>语言包</h3><p>所有在语言包中定义的词组或句子，可以通过</p><pre><code>[[=变量名]]</code></pre><p>来调用。通过这种调用形式来输出词组可以最大程度的使主题通用于各种语言。</p><p>语言包的变量都是全局性的。在任何区块里调用</p><pre><code>[[=page:Home]]</code></pre><p>都可以获得当前语言包的“首页”这个词组。</p><h2>info.php定义</h2><p>info.php 定义了主题的名称等详细信息，是唯一一个必要文件。</p><p>该文件的格式和意义为：</p><pre><code>&lt;?php
+$theme['themeName']=&quot;Name&quot;;  //可供人类理解的主题名字
+$theme['themeAuthor']=&quot;bW&quot;;  //主题作者名
+$theme['themeUrl']=&quot;http://www.a.com&quot;;  //主题作者的网站链接
+$theme['themeVersion']=&quot;1.0&quot;;  //主题当前的版本号
+$theme['guid']=&quot;com.bo-blog.name&quot;;  //主题的唯一ID，建议采用反域名格式</code></pre><p>其中，版本号、唯一ID只在主题进入主题商店（筹）后才有实际的意义。</p><h2>常用变量</h2><p>了解这些变量后，便可以随意制作主题了。<br>首先，介绍全局变量。</p><h3>常规变量</h3><ul><li><p>authorIntro - 网站主人的一句话简介</p></li><li><p>metaData - 自动生成该页的MetaData，包含了网站简介以及文章tag等。</p></li><li><p>siteURL - 网站根地址。所有链接都必须采用带有这个根地址的绝对路径！</p></li><li><p>siteName - 网站名</p></li><li><p>canonicalURL - 当前页的标准链接</p></li><li><p>authorName - 站长姓名</p></li><li><p>activeNav - 当前激活状态的分类的ID（若有）</p></li><li><p>prevPageLink - 有多页存在时，前一页的链接</p></li><li><p>firstPageLink - 有多页存在时，第一页的链接</p></li><li><p>finalPageLink - 有多页存在时，最后一页的链接</p></li><li><p>nextPageLink - 有多页存在时，下一页的链接</p></li><li><p>gotoPageLink - 有多页存在时，某一页的链接</p></li><li><p>errorMessage - 出错时的错误信息</p></li></ul><h3>URL片段变量</h3><p>为了支持 <a href="./url-rewrite.html">URL Rewrite 伪静态</a>，引入了一系列URL片段变量，用于在主题中灵活地兼容开启和关闭了URL Rewrite的状态。</p><ul><li><p>linkPrefixIndex - 首页，开启URL Rewrite时输出 index，关闭时输出 index.php（nginx下会输出Ugly URL以提高兼容性，下略）</p></li><li><p>linkPrefixCategory - 分类，开启URL Rewrite时输出 category，关闭时输出 category.php</p></li><li><p>linkPrefixArticle - 单篇日志，开启URL Rewrite时输出 post，关闭时输出read.php</p></li><li><p>linkPrefixTag - 标签，开启URL Rewrite时输出 tag，关闭时输出 tag.php</p></li><li><p>linkPrefixSend - 提交表单，始终输出 send.php</p></li><li><p>linkPrefixAdmin - 后台，始终输出 admin.php</p></li><li><p>linkPrefixPage - 单页，开启URL Rewrite时输出 page，关闭时输出 page.php</p></li><li><p>linkConj - 多个URL传递参数之间的连接符，非Ugly URL状态时输出 ?，Ugly URL状态时输出 &</p></li></ul><h3>常用于主框架的变量</h3><p><strong>navigation</strong> - 由分类信息组成的导航条，为循环变量，其中每个成员是一个导航条项目，包含下列子变量：</p><ul><li><p>aCateURLName - 分类的ID</p></li><li><p>aCateDispName - 分类的名称</p></li></ul><p><strong>articlesummary</strong> - 由多篇日志摘要组成的日志信息流，为循环变量，其中每个成员是一篇日志摘要。对于单篇日志摘要的格式定义，一般写在 summary.php 里。一篇摘要包含下列自变量：</p><ul><li><p>aTitle - 日志标题</p></li><li><p>aTime - 日志发布时间，为 YYYY-MM-DD HH:MM:SS 格式。支持运算方法 dateFormat，用于自定义日期显示格式，格式参数写法参考 PHP 的 date() 函数。<br>示例：</p></li></ul><pre><code>&lt;span&gt;发布时间：[[::aTime, dateFormat, Y年m月d日 H:i]]&lt;/span&gt;</code></pre><p>可以得到：</p><pre><code>&lt;span&gt;发布时间：2015年1月1日 20:12&lt;/span&gt;</code></pre><ul><li><p>aCateURLName - 该篇日志所属分类的分类ID，用于构建指向分类的链接。以下是正确的指向一个分类页面的链接的形式：[[::siteURL]]/[[::linkPrefixCategory]]/[[::aCateURLName]]/</p></li><li><p>aCateDispName - 该篇日志所属分类的分类名称</p></li><li><p>aContent - 该日志的正文。支持运算方法 formatText，用于决定是输出正文全文还是仅输出摘要。参数为“less”时输出摘要，参数“full”时输出全文。即使用</p></li></ul><pre><code>[[::aContent, formatText, less]]</code></pre><p>输出摘要。</p><ul><li><p>aID - 日志的唯一ID。支持运算方法 hasMore，此运算需结合 aContent 的 formatText 运算方法使用。当 aContent 在摘要之外并无更多的内容时，使用 hasMore 运算方法可以输出在“参数”中指定的代码。例如：</p></li></ul><pre><code>[[::aID, hasMore, 已显示了全文]]</code></pre><p>如果这篇日志已经显示完毕没有更多内容，则显示“已显示了全文”。否则则不显示任何内容。这个方法通常用于决定是否显示“阅读更多”的链接。</p><ul><li><p>aTags - 日志的标签。<br>支持运算方法 hasTags。当日志设定有标签时，输出“参数”中指定的内容。</p></li></ul><p>支持运算方法 formatTags。当日志设定有标签时，用“参数”中指定的格式来显示每一个标签。此处的参数可以引用其他的变量，但变量需用 [::xxx] 来引用。<br>将 aTags 的两个运算方法相结合，可以做到在有标签时输出标签行。示例：</p><pre><code>[[::aTags, hasTags, &lt;h4 class=&quot;tagsRow&quot;&gt;]] [[::aTags, formatTags, &lt;span class=&quot;oneTag&quot;&gt;&lt;a href=&quot;[::siteURL]/[::linkPrefixTag]/[::tagInURL]/&quot;&gt;#[::tagValue]&lt;/a&gt;&lt;/span&gt;]][[::aTags, hasTags, &lt;/h4&gt;]]</code></pre><p>这里，对于每一个标签，支持这些变量：</p><ul><li><p>tagInURL - 是经过base64处理的可用于URL中的标签名称。</p></li><li><p>tagValue - 是标签名称。</p></li></ul><p>（未完待续）</p>
+	</article>
+</div>
+
+<footer>
+<div id="footerWrapper">
+<div class="footerL">
+<h4>常用链接</h4>
+<h5><a href="http://bw.bo-blog.com/download/">程序下载</a></h5>
+<h5>主题</h5>
+<h5>插件扩展</h5>
+</div>
+
+<div class="footerL">
+<h4>使用支持</h4>
+<h5><a href="http://bw.bo-blog.com/manual/">文档</a></h5>
+<h5><a href="http://bw.bo-blog.com/forum/" target="_blank">论坛</a></h5>
+<h5><a href="https://github.com/bo-blog/bw/issues" target="_blank">报告Bug</a></h5>
+</div>
+
+<div class="footerL">
+<h4>项目相关</h4>
+<h5><a href="https://github.com/bo-blog/bw">bW on GitHub</a></h5>
+<h5><a href="https://coding.net/u/bo-blog/p/bw/git">bW在Coding.net</a></h5>
+<h5><a href="http://www.bo-blog.com/index.php">Bo-Blog 2 [旧版]</a></h5>
+</div>
+
+<div class="footerL">
+<h4>分享</h4>
+<h5>
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24">
+<a class="jiathis_button_tsina"></a>
+<a class="jiathis_button_weixin"></a>
+<a class="jiathis_button_tqq"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+	summary:"",
+	shortUrl:false,
+	hideMore:true
+}
+</script>
+<!-- JiaThis Button END -->
+</h5>
+</div>
+
+<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">&copy; Bo-blog Wind</a></div>
+
+</div>
+</footer>
+<script type="text/javascript">
+$('#nav-document').addClass('activeNav');
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+</div>
+
+</body>
+</html>
