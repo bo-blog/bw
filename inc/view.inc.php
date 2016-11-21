@@ -321,6 +321,11 @@ class bwView {
 		if (defined ('ajax')) {
 			die (json_encode (array ('error' => 1, 'returnMsg' => $errMsg)));
 		} 
+		if (M == 'api') {
+			header ('HTTP/1.1 400 Bad Request');
+			header ('Content-Type: application/json'); 
+			die (json_encode (array ('error' => 1, 'message' => $errMsg)));
+		} 
 		$this -> setMaster ('error');
 		$this -> setPassData (array('errorMessage' => $errMsg));
 		$this -> setWorkFlow (array('error'));

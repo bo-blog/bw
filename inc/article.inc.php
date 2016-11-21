@@ -24,17 +24,18 @@ class bwArticle {
 		$this -> listCate = 'all';
 		$this -> totalArticles = 0;
 		$this -> cutTime = date ('Y-m-d H:i:s');
+		$this -> sinceTime = date ('1970-01-01 00:00:00');
 	} 
 
 	public function getArticleList ()
 	{
 		$currentTitleStart = ($this -> pageNum-1) * bw :: $conf['perPage'];
 
-		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>"_trash" AND aCateURLName<>"_page" AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?';
+		$qStr = $this -> listCate == 'all' ? 'SELECT * FROM articles WHERE aCateURLName<>"_trash" AND aCateURLName<>"_page" AND aTime<=? AND aTime>? ORDER BY aTime DESC LIMIT ?, ?' : 'SELECT * FROM articles WHERE aCateURLName=? AND aTime<=? AND aTime>? ORDER BY aTime DESC LIMIT ?, ?';
 		if ($this -> listCate != 'all') {
-			$qBind = array ($this -> listCate, $this -> cutTime, $currentTitleStart, bw :: $conf['perPage']);
+			$qBind = array ($this -> listCate, $this -> cutTime, $this -> sinceTime, $currentTitleStart, bw :: $conf['perPage']);
 		} else {
-			$qBind = array ($this -> cutTime, $currentTitleStart, bw :: $conf['perPage']);
+			$qBind = array ($this -> cutTime, $this -> sinceTime, $currentTitleStart, bw :: $conf['perPage']);
 		} 
 		$allTitles = bw :: $db -> getRows ($qStr, $qBind);
 
@@ -79,11 +80,11 @@ class bwArticle {
 
 		$allIDs = str_replace (']', '', substr ($tagList['tList'], 1));
 
-		$allTitles = bw :: $db -> getRows ("SELECT * FROM articles WHERE aID IN ({$allIDs}) AND aCateURLName<>\"_trash\" AND aCateURLName<>\"_page\" AND aTime<=? ORDER BY aTime DESC LIMIT ?, ?", array ($this -> cutTime, $currentTitleStart, bw :: $conf['perPage']));
+		$allTitles = bw :: $db -> getRows ("SELECT * FROM articles WHERE aID IN ({$allIDs}) AND aCateURLName<>\"_trash\" AND aCateURLName<>\"_page\" AND aTime<=? AND aTime>? ORDER BY aTime DESC LIMIT ?, ?", array ($this -> cutTime, $this -> sinceTime, $currentTitleStart, bw :: $conf['perPage']));
 
 		$this -> parseArticleList ($allTitles);
 		hook ('getArticleListByTag', 'Execute', $this);
-		$this -> totalArticles = bw :: $db -> countRows ("SELECT aID FROM articles WHERE aID IN ({$allIDs}) AND aCateURLName<>\"_trash\" AND aTime<=?", array ($this -> cutTime));
+		$this -> totalArticles = bw :: $db -> countRows ("SELECT aID FROM articles WHERE aID IN ({$allIDs}) AND aCateURLName<>\"_trash\" AND aTime<=? AND aTime>?", array ($this -> cutTime, $this -> sinceTime));
 	} 
 
 	public function alterCate ($cateID)
@@ -123,9 +124,19 @@ class bwArticle {
 		bw :: $conf['perPage'] = floor ($num);
 	} 
 
+	public function alterPageNum ($num)
+	{
+		$this -> pageNum = floor ($num);
+	} 
+
 	public function setCutTime ($timeStamp)
 	{
 		$this -> cutTime = $timeStamp == 0 ? '9999-12-31 23:59:59' : date ('Y-m-d H:i:s', $timeStamp);
+	} 
+
+	public function setSinceTime ($timeStamp)
+	{
+		$this -> sinceTime = $timeStamp == 0 ? '1970-01-01 00:00:00' : date ('Y-m-d H:i:s', $timeStamp);
 	} 
 
 	public function addArticle ($smt)

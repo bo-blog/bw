@@ -99,7 +99,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ('No data is submitted.');
 		} 
-		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
+		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'autoSave', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$outputExternal = '';
 		for ($i = 0; $i < count ($smt['externalLinks']['lnkname']); $i++) {
@@ -187,8 +187,11 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		if (isset ($_REQUEST['ispage'])) {
 			$_REQUEST['smt']['aCateURLName'] = '_page';
 		}
+		if (isset ($_REQUEST['autosave'])) {
+			$_REQUEST['smt']['aCateURLName'] = '_trash';
+		}
 		$article -> addArticle ($_REQUEST['smt']);
-		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
+		ajaxSuccess (isset ($_REQUEST['autosave']) ? $conf['l']['admin:msg:AutoSaved'] : $conf['l']['admin:msg:ChangeSaved']);
 	} elseif ($canonical -> currentArgs['subAction'] == 'update') {
 		$admin -> checkCSRFCode ('articlesave');
 		if (!isset ($_REQUEST['smt'])) {
@@ -197,8 +200,11 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		if (isset ($_REQUEST['ispage'])) {
 			$_REQUEST['smt']['aCateURLName'] = '_page';
 		}
+		if (isset ($_REQUEST['autosave'])) {
+			$_REQUEST['smt']['aCateURLName'] = '_trash';
+		}
 		$article -> updateArticle ($_REQUEST['smt']);
-		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
+		ajaxSuccess (isset ($_REQUEST['autosave']) ? $conf['l']['admin:msg:AutoSaved'] : $conf['l']['admin:msg:ChangeSaved']);
 	} elseif ($canonical -> currentArgs['subAction'] == 'modify') {
 		$admin -> checkCSRFCode ('navibar');
 		if (!isset ($_REQUEST['aID'])) {
@@ -219,6 +225,10 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$qiniuFileToken = $qiniuClient -> uploadToken($flags);
 			$view -> setPassData (array ('qiniuFileToken' => $qiniuFileToken, 'qiniuKey' => $fStoreName));
 			$uploader = 'adminqiniuupload';
+		} elseif ($conf['qiniuUpload'] == '2') {
+			$uploader = 'adminaliyunupload';
+			$policy = '{"expiration": "2120-01-01T12:00:00.000Z","conditions":[{"bucket": "'. bw :: $conf['aliyunBucket'] .'" },["content-length-range", 0, 104857600]]}';
+			$view -> setPassData (array ('policy' => base64_encode ($policy), 'signature' => base64_encode (hash_hmac ('sha1', $policy, bw :: $conf['aliyunSKey'], true))));
 		} else {
 			$uploader = 'admincommonupload';
 		} 
@@ -233,10 +243,15 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
 			$fStoreName = 'storage/' . substr (md5 (rand (1, 99999) . time()), 10, 8);
 			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/{$conf['linkPrefixAdmin']}/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)', 'ftype' => '$(mimeType)')));
-			$qiniuFileToken = $qiniuClient -> uploadToken($flags);
+			$qiniuFileToken = $qiniuClient -> uploadToken ($flags);
 			$view -> setPassData (array ('qiniuFileToken' => $qiniuFileToken, 'qiniuKey' => $fStoreName));
 			$uploader = 'adminqiniuupload';
-		} else {
+		} elseif ($conf['qiniuUpload'] == '2') {
+			$uploader = 'adminaliyunupload';
+			$policy = '{"expiration": "2120-01-01T12:00:00.000Z","conditions":[{"bucket": "'. bw :: $conf['aliyunBucket'] .'" },["content-length-range", 0, 104857600]]}';
+			$policy = base64_encode ($policy);
+			$view -> setPassData (array ('policy' => $policy, 'signature' => base64_encode (hash_hmac ('sha1', $policy, bw :: $conf['aliyunSKey'], true))));
+		}  else {
 			$uploader = 'admincommonupload';
 		} 
 
@@ -263,6 +278,14 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$outTags[] = $aTag['tValue'];
 		} 
 		die ('var lastTags='.json_encode ($outTags).';');
+	}  elseif ($canonical -> currentArgs['subAction'] == 'getpinyin') {
+		if (!isset ($_REQUEST['str']) || !function_exists('mb_convert_encoding')) {
+			stopError ('');
+		}
+		include_once (P . 'inc/script/pinyin/pinyin.php');
+		$PY = new toPinyin;
+		$pinyin = $PY -> stringToPinyin ($_REQUEST['str']);
+		ajaxSuccess ($pinyin);
 	} elseif ($canonical -> currentArgs['subAction'] == 'loadtpl') {
 		if (isset ($_REQUEST['tpl'])) {
 			$tplFile = P . 'inc/template/' . basename ($_REQUEST['tpl']) . '.tpl.php';
@@ -351,6 +374,25 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$view -> setPassData (array ('adminuploadedpic' => $picfiles, 'adminuploadedfile' => $files));
 		$view -> setWorkFlow (array ('adminuploadinsert'));
 		$view -> finalize ();
+	}  elseif ($canonical -> currentArgs['subAction'] == 'aliyunuploader') {
+		$admin -> checkCSRFCode ('upload');
+		loadServices ();
+		$picfiles = $files = array();
+		if (isset ($_REQUEST['filename'])) {
+			$fOriginalName = basename (urlencode($_REQUEST['filename']));
+			$fExtName = pathinfo ($fOriginalName, PATHINFO_EXTENSION);
+			$fStoreName = "http://{$conf['aliyunBucket']}.{$conf['aliyunRegion']}.aliyuncs.com/storage/{$fOriginalName}";
+
+			if (in_array (strtolower ($fExtName), array('gif', 'jpg', 'png', 'bmp', 'jpeg', 'jpe'))) {
+				$picfiles[]['fileURL'] = $fStoreName;
+			} elseif (!in_array (strtolower ($fExtName), array('php', 'php3', 'asp', 'aspx', 'jsp', 'cgi', 'py', 'cf'))) {
+				$files[]['fileURL'] = $fStoreName;
+			}
+			$view -> setMaster ('adminuploadinsert');
+			$view -> setPassData (array ('adminuploadedpic' => $picfiles, 'adminuploadedfile' => $files));
+			$view -> setWorkFlow (array ('adminuploadinsert'));
+			$view -> finalize ();
+		} 
 	} elseif ($canonical -> currentArgs['subAction'] == 'savecategories') {
 		$admin -> checkCSRFCode ('category');
 		if (!isset ($_REQUEST['smt'])) {
@@ -447,10 +489,14 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		} 
-		$acceptedKeys = array ('duoshuoID', 'disqusID', 'sinaAKey', 'sinaSKey', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain');
+		$acceptedKeys = array ('duoshuoID', 'disqusID', 'sinaAKey', 'sinaSKey', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain', 'APIOpen', 'basicAPI', 'advancedAPI', 'aliyunAKey', 'aliyunSKey', 'aliyunBucket', 'aliyunRegion');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
+		$basicAPI = @explode ('<>', $smt['basicAPI']);
+		$advancedAPI = @explode ('<>', $smt['advancedAPI']);
 		$smt = array_map ('htmlspecialchars', $smt);
-		if ($smt['qiniuBucket']) {
+		$smt['basicAPI'] = array_filter ($basicAPI, 'strlen');
+		$smt['advancedAPI'] = array_filter ($advancedAPI, 'strlen');
+		if ($smt['qiniuBucket'] == '1') {
 			require_once (P . "inc/script/qiniu/QiniuClient.php");
 			$qiniuClient = new qiniuClient ($smt['qiniuAKey'], $smt['qiniuSKey']);
 			$result = $qiniuClient -> listFiles($smt['qiniuBucket'], $limit = 1);
@@ -497,10 +543,29 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		dochmod ('.');
 		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/services/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
 		exit ();
+	}  elseif ($canonical -> currentArgs['subAction'] == 'getnewapikey') {
+		$admin -> checkCSRFCode ('services');
+		$APIKey = 'o_' . sha1 (bw :: $conf['siteKey'] . 'KEY' . rand (10000, 99999));
+		$authSecret = sha1 ($APIKey . bw :: $conf['siteKey'] . "API");
+		ajaxSuccess ($APIKey . '-' . $authSecret);
 	}
 	else {
 		$admin -> checkCSRFCode ('navibar');
 		loadServices ();
+		if (isset ($conf['basicAPI'])) {
+			$basicAPI = array ();
+			foreach ((array) $conf['basicAPI'] as $itm => $val) {
+				$basicAPI[] = array ('apiID' => 'basic' . $itm, 'apiKey' => $val, 'apiSecret' => sha1 ($val . bw :: $conf['siteKey'] . "API"));
+			}
+			$view -> setPassData (array ('basicAPI' => $basicAPI));
+		}
+		if (isset ($conf['advancedAPI'])) {
+			$advancedAPI = array ();
+			foreach ((array) $conf['advancedAPI'] as $itm => $val) {
+				$advancedAPI[] = array ('apiID' => 'advanced' . $itm, 'apiKey' => $val, 'apiSecret' => sha1 ($val . bw :: $conf['siteKey'] . "API"));
+			}
+			$view -> setPassData (array ('advancedAPI' => $advancedAPI));
+		}
 		$view -> setMaster ('admin');
 		$view -> setPassData (array ('serviceCSRFCode' => $admin -> getCSRFCode ('services')));
 		$view -> setWorkFlow (array ('adminservices', 'admin'));
@@ -695,7 +760,25 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 		} 
-	} elseif ($canonical -> currentArgs['subAction'] == 'savehooks') {
+	} elseif ($canonical -> currentArgs['subAction'] == 'savewidgetsort') {
+		$admin -> checkCSRFCode ('extensions');
+		if (!isset ($_REQUEST['sortstr'])) {
+			stopError ($conf['l']['admin:msg:NotExist']);
+		}
+		$allWidgets = @explode ('<>', $_REQUEST['sortstr']);
+		$allWidgets = array_reverse ($allWidgets);
+		$dataLine = array();
+		$i = 1;
+		foreach ($allWidgets as $extID) {
+			$dataLine[$i][':extOrder'] = $i;
+			$dataLine[$i][':extID'] = $extID;
+			$i += 1;
+		} 
+
+		bw :: $db -> dbExecBatch ('UPDATE extensions SET extOrder=:extOrder WHERE extID=:extID', $dataLine);
+		clearCache ();
+		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
+	}  elseif ($canonical -> currentArgs['subAction'] == 'savehooks') {
 		$admin -> checkCSRFCode ('extensions');
 		foreach ($allOpenHooks as $openHook) {
 			@file_put_contents (P . 'conf/insert_' . $openHook . '.htm', $_REQUEST['smt'][$openHook]);

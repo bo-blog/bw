@@ -47,9 +47,12 @@ if (!defined ('P')) {
 <span class="extStatus0"><span class="icon-warning"></span> [[=admin:msg:ExtSafety]]</span><br/>
 </article>
 </div>
+
+
 <h2><span class="icon-module"></span> [[=admin:sect:Modules]]</h2>[[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtHTMLHead]]<br/>
-[[::loop, wgtListHtmlhead]]<span class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '[[::extID]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
-<span class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
+<ul class="adminLaidItemList">
+[[::loop, wgtListHtmlhead]]<li class="adminLaidItem" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '[[::extID]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])" data-eid="[[::extID]]">[[::extID]]</li>[[::/loop]]
+<li class="adminLaidItem newLaid" onclick="fillWgtHtmlHead ('addWgtHtmlhead', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</li></ul>
 <br style="clear: both"/>
 <article id="addWgtHtmlhead" style="display: none;">
 [[=admin:sect:EditModules]]<br/>
@@ -71,8 +74,9 @@ if (!defined ('P')) {
 <br/>
 
 <span class="icon-arrow-right5"></span> [[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtHeader]]<br/>
-[[::loop, wgtListHeader]]<span class="adminLaidItem" onclick="fillWgtHeader ('addWgtHeader', '[[::extID]]', '[[::text]]', '[[::url]]', '[[::target]]', '[[::title]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
-<span class="adminLaidItem" onclick="fillWgtHeader ('addWgtHeader', '', '', 'http://', '_self', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
+<ul class="adminLaidItemList">
+[[::loop, wgtListHeader]]<li class="adminLaidItem" onclick="fillWgtHeader ('addWgtHeader', '[[::extID]]', '[[::text]]', '[[::url]]', '[[::target]]', '[[::title]]', [[::extOrder]], [[::extActivate]])" data-eid="[[::extID]]">[[::extID]]</li>[[::/loop]]
+<li class="adminLaidItem newLaid" onclick="fillWgtHeader ('addWgtHeader', '', '', 'http://', '_self', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</li></ul>
 <br style="clear: both"/>
 <article id="addWgtHeader" style="display: none;">
 [[=admin:sect:EditModules]]<br/>
@@ -95,8 +99,9 @@ if (!defined ('P')) {
 <br/>
 
 <span class="icon-arrow-right5"></span> [[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtSidebar]]<br/>
-[[::loop, wgtListSiderbar]]<span class="adminLaidItem" onclick="fillWgtSidebar ('addWgtSidebar', '[[::extID]]', '[[::title]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
-<span class="adminLaidItem" onclick="fillWgtSidebar ('addWgtSidebar', '', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
+<ul class="adminLaidItemList">
+[[::loop, wgtListSiderbar]]<li class="adminLaidItem" onclick="fillWgtSidebar ('addWgtSidebar', '[[::extID]]', '[[::title]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])" data-eid="[[::extID]]">[[::extID]]</li>[[::/loop]]
+<li class="adminLaidItem newLaid" onclick="fillWgtSidebar ('addWgtSidebar', '', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</li></ul>
 <br style="clear: both"/>
 <article id="addWgtSidebar" style="display: none;">
 [[=admin:sect:EditModules]]<br/>
@@ -119,8 +124,9 @@ if (!defined ('P')) {
 <br/>
 
 <span class="icon-arrow-right5"></span> [[=admin:item:WgtInterfaceName]] [[=admin:msg:WgtFooter]]<br/>
-[[::loop, wgtListFooter]]<span class="adminLaidItem" onclick="fillWgtFooter ('addWgtFooter', '[[::extID]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])">[[::extID]]</span>[[::/loop]]
-<span class="adminLaidItem" onclick="fillWgtFooter ('addWgtFooter', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</span>
+<ul class="adminLaidItemList">
+[[::loop, wgtListFooter]]<li class="adminLaidItem" onclick="fillWgtFooter ('addWgtFooter', '[[::extID]]', '[[::value, safeConvert]]', [[::extOrder]], [[::extActivate]])" data-eid="[[::extID]]">[[::extID]]</li>[[::/loop]]
+<li class="adminLaidItem newLaid" onclick="fillWgtFooter ('addWgtFooter', '', '', -1, -1)">[+] [[=admin:btn:NewWidget]]</li></ul>
 <br style="clear: both"/>
 <article id="addWgtFooter" style="display: none;">
 [[=admin:sect:EditModules]]<br/>
@@ -139,7 +145,9 @@ if (!defined ('P')) {
 </span>
 <p class="wgtPromptError"></p>
 </article>
-
+ <p><li class="adminLaidItem newLaid" style="text-align: center;" onclick="savewidgetsort();">[[=admin:btn:SortWidget]]</li></p>
+<br/>
+<br/>
 
 <br class="smallBr"/>
 
@@ -208,10 +216,18 @@ if (!defined ('P')) {
 </p>
 [[::ext_adminExtensions]]
 
-<script type="text/javascript">
-$("#admExtensions").addClass("activeNav");
-var smtURL=$("#smtForm").data('adminurl');
+<script src="[[::siteURL]]/inc/script/html5sortable/html.sortable.min.js"></script>
 
+<script type="text/javascript">
+sortable ('.adminLaidItemList', {
+    forcePlaceholderSize: true,
+	placeholderClass: 'sortable-placeholder2',
+	items: ':not(.newLaid)',
+});
+
+$("#admExtensions").addClass("activeNav");
+
+var smtURL=$("#smtForm").data('adminurl');
 $("#themeID-[[::siteTheme]]").hide();
 
 function makeEnabled (extID) {
@@ -311,6 +327,25 @@ function addWidget (formID) {
 	}, "json");
 }
 
+function savewidgetsort () {
+	var sorts = new Array ();
+	$(".adminLaidItem:not(.newLaid)").each (function(){
+		sorts.push(encodeURIComponent($(this).data('eid')));
+	});
+	var sortStr = sorts.join('<>');
+	var targetURL=smtURL+"savewidgetsort/[[::linkConj]]ajax=1&CSRFCode=[[::extCSRFCode]]";
+	$("#UI-loading").fadeIn(500);
+	$.post (targetURL, {sortstr : sortStr}, function(data) {
+		$("#UI-loading").fadeOut(200);
+			if (data.error==1) {
+				alert (data.returnMsg);
+			}
+			else {
+				location.reload();
+			}
+		}, "json");
+}
+
 function removeExt (extID) {
 	if (confirm("[[=admin:msg:RemoveExtension]]"))
 	{
@@ -349,7 +384,6 @@ function addExt () {
 function saveOpenHooks () {
 	$("#UI-loading").fadeIn(500);
 	var targetURL=smtURL+"savehooks/[[::linkConj]]ajax=1&CSRFCode=[[::extCSRFCode]]";
-
 	$.post(targetURL, $("#smtForm").serialize(), function(data) {
 		$("#UI-loading").fadeOut(200);
 		if (data.error==1) {

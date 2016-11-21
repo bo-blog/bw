@@ -62,11 +62,16 @@ padding-left: 12px;
 border: 1px solid #E8E8E8;
 cursor: pointer;
 }
+.adminCateList li {
+cursor: move;
+}
+.adminCateList .adminSCLine {
+cursor: pointer;
+}
 .sortable-placeholder {
 padding-left: 12px;
 border: 1px solid #E8E8E8;
 min-height: 30px;
-background: #CCC;
 }
 .adminSingleArticle:hover, .adminSingleArticle:hover a, .adminSingleArticle:hover .adminSADate {
 background: #73D90C;
@@ -199,16 +204,19 @@ color: red;
 .adminArea article a {
 border: 0;
 }
-.adminLaidItem {
+.adminLaidItem, .sortable-placeholder2 {
 width: 250px;
 overflow-x: auto;
 display: block;
 float: left;
 border: 1px dashed #ccc;
-cursor: pointer;
+cursor: move;
 padding: 3px;
 margin: 0 10px 3px 0;
 color: #505050;
+}
+.newLaid {
+cursor: pointer;
 }
 .adminLaidItem:hover {
 background: #ccc;
