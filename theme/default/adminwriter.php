@@ -60,15 +60,18 @@ if (!defined ('P')) {
 [[::ext_adminWriter]]
 </form>
 <div id="adminUploadContainer" data-upurl="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/getqiniuuploadpart/[[::linkConj]]CSRFCode=[[::upCSRFCode]]">
-[[::adminqiniuupload]][[::admincommonupload]]
+[[::adminqiniuupload]][[::adminaliyunupload]][[::admincommonupload]]
 </div>
 
 <iframe id="execPicTarget" name="execPicTarget" style="display: none;"></iframe>
 <script type="text/javascript" src="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/getautocomplete/"></script>
 <script type="text/javascript" src="[[::siteURL]]/inc/script/main.js"></script>
+<script type="text/javascript" src="[[::siteURL]]/inc/script/timers/jquery.timers.js"></script>
+
 <script type="text/javascript">
 var clearAutoID=false;
 var callCustomEditor=false;
+var inAutoSave=false;
 
 if ($("#aID").val()=='')
 {
@@ -181,6 +184,16 @@ $("#aTitle").blur(function() {
 	if ($("#aTitle").val()=='')
 	{
 		$("#aTitle").addClass("inputLineWarn");
+	} 
+	else {
+		if ("[[::aID]]" == '') {
+			$.post ("[[::siteURL]]/admin.php/articles/getpinyin/[[::linkConj]]ajax=1", {str: $("#aTitle").val()}, function(data){
+				if (data.error!=1) {
+					$("#aID").val (data.returnMsg);
+					clearAutoID=false;
+				}
+			}, 'json');
+		}
 	}
 	$("#aTitle").click(function() {
 		$("#aTitle").removeClass("inputLineWarn");
@@ -300,6 +313,17 @@ function doPicUp2() {
 	}
 }
 
+function doPicUp3() {
+	if($("#uploadPicFile").val() != '') {
+		var f = document.getElementById("uploadPicFile").files;  
+		var fn = f[0].name;
+		$('#success_action_redirect').val("[[::siteURL]]/[[::linkPrefixAdmin]]/articles/aliyunuploader/[[::linkConj]]CSRFCode=[[::upCSRFCode]]&filename="+encodeURIComponent(fn));
+		$("#UI-loading").fadeIn(500);
+		$('#picForm').submit();
+		$('#adminUpAdd').html("[[=admin:btn:Uploading]]");
+	}
+}
+
 if ($("#originID").val()=='') {
 	$("#btnDel").hide();
 }
@@ -317,7 +341,7 @@ function saveArticle(formID, smtURL) {
 
 	if (!stopSubmit)
 	{
-		$("#UI-loading").fadeIn(500);
+		!inAutoSave && $("#UI-loading").fadeIn(500);
 		var allTags=new Array();
 		$(".admSingleTag i").each(function(){
 			allTags.push ($(this).text());
@@ -329,8 +353,11 @@ function saveArticle(formID, smtURL) {
 		if ("[[::writermode]]" == "singlepage") {
 			smtURL+='&ispage=1';
 		}
+		if (inAutoSave) {
+			smtURL+='&autosave=1';
+		}
 		$.post(smtURL, $('#'+formID).serialize(), function(data) {
-			$("#UI-loading").fadeOut(200);
+			!inAutoSave && $("#UI-loading").fadeOut(200);
 			if (data.error==1) {
 				$("#adminPromptError").text (data.returnMsg);
 				$("#adminPromptError").fadeIn(400).delay(1500).fadeOut(600);
@@ -338,7 +365,7 @@ function saveArticle(formID, smtURL) {
 			}
 			else {
 				clearLeaveWarning ();
-				if ($("#originID").val()=='')
+				if ($('#aCateURLName').val()!='_trash' && !inAutoSave)
 				{
 					window.location="[[::writermode]]" == "article" ? "[[::siteURL]]/[[::linkPrefixArticle]]/"+$("#aID").val()+"/" : "[[::siteURL]]/[[::linkPrefixPage]]/"+$("#aID").val()+"/";
 				}
@@ -348,6 +375,8 @@ function saveArticle(formID, smtURL) {
 					$("#adminPromptSuccess").fadeIn(400).delay(1500).fadeOut(600);
 					$("#originID").val($("#aID").val());
 				}
+				inAutoSave && $("#originID").val($("#aID").val());
+				inAutoSave = false;
 			}
 		}, "json");
 
@@ -513,6 +542,18 @@ $("#tplSel").change (function() {
 		$("#tplSel").val('');
 	}
 });
+
+function autosave () {
+	if ($("#aTitle").val() != '' && $("#aContent").val() != '' && "[[::writermode]]" != "singlepage")
+	{
+		inAutoSave = true;
+		saveArticle('smtForm', '[[::siteURL]]/[[::linkPrefixAdmin]]/articles/');
+	}
+}
+if ("[[::autoSave]]" == '1') {
+	$('body').everyTime('60s', autosave);
+}
+
 </script>
 
 </div>

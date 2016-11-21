@@ -82,6 +82,17 @@ $parts['adminqiniuupload']=<<<eot
 </form>
 eot;
 
+$parts['adminaliyunupload']=<<<eot
+<form id="picForm" method="post" action="http://[[::aliyunBucket]].[[::aliyunRegion]].aliyuncs.com" target="execPicTarget" enctype="multipart/form-data">
+<input type="hidden" name="OSSAccessKeyId" id="OSSAccessKeyId"  value="[[::aliyunAKey]]" />
+<input type="hidden" name="policy" id="policy"  value='[[::policy]]' />
+<input type="hidden" name="signature" id="signature"  value="[[::signature]]" />
+<input type="hidden" name="key" id="key"  value="storage/\${filename}" />
+<input type="hidden" name="success_action_redirect" id="success_action_redirect" value='' />
+<input type="file" style="display: none; height: 1px;" name="file" id="uploadPicFile"  onchange="doPicUp3();"/>
+</form>
+eot;
+
 
 $parts['admincategorylist']=<<<eot
 <li class="adminSingleArticle adminSCL" data-cid="[[::aCateURLName]]" id="adminSCL-[[::aCateURLName]]">

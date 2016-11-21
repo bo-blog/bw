@@ -70,6 +70,11 @@ class bwCanonicalization {
 				$this -> loaderID = 'list';
 				$this -> currentScript = $conf['linkPrefixIndex'];
 				break;
+			case 'api':
+				$this -> argsPattern = array ('mainAPI', 'subAPI', 'pref');
+				$this -> loaderID = 'api';
+				$this -> currentScript = 'api.php';
+				break;
 			default:
 				$this -> loaderID = 'error';
 				$this -> currentScript = $conf['linkPrefixIndex'];

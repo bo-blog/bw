@@ -41,6 +41,9 @@ if (!defined ('P')) {
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentBreak]]<br/><input type="text" class="inputLine inputLarge" name="smt[comPerLoad]" value="[[::comPerLoad]]" />
 </p> -->
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:AutoSave]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst autoSave" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast autoSave" data-reflect="1"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::autoSave]]" name="smt[autoSave]" id="autoSave"/><br/><span class="adminExplain">[[=admin:msg:AutoSaveNotice]]</span>
+</p>
 
 <p><br/><br/></p>
 
@@ -194,6 +197,7 @@ function goSelector(selID) {
 
 goSelector ('perPage');
 goSelector ('pageCache');
+goSelector ('autoSave');
 var tmpLinkPrefixIndex = $("#linkPrefixIndex").val().split('?');
 $("#linkPrefixIndex").val(tmpLinkPrefixIndex[0]);
 goSelector ('linkPrefixIndex');

@@ -70,10 +70,11 @@ if (!defined ('P')) {
 </ul>
 </p>
 
+<script src="[[::siteURL]]/inc/script/html5sortable/html.sortable.min.js"></script>
 <script type="text/javascript" src="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/gettitlelist/"></script>
 
 <script type="text/javascript">
-
+sortable('.adminCateList');
 
 $(".adminSAT").click(function(){
 	var aID=$(this).data("aid");
