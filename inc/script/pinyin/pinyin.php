@@ -1,6 +1,6 @@
 <?php
 /**
-*Chinese characters change to Pinyin class
+*Chinese characters change to Pinyin class 
 * the class can change Chinese characters to Pinyin
 * the encoding of this file is utf8
 * Useage:
