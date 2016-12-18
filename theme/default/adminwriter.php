@@ -25,7 +25,8 @@ if (!defined ('P')) {
 
 <p id="editorBody">
 <span class="icon-arrow-right5"></span> [[=admin:item:AContent]]<span class="adminUploader"><a href="##" id="adminUploader"><span class="icon-pictures"> </span><span id="adminUpAdd">[[=admin:btn:AddPic]]</span></a> <a href="##" id="adminPreview"><span class="icon-screen2"> </span><span id="adminPrevAdd">[[=admin:btn:StartPreview]]</span></a> <select id="tplSel" class="selectLine inputLine inputMiddle" style="width: 90px; font-size: 12px"><option value="">[[=admin:btn:TextHelper]]</option>[[::loop, articleTemplate]]<option value="[[::file]]">[[::name]]</option>[[::/loop]]</select>
-</span> <br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea><div id="previewArea" class="inputLine inputLarge textareaLine details"></div>
+</span> <br/><textarea type="text" class="inputLine inputLarge textareaLine" name="smt[aContent]" id="aContent" />[[::aContent]]</textarea><br><span id="adminPromptSuccessAuto"></span><div id="previewArea" class="inputLine inputLarge textareaLine details"></div>
+
 </p>
 
 <p class="articleOnly">
@@ -369,6 +370,12 @@ function saveArticle(formID, smtURL) {
 				{
 					window.location="[[::writermode]]" == "article" ? "[[::siteURL]]/[[::linkPrefixArticle]]/"+$("#aID").val()+"/" : "[[::siteURL]]/[[::linkPrefixPage]]/"+$("#aID").val()+"/";
 				}
+				else if (inAutoSave)
+				{
+					$("#adminPromptSuccessAuto").text (data.returnMsg);
+					$("#adminPromptSuccessAuto").fadeIn(1400).delay(3500).fadeOut(1600);
+					$("#originID").val($("#aID").val());
+				}
 				else
 				{
 					$("#adminPromptSuccess").text (data.returnMsg);
@@ -420,9 +427,16 @@ $('#eTags').keyup (function(event) {
 		$("#taghint").append('<span class="admSingleTag" onclick="$(this).remove();"><i>'+$('#eTags').val().slice(0, -1)+'</i><span class="icon-cross admSingleTagDel"></span></span>');
 		$('#eTags').val('');
 	}
-	if (event.keyCode==191 || event.keyCode==220)
+	else if (event.keyCode==191 || event.keyCode==220)
 	{
 		$('#eTags').val($('#eTags').val().slice(0, -1));
+	}
+	else {
+		if ($('#eTags').val().charAt(($('#eTags').val().length)-1) == '，')
+		{
+			$("#taghint").append('<span class="admSingleTag" onclick="$(this).remove();"><i>'+$('#eTags').val().slice(0, -1)+'</i><span class="icon-cross admSingleTagDel"></span></span>');
+			$('#eTags').val('');
+		}
 	}
 });
 

@@ -62,7 +62,7 @@ if (!defined ('P')) {
 </div>
 
 <p style="clear: both;"><br/><br/></p>
-<h2><span class="icon-upload2"></span> [[=admin:sect:API]] (BETA)</h2>
+<h2><span class="icon-earth2"></span> [[=admin:sect:API]] (BETA)</h2>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:APIOpen]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst APIOpen" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast APIOpen" data-reflect="1"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::APIOpen]]" name="smt[APIOpen]" id="APIOpen"/>
 </p>

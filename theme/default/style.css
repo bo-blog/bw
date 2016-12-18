@@ -11,7 +11,7 @@ address { font-style:normal }
 /* main style */
 body {
 background: #1B1B1B;
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
+font-family: 'HanHei SC', 'PingFang SC', 'Helvetica Neue', 'Helvetica', 'STHeitiSC-Light', 'Microsoft Yahei', 'Microsoft JhengHei', 'Arial', sans-serif;
 height:100%;
 }
 a {
@@ -21,29 +21,19 @@ color: #CCC;
 background: #F3F3F3;
 height: 100%;
 padding-bottom: 140px;
+overflow-x: none;
 }
 header {
 background: #464646;
 box-shadow: 5px 4px 5px #A4A4A4;
 padding: 40px 20px 20px 20px;
-width: 100%;
-position: fixed;
 z-index: 10000;
 }
 header h1, h1 a {
 color: #D6D6D6;
 font-size: 26px;
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 display: inline;
 margin-left: 5px;
-}
-.headerShrink {
-padding: 6px 20px 6px 20px;
-box-shadow: none;
-opacity: 0.9;
-}
-.headerShrink h1,  .headerShrink h1 a{
-font-size: 20px;
 }
 .iconLogo {
 font-size: 24px;
@@ -54,7 +44,7 @@ color: #FFF;
 }
 nav {
 float: right;
-padding-right: 40px;
+padding: 10px 0 0 0;
 }
 nav li {
 float: left;
@@ -69,31 +59,13 @@ color: #ECECEC;
 nav .activeNav a {
 color: #ECECEC;
 }
-#profileArea {
-padding: 100px 20px 10px 20px;
-height: 90px;
-}
 #profileImg {
 border-radius: 50%;
-float: right;
-box-shadow: 1px 1px 2px #fff;
-height: 90px;
-}
-#profile {
-float: right;
-margin: 20px 40px 10px auto;
-}
-#profileAuthor {
-font-size: 18px;
-color: #555;
-}
-#profileIntro {
-font-size: 14px;
-color: #A7A7A7;
+height: 40px;
 }
 #mainArea {
 clear: both;
-padding: 10px 0 10px 0;
+padding: 40px 0 10px 0;
 text-align: center;
 }
 
@@ -117,18 +89,19 @@ position: absolute;
 margin-top: -50px;
 } 
 article h2, article h2 a {
+background: none;
 color: #000;
 font-size: 22px;
-font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
-text-shadow: 3px 2px 3px #ddd;
+transition: background .5s ease-out;
 }
 article h2 a:hover {
-color: #356A00;
+background: #A8FF51;
+color: #000;
+transition: background .5s ease-out;
 }
 article h3 {
 color: #717171;
 font-size: 14px;
-font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 margin: 5px 0 16px 0;
 }
 article h3 a {
@@ -138,7 +111,6 @@ color: #717171;
 line-height: 190%;
 color: #464646;
 font-size: 15px;
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 }
 .details a {
 color: #464646;
@@ -252,7 +224,6 @@ color: #464646;
 margin-bottom: 18px;
 }
 .comContent pre {
-font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 font-size: 13px;
 margin-left: 70px;
 white-space: pre-wrap;
@@ -261,7 +232,6 @@ word-wrap: break-word;
 .comTitle {
 color: #000;
 font-size: 22px;
-font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 text-shadow: 3px 2px 3px #ddd;
 }
 .comForm {
@@ -270,7 +240,6 @@ margin-bottom: 40px;
 }
 .comInput {
 border-radius: 5px;
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 font-size: 14px;
 padding: 4px 8px 4px 8px;
 border: 1px solid #AAA;
@@ -376,6 +345,9 @@ margin-left: 28px;
 footer a {
 color: #505050;
 }
+footer a:hover {
+color: #fff;
+}
 #copyright {
 width: 100%;
 text-align: center;
@@ -384,7 +356,7 @@ padding-top: 24px;
 #copyright a, #copyright {
 color: #505050;
 font-size: 13px;
-font-family: Helvetica, Arial;
+font-family: Arial, Helvetica, Arial;
 }
 #pageBar {
 width: 95%;
@@ -501,7 +473,13 @@ min-height: 200px;
 padding: 20px 20px 40px 20px;
 text-align: left;
 }
-
+#adminLoginImg {
+border-radius: 50%;
+box-shadow: 1px 1px 2px #fff;
+}
+.adminWrapper p {
+margin-bottom: 20px;
+}
 
 
 
@@ -511,7 +489,6 @@ max-width: 80%;
 cursor: pointer;
 }
 .details h1, .details h2, .details h3, .details h4, .details h5, .details h6 {
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 color: #464646;
 text-shadow: none;
 font-weight: bold;
@@ -543,13 +520,11 @@ width: 95%;
 background: #EFEFEF;
 border-left: 5px solid #A8FF51;
 padding: 2px 2px 2px 8px;
-font-family: "Lucida Sans Unicode", Helvetica, "Times New Roman", SimHei, Hei, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 word-break: break-word;
 margin-bottom: 16px;
 }
 .details code {
 width: 95%;
-font-family: Consolas, Monaco, "Microsoft Yahei", "Microsoft JhengHei", "Meiryo UI"; 
 word-break: break-word;
 }
 .details pre {
@@ -581,7 +556,6 @@ width: 250px;
 height: 16px;
 padding: 8px;
 color: #505050;
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 background: #FFF;
 border: 2px solid #CCC;
 border-radius: 6px;
@@ -631,7 +605,6 @@ cursor: pointer;
 font-size: 16px;
 font-weight: bold;
 margin-left: 6px;
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 }
 .buttonLine:hover, .buttonLine:focus {
 border: 2px solid #CCC;
@@ -661,7 +634,6 @@ color: #FFF;
 width: 80%;
 padding: 4px 8px 4px 8px;
 color: #505050;
-font-family: "Lucida Sans Unicode", Helvetica, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 background: #FFF;
 border: 2px solid #CCC;
 border-radius: 6px;
@@ -706,45 +678,36 @@ display: none;
 @media only screen and (max-width:800px) {
 nav {
 position: absolute;
-right: 0;
-top: 80px;
+left: 0;
+top: 90px;
 clear: both;
-float: right;
 display: none;
-height: 100%;
+height: 800px;
+width: 100%;
+background: #464646;
 }
 nav li {
-clear: both;
 background: #464646;
+width: 100%;
 padding: 6px;
-width: 200px;
-text-align: center;
-box-shadow: 1px 1px 2px #464646;
 font-size: 20px;
 }
-nav li:hover {
-background: #fff;
-}
 nav li a:hover {
-color: #464646;
+color: #fff;
 }
 #menuDown {
 display: inline;
 color: #fff;
 float: right;
-padding-right: 40px;
 }
 .menuDownIcon {
-font-size: 26px;
-}
-.menuLastList {
-height: 5000px;
+font-size: 32px;
 }
 #profileArea {
 display:none;
 }
 #mainArea {
-padding-top: 120px;
+padding-top: 4px;
 }
 article, .commentArea, .adminArea{
 width: 90%;

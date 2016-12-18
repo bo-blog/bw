@@ -2,13 +2,6 @@
 #mainArea {
 display: none;
 }
-#adminLoginImg {
-border-radius: 50%;
-box-shadow: 1px 1px 2px #fff;
-}
-.adminWrapper p {
-margin-bottom: 20px;
-}
 .adminArea {
 width: 92%;
 min-height: 360px;
@@ -17,7 +10,6 @@ margin: 0 auto 0 auto;
 padding: 20px;
 background: #FFF;
 box-shadow: 2px 5px 7px #D6D6D6;
-font-family: Helvetica, Arial, "Microsoft Yahei", "Microsoft JhengHei", STHei, "Meiryo UI";
 line-height: 185%;
 }
 .adminArea h2 {
@@ -312,12 +304,6 @@ min-height: 100%;
 /* responsive */
 
 @media only screen and (max-width:800px) {
-.admLastList {
-height: 5000px;
-}
-.admLastList:hover {
-background: #464646;
-}
 .admHeader #menuDown {
 padding-right: 0;
 }
@@ -364,6 +350,9 @@ font-size: 17px!important;
 float: none;
 margin-bottom: -27px;
 }
+#tplSel {
+display: none;
+}
 #aContent, #previewArea{
 height: 190px;
 }
@@ -371,4 +360,9 @@ height: 190px;
 width: 100%;
 min-height: 100%;
 }
+nav li {
+float: left;
+width: 100px;
+}
+
 }

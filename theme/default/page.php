@@ -21,10 +21,10 @@ if (!defined ('P')) {
 <meta name="keywords" content="[[::metaData]]" />
 <link rel="icon" type="image/png" href="[[::siteURL]]/theme/default/logo.png" />
 <link rel="canonical" href="[[::canonicalURL]]" />
+<link href="[[::siteURL]]/theme/default/style.css" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
-<link href="[[::siteURL]]/theme/default/style.css?ver=02282016" media="all" rel="stylesheet" type="text/css" />
 <link  href="[[::siteURL]]/rss.php" rel="alternate" type="application/rss+xml" title="RSS 2.0" />
-<title>[[::pageTitle]][[::siteName]]</title>
+<title>[[::pageTitle]][[::siteName]] - [[::authorIntro]]</title>
 <script src="//lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
 <script>
 !window.jQuery && document.write ('<script src="[[::siteURL]]/inc/script/jquery.min.js"><\/script>');
@@ -41,8 +41,8 @@ var lng={
 <body>
 <div id="overallContainer">
 <header>
-<span class="icon-newicon iconLogo"><h1><a href="[[::siteURL]]/">[[::siteName]]</a></h1></span>
-<span id="menuDown"><a href="#" onclick="scrollToTop(); $('nav').toggle('fast');"><span class="icon-list menuDownIcon"></span> </a></span>
+<span class="iconLogo"><span class="adminSign" data-adminurl="[[::siteURL]]/admin.php" data-adminid="[[::aID]]"><a href="##"><img src="[[::siteURL]]/conf/profile.png" id="profileImg" valign="middle" title="[[::authorName]] - [[::authorIntro]]"/></span> <a href="[[::siteURL]]/">[[::siteName]]</a></span>
+<span id="menuDown"><a href="#" onclick="$('nav').toggle('fast');"><span class="icon-list4 menuDownIcon"></span> </a></span>
 <nav>
 <ul>
 <li id="nav-index"><a href="[[::siteURL]]/">[[=page:Home]]</a></li>
@@ -55,14 +55,6 @@ var lng={
 </nav>
 [[::ext_header]]
 </header>
-<div id="profileArea">
-<img src="[[::siteURL]]/conf/profile.png" id="profileImg"/>
-<div id="profile">
-<p id="profileAuthor">[[::authorName]]</p>
-<p id="profileIntro">[[::authorIntro]]</p>
-[[::ext_intro]]
-</div>
-</div>
 
 <div id="mainArea">
 [[::ext_mainAreaStart]]
@@ -86,7 +78,7 @@ var lng={
 [[=page:Links]]<br/>
 [[::loop, externallink]]<span class="lnk"><a href="[[::linkURL]]" target="_blank">[[::linkName]]</a></span>[[::/loop]]
 [[::ext_footer]]
-<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank">Powered by Bo-blog Wind</a> | <span class="adminSign" data-adminurl="[[::siteURL]]/admin.php" data-adminid="[[::aID]]"><a href="##">[[=page:Admin]]</a></span></div>
+<div id="copyright"><a href="http://bw.bo-blog.com/" target="_blank"><span class="icon-newicon"></span> Powered by Bo-blog Wind</a> | <span class="adminSign" data-adminurl="[[::siteURL]]/admin.php" data-adminid="[[::aID]]"><a href="##">[[=page:Admin]]</a></span></div>
 [[::widget_wgfooter]]
 </footer>
 

@@ -148,6 +148,7 @@ $conf['l'] = array(
 	'admin:item:AdvancedAPI' => '高級API',
 	'admin:item:APIOpen' => '允許API',
 	'admin:item:AutoSave' => '每分鐘自動保存草稿',
+	'admin:item:LessSQLOps' => '減少資料庫操作',
 
 	'admin:opt:SimplifiedChinese' => '簡體中文',
 	'admin:opt:TraditionalChinese' => '繁體中文',
@@ -240,6 +241,7 @@ $conf['l'] = array(
 	'admin:msg:AdvancedAPI' => '<span style="color: red">危險！</span>高級API接口在基本接口的基礎上，還具有數據寫入刪除等權限。務必只提供給受信任者！',
 	'admin:msg:Aliyun' => '【阿里雲OSS】是一項由 <a href="https://www.aliyun.com/solution/storage" target="_blank">aliyun.com</a> 提供的雲存儲服務。',
 	'admin:msg:AliyunRegion' => '請參考 <a href="https://help.aliyun.com/document_detail/31837.html" target="_blank">此頁面</a> 設置Region英文名。',
+	'admin:msg:LessSQL' => '通過關閉流覽及文章閱讀數統計，降低資料庫寫入次數。適合訪問量較大的情況。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',

@@ -99,7 +99,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ('No data is submitted.');
 		} 
-		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'autoSave', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
+		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'autoSave', 'lessSQL', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$outputExternal = '';
 		for ($i = 0; $i < count ($smt['externalLinks']['lnkname']); $i++) {

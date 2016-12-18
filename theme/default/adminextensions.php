@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -17,7 +17,7 @@ if (!defined ('P')) {
 <input type="hidden" name="pkgType" value='' id="uploadType" />
 </form>
 <form id="smtForm" data-adminurl="[[::siteURL]]/[[::linkPrefixAdmin]]/extensions/">
-<h2><span class="icon-pictures"></span> [[=admin:sect:ManageThemes]]<span class="adminSANew"><a href='##' onclick="installPkgDo('theme');"><span class="icon-plus2"></span> [[=admin:btn:NewExt]]</a></span></h2> 
+<h2><span class="icon-pictures"></span> [[=admin:sect:ManageThemes]]<span class="adminSANew"><a href='##' onclick="installPkgDo('theme');"><span class="icon-plus2"></span> [[=admin:btn:NewExt]]</a></span></h2>
 <p>
 [[::loop, themeList]]<article style="float: left; clear: both;" id="theme-[[::themeDir]]">
 <div style="float: left"><img src="[[::siteURL]]/theme/[[::themeDir]]/icon.jpg" style="width: 120px; margin-right: 20px; border-radius: 10px" alt='' /></div>
@@ -29,12 +29,12 @@ if (!defined ('P')) {
 </article>[[::/loop]]
 </p>
 <br/>
-<h2><span class="icon-list"></span> [[=admin:sect:InstalledExt]]<span class="adminSANew"><a href='##' onclick="installPkgDo('extension');"><span class="icon-plus2"></span> [[=admin:btn:NewExt]]</a> <a href='##' onclick="$('#installExtBlock').fadeToggle();"><span class="icon-plus2"></span> [[=admin:sect:InstallExt]]</a></span></h2> 
+<h2><span class="icon-list"></span> [[=admin:sect:InstalledExt]]<span class="adminSANew"><a href='##' onclick="installPkgDo('extension');"><span class="icon-plus2"></span> [[=admin:btn:NewExt]]</a> <a href='#installExtBlock' onclick="$('#installExtBlock').fadeToggle();"><span class="icon-plus2"></span> [[=admin:sect:InstallExt]]</a></span></h2> 
 <p>
 [[::loop, extList]]<article style="float: left; clear: both;">
 <div style="float: left"><img src="[[::siteURL]]/extension/[[::extID]]/icon.png" style="width: 100px; margin-right: 20px; border-radius: 10px" alt='' /></div>
 <div style="float: left"><h2 title="[[=admin:msg:Hook]] [[::extHooks]]">[[::extName]]</h2>
-[[::extIntro]] 
+[[::extIntro]]
 <h3>[[=admin:msg:By]] <a href="[[::extURL]]">[[::extAuthor]]</a> | <span class="extStatus[[::extActivate]]">[[=admin:msg:ExtStatus[[::extActivate]]]]</span></h3>
 <span class="details"><a href="##" onclick="makeEnabled('[[::extID]]');"><span class="icon-plus2"></span> [[=admin:opt:Enable]]</a> &nbsp; &nbsp; <a href="##" onclick="makeDisabled('[[::extID]]');"><span class="icon-minus2"></span> [[=admin:opt:Disable]]</a> &nbsp; &nbsp; <a href="##" onclick="removeExt('[[::extID]]');"><span class="icon-cross3"></span> [[=admin:msg:Remove]]</a> &nbsp; &nbsp; <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/extensions/exportextension/[[::linkConj]]extID=[[::extID]]&CSRFCode=[[::extCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:ExportTheme]] </a></span></div>
 </article>[[::/loop]]
@@ -151,7 +151,7 @@ if (!defined ('P')) {
 
 <br class="smallBr"/>
 
-<h2><span class="icon-file-xml"></span> [[=admin:sect:CustomizedHTML]]</h2> 
+<h2><span class="icon-file-xml"></span> [[=admin:sect:CustomizedHTML]]</h2>
 <span class="adminExplain">[[=admin:msg:CustomizedHTML]]</span>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:InterfaceName]] htmlhead<br/>
@@ -439,7 +439,7 @@ function installPkgDo (uptype) {
 		$('#uploadType').val(uptype);
 		$('#uploadFile').click();
 	}
-} 
+}
 
 function installPkgUp () {
 	$("#UI-loading").fadeIn(500);

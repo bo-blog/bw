@@ -62,6 +62,7 @@ if ($step == 2) {
   'commentOpt' => '0',
   'comFrequency' => '10',
   'comPerLoad' => '20',
+  'autoSave' => '0',
   'siteTheme' => 'default',
   'siteLang' => '{$l['data.lang']}',
   'perPage' => '3',
@@ -93,6 +94,17 @@ if ($step == 2) {
   'qiniuSync' => '',
   'qiniuUpload' => '0',
   'qiniuDomain' => '',
+  'APIOpen' => '0',
+  'basicAPI' => 
+  array (
+  ),
+  'advancedAPI' => 
+  array (
+  ),
+  'aliyunAKey' => '',
+  'aliyunSKey' => '',
+  'aliyunBucket' => '',
+  'aliyunRegion' => '',
 );";
 		$writeResult = $writeResult && @file_put_contents ('./conf/services.php', $servicesConfContent);
 

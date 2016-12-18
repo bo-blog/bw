@@ -149,6 +149,7 @@ $conf['l'] = array(
 	'admin:item:AdvancedAPI' => 'Advanced API',
 	'admin:item:APIOpen' => 'Enable API',
 	'admin:item:AutoSave' => 'Save Draft Every Minute',
+	'admin:item:LessSQLOps' => 'Less DB Write Operations',
 
 	'admin:opt:SimplifiedChinese' => 'Simplified Chinese',
 	'admin:opt:TraditionalChinese' => 'Traditional Chinese',
@@ -241,6 +242,7 @@ $conf['l'] = array(
 	'admin:msg:AdvancedAPI' => '<span style="color: red">Caution!</span> Advanced API provides read and write permission. Only disclose the access info to trusted people.',
 	'admin:msg:Aliyun' => 'Aliyun OSS is a cloud storage service provided by <a href="https://www.aliyun.com/solution/storage" target="_blank">aliyun.com</a>.',
 	'admin:msg:AliyunRegion' => 'Check <a href="https://help.aliyun.com/document_detail/31837.html" target="_blank">this page </a> for Region name.',
+	'admin:msg:LessSQL' => 'Disable counts on page visits and article reads to reduce DB write operations.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',

@@ -13,7 +13,7 @@ if (!defined ('P')) {
 
 <div class="adminArea">
 <h2><span class="icon-house"></span> [[=admin:sect:Welcome]], [[::authorName]]!</h2>
-<p></p>
+<p id="sContent" class="details"></p>
 <div id="admStatBlock0">
 <div class="admStatBlock1">
 <h2>[[=admin:item:AtAGlance]]</h2>
@@ -24,11 +24,11 @@ if (!defined ('P')) {
 </div>
 <div class="admStatBlock2">
 <h2>[[=admin:item:StartHere]] </h2>
-<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]">[[=admin:item:WriteArticle]] </a><br/>
+<span id="admStatCont"><span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]">[[=admin:item:WriteArticle]] </a><br/>
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/center/[[::linkConj]]CSRFCode=[[::navCSRFCode]]">[[=admin:item:ChangeSetting]] </a><br/>
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/[[::linkConj]]CSRFCode=[[::navCSRFCode]]#admBackup">[[=admin:item:BackupData]] </a><br/>
 <!-- <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/market/[[::linkConj]]CSRFCode=[[::navCSRFCode]]">[[=admin:item:GoMarket]] </a><br/>-->
-<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/">[[=admin:item:BackHome]] </a><br/>
+<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/">[[=admin:item:BackHome]] </a></span><br/>
 </div>
 <div class="admStatBlock3">
 <h2>[[=admin:item:MostPopular]]</h2>
@@ -44,7 +44,7 @@ if (!defined ('P')) {
 </div>
 </div>
 
-<p style="clear:both"><br/><br/></p>
+<p style="clear:both"><br/></p>
 <h2><span class="icon-help"></span> [[=admin:sect:SysInfo]]</h2>
 <span class="icon-arrow-right5"></span> bW (ver [[::thisVersion]])<br/>
 <span class="icon-arrow-right5"></span> [[::serverInfo]]<br/>
@@ -84,6 +84,13 @@ if (window.location.hash == '#UpdateSuccess')
 	alert ("[[=admin:msg:UpdateDone]]");
 }
 $("#admPanel").addClass("activeNav");
+
+if ("[[::lessSQL]]" == "1")
+{
+	var sC = $("#admStatCont").html();
+	$("#admStatBlock0").remove();
+	$("#sContent").html(sC);
+}
 </script>
 [[::ext_adminDashboardEnding]]
 

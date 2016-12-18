@@ -18,9 +18,9 @@ if (!defined ('P')) {
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
 <meta name="robots" content="none" />
+<link href="[[::siteURL]]/theme/default/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="[[::siteURL]]/theme/default/admin.css" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
-<link href="[[::siteURL]]/theme/default/style.css?ver=05292016" media="all" rel="stylesheet" type="text/css" />
-<link href="[[::siteURL]]/theme/default/admin.css?ver=05292016" media="all" rel="stylesheet" type="text/css" />
 <title>[[=page:Admin]] | [[::siteName]]</title>
 <script src="//lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
 <script>
@@ -39,7 +39,7 @@ var lng={
 <body>
 <div id="overallContainer">
 <header class="admHeader">
-<span class="icon-newicon iconLogo"><h1><a href="[[::siteURL]]/" title="[[=admin:item:BackHome]]">[[::siteName]]</a></h1></span>
+<span class="iconLogo"><a href="[[::siteURL]]/" title="[[=admin:item:BackHome]]"><img src="[[::siteURL]]/conf/profile.png" id="profileImg" valign="middle"/> [[::siteName]]</a></span>
 <span id="menuDown"><a href="#" onclick="$('nav').toggle('fast');"><span class="icon-list4 menuDownIcon"></span> </a></span>
 <nav>
 <ul>
@@ -59,7 +59,7 @@ var lng={
 [[::ext_adminMainAreaStart]]
 [[::load, admindashboard]][[::load, admincenter]][[::load, adminarticles]][[::load, adminwriter]][[::load, adminservices]][[::load, adminextensions]][[::load, adminmarket]][[::adminplainpage]]
 </div>
-<div id="copyright" class="admFooter"> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/login/logout/[[::linkConj]]CSRFCode=[[::logoutCSRFCode]]" title="Logout"><span class="icon-logout"></span> [[=admin:Logout]]</a> &nbsp; <a href="#"><span class="icon-arrow-up4"></span>TOP</a><br/><br/>Powered by bW <a href="http://bw.bo-blog.com/" target="_blank"><span class="icon-earth2"></span></a> <a href="https://github.com/bo-blog/bw" target="_blank"><span class="icon-github6"></span></a></div>
+<div id="copyright" class="admFooter"> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/login/logout/[[::linkConj]]CSRFCode=[[::logoutCSRFCode]]" title="Logout"><span class="icon-logout"></span> [[=admin:Logout]]</a> &nbsp; <a href="#"><span class="icon-arrow-up4"></span>TOP</a><br/><br/>Powered by Bo-blog Wind <a href="http://bw.bo-blog.com/" target="_blank"><span class="icon-newicon"></span></a> <a href="https://github.com/bo-blog/bw" target="_blank"><span class="icon-github6"></span></a></div>
 [[::ext_adminMainAreaEnd]]
 </div>
 <div id="UI-loading"><img src="[[::siteURL]]/theme/default/loading.gif"></div>

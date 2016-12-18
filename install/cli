@@ -56,6 +56,7 @@ if ($argv[1] == 'install' || $argv[1] == 'check') {
   'commentOpt' => '1',
   'comFrequency' => '10',
   'comPerLoad' => '20',
+  'autoSave' => '0',
   'siteTheme' => 'default',
   'siteLang' => 'en',
   'perPage' => '3',
@@ -87,6 +88,17 @@ if ($argv[1] == 'install' || $argv[1] == 'check') {
   'qiniuSync' => '',
   'qiniuUpload' => '0',
   'qiniuDomain' => '',
+  'APIOpen' => '0',
+  'basicAPI' => 
+  array (
+  ),
+  'advancedAPI' => 
+  array (
+  ),
+  'aliyunAKey' => '',
+  'aliyunSKey' => '',
+  'aliyunBucket' => '',
+  'aliyunRegion' => '',
 );";
 	file_put_contents (P . 'conf/services.php', $servicesConfContent);
 
