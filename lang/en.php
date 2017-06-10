@@ -32,7 +32,7 @@ $conf['l'] = array(
 	'page:BlockIP' => 'Block this IP',
 	'page:AddComment' => 'Add your comment',
 	'page:NickName' => 'Name',
-	'page:URL' => 'URL (Optional)',
+	'page:URL' => 'Website or Email (Optional)',
 	'page:CommentContent' => 'Your comment',
 	'page:SendComment' => 'Send',
 	'page:ClearComment' => 'Clear',
@@ -63,6 +63,8 @@ $conf['l'] = array(
 	'page:NoArticleAtAll' => 'No article has been published.',
 	'page:SinglePage' => 'Custom Page',
 	'page:Search' => 'Search',
+	'page:pageSelector' => 'Page Selection',
+	'page:EnterToSearch' => 'Press Enter to Search',
 
 	'js:RememberFail' => 'Authentication failed. ',
 	'js:RememberSuccess' => 'Authentication finished. Please close this window.',
@@ -150,6 +152,7 @@ $conf['l'] = array(
 	'admin:item:APIOpen' => 'Enable API',
 	'admin:item:AutoSave' => 'Save Draft Every Minute',
 	'admin:item:LessSQLOps' => 'Less DB Write Operations',
+	'admin:item:EmbededSearch' => 'In-site Search Engine',
 
 	'admin:opt:SimplifiedChinese' => 'Simplified Chinese',
 	'admin:opt:TraditionalChinese' => 'Traditional Chinese',
@@ -168,6 +171,10 @@ $conf['l'] = array(
 	'admin:opt:ThirdPartyComment' => 'Hosted by social comment services',
 	'admin:opt:NoCustomTheme' => 'Use the global theme',
 	'admin:opt:CustomTheme' => 'Use theme: ',
+	'admin:opt:Baidu' => 'Baidu',
+	'admin:opt:Google' => 'Google',
+	'admin:opt:Bing' => 'Bing',
+	'admin:opt:Sogou' => 'Sogou',
 
 	'admin:msg:SiteURL' => 'Example: http://name.com/path. Do not change unless you know what you\'re doing.',
 	'admin:msg:BlankPsw' => 'Leave blank to keep the current password',
@@ -243,6 +250,7 @@ $conf['l'] = array(
 	'admin:msg:Aliyun' => 'Aliyun OSS is a cloud storage service provided by <a href="https://www.aliyun.com/solution/storage" target="_blank">aliyun.com</a>.',
 	'admin:msg:AliyunRegion' => 'Check <a href="https://help.aliyun.com/document_detail/31837.html" target="_blank">this page </a> for Region name.',
 	'admin:msg:LessSQL' => 'Disable counts on page visits and article reads to reduce DB write operations.',
+	'admin:msg:EmbededSearch' => 'Enable only after search engine indexed your website.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',
@@ -274,6 +282,7 @@ $conf['l'] = array(
 	'admin:btn:SortWidget' => 'Finish Sorting',
 	'admin:btn:AddKey' => 'Add a new API Key',
 	'admin:btn:APIAddr' => 'API URL',
+	'admin:btn:DownloadManual' => 'Download for Manual Update',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',

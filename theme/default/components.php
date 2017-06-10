@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -11,7 +11,7 @@ if (!defined ('P')) {
 
 $parts['pagination']=<<<eot
 <div id="pageBar">
-[[::prevpage]][[::nextpage]]
+[[::prevpage]][[::nextpage]]<span id="pageSelector">[[::gotopage]]</span><span id="openPageSelector" class="gotoPage"><a href="##" title="[[=page:pageSelector]]"><span class="icon-ellipsis"></span></a></span>
 </div>
 eot;
 
@@ -32,7 +32,7 @@ $parts['finalpage']=<<<eot
 eot;
 
 $parts['gotopage']=<<<eot
-<span id="gotoPage"><a href="[[::gotoPageLink]]" class="pageLink"></a></span>
+[[::loop, gotoPageLink]]<span class="gotoPage currentPage[[::isCurrentPage]]"><a href="[[::pageLink]]" class="pageLink">[[::pageNum]]</a></span>[[::/loop]]
 eot;
 
 $parts['ajax-article-list']=<<<eot
@@ -96,7 +96,7 @@ eot;
 
 $parts['admincategorylist']=<<<eot
 <li class="adminSingleArticle adminSCL" data-cid="[[::aCateURLName]]" id="adminSCL-[[::aCateURLName]]">
-<a href="##" onclick='$("#adminSCL-[[::aCateURLName]]").remove();'><span class="icon-cross3"></span></a> <a href="##" title="[[=admin:msg:Up]]" class="adminSCLUp" data-cid="[[::aCateURLName]]"><span class="icon-arrow-up3"></span></a> <a href="##" title="[[=admin:msg:Down]]" class="adminSCLDown" data-cid="[[::aCateURLName]]"><span class="icon-arrow-down4"></span></a> 
+<a href="##" onclick='$("#adminSCL-[[::aCateURLName]]").remove();'><span class="icon-cross3"></span></a> <a href="##" title="[[=admin:msg:Up]]" class="adminSCLUp" data-cid="[[::aCateURLName]]"><span class="icon-arrow-up3"></span></a> <a href="##" title="[[=admin:msg:Down]]" class="adminSCLDown" data-cid="[[::aCateURLName]]"><span class="icon-arrow-down4"></span></a>
 <span id="adminSCLine-[[::aCateURLName]]" class="adminSCLine" data-cid="[[::aCateURLName]]" data-cname="[[::aCateDispName]]" data-ctheme="[[::aCateTheme]]">[[::aCateDispName]]</span>
 </li>
 eot;
@@ -127,10 +127,9 @@ $parts['commentarea']=<<<eot
 <div class="comForm">
 <form id="smtForm">
 
-<span id="wb_connect_btn"></span>
 <span id="comLoggedIn">[[=page:LoggedIn]] <span id="comLoggedInAs"></span> <span id="comLogout">[[[=page:LogOut]]]</span><br/></span>
-<input type="text" name="smt[userName]" class="comInput comInputSmall" id="comUserName" placeholder="[[=page:NickName]]" /> <span><span class="icon-sina-weibo" id="comUseWeibo" title="Login with Sina Weibo"></span></span><br class="comLineChange"/>
-<input type="text" name="smt[userURL]" class="comInput comInputSmall" id="comUserURL" placeholder="[[=page:URL]]" /><br class="comLineChange"/>
+<input type="text" name="smt[userName]" class="comInput comInputSmall" id="comUserName" placeholder="[[=page:NickName]]"  value="[[::tmpUserName]]"/> <br class="comLineChange"/>
+<input type="text" name="smt[userURL]" class="comInput comInputSmall" id="comUserURL" placeholder="[[=page:URL]]" value="[[::tmpUserURL]]"/><br class="comLineChange"/>
 <textarea type="text" class="comInput comInputLarge" name="smt[userContent]" id="comUserContent" placeholder="[[=page:CommentContent]]" /></textarea>
 <input type="hidden" name="smt[aID]" value="[[::aID]]" />
 <input type="hidden" name="smt[comkey]" value="[[::comkey]]" />
@@ -148,15 +147,15 @@ $parts['commentarea']=<<<eot
 [[::ajaxcommentgroup]]
 <div id="comInsertOld"></div>
 </div>
+<script src="[[::siteURL]]/inc/script/rnd-avatar/avatar.js"></script>
 <script>
 makeComUserLink ();
 commentBatches ('[[::siteURL]]/[[::linkPrefixSend]]/comments/load/', "[[::aID]]");
-if ('[[::sinaAKey]]'=='' || '[[::sinaSKey]]'=='') {
-	$('#comUseWeibo').hide();
-}
-if ([[::commentOpt]]==2) {
+if ('[[::commentOpt]]'=='2') {
 	$("#comUserName").attr('placeholder', '[[=page:LoginRequired]]');
 	$("#comUserName").attr('readonly', 'readonly');
+}
+else {
 }
 
 function errorPrompter (inputId)
@@ -209,36 +208,16 @@ $('#comSubmitBtn').click (function () {
 				$("#comPromptSuccess").fadeIn(400).delay(1500).fadeOut(600);
 				$("#comInsertNew").after(data.returnMsg);
 				$(".comWrap:first").hide().delay(100).fadeIn(800);
-				$('#comClearBtn').click();
+				$('#comUserContent').val('');
+				document.cookie = 'tmpUserName='+$("#comUserName").val()+';path=/';
+				document.cookie = 'tmpUserURL='+$("#comUserURL").val()+';path=/';
 			}
 		}, "json");
 	}
 });
 
-$('#comUseWeibo').click (function () {
-window.location=conj ("[[::siteURL]]/[[::linkPrefixSend]]/sina/start/", "aID=[[::aID]]");
-});
-
-$.get(conj ("[[::siteURL]]/[[::linkPrefixSend]]/sina/check/", "ajax=1"), function(data) {
-	if (data.error==0) { //Logged in with Sina Weibo
-		$('#comLoggedInAs').html ('<span class="icon-sina-weibo"></span> '+data.returnMsg['screen_name']);
-		$('#comLogout').click(function () {
-			window.location=conj ("[[::siteURL]]/[[::linkPrefixSend]]/sina/end/", "aID=[[::aID]]");
-		});
-		$('#comLoggedIn').show();
-		$('#comUserName').removeAttr ('readonly');
-		$('#comUserName').val (data.returnMsg['screen_name']);
-		$('#comUserURL').val (data.returnMsg['url']);
-		$('#comUserName').hide();
-		$('#comUserURL').hide();
-		$('#comUseWeibo').hide();
-		$('.comLineChange').hide();
-		$('#comSocialKey').val ('sina');
-	}
-}, "json");
-
 $.get(conj ("[[::siteURL]]/[[::linkPrefixSend]]/comments/check/", "ajax=1"), function(data) {
-	if (data.error==0) { //Logged in 
+	if (data.error==0) { //Logged in
 		$('#comLoggedInAs').html ("[[::authorName]]");
 		$('#comLogout').hide();
 		$('#comLoggedIn').show();
@@ -246,7 +225,6 @@ $.get(conj ("[[::siteURL]]/[[::linkPrefixSend]]/comments/check/", "ajax=1"), fun
 		$('#comUserURL').val ("[[::siteURL]]");
 		$('#comUserName').hide();
 		$('#comUserURL').hide();
-		$('#comUseWeibo').hide();
 		$('.comLineChange').hide();
 		$('#comSocialKey').val ('administrator');
 	}
@@ -259,9 +237,9 @@ eot;
 $parts['ajaxcommentgroup']=<<<eot
 [[::loop, comments]]
 <div id="comWrap-[[::comID]]" class="comWrap">
-<div class="comAvatar"><img src="[[::comAvatar]]" alt="User" /></div>
-<div class="comName"><h6 data-usersource="[[::comSource]]"><a href="[[::comURL]]" target="_blank">[[::comName]]</a></h6><h5>[[::comTime, dateFormat, Y/m/d H:i]]</h5></div>
-<div class="comContent"><pre>[[::comContent]]<div class="comBlockBar"><a href="##" onclick="blockComment ('comAdm', 'blockitem', '[[::comID]]', '[[::comArtID]]');"><span class="icon-cross"></span> [[=page:BlockItem]]</a> &nbsp; &nbsp; <a href="##" onclick="blockComment ('comAdm', 'blockip', '[[::comID]]', '[[::comArtID]]');"><span class="icon-minus3"></span> [[=page:BlockIP]]</a></div></pre></div>
+<div class="comAvatar" data-avatar="[[::comAvatarAvailable]]" data-user="[[::comName]]"><img src="[[::comAvatar]]" alt="User" /></div>
+<div class="comName"><h6 data-usersource="[[::comSource]]"><a href="[[::comURL]]" target="_blank">[[::comName]]</a><div class="comBlockBar"><a href="##" onclick="$('#comUserContent').val ('@[[::comName]] '+$('#comUserContent').val());window.location.hash='comUserName';$('#comUserContent').focus();"><span class="icon-reply2" title="@..."></span></a> <a href="##" onclick="blockComment ('comAdm', 'blockitem', '[[::comID]]', '[[::comArtID]]');"><span class="icon-minus3" title="[[=page:BlockItem]]"></span></a> <a href="##" onclick="blockComment ('comAdm', 'blockip', '[[::comID]]', '[[::comArtID]]');"><span class="icon-popup" title="[[=page:BlockIP]]"></span></a></div></h6><h5>[[::comTime, dateFormat, Y/m/d H:i]]</h5></div>
+<div class="comContent">[[::comContent]]</div>
 </div>
 [[::/loop]]
 <div id="comLoadMore">
@@ -272,34 +250,11 @@ eot;
 $parts['ajaxcomment']=<<<eot
 <div id="comWrap-[[::comID]]" class="comWrap">
 <div class="comAvatar"><img src="[[::comAvatar]]" alt="User" /></div>
-<div class="comName"><h6 data-usersource="[[::comSource]]"><a href="[[::comURL]]" target="_blank">[[::comName]]</a></h6><h5>[[::comTime, dateFormat, Y/m/d H:i]]</h5></div>
-<div class="comContent"><pre>[[::comContent]]<div class="comBlockBar"><a href="##" onclick="blockComment ('comAdm', 'blockitem', '[[::comID]]', '[[::comArtID]]');"><span class="icon-cross"></span> [[=page:BlockItem]]</a> &nbsp; &nbsp; <a href="##" onclick="blockComment ('comAdm', 'blockip', '[[::comID]]', '[[::comArtID]]');"><span class="icon-minus3"></span> [[=page:BlockIP]]</a></div></pre></div>
+<div class="comName"><h6 data-usersource="[[::comSource]]"><a href="[[::comURL]]" target="_blank">[[::comName]]</a><div class="comBlockBar"><a href="##" onclick="$('#comUserContent').val ('@[[::comName]] '+$('#comUserContent').val());window.location.hash='comUserName';$('#comUserContent').focus();"><span class="icon-reply2" title="@..."></span></a> <a href="##" onclick="blockComment ('comAdm', 'blockitem', '[[::comID]]', '[[::comArtID]]');"><span class="icon-minus3" title="[[=page:BlockItem]]"></span></a> <a href="##" onclick="blockComment ('comAdm', 'blockip', '[[::comID]]', '[[::comArtID]]');"><span class="icon-popup" title="[[=page:BlockIP]]"></span></a></div></h6><h5>[[::comTime, dateFormat, Y/m/d H:i]]</h5></div>
+<div class="comContent">[[::comContent]]</div>
 </div>
 eot;
 
-
-$parts['duoshuoarea']=<<<eot
-<div class="commentArea">
-<!-- Duoshuo start -->
-<div class="ds-thread" data-thread-key="[[::aID]]" data-title="[[::aTitle]]" data-url="[[::siteURL]]/[[::linkPrefixArticle]]/[[::aID]]/" data-form-position="top" data-order="desc"></div>
-<!-- Duoshuo end -->
-<!-- Duoshuo JS start -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"[[::duoshuoID]]"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-$("<link>").attr({rel:"stylesheet", type:"text/css", href: "[[::siteURL]]/theme/default/duoshuo.css"}).appendTo("head");
-
-</script>
-<!-- Duoshuo JS end -->
-</div>
-eot;
 
 $parts['disqusarea']=<<<eot
 <div class="commentArea">
@@ -379,7 +334,7 @@ function checkPermission () {
 			window.location="[[::siteURL]]/[[::linkPrefixAdmin]]/dashboard/[[::linkConj]]CSRFCode="+CSRFCode;
 		}
 	}, "json");
-} 
+}
 $('body').everyTime('1s', checkPermission);
 </script>
 eot;
@@ -466,7 +421,7 @@ function installPkgDo (url) {
 			$('#installWindow').attr('src', "[[::siteURL]]/[[::linkPrefixAdmin]]/market/installpkg/[[::linkConj]]dl="+encodeURIComponent(url)+"&CSRFCode=[[::installCSRFCode]]");
 		}
 	}
-} 
+}
 
 </script>
 eot;

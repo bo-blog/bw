@@ -1,13 +1,13 @@
-<?php 
+<?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
 if (!defined ('P')) {
 	die ('Access Denied.');
-} 
+}
 
 $view = new bwView;
 
@@ -24,13 +24,13 @@ if ($canonical -> currentArgs['mainAction'] == 'na') { //Authorize a mobile phon
 	);
 
 	$ua = strtolower ($_SERVER['HTTP_USER_AGENT']);
-	foreach ($knownDevices as $devID => $devName) { 
+	foreach ($knownDevices as $devID => $devName) {
 		if (strpos ($ua, $devID) !== false) {
 			$uaDev = $devName;
 			break;
 		}
 	}
-	if (!isset ($uaDev)) { 
+	if (!isset ($uaDev)) {
 		$uaDev = $conf['l']['page:MPDefault'];
 	}
 	$uaDev = $conf['authorName'] . $conf['l']['page:Conj'] . $uaDev;
@@ -74,8 +74,8 @@ elseif ($canonical -> currentArgs['mainAction'] == 'nado') {
 			$view -> finalize ();
 		} else {
 			stopError ($conf['l']['admin:msg:ChangeNotSaved']);
-		} 
-	} 
+		}
+	}
 }
 
 elseif ($canonical -> currentArgs['mainAction'] == 'gona') { //Authorize a mobile phone
@@ -132,7 +132,7 @@ elseif ($canonical -> currentArgs['mainAction'] == 'nasearch') { //Authorize a m
 	}
 	$inPC2 = bw :: $db -> getSingleRow ('SELECT * FROM cache WHERE caID=?', array('nalogin'));
 	if ($inPC2) {
-		if ($inPC2['caContent'] == $_REQUEST['inPC']) { 
+		if ($inPC2['caContent'] == $_REQUEST['inPC']) {
 			@session_start ();
 			$admin = new bwAdmin;
 			$admin -> storeMobileToken ();
@@ -155,7 +155,7 @@ if ($conf['commentOpt']<>0) {
 	}
 } else {
 	die ('Access Denied.');
-} 
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'comments') {
 	if ($canonical -> currentArgs['subAction'] == 'submit') {
@@ -179,7 +179,7 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 				if (!$admin -> verified) {
 					unset ($smt['userAvatar']);
 					$smt['socialkey'] = '';
-				} 
+				}
 				else {
 					$smt['userAvatar'] = bw :: $conf['siteURL']. '/conf/profile.png';
 				}
@@ -191,7 +191,7 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 		}
 		if (strtolower (trim ($smt['userName'])) == strtolower (bw :: $conf['authorName']) && $smt['socialkey'] <> 'administrator') {
 			stopError (bw :: $conf['l']['page:NameViolation']);
-		} 
+		}
 		if ($conf['commentOpt'] == 2 && !$smt['socialkey']) {
 			stopError (bw :: $conf['l']['page:LoginRequiredError']);
 		}
@@ -207,7 +207,7 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 			$admin -> verifySessionToken ($_SESSION['login-token']);
 			if ($admin -> verified) {
 				ajaxSuccess ('');
-			} 
+			}
 		}
 		stopError ('');
 	}

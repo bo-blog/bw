@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -16,10 +16,10 @@ if (!defined ('P')) {
 <head>
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="robots" content="none" />
-<link href="[[::siteURL]]/theme/default/style.css" media="all" rel="stylesheet" type="text/css" />
-<link href="[[::siteURL]]/theme/default/admin.css" media="all" rel="stylesheet" type="text/css" />
+<link href="[[::siteURL]]/theme/default/style.css?ver=201704222316" media="all" rel="stylesheet" type="text/css" />
+<link href="[[::siteURL]]/theme/default/admin.css?ver=201704222316" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
 <title>[[=page:Admin]] | [[::siteName]]</title>
 <script src="//lib.sinaapp.com/js/jquery/2.0.3/jquery-2.0.3.min.js"></script>
@@ -57,7 +57,7 @@ var lng={
 
 <div id="mainArea" class="admMainArea inAdmin">
 [[::ext_adminMainAreaStart]]
-[[::load, admindashboard]][[::load, admincenter]][[::load, adminarticles]][[::load, adminwriter]][[::load, adminservices]][[::load, adminextensions]][[::load, adminmarket]][[::adminplainpage]]
+[[::load, admindashboard]][[::load, admincenter]][[::load, adminarticles]][[::load, adminwriter]][[::load, adminservices]][[::load, adminextensions]][[::load, adminmarket]][[::load, admincomments]][[::adminplainpage]]
 </div>
 <div id="copyright" class="admFooter"> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/login/logout/[[::linkConj]]CSRFCode=[[::logoutCSRFCode]]" title="Logout"><span class="icon-logout"></span> [[=admin:Logout]]</a> &nbsp; <a href="#"><span class="icon-arrow-up4"></span>TOP</a><br/><br/>Powered by Bo-blog Wind <a href="http://bw.bo-blog.com/" target="_blank"><span class="icon-newicon"></span></a> <a href="https://github.com/bo-blog/bw" target="_blank"><span class="icon-github6"></span></a></div>
 [[::ext_adminMainAreaEnd]]

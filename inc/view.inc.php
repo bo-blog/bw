@@ -1,13 +1,13 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
 if (!defined ('P')) {
 	die ('Access Denied.');
-} 
+}
 
 class bwView {
 	public $viewWorkFlow;
@@ -28,7 +28,7 @@ class bwView {
 		$this -> outputContent = $this -> masterMod = $this -> themeDir = '';
 		self :: $markdownParser = null;
 		$this -> passData['pageTitle'] = '';
-	} 
+	}
 
 	public function setTheme ($setThemeDir)
 	{
@@ -37,30 +37,30 @@ class bwView {
 			$setThemeDir = 'default';
 		} else {
 			$this -> themeDir = P . "theme/{$setThemeDir}";
-		} 
-	} 
+		}
+	}
 
 	public function setMaster ($modName)
 	{
 		$this -> masterMod = $modName;
-	} 
+	}
 
 	public function setPassData ($arrayData)
 	{
 		$this -> passData += $arrayData;
-	} 
+	}
 
 	public function resetPassData ()
 	{
 		$this -> passData = array ();
-	} 
+	}
 
 	public function setWorkFlow ($arrayWorkFlow)
 	{
 		if (is_array ($arrayWorkFlow)) {
 			$this -> viewWorkFlow = $arrayWorkFlow;
-		} 
-	} 
+		}
+	}
 
 	public function generateOutput ()
 	{
@@ -75,7 +75,7 @@ class bwView {
 		include_once (P . "theme/default/components.php");
 		if (file_exists ($this -> themeDir . "/components.php")) {
 			include_once ($this -> themeDir . "/components.php");
-		} 
+		}
 		$this -> parts = (count($this -> parts)) ? $this -> parts : $parts;
 
 		hook ('generateOutputInit', 'Execute', $this);
@@ -94,40 +94,24 @@ class bwView {
 				$obContent = ob_get_clean ();
 			} else {
 				continue;
-			} 
+			}
 			// load looped data
 			$this -> modContent[$viewMod] = $this -> commonParser ($obContent);
-		} 
+		}
 		$this -> outputContent = trim (@$this -> modContent[$this -> masterMod] ?: '');
 		$this -> outputContent = preg_replace_callback ('/\[\[=(.+?)\]\]/', array($this, 'strInLang'), $this -> outputContent);
 		hook ('generateOutputDone', 'Execute', $this);
-	} 
+	}
 
 	private function passLoop ($param)
-	{ 
+	{
 		$return = '';
 		if (isset ($this -> passData[$param[1]])) {
 			foreach ($this -> passData[$param[1]] as $this -> loopEach) {
 				$return .= preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInLoop'), $param[2]);
-			} 
-		} 
-		return ($return);
-	} 
-
-	private function passCondition ($param, $strInLoop = false)
-	{ 
-		if ($strInLoop) {
-			$param[1] = preg_replace_callback ('/\[::(.+?)\]/', array($this, 'strInLoop'), $param[1]);
-		} 
-		else {
-			$param[1] = preg_replace_callback ('/\[::(.+?)\]/', array($this, 'strInTheme'), $param[1]);
+			}
 		}
-		eval ("\$return = {$param[1]} ? \$param[2] : '';");
 		return ($return);
-	} 
-
-	private function passConditionInLoop ($param) {
-		return $this -> passCondition ($param, true);
 	}
 
 	private function loadElement ($param)
@@ -142,20 +126,19 @@ class bwView {
 			include (P . "theme/default/{$viewMod}.php");
 		} else {
 			return $obContent;
-		} 
+		}
 		$obContent = ob_get_clean ();
 		$obContent = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $obContent);
 		return $obContent;
-	} 
+	}
 
 	public function commonParser ($text)
 	{
 		$text = preg_replace_callback ('/\[\[::load, (.+?)\]\]/', array($this, 'loadElement'), $text);
 		$text = preg_replace_callback ('/\[\[::loop, (.+?)\]\](.+?)\[\[::\/loop\]\]/s', array($this, 'passLoop'), $text);
-		$text = preg_replace_callback ('/\[\[::if, (.+?)\]\](.+?)\[\[::\/if]\]/s', array($this, 'passCondition'), $text);
 		$text = preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInTheme'), $text);
 		return $text;
-	} 
+	}
 
 	private function strInTheme ($param, $isLoop = false)
 	{
@@ -168,7 +151,7 @@ class bwView {
 			$needWalk = true;
 		} else {
 			$needWalk = false;
-		} 
+		}
 		if (array_key_exists ($key, $this -> modContent)) {
 			$return = $this -> modContent[$key];
 		} elseif (array_key_exists ($key, bw :: $conf) && $key <> 'siteKey') {
@@ -180,30 +163,30 @@ class bwView {
 		} elseif ($isLoop) {
 			if (array_key_exists ($key, $this -> loopEach)) {
 				$return = $this -> loopEach[$key];
-			} 
+			}
 		}  elseif (array_key_exists ($key, $this -> passData)) {
 			$return = $this -> passData[$key];
 		}
 
 		if ($needWalk) {
 			$return = call_user_func (array($this, 'theme_' . $funcWalk), $funcParam, $return);
-		} 
+		}
 		return $return;
-	} 
+	}
 
 	private function strInLoop ($param)
 	{
 		return $this -> strInTheme ($param, true);
-	} 
+	}
 
 	private function strInLang ($param)
 	{
 		$key = $param[1];
 		if (array_key_exists ($key, bw :: $conf['l'])) {
 			return bw :: $conf['l'][$key];
-		} 
+		}
 		return "Unknown string: $key";
-	} 
+	}
 
 	public function doPagination ()
 	{
@@ -212,12 +195,12 @@ class bwView {
 		if ($canonical -> currentPage > 1) {
 			$paginationElements[] = 'prevpage';
 			$paginationVals['prevPageLink'] = sprintf ($canonical -> paginableURL, $canonical -> currentPage-1);
-		} 
+		}
 
 		if ($canonical -> currentPage < $canonical -> totalPages) {
 			$paginationElements[] = 'nextpage';
 			$paginationVals['nextPageLink'] = sprintf ($canonical -> paginableURL, $canonical -> currentPage + 1);
-		} 
+		}
 
 		$paginationElements[] = 'firstpage';
 		$paginationVals['firstPageLink'] = sprintf ($canonical -> paginableURL, 1);
@@ -225,7 +208,15 @@ class bwView {
 		if ($canonical -> totalPages > 1) {
 			$paginationElements[] = 'finalpage';
 			$paginationVals['finalPageLink'] = sprintf ($canonical -> paginableURL, $canonical -> totalPages);
-		} 
+		}
+
+		$paginationElements[] = 'gotopage';
+		$paginationLinkLoop = $paginationNumLoop = array ();
+		for ($i = 0; $i < $canonical -> totalPages; $i++) {
+			$paginationVals['gotoPageLink'][$i]['pageLink'] = sprintf ($canonical -> paginableURL, $i + 1);
+			$paginationVals['gotoPageLink'][$i]['pageNum'] = $i + 1;
+			$paginationVals['gotoPageLink'][$i]['isCurrentPage'] = ($i + 1 == $canonical -> currentPage) ? 1 : 0;
+		}
 
 		$paginationElements[] = 'pagination';
 
@@ -236,24 +227,24 @@ class bwView {
 
 		$this -> setWorkFlow ($paginationElements);
 		$this -> generateOutput ();
-	} 
+	}
 
 	public function setPageTitle ($mainTitle)
 	{
 		$this -> passData['pageTitle'] = $mainTitle . ' | ';
 		$this -> passData['pageTitle'] = hook ('setPageTitle', 'Replace', $this -> passData['pageTitle']);
-	} 
+	}
 
 	public function setMetaData ($meta)
 	{
 		$this -> passData['metaData'] = $meta;
 		$this -> passData['metaData'] = hook ('setMetaData', 'Replace', $this -> passData['metaData']);
-	} 
+	}
 
 	public function setActiveNav ($navID)
 	{
 		bw :: $conf['activeNav'] = $navID;
-	} 
+	}
 
 	public function outputView ()
 	{
@@ -262,8 +253,8 @@ class bwView {
 			echo (json_encode (array ('error' => 0, 'returnMsg' => $this -> outputContent)));
 		} else {
 			echo ($this -> outputContent);
-		} 
-	} 
+		}
+	}
 
 	public function finalize ()
 	{
@@ -273,11 +264,11 @@ class bwView {
 		hook ('finalize', 'Execute', $this);
 		if (defined ('docache') && $this -> masterMod <> 'error') {
 			bw :: $db -> dbExec ('INSERT INTO cache (caID, caContent) VALUES (?, ?)', array (docache, $this -> outputContent));
-		} 
+		}
 		exit ();
-	} 
+	}
 
-	public function getOutput ($clearAtOnce=true) 
+	public function getOutput ($clearAtOnce=true)
 	{
 		$this -> generateOutput ();
 		$return = $this -> outputContent;
@@ -291,11 +282,11 @@ class bwView {
 	{
 		if (!isset ($this -> themeInternal['insert_' . $hookInterface])) {
 			$this -> themeInternal['insert_' . $hookInterface] = @file_get_contents (P . 'conf/insert_' . basename ($hookInterface) . '.htm');
-		} 
+		}
 		$return = hook ($hookInterface, 'Insert') . $this -> themeInternal['insert_' . $hookInterface];
 		$return = $this -> commonParser ($return);
 		return $return;
-	} 
+	}
 
 	public function addWidgetIntoView ($hookInterface)
 	{
@@ -310,34 +301,34 @@ class bwView {
 				if (is_array ($output)) {
 					$outputKeys = array_map ($keyMaker, array_keys ($output));
 					$return .= str_replace ($outputKeys, array_values ($output), $this -> parts[$hookInterface]);
-				} 
-			} 
+				}
+			}
 			return $return;
-		} 
-	} 
+		}
+	}
 
 	public function haltWithError ($errMsg)
 	{
 		if (defined ('ajax')) {
 			die (json_encode (array ('error' => 1, 'returnMsg' => $errMsg)));
-		} 
+		}
 		if (M == 'api') {
 			header ('HTTP/1.1 400 Bad Request');
-			header ('Content-Type: application/json'); 
+			header ('Content-Type: application/json');
 			die (json_encode (array ('error' => 1, 'message' => $errMsg)));
-		} 
+		}
 		$this -> setMaster ('error');
 		$this -> setPassData (array('errorMessage' => $errMsg));
 		$this -> setWorkFlow (array('error'));
 		$this -> finalize ();
-	} 
+	}
 
 	public function haltWithSuccess ($successMsg) // Only used in ajax mode
 	{
 		if (defined ('ajax')) {
 			die (json_encode (array ('error' => 0, 'returnMsg' => $successMsg)));
-		} 
-	} 
+		}
+	}
 	// Theme functions
 	public function scanForThemes ()
 	{
@@ -349,12 +340,12 @@ class bwView {
 						include_once (P . 'theme/' . $file . '/info.php');
 						$themes[$theme['themeName']] = $theme;
 						$themes[$theme['themeName']]['themeDir'] = $file;
-					} 
-				} 
-			} 
-		} 
+					}
+				}
+			}
+		}
 		return $themes;
-	} 
+	}
 
 	private function theme_dateFormat ($format, $timestamp)
 	{
@@ -362,9 +353,9 @@ class bwView {
 			$timestamp = time ();
 		} else {
 			$timestamp = strtotime ($timestamp);
-		} 
+		}
 		return date ($format, $timestamp);
-	} 
+	}
 
 	private function theme_datePast ($format, $timestamp)
 	{
@@ -374,7 +365,7 @@ class bwView {
 		} else {
 			$timestamp = strtotime ($timestamp);
 			$past = time () - $timestamp;
-		} 
+		}
 		if ($past < 120) {
 			$return = 'Just now';
 		} elseif ($past < 3600) {
@@ -413,7 +404,7 @@ class bwView {
 			$return.= ' ago';
 		}
 		return $return;
-	} 
+	}
 
 	private function theme_formatText ($mode, $text)
 	{
@@ -424,14 +415,14 @@ class bwView {
 			} else {
 				$this -> themeInternal['hasMore'] = true;
 				$text = substr ($text, 0, $textcutter);
-			} 
+			}
 		} else {
 			$text = str_replace ('+++', '<a name="more"></a>', $text);
-		} 
+		}
 
 		$text = $this -> textFormatter ($text);
 		return $text;
-	} 
+	}
 
 	private function theme_readMore ($format, $aID)
 	{
@@ -439,26 +430,26 @@ class bwView {
 			$link = bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixArticle'] . "/{$aID}/#more";
 			$link = hook ('readMoreLink', 'Replace', $link);
 			return sprintf ($format, $link, bw :: $conf['l']['page:More']);
-		} 
-	} 
+		}
+	}
 
 	private function theme_hasMore ($format, $aID)
 	{
 		if (!$this -> themeInternal['hasMore']) {
 			return $format;
-		} 
-	} 
+		}
+	}
 
 	private function theme_URLEncode ($unuse, $text)
 	{
 		return urlencode ($text);
-	} 
+	}
 
 	private function theme_safeConvert ($unuse, $text)
 	{
 		$text = hook ('safeConvert', 'Replace', $text);
 		return str_replace ('\'', '\\\'', htmlspecialchars (str_replace (array("\r\n", "\r", "\n"), "\\r", $text), ENT_COMPAT, 'UTF-8'));
-	} 
+	}
 
 	private function theme_formatTags ($format, $aTags)
 	{
@@ -470,48 +461,46 @@ class bwView {
 		if (count ($aAllTags) > 0) {
 			foreach ($aAllTags as $tagValue) {
 				$return .= str_replace (array ('[::tagValue]', '[::tagInURL]'), array ($tagValue, urlencode ($tagValue)), $format);
-			} 
+			}
 			$return = str_replace (array ('[::', ']'), array ('[[::', ']]'), $return);
 			$return = preg_replace_callback ('/\[\[::(.+?)\]\]/', array($this, 'strInTheme'), $return);
-		} 
+		}
 		return $return;
-	} 
+	}
 
 	private function theme_hasTags ($format, $aTags)
 	{
 		return $aTags ? $format : '';
-	} 
+	}
 
 	public static function textFormatter ($text)
 	{
 		if (!is_object (self :: $markdownParser)) {
 			include_once (P . 'inc/script/parsedown/Parsedown.php');
 			self :: $markdownParser = new Parsedown;
-		} 
-		$text = self :: $markdownParser -> text ($text); 
+		}
+		$text = self :: $markdownParser -> setBreaksEnabled (true) -> text ($text);
 		// Start customized markdown
 		// xiami music loader
-		$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text); 
+		$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text);
 		// Wangyi Yun Yinyue loader
-		$text = preg_replace ("/!~!(.+?)\[wangyiyun]/", "<p><iframe frameborder=\"no\" border=\"0\" marginwidth=\"0\" marginheight=\"0\" width='330' height='86' src=\"http://music.163.com/outchain/player?type=2&id=$1&auto=0&height=66\"></iframe></p>", $text); 
+		$text = preg_replace ("/!~!(.+?)\[wangyiyun]/", "<p><iframe frameborder=\"no\" border=\"0\" marginwidth=\"0\" marginheight=\"0\" width='330' height='86' src=\"http://music.163.com/outchain/player?type=2&id=$1&auto=0&height=66\"></iframe></p>", $text);
 		// Youku loader
-		$text = preg_replace ("/!~!(.+?)\[youku\]/", "<iframe src=\"http://player.youku.com/embed/$1\"  frameborder='0' class=\"videoFrame\"></iframe>", $text); 
+		$text = preg_replace ("/!~!(.+?)\[youku\]/", "<iframe src=\"http://player.youku.com/embed/$1\"  frameborder='0' class=\"videoFrame\"></iframe>", $text);
 		// Geolocation from Baidu
-		$text = preg_replace ("/!~!(.+?)\[location\]/", "<span class=\"icon-location geoLocator\"></span> <span class=\"geoLocator\">$1</span>", $text); 
+		$text = preg_replace ("/!~!(.+?)\[location\]/", "<span class=\"icon-location geoLocator\"></span> <span class=\"geoLocator\">$1</span>", $text);
 		// !!URL = music
 		$text = preg_replace ("/!!<a href=\"(.+?)\">(.+?)<\/a>/", "<audio controls><source src=\"$1\" type=\"audio/mpeg\">Your browser does not support the audio element.</audio>", $text);
-		$text = str_replace ("\n", '<br/>', $text);
-		$text = preg_replace ("/<\/(.+?)><br\/>/", "</$1>", $text);
 
 		//Image aligned to left or right
-		$text = preg_replace ("/<img (.+?) alt=\"-R\"/", "<img $1 class=\"RImg\" alt=\"\"", $text); 
-		$text = preg_replace ("/<img (.+?) alt=\"-L\"/", "<img $1 class=\"LImg\" alt=\"\"", $text); 
+		$text = preg_replace ("/<img (.+?) alt=\"-R\"/", "<img $1 class=\"RImg\" alt=\"\"", $text);
+		$text = preg_replace ("/<img (.+?) alt=\"-L\"/", "<img $1 class=\"LImg\" alt=\"\"", $text);
 
 		//Image Gallery
 		$varAlbumID = rand (100000, 999999);
-		$text = preg_replace ("/<img (.+?) alt=\"-Album:(.+?)\"/", "<img $1 class=\"ImgAlbum Alb" . $varAlbumID . "\" data-desc=\"$2\" data-album=\"" . $varAlbumID . "\"", $text); 
+		$text = preg_replace ("/<img (.+?) alt=\"-Album:(.+?)\"/", "<img $1 class=\"ImgAlbum Alb" . $varAlbumID . "\" data-desc=\"$2\" data-album=\"" . $varAlbumID . "\"", $text);
 
 		$text = hook ('textParser', 'Replace', $text);
 		return $text;
-	} 
-} 
+	}
+}

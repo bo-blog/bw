@@ -1,13 +1,13 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
 if (!defined ('P')) {
 	die ('Access Denied.');
-} 
+}
 
 @session_start ();
 
@@ -24,8 +24,8 @@ if ($canonical -> currentArgs['mainAction'] == '1') {
 				$_SESSION['authmobile'] = 1;
 			}
 		}
-	} 
-} 
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] <> 'login') {
 	if (!array_key_exists ('login-token', $_SESSION)) {
@@ -41,13 +41,13 @@ if ($canonical -> currentArgs['mainAction'] <> 'login') {
 		$view -> finalize ();
 	} else {
 		$admin -> verifySessionToken ($_SESSION['login-token']);
-	} 
+	}
 	if (!$admin -> verified) {
 		stopError ($conf['l']['admin:msg:NeedLogin']);
 	} else {
 		$view -> setPassData (array ('logoutCSRFCode' => $admin -> getCSRFCode ('logout'), 'navCSRFCode' => $admin -> getCSRFCode ('navibar')));
-	} 
-} 
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] == '1') {
 	if (defined ('ajax')) {
@@ -56,14 +56,14 @@ if ($canonical -> currentArgs['mainAction'] == '1') {
 				ajaxSuccess ($admin -> getCSRFCode ('navibar'));
 			} else {
 				stopError (bw :: $conf['l']['admin:msg:CSRF']);
-			} 
+			}
 		} else {
 			stopError (bw :: $conf['l']['admin:msg:CSRF']);
-		} 
+		}
 	} else {
 		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/dashboard/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
 	}
-} 
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'login') {
 	if ($canonical -> currentArgs['subAction'] == 'logout') {
@@ -84,22 +84,22 @@ if ($canonical -> currentArgs['mainAction'] == 'login') {
 			$admin -> storeSessionToken ($s_token);
 			$navCSRFCode = $admin -> getCSRFCode ('navibar');
 			ajaxSuccess ('-' . $navCSRFCode);
-		} 
+		}
 	} else {
 		$view -> setTheme (bw :: $conf['siteTheme']);
 		$view -> setMaster ('adminlogin');
 		$view -> setWorkFlow (array ('adminlogin'));
 		$view -> finalize ();
-	} 
-} 
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'center') {
 	if ($canonical -> currentArgs['subAction'] == 'store') {
 		$admin -> checkCSRFCode ('saveconfig');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ('No data is submitted.');
-		} 
-		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'autoSave', 'lessSQL', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks');
+		}
+		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'autoSave', 'lessSQL', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks', 'searchEngine');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$outputExternal = '';
 		for ($i = 0; $i < count ($smt['externalLinks']['lnkname']); $i++) {
@@ -115,7 +115,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		} else {
 			$admin -> storeSessionToken ($smt['siteKey']);
 			$smt['siteKey'] = sha1 ($smt['siteKey']);
-		} 
+		}
 		$smt['siteURL'] = substr ($smt['siteURL'], -1) == '/' ? substr ($smt['siteURL'], 0, strlen ($smt['siteURL']) - 1) : $smt['siteURL'];
 		$valString = "<?php\r\n\$conf=" . var_export ($smt, true) . ";";
 		$rS = file_put_contents (P . "conf/info.php", $valString);
@@ -124,24 +124,24 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 		} else {
 			stopError ($conf['l']['admin:msg:ChangeNotSaved']);
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'avatarupload') {
 		$admin -> checkCSRFCode ('upload');
 		if (count ($_FILES) < 1) {
 			exit ();
-		} 
+		}
 		if ($_FILES["uploadFile"]["error"] == UPLOAD_ERR_OK) {
 			$fExtName = pathinfo ($_FILES["uploadFile"]["name"], PATHINFO_EXTENSION);
 			if (in_array (strtolower ($fExtName), array('gif', 'jpg', 'png', 'bmp', 'jpeg', 'jpe'))) {
 				move_uploaded_file ($_FILES["uploadFile"]["tmp_name"], P . "conf/profile.png");
-			} 
+			}
 		}
 		exit ();
 	}  elseif ($canonical -> currentArgs['subAction'] == 'cancelauth') {
 		$admin -> checkCSRFCode ('saveconfig');
 		if (!isset ($_REQUEST['devID'])) {
 			stopError ('');
-		} 
+		}
 		$allMobileKeys = array ();
 		if (file_exists (P . 'conf/mobileauth.php')) {
 			include_once (P . 'conf/mobileauth.php');
@@ -163,10 +163,10 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		$allLinks2 = array ();
 		if (isset ($conf['externalLinks'])) {
 			$allLinks = parse_ini_string ($conf['externalLinks']);
-		} 
+		}
 		foreach ($allLinks as $linkURL => $linkName) {
 			$allLinks2[] = array ('linkURL' => urldecode ($linkURL), 'linkName' => $linkName, 'linkID' => rand (10000, 99999));
-		} 
+		}
 
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
@@ -174,8 +174,8 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		$view -> setPassData (array ('allLinks' => $allLinks2));
 		$view -> setWorkFlow (array ('admincenter', 'admin'));
 		$view -> finalize ();
-	} 
-} 
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'articles') {
 	$article = new bwArticle;
@@ -183,7 +183,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$admin -> checkCSRFCode ('articlesave');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
-		} 
+		}
 		if (isset ($_REQUEST['ispage'])) {
 			$_REQUEST['smt']['aCateURLName'] = '_page';
 		}
@@ -196,7 +196,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$admin -> checkCSRFCode ('articlesave');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
-		} 
+		}
 		if (isset ($_REQUEST['ispage'])) {
 			$_REQUEST['smt']['aCateURLName'] = '_page';
 		}
@@ -209,7 +209,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$admin -> checkCSRFCode ('navibar');
 		if (!isset ($_REQUEST['aID'])) {
 			stopError ($conf['l']['admin:msg:NotExist']);
-		} 
+		}
 		$article -> fetchArticle ($_REQUEST['aID'], true);
 		$view -> setMaster ('admin');
 		$view -> setPassData ($article -> articleList[$_REQUEST['aID']]);
@@ -231,7 +231,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$view -> setPassData (array ('policy' => base64_encode ($policy), 'signature' => base64_encode (hash_hmac ('sha1', $policy, bw :: $conf['aliyunSKey'], true))));
 		} else {
 			$uploader = 'admincommonupload';
-		} 
+		}
 		$view -> setPassData (array ('articleTemplate' => $article -> getArticleTemplateList()));
 		$view -> setWorkFlow (array ($uploader, 'adminwriter', 'admin'));
 		$view -> finalize ();
@@ -253,7 +253,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$view -> setPassData (array ('policy' => $policy, 'signature' => base64_encode (hash_hmac ('sha1', $policy, bw :: $conf['aliyunSKey'], true))));
 		}  else {
 			$uploader = 'admincommonupload';
-		} 
+		}
 
 		$view -> setMaster ('admin');
 		$view -> setPassData (array ('writermode' => $canonical -> currentArgs['subAction'] == 'new' ? 'article' : 'singlepage', 'admincatelist' => bw :: $cateList, 'upCSRFCode' => $admin -> getCSRFCode ('upload'), 'articleCSRFCode' => $admin -> getCSRFCode ('articlesave'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
@@ -270,13 +270,13 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$flags = array ('scope' => $conf['qiniuBucket'] . ':' . $fStoreName, 'deadline' => 3600 + time(), 'returnUrl' => "{$conf['siteURL']}/{$conf['linkPrefixAdmin']}/articles/qiniuuploader/", 'returnBody' => json_encode(array('fname' => '$(key)', 'ftype' => '$(mimeType)')));
 			$qiniuFileToken = $qiniuClient -> uploadToken($flags) . '<<<' . $fStoreName;
 			ajaxSuccess ($qiniuFileToken);
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'getautocomplete') {
 		$allTags = bw :: $db -> getRows ('SELECT tValue FROM tags ORDER BY tCount DESC LIMIT 0, 100');
 		$outTags = array();
 		foreach ($allTags as $aTag) {
 			$outTags[] = $aTag['tValue'];
-		} 
+		}
 		die ('var lastTags='.json_encode ($outTags).';');
 	}  elseif ($canonical -> currentArgs['subAction'] == 'getpinyin') {
 		if (!isset ($_REQUEST['str']) || !function_exists('mb_convert_encoding')) {
@@ -296,7 +296,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 				if (isset ($tplInsert[1])) {
 					die ($tplInsert[1]);
 				}
-			} 
+			}
 		}
 		exit ();
 	}  elseif ($canonical -> currentArgs['subAction'] == 'gettitlelist') {
@@ -304,13 +304,13 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$outTitles = array();
 		foreach ($allTitles as $aID => $aTitle) {
 			$outTitles[] = $aTitle;
-		} 
+		}
 		die ('var allTitles='.json_encode ($outTitles).';var allFullList='.json_encode (array_flip ($allTitles)).';');
 	}  elseif ($canonical -> currentArgs['subAction'] == 'getpreviewhtml') {
 		$admin -> checkCSRFCode ('articlesave');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
-		} 
+		}
 		ajaxSuccess (bwView :: textFormatter ($_REQUEST['smt']['aContent']));
 
 	} elseif ($canonical -> currentArgs['subAction'] == 'delete') {
@@ -331,7 +331,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$admin -> checkCSRFCode ('upload');
 		if (count ($_FILES) < 1) {
 			exit ();
-		} 
+		}
 
 		$picfiles = $files = array();
 
@@ -349,8 +349,8 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 					move_uploaded_file ($tmp_name, P . "storage/{$fStoreName}");
 					$files[]['fileURL'] = "{$conf['siteURL']}/storage/{$fStoreName}";
 				}
-			} 
-		} 
+			}
+		}
 
 		$view -> setMaster ('adminuploadinsert');
 		$view -> setPassData (array ('adminuploadedpic' => $picfiles, 'adminuploadedfile' => $files));
@@ -369,7 +369,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			} else {
 				$files[]['fileURL'] = $conf['qiniuDomain'] ? "{$conf['qiniuDomain']}/{$uploadReturn['fname']}" : "http://{$conf['qiniuBucket']}.qiniudn.com/{$uploadReturn['fname']}";
 			}
-		} 
+		}
 		$view -> setMaster ('adminuploadinsert');
 		$view -> setPassData (array ('adminuploadedpic' => $picfiles, 'adminuploadedfile' => $files));
 		$view -> setWorkFlow (array ('adminuploadinsert'));
@@ -392,12 +392,12 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			$view -> setPassData (array ('adminuploadedpic' => $picfiles, 'adminuploadedfile' => $files));
 			$view -> setWorkFlow (array ('adminuploadinsert'));
 			$view -> finalize ();
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'savecategories') {
 		$admin -> checkCSRFCode ('category');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
-		} 
+		}
 		//stopError (print_r($_REQUEST['smt2'], true));
 		$smt2 = isset ($_REQUEST['smt2']) ? $_REQUEST['smt2'] : array ();
 		$cates = new bwCategory;
@@ -412,7 +412,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		foreach ($remainedCates as $k => $aRemainedCate) {
 			$remainedAsNewCates[] = $_REQUEST['smt'][$k];
 			$remainedNewCatesTheme[] = isset ($smt2[$k]) ? $smt2[$k] : '';
-		} 
+		}
 		$cates -> renameCategories (array_keys ($remainedCates), array_values ($remainedCates), $remainedAsNewCates);
 		$cates -> updateCategoryThemes (array_keys ($remainedCates), $remainedNewCatesTheme);
 		$cates -> orderCategories (array_keys ($_REQUEST['smt']));
@@ -422,16 +422,16 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$admin -> checkCSRFCode ('category');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
-		} 
+		}
 		if (empty ($_REQUEST['smt']['aCateDispName'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
-		} 
-		if (empty ($_REQUEST['smt']['aCateURLName'])) { 
+		}
+		if (empty ($_REQUEST['smt']['aCateURLName'])) {
 			$smt['aCateURLName'] = urlencode ($_REQUEST['smt']['aCateDispName']);
-		} 
-		else { 
+		}
+		else {
 			$smt['aCateURLName'] = urlencode ($_REQUEST['smt']['aCateURLName']);
-		} 
+		}
 		if ($smt['aCateURLName'] == '_trash' || $smt['aCateURLName'] == '_page') {
 			stopError ($conf['l']['admin:msg:NoData']);
 		}
@@ -445,7 +445,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		}
 		if (array_key_exists ($smt['aCateURLName'], bw :: $cateData)) {
 			stopError ($conf['l']['admin:msg:Existed']);
-		} 
+		}
 		if ($canonical -> currentArgs['subAction'] == 'validatecategory') {
 			$view -> setMaster ('admincategorylist');
 			$view -> setPassData ($smt);
@@ -458,7 +458,7 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 			ajaxSuccess ('');
 		}
 	} else {
-		$admin -> checkCSRFCode ('navibar'); 
+		$admin -> checkCSRFCode ('navibar');
 		$article -> setCutTime (0);
 		// Pagination
 		$article -> alterPerPage (20);
@@ -480,15 +480,15 @@ if ($canonical -> currentArgs['mainAction'] == 'articles') {
 		$view -> setPassData (array ('adminarticlelist' => $adminarticlelist, 'admindraftlist' => $admindraftlist, 'adminsinglepagelist' => $adminsinglepagelist, 'admincatelist' => bw :: $cateList, 'themeList' => $view -> scanForThemes (), 'newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'oldCSRFCode' => $admin -> getCSRFCode ('navibar'), 'cateCSRFCode' => $admin -> getCSRFCode ('category')));
 		$view -> setWorkFlow (array ('adminarticlelist', 'admincategorylist', 'adminarticles', 'admin'));
 		$view -> finalize ();
-	} 
-} 
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'services') {
 	if ($canonical -> currentArgs['subAction'] == 'store') {
 		$admin -> checkCSRFCode ('services');
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
-		} 
+		}
 		$acceptedKeys = array ('duoshuoID', 'disqusID', 'sinaAKey', 'sinaSKey', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain', 'APIOpen', 'basicAPI', 'advancedAPI', 'aliyunAKey', 'aliyunSKey', 'aliyunBucket', 'aliyunRegion');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$basicAPI = @explode ('<>', $smt['basicAPI']);
@@ -502,15 +502,15 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 			$result = $qiniuClient -> listFiles($smt['qiniuBucket'], $limit = 1);
 			if (!$result) {
 				stopError ($conf['l']['admin:msg:QiniuError'] . $qiniuClient -> err);
-			} 
-		} 
+			}
+		}
 		$valString = "<?php\r\n\$conf+=" . var_export ($smt, true) . ";?>";
 		$rS = file_put_contents (P . "conf/services.php", $valString);
 		if ($rS) {
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 		} else {
 			stopError ($conf['l']['admin:msg:ChangeNotSaved']);
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'backup' || $canonical -> currentArgs['subAction'] == 'sync') {
 		$admin -> checkCSRFCode ('services');
 		require_once (P . "inc/script/pclzip/pclzip.lib.php");
@@ -527,8 +527,8 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		} else {
 			if ($canonical -> currentArgs['subAction'] == 'backup') {
 				header ("Location: {$conf['siteURL']}/{$ff}");
-			} 
-			else { 
+			}
+			else {
 				loadServices ();
 				require_once (P . "inc/script/qiniu/QiniuClient.php");
 				$qiniuClient = new qiniuClient (QINIU_AK, QINIU_SK);
@@ -536,8 +536,8 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 				@unlink (P . $ff);
 				header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/services/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
 				exit ();
-			} 
-		} 
+			}
+		}
 	}  elseif ($canonical -> currentArgs['subAction'] == 'reset') {
 		$admin -> checkCSRFCode ('services');
 		dochmod ('.');
@@ -570,8 +570,8 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		$view -> setPassData (array ('serviceCSRFCode' => $admin -> getCSRFCode ('services')));
 		$view -> setWorkFlow (array ('adminservices', 'admin'));
 		$view -> finalize ();
-	} 
-} 
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 	if ($canonical -> currentArgs['subAction'] == 'update' || $canonical -> currentArgs['subAction'] == 'updatedirect') {
@@ -579,11 +579,11 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 		if ($canonical -> currentArgs['subAction'] == 'update') {
 			if (!isset ($_REQUEST['dlURL']) || !isset ($_REQUEST['hash'])) {
 				stopError ($conf['l']['admin:msg:NoData']);
-			} 
+			}
 			$packageContent = curlRetrieve ($_REQUEST['dlURL']);
 			if (!$packageContent) {
 				stopError ($conf['l']['admin:msg:UpdateDownloadFail']);
-			} 
+			}
 			else {
 				file_put_contents (P . 'update/dlupkg_tmp.zip', $packageContent);
 				@chmod (P . 'update/dlupkg_tmp.zip', 0777);
@@ -593,7 +593,7 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 			}
 			$pkgName = P . 'update/dlupkg_tmp.zip';
 		}
-		
+
 		else {
 			if (!file_exists (P . 'update/manual_update.zip')) {
 				stopError ($conf['l']['admin:msg:UpdatePackageMissing']);
@@ -605,7 +605,7 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 		bwZip :: zipRead ($pkgName, 1, 1);
 		@unlink ($pkgName);
 		$sqlUpdater = P . 'update/update.' . strtolower (DBTYPE) . '.sql';
-		if (file_exists ($sqlUpdater)) { 
+		if (file_exists ($sqlUpdater)) {
 			$allSqls = @file ($sqlUpdater);
 			bw :: $db -> silentError (true);
 			foreach ($allSqls as $sql) {
@@ -632,13 +632,13 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 		$statVals['whatsHottest'] = array ();
 		foreach ($article -> articleList as $row) {
 			$statVals['whatsHottest'][] = "<a href=\"{$conf['siteURL']}/{$conf['linkPrefixArticle']}/{$row['aID']}/\">{$row['aTitle']}</a>";
-		} 
+		}
 		$statVals['whatsHottest'] = '<li>' . @implode('</li><li>', $statVals['whatsHottest']) . '</li>';
 
 		$recents = bw :: $db -> getRows ('SELECT * FROM statistics ORDER BY lastView DESC LIMIT 0, 5');
 		foreach ($recents as $row) {
 			$statVals['latestViews'][] = "<a href=\"{$conf['siteURL']}{$row['pageURL']}\">{$row['pageURL']}</a>";
-		} 
+		}
 		$statVals['latestViews'] = '<li>' . implode('</li><li>', $statVals['latestViews']) . '</li>';
 
 		$statVals['thisVersion'] = bwVersion;
@@ -649,8 +649,8 @@ if ($canonical -> currentArgs['mainAction'] == 'dashboard') {
 		$view -> setPassData (array ('newCSRFCode' => $admin -> getCSRFCode ('newarticle'), 'serviceCSRFCode' => $admin -> getCSRFCode ('services'), 'updateCSRFCode' => $admin -> getCSRFCode ('update')));
 		$view -> setWorkFlow (array ('admindashboard', 'admin'));
 		$view -> finalize ();
-	} 
-} 
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 	$allOpenHooks = array ('htmlhead', 'header', 'intro', 'mainAreaEnd', 'footer', 'beforeEnd', 'summaryDetail', 'articleDetail', 'commentArea');
@@ -664,7 +664,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			bw :: $db -> dbExec ('UPDATE extensions SET extActivate=? WHERE extID=?', array ($extActivate, $extID));
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'remove') {
 		$admin -> checkCSRFCode ('extensions');
 		if (!isset ($_REQUEST['extID'])) {
@@ -676,12 +676,12 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 				include (P . 'extension/' . $extID . '/do.php');
 				$callableClass = 'ext_' . $extID;
 				if (method_exists ($callableClass , 'uninstall')) {
-					$callableClass :: uninstall (); 
+					$callableClass :: uninstall ();
 				}
 			}
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'removetheme') {
 		$admin -> checkCSRFCode ('extensions');
 		if (!isset ($_REQUEST['themeID'])) {
@@ -694,7 +694,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			@rrmdir (P . 'theme/' . basename ($themeID) . '/');
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'add') {
 		$admin -> checkCSRFCode ('newext');
 		if (!isset ($_REQUEST['extID'])) {
@@ -705,17 +705,17 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			$extID = htmlspecialchars ($extID, ENT_QUOTES, 'UTF-8');
 			if (array_key_exists ($extID, $extList)) {
 				stopError ($conf['l']['admin:msg:Existed']);
-			} 
+			}
 			if (!file_exists (P . 'extension/' . $extID . '/define.php') || !file_exists (P . 'extension/' . $extID . '/do.php')) {
 				stopError ($conf['l']['admin:msg:ExtNotFound']);
-			} 
+			}
 			$aExt = @parse_ini_file (P . 'extension/' . $extID . '/define.php');
 			$aExt['extDesc'] = "name='{$aExt['name']}'\r\nintro='{$aExt['intro']}'\r\nauthor='{$aExt['author']}'\r\nurl='{$aExt['url']}'";
 			bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget) VALUES (?, ?, ?, 1, ?, 0)', array ($aExt['ID'], $aExt['extDesc'], $aExt['hooks'], count ($extList) + 1));
 			include (P . 'extension/' . basename ($extID) . '/do.php');
 			$callableClass = 'ext_' . $extID;
 			if (method_exists ($callableClass , 'setup')) {
-				$callableClass :: setup (); 
+				$callableClass :: setup ();
 			}
 			clearCache ();
 			if (defined ('ajax')) {
@@ -724,7 +724,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 				header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/extensions/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
 				exit ();
 			}
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'widget') {
 		$admin -> checkCSRFCode ('newext');
 		if (!isset ($_REQUEST['wgtID']) || empty ($_REQUEST['wgtID'])) {
@@ -741,25 +741,25 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			$extHooks = $_REQUEST['extHooks'];
 			if (!array_key_exists ($extHooks, $patternWidgetHooks)) {
 				stopError ($conf['l']['admin:msg:NoContent']);
-			} 
+			}
 			$extStorage = array ();
 			foreach (@explode (',', $patternWidgetHooks[$extHooks]) as $wgtCol) {
 				$extStorage[$wgtCol] = ($wgtCol == 'value') ? $_REQUEST['wgt' . $wgtCol] : htmlspecialchars ($_REQUEST['wgt' . $wgtCol], ENT_QUOTES, 'UTF-8');
-			} 
+			}
 			if ($extOrder == -1) {
 				if (array_key_exists ($extID, $extList)) {
 					stopError ($conf['l']['admin:msg:Existed']);
-				} 
+				}
 				bw :: $db -> dbExec ('INSERT INTO extensions (extID, extDesc, extHooks, extActivate, extOrder, isWidget, extStorage) VALUES (?, "", ?, 1, ?, 1, ?)', array ($extID, $extHooks, count ($extList) + 1, json_encode ($extStorage)));
 			} else {
 				if (!array_key_exists ($extID, $extList)) {
 					stopError ($conf['l']['admin:msg:NotExist']);
-				} 
+				}
 				bw :: $db -> dbExec ('UPDATE extensions SET extStorage=? WHERE extID=? AND isWidget=1', array (json_encode ($extStorage), $extID));
-			} 
+			}
 			clearCache ();
 			ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-		} 
+		}
 	} elseif ($canonical -> currentArgs['subAction'] == 'savewidgetsort') {
 		$admin -> checkCSRFCode ('extensions');
 		if (!isset ($_REQUEST['sortstr'])) {
@@ -773,7 +773,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 			$dataLine[$i][':extOrder'] = $i;
 			$dataLine[$i][':extID'] = $extID;
 			$i += 1;
-		} 
+		}
 
 		bw :: $db -> dbExecBatch ('UPDATE extensions SET extOrder=:extOrder WHERE extID=:extID', $dataLine);
 		clearCache ();
@@ -782,10 +782,10 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		$admin -> checkCSRFCode ('extensions');
 		foreach ($allOpenHooks as $openHook) {
 			@file_put_contents (P . 'conf/insert_' . $openHook . '.htm', $_REQUEST['smt'][$openHook]);
-		} 
+		}
 		clearCache ();
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
-	}  elseif ($canonical -> currentArgs['subAction'] == 'exporttheme') { 
+	}  elseif ($canonical -> currentArgs['subAction'] == 'exporttheme') {
 		$admin -> checkCSRFCode ('extensions');
 		if (!isset ($_REQUEST['themeID'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
@@ -797,7 +797,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		include (P. 'inc/zip.inc.php');
 		bwZip :: zipFolder (P . "theme/{$themeID}/" , P . 'storage/theme_'.$themeID.'.pkg');
 		header ("Location: {$conf['siteURL']}/storage/theme_{$themeID}.pkg");
-	}  elseif ($canonical -> currentArgs['subAction'] == 'exportextension') { 
+	}  elseif ($canonical -> currentArgs['subAction'] == 'exportextension') {
 		$admin -> checkCSRFCode ('extensions');
 		if (!isset ($_REQUEST['extID'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
@@ -812,20 +812,20 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		bwZip :: zipFolder (P . "extension/{$extID}/" , P . 'storage/extension_'.$extID.'.pkg', array (P . "extension/autoinstall.txt"));
 		unlink (P . "extension/autoinstall.txt");
 		header ("Location: {$conf['siteURL']}/storage/extension_{$extID}.pkg");
-	} elseif ($canonical -> currentArgs['subAction'] == 'installpkg') { 
+	} elseif ($canonical -> currentArgs['subAction'] == 'installpkg') {
 		$admin -> checkCSRFCode ('newext');
 		if (!isset ($_FILES['userfile']) || !isset ($_REQUEST['pkgType'])) {
 			stopError ($conf['l']['admin:msg:PkgError']);
-		} 
+		}
 		if ($_REQUEST['pkgType']!='theme' && $_REQUEST['pkgType']!='extension') {
 			stopError ($conf['l']['admin:msg:PkgError']);
-		} 
+		}
 		if (!$_FILES['userfile']['tmp_name']) {
 			stopError ($conf['l']['admin:msg:PkgError']);
-		} 
+		}
 		if (pathinfo ($_FILES["userfile"]["name"], PATHINFO_EXTENSION) != 'pkg') {
 			stopError ($conf['l']['admin:msg:PkgError']);
-		} 
+		}
 		$fName = P . 'storage/theme_' . rand (100000, 999999) . '.pkg';
 
 		if (move_uploaded_file ($_FILES['userfile']['tmp_name'],  $fName)) {
@@ -840,12 +840,12 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 					exit ();
 				}
 			}
-		} 
+		}
 		header ("Location: {$conf['siteURL']}/{$conf['linkPrefixAdmin']}/extensions/{$conf['linkConj']}CSRFCode=" . $admin -> getCSRFCode ('navibar'));
-	} elseif ($canonical -> currentArgs['subAction'] == 'selecttheme') { 
+	} elseif ($canonical -> currentArgs['subAction'] == 'selecttheme') {
 		if (!isset ($_REQUEST['themeID'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
-		} 
+		}
 		$themeID = basename ($_REQUEST['themeID']);
 		if (!file_exists (P . "theme/{$themeID}/info.php")) {
 			stopError ($conf['l']['admin:msg:NotExist']);
@@ -854,7 +854,7 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		clearCache ();
 		ajaxSuccess ($conf['l']['admin:msg:ChangeSaved']);
 	}
-	
+
 	else {
 		$admin -> checkCSRFCode ('navibar');
 		$view -> setMaster ('admin');
@@ -862,33 +862,49 @@ if ($canonical -> currentArgs['mainAction'] == 'extensions') {
 		$view -> setPassData (array ('wgtListHtmlhead' => bw :: getWidgets ('wghtmlhead'), 'wgtListHeader' => bw :: getWidgets ('wgheader'), 'wgtListSiderbar' => bw :: getWidgets ('wgsidebar'), 'wgtListFooter' => bw :: getWidgets ('wgfooter')));
 		foreach ($allOpenHooks as $openHook) {
 			$allHooks['insert_' . $openHook] = @file_get_contents (P . 'conf/insert_' . $openHook . '.htm');
-		} 
+		}
 		$view -> setPassData ($allHooks);
 		$view -> setWorkFlow (array ('adminextensions', 'admin'));
 		$view -> finalize ();
-	} 
-} 
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'comments') {
 	$comment = new bwComment;
 	if ($canonical -> currentArgs['subAction'] == 'blockitem') {
 		if (!$_REQUEST['comID'] || !$_REQUEST['aID']) {
 			stopError ($conf['l']['admin:msg:NotExist']);
-		} 
+		}
 		$comment -> blockItem ($_REQUEST['comID'], $_REQUEST['aID']);
 		ajaxSuccess($conf['l']['admin:msg:ChangeSaved']);
-	} 
-	if ($canonical -> currentArgs['subAction'] == 'blockip') {
+	}
+	elseif ($canonical -> currentArgs['subAction'] == 'blockip') {
 		if (!$_REQUEST['comID']) {
 			stopError ($conf['l']['admin:msg:NotExist']);
-		} 
+		}
 		$comment -> blockIP ($_REQUEST['comID']);
 		ajaxSuccess($conf['l']['admin:msg:ChangeSaved']);
-	} 
-} 
+	}
+	elseif ($canonical -> currentArgs['subAction'] == 'comments') {
+		$admin -> checkCSRFCode ('navibar');
+		$comment -> alterPerPage (30);
+		$comment -> showBlocked (true);
+		$comment -> getComList ();
+		$view -> setMaster ('admin');
+		$view -> setPassData (array ('newCSRFCode' => $admin -> getCSRFCode ('newext'), 'extCSRFCode' => $admin -> getCSRFCode ('extensions')));
+		$view -> setPassData (array ('comments' => $comment -> comList));
+
+		$view -> setWorkFlow (array ('admincomments', 'admin'));
+		$view -> finalize ();
+
+	}
+	else {
+		exit ();
+	}
+}
 
 if ($canonical -> currentArgs['mainAction'] == 'market') {
-	if ($canonical -> currentArgs['subAction'] == 'detail') { 
+	if ($canonical -> currentArgs['subAction'] == 'detail') {
 		if (!isset ($_SESSION['enable_load_market'])) {
 			stopError ($conf['l']['admin:msg:NotExist']);
 		}
@@ -912,7 +928,7 @@ if ($canonical -> currentArgs['mainAction'] == 'market') {
 		$view -> setPassData (array ('adminplainpage' => $authX));
 		$view -> setWorkFlow (array ('admin'));
 		$view -> finalize ();
-	} elseif ($canonical -> currentArgs['subAction'] == 'installpkg') { 
+	} elseif ($canonical -> currentArgs['subAction'] == 'installpkg') {
 		$returnError = true;
 		if (isset ($_SESSION['enable_load_market']) && $admin -> getCSRFCode ('install' . $_SESSION['enable_load_market']) == $_REQUEST['CSRFCode'] && isset ($_REQUEST['dl'])) {
 			$returnError = false;
@@ -939,8 +955,8 @@ if ($canonical -> currentArgs['mainAction'] == 'market') {
 		$view -> setPassData (array ('installCSRFCode' => $admin -> getCSRFCode ('install' . $rndCode)));
 		$view -> setWorkFlow (array ('adminmarket', 'admin'));
 		$view -> finalize ();
-	} 
-} 
+	}
+}
 
 hook ('newAdminCategory', 'Execute', $canonical, $admin, $view);
 

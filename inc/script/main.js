@@ -59,7 +59,7 @@ function lightboxImage (imgSrc, inAlbum) {
 				if (finalHeight>idealHeight)
 				{
 					finalHeight=idealHeight;
-					finalWidth=Math.floor((picWidth/picHeight)*idealHeight);		
+					finalWidth=Math.floor((picWidth/picHeight)*idealHeight);
 				}
 			}
 			if (picHeight>picWidth)
@@ -81,7 +81,7 @@ function lightboxImage (imgSrc, inAlbum) {
 			$("#lightbox-image").css("top", Math.max (Math.floor((windowHeight-finalHeight)/2-55), 0));
 			$("#imgDesc").css("width", finalWidth+"px");
 			$("#imgRightArrow").css("margin-left", finalWidth-25+"px");
-		} 
+		}
 		else {
 			$("#lightbox-image").css("top", Math.floor((windowHeight-finalHeight)/2));
 		}
@@ -102,7 +102,7 @@ function lightboxImage (imgSrc, inAlbum) {
 			$("#UI-lightbox").html('');
 			$("#UI-lightbox").unbind();
 		});
-	} 
+	}
 	else {
 		$('#lightboxImage').click(function (){
 			$("#UI-lightbox").fadeOut();
@@ -117,13 +117,13 @@ function lightboxImageAlbum (picURL, ImgGroups, ImgDesc, ImgSeq) {
 	var totalImgs = ImgGroups.length;
 	if (ImgSeq==0) {
 		var ImgPrev = totalImgs-1;
-	} 
+	}
 	else {
 		var ImgPrev = ImgSeq-1;
 	}
 	if (ImgSeq==totalImgs-1) {
 		var ImgNext = 0;
-	} 
+	}
 	else {
 		var ImgNext = ImgSeq+1;
 	}
@@ -306,6 +306,14 @@ function makeComUserLink ()
 		var comURL=$(this).attr ('href');
 		if (!comURL) {
 			$(this).removeAttr ('href');
+		}
+		if (comURL.indexOf ('@') != -1) {
+			$(this).attr ('href', 'mailto:' + comURL);
+		}
+	});
+	$(".comAvatar").each (function () {
+		if ($(this).data('avatar')=='0') {
+			$(this).html(genAvatar (45, $(this).data('user')));
 		}
 	});
 }

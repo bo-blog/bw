@@ -24,7 +24,7 @@ $('.pageLink').click(function () {
 			});
 		}
 	}, "json");
-		
+
 	return false;
 
 });
@@ -75,3 +75,15 @@ $('article .xiamiLoader').each (function () {
 });
 
 changeNav ();
+
+$('#openPageSelector').click (function () {
+	$('#pageSelector').fadeToggle();
+});
+
+$("#searchVal").keydown (function (event) {
+	if(event.which == 13 && $("#searchVal").val()!='') {
+		 var searchPlus = $("#searchVal").data("searchquery").replace(/http%3A%2F%2F/, '');
+		 searchPlus = searchPlus.replace(/https%3A%2F%2F/, '');
+		 window.location = $("#searchVal").data("searchurl")+encodeURI($("#searchVal").val())+searchPlus;
+	}
+});

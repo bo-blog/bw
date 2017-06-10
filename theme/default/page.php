@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -16,12 +16,12 @@ if (!defined ('P')) {
 <head profile="http://www.w3.org/2005/10/profile">
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="description" content="[[::authorIntro]]" />
 <meta name="keywords" content="[[::metaData]]" />
 <link rel="icon" type="image/png" href="[[::siteURL]]/theme/default/logo.png" />
 <link rel="canonical" href="[[::canonicalURL]]" />
-<link href="[[::siteURL]]/theme/default/style.css" media="all" rel="stylesheet" type="text/css" />
+<link href="[[::siteURL]]/theme/default/style.css?ver=201704222316" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
 <link  href="[[::siteURL]]/rss.php" rel="alternate" type="application/rss+xml" title="RSS 2.0" />
 <title>[[::pageTitle]][[::siteName]] - [[::authorIntro]]</title>
@@ -34,7 +34,7 @@ var lng={
 	BlockIP : '[[=js:BlockIP]]'
 };
 </script>
-<script src="[[::siteURL]]/inc/script/main.js"></script>
+<script src="[[::siteURL]]/inc/script/main.js?ver=2017050601"></script>
 [[::ext_htmlhead]]
 [[::widget_wghtmlhead]]
 </head>
@@ -43,6 +43,8 @@ var lng={
 <header>
 <span class="iconLogo"><span class="adminSign" data-adminurl="[[::siteURL]]/admin.php" data-adminid="[[::aID]]"><a href="##"><img src="[[::siteURL]]/conf/profile.png" id="profileImg" valign="middle" title="[[::authorName]] - [[::authorIntro]]"/></span> <a href="[[::siteURL]]/">[[::siteName]]</a></span>
 <span id="menuDown"><a href="#" onclick="$('nav').toggle('fast');"><span class="icon-list4 menuDownIcon"></span> </a></span>
+<div id="searchIcon"><a href="#" onclick="$('#searchBar').toggleClass('searchBarFocus'); $('nav').fadeToggle();">&#9906;</a></div>
+<div id="searchBar"><input type="text" placeholder="[[=page:EnterToSearch]]" id="searchVal" class="inputLine inputSmall" data-searchurl="[[::searchEngine]]" data-searchquery="+site%3a[[::siteURL, URLEncode]]"></div>
 <nav>
 <ul>
 <li id="nav-index"><a href="[[::siteURL]]/">[[=page:Home]]</a></li>
@@ -63,7 +65,7 @@ var lng={
 [[::loop, articlesummary]][[::load, summary]][[::/loop]]
 [[::load, article]][[::load, singlepage]][[::listContent]]
 [[::pagination]]
-<script src="[[::siteURL]]/inc/script/loader.js"></script>
+<script src="[[::siteURL]]/inc/script/loader.js?ver=201704222316"></script>
 </div>
 <!-- end ajax section -->
 [[::ext_mainAreaEnd]]
@@ -88,6 +90,7 @@ var lng={
 $('#nav-[[::activeNav]]').addClass('activeNav');
 $('.adminSign').click(function (){checkLogin('adminSign');});
 if ($("#ajax-article-list article").length==0) {$("#ajax-article-list").html("[[=page:NoArticleAtAll]]");}
+if ("[[::searchEngine]]" == "") {$("#searchIcon").remove();}
 </script>
 [[::ext_beforeEnd]]
 </body>

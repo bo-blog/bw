@@ -1,15 +1,14 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
 */
 if (!defined ('P')) {
 	die ('Access Denied.');
-} 
+}
 $article = new bwArticle;
-
 $article -> fetchArticle ($canonical -> currentArgs['aID']);
 
 $view = new bwView;
@@ -30,9 +29,10 @@ if ($conf['commentOpt']<>0) {
 	if ($conf['commentOpt'] == 1 || $conf['commentOpt'] == 2) { //Build-in comment
 
 		//Discarded on 2016/6/22
-		$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));
+		//Added back on 2017/4/9
+		//$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));
 
-		/*
+
 		@session_start ();
 		$comment = new bwComment;
 		$comment -> alterAID ($canonical -> currentArgs['aID']);
@@ -41,19 +41,16 @@ if ($conf['commentOpt']<>0) {
 		$comkey = md5 ($comment -> initComAKey () . $comment -> initComSKey ());
 		$view -> setPassData (array ('comkey' => $comkey));
 		$totalBatches = ceil ($comment -> totalCom / bw :: $conf['comPerLoad']);
-		$view -> setPassData (array ('totalbatches' => $totalBatches, 'currentbatch' => $canonical -> currentPage));
+		$view -> setPassData (array ('totalbatches' => $totalBatches, 'currentbatch' => $canonical -> currentPage, 'tmpUserName' => isset ($_COOKIE['tmpUserName']) ? $_COOKIE['tmpUserName'] : '',  'tmpUserURL' => isset ($_COOKIE['tmpUserURL']) ? $_COOKIE['tmpUserURL'] : ''));
 		$view -> setWorkFlow (array ('ajaxcommentgroup', 'commentarea', 'article', 'page'));
-		*/
+
 	} elseif ($conf['commentOpt'] == 3) {
-		if ($conf['duoshuoID']) {
-			$view -> setWorkFlow (array ('duoshuoarea', 'article', 'page'));
-		}
-		elseif ($conf['disqusID']) {
+		if ($conf['disqusID']) {
 			$view -> setWorkFlow (array ('disqusarea', 'article', 'page'));
 		} else {
 			$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));
 		}
-	} 
+	}
 }  else {
 	$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));
 }

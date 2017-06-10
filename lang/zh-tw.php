@@ -31,7 +31,7 @@ $conf['l'] = array(
 	'page:BlockIP' => '遮罩此IP',
 	'page:AddComment' => '發表評論',
 	'page:NickName' => '名字',
-	'page:URL' => '網站（可選）',
+	'page:URL' => '網站或Email（可選）',
 	'page:CommentContent' => '評論內容',
 	'page:SendComment' => '送出',
 	'page:ClearComment' => '清空',
@@ -62,6 +62,8 @@ $conf['l'] = array(
 	'page:NoArticleAtAll' => '暫未發佈任何文章',
 	'page:SinglePage' => '單頁',
 	'page:Search' => '檢索',
+	'page:pageSelector' => '所有分頁',
+	'page:EnterToSearch' => '按下Enter檢索',
 
 	'js:RememberFail' => '驗證不成功。可能手機流覽器工作在私密流覽模式下或者未被關聯。',
 	'js:RememberSuccess' => '驗證成功，可關閉本頁',
@@ -149,6 +151,7 @@ $conf['l'] = array(
 	'admin:item:APIOpen' => '允許API',
 	'admin:item:AutoSave' => '每分鐘自動保存草稿',
 	'admin:item:LessSQLOps' => '減少資料庫操作',
+	'admin:item:EmbededSearch' => '站内搜索使用搜索引擎',
 
 	'admin:opt:SimplifiedChinese' => '簡體中文',
 	'admin:opt:TraditionalChinese' => '繁體中文',
@@ -167,6 +170,10 @@ $conf['l'] = array(
 	'admin:opt:ThirdPartyComment' => '由協力廠商服務接管評論功能',
 	'admin:opt:NoCustomTheme' => '不單獨設置主題',
 	'admin:opt:CustomTheme' => '主題設置為：',
+	'admin:opt:Baidu' => '百度',
+	'admin:opt:Google' => 'Google',
+	'admin:opt:Bing' => 'Bing',
+	'admin:opt:Sogou' => '搜狗',
 
 	'admin:msg:SiteURL' => '例如：http://name.com/path。除非你知道在修改什麼，請勿改動。',
 	'admin:msg:BlankPsw' => '不填即不修改',
@@ -242,6 +249,7 @@ $conf['l'] = array(
 	'admin:msg:Aliyun' => '【阿里雲OSS】是一項由 <a href="https://www.aliyun.com/solution/storage" target="_blank">aliyun.com</a> 提供的雲存儲服務。',
 	'admin:msg:AliyunRegion' => '請參考 <a href="https://help.aliyun.com/document_detail/31837.html" target="_blank">此頁面</a> 設置Region英文名。',
 	'admin:msg:LessSQL' => '通過關閉流覽及文章閱讀數統計，降低資料庫寫入次數。適合訪問量較大的情況。',
+	'admin:msg:EmbededSearch' => '建議在建站一段時間後再開啓，幷選擇一個收錄本站內容較多的搜索引擎。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',
@@ -273,7 +281,8 @@ $conf['l'] = array(
 	'admin:btn:SortWidget' => '保存排序',
 	'admin:btn:AddKey' => '添加一個API Key',
 	'admin:btn:APIAddr' => 'API接口地址',
-	
+	'admin:btn:DownloadManual' => '下載以手動更新',
+
 	'admin:msg:NeedLogin' => '請先登錄。',
 	'admin:msg:ChangeSaved' => '保存成功。',
 	'admin:msg:ChangeNotSaved' => '保存失敗。請檢查<strong>/conf/</strong>下所有檔的寫入許可權。',

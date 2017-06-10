@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -13,7 +13,7 @@ if (!defined ('P')) {
 
 <div class="adminArea">
 <form id="smtForm" action="post">
-<h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a> <a href='##' onclick="shBatch();"><span class="icon-wrench"></span> [[=admin:btn:Batch]]</a> <a href='##' onclick="shSearch();"><span class="icon-help"></span> [[=page:Search]]</a></span></h2> 
+<h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a> <a href='##' onclick="shBatch();"><span class="icon-wrench"></span> [[=admin:btn:Batch]]</a> <a href='##' onclick="shSearch();"><span class="icon-help"></span> [[=page:Search]]</a> <!-- <a href='[[::siteURL]]/[[::linkPrefixAdmin]]/comments/comments/[[::linkConj]]CSRFCode=[[::navCSRFCode]]'><span class="icon-comment"></span> [[=admin:item:CommentOpt]]</a> --></span></h2>
 <div id="adminSAB"><a href='##' onclick="shSelAll();">[[=admin:btn:SelectAll]]</a> &nbsp; <a href='##' onclick="shDeSelAll();">[[=admin:btn:DeSelectAll]]</a> &nbsp; <a href='##' onclick="shDel();">[[=admin:btn:Delete]]</a> &nbsp; <a href='##' onclick="shDraft();">[[=admin:btn:MoveDraft]]</a></div>
 <div id="adminSAS"><input type="text" id='eTags' class="inputLine inputMiddle" value="[[::aTags]]" /><div id="taghint"></div></div>
 <p>
@@ -31,7 +31,7 @@ if (!defined ('P')) {
 <p><ul class="adminCateList" id="adminCateList">
 [[::loop, admincatelist]]
 <li class="adminSingleArticle adminSCL" data-cid="[[::aCateURLName]]" id="adminSCL-[[::aCateURLName]]">
-<a href="##" onclick='$("#adminSCL-[[::aCateURLName]]").remove();'><span class="icon-cross3"></span></a> <a href="##" title="[[=admin:msg:Up]]" class="adminSCLUp" data-cid="[[::aCateURLName]]"><span class="icon-arrow-up3"></span></a> <a href="##" title="[[=admin:msg:Down]]" class="adminSCLDown" data-cid="[[::aCateURLName]]"><span class="icon-arrow-down4"></span></a> 
+<a href="##" onclick='$("#adminSCL-[[::aCateURLName]]").remove();'><span class="icon-cross3"></span></a> <a href="##" title="[[=admin:msg:Up]]" class="adminSCLUp" data-cid="[[::aCateURLName]]"><span class="icon-arrow-up3"></span></a> <a href="##" title="[[=admin:msg:Down]]" class="adminSCLDown" data-cid="[[::aCateURLName]]"><span class="icon-arrow-down4"></span></a>
 <span id="adminSCLine-[[::aCateURLName]]" class="adminSCLine" data-cid="[[::aCateURLName]]" data-cname="[[::aCateDispName]]" data-ctheme="[[::aCateTheme]]">[[::aCateDispName]]</span>
 </li>
 [[::/loop]]
@@ -53,7 +53,7 @@ if (!defined ('P')) {
 [[::ext_adminArticles]]
 
 <p><br/></p>
-<h2><span class="icon-suitcase"></span> [[=admin:item:TrashBin]]</h2> 
+<h2><span class="icon-suitcase"></span> [[=admin:item:TrashBin]]</h2>
 <p>
 <ul id="draftList">
 [[::loop, admindraftlist]]<li class="adminSingleArticle adminSAL" data-aid="[[::aID]]"><a href="#"><span class="icon-popup"></span></a> <span class="adminSAT" data-aid="[[::aID]]" title="[[=admin:msg:Modify]]">[[::aTitle]]</span> <span class="adminSADate">[[::aTime]]</span> </li>
@@ -62,7 +62,7 @@ if (!defined ('P')) {
 </p>
 
 <p><br/></p>
-<h2><span class="icon-newspaper2"></span> [[=admin:sect:Pages]]<span class="adminSANew"><a href='[[::siteURL]]/[[::linkPrefixAdmin]]/articles/newpage/[[::linkConj]]CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewPage]]</a></span></h2> 
+<h2><span class="icon-newspaper2"></span> [[=admin:sect:Pages]]<span class="adminSANew"><a href='[[::siteURL]]/[[::linkPrefixAdmin]]/articles/newpage/[[::linkConj]]CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewPage]]</a></span></h2>
 <p>
 <ul id="spList">
 [[::loop, adminsinglepagelist]]<li class="adminSingleArticle adminSAL" data-aid="[[::aID]]"><a href="[[::siteURL]]/[[::linkPrefixPage]]/[[::aID]]/" title="[[=admin:msg:Open]]"><span class="icon-export"></span></a> <span class="adminSAT" data-aid="[[::aID]]" title="[[=admin:msg:Modify]]">[[::aTitle]]</span> <span class="adminSADate">[[::aTime]]</span> </li>
@@ -190,7 +190,7 @@ function addCategory(smtURL) {
 
 	var newList=$("#adminSCInputNewItemID").val()+'='+$("#adminSCInputNewItemName").val()+'='+$("#adminSCInputNewItemTheme").val();
 	var nList=newList.split('=');
-	var smtURL=smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::cateCSRFCode]]";	
+	var smtURL=smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::cateCSRFCode]]";
 	var sVal=encodeURI("smt[aCateURLName]="+nList[0]+"&smt[aCateDispName]="+nList[1]+"&smt[aCateTheme]="+nList[2]);
 	$.post(smtURL, sVal, function(data) {
 		if (data.error==1) {
@@ -217,7 +217,7 @@ function saveCategoryChanges(smtURL) {
 		finalList+=encodeURI("smt["+cID+"]="+$("#adminSCLine-"+cID).data("cname")+"&smt2["+cID+"]="+$("#adminSCLine-"+cID).data("ctheme"))+"&";
 	});
 
-	var smtURL=smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::cateCSRFCode]]";	
+	var smtURL=smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::cateCSRFCode]]";
 
 	$.post(smtURL, finalList, function(data) {
 		$("#UI-loading").fadeOut(200);
@@ -260,6 +260,9 @@ $('#eTags').AutoComplete({
 }
 });
 
+$('#openPageSelector').click (function () {
+	$('#pageSelector').fadeToggle();
+});
 </script>
 </form>
 

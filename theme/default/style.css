@@ -87,7 +87,7 @@ height: 30px;
 background: #A8FF51;
 position: absolute;
 margin-top: -50px;
-} 
+}
 article h2, article h2 a {
 background: none;
 color: #000;
@@ -202,6 +202,7 @@ font-size: 14px;
 color: #356A00;
 }
 .comName h5 {
+font-size: 10px;
 color: #AAA;
 }
 .comSrc {
@@ -219,13 +220,9 @@ margin-left: 12px;
 cursor: pointer;
 }
 .comContent {
-clear: both;
 color: #464646;
-margin-bottom: 18px;
-}
-.comContent pre {
 font-size: 13px;
-margin-left: 70px;
+margin: auto auto 28px 70px;
 white-space: pre-wrap;
 word-wrap: break-word;
 }
@@ -282,13 +279,19 @@ color: red;
 color: #356A00;
 }
 .comBlockBar {
-margin-top: 3px;
+display: inline;
+font-size: 16px;
+margin: 3px auto auto 6px;
 }
-.comBlockBar, .comBlockBar a {
+h6 .comBlockBar a {
 color: #fff;
+margin-left: 8px;
 }
-.comBlockBar:hover,  .comBlockBar:hover a {
+.comWrap:hover h6 .comBlockBar a {
 color: #999;
+}
+.comBlockBar a:hover {
+color: #000;
 }
 #comUseWeibo {
 font-size: 20px;
@@ -321,7 +324,6 @@ color: #356A00;
 #comLoadMore a:hover {
 color: #000;
 }
-
 
 footer {
 clear: both;
@@ -370,7 +372,7 @@ font-size: 16px;
 height: 50px;
 margin: -30px auto 10px auto;
 }
-#goNextPage a,  #goPrevPage a {
+#goNextPage a,  #goPrevPage a, .gotoPage a {
 display: block;
 float: left;
 margin-right: 12px;
@@ -382,8 +384,11 @@ color: #FFF;
 border-radius: 50%;
 text-align: center;
 }
-#goNextPage a:hover, #goPrevPage a:hover {
+#goNextPage a:hover, #goPrevPage a:hover, .gotoPage a:hover, .currentPage1 a {
 background: #2A2A2A;
+}
+#pageSelector {
+display: none;
 }
 #errorArea {
 min-height: 200px;
@@ -670,6 +675,29 @@ color: #FF2626;
 text-shadow: 3px 2px 3px #ddd;
 }
 
+#searchIcon {
+float: right;
+font-size: 24px;
+transform: rotate(-45deg);
+margin-left: -10px;
+}
+#searchBar {
+width: 240px;
+position: fixed;
+top: 40px;
+right: -270px;
+transition: right .1s ease-out;
+}
+.searchBarFocus {
+right: 25px!important;
+transition: right .1s ease-out;
+}
+#searchVal {
+width: 200px;
+margin-right: 20px;
+background: #ddd;
+}
+
 /* responsive */
 #menuDown {
 display: none;
@@ -776,5 +804,20 @@ box-shadow: none;
 float: none;
 display: block;
 max-width: 90%!important;
+}
+
+#searchIcon {
+margin-right: 18px;
+margin-top: -6px;
+font-size: 30px;
+}
+#searchBar {
+right: auto;
+left: -270px;
+transition: left .1s ease-out;
+}
+.searchBarFocus {
+left: 70px!important;
+transition: left .1s ease-out;
 }
 }

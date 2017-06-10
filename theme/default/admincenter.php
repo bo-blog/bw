@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -30,17 +30,17 @@ if (!defined ('P')) {
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentOpt]]<br class="smallBr"/>
 <select name="smt[commentOpt]" id="commentOpt" class="selectLine">
 <option value="0">[[=admin:opt:NoComment]]</option>
-<!--<option value="1">[[=admin:opt:AllowComment]]</option>
-<option value="2">[[=admin:opt:OnlyLoginComment]]</option>-->
+<option value="1">[[=admin:opt:AllowComment]]</option>
+<!-- <option value="2">[[=admin:opt:OnlyLoginComment]]</option> -->
 <option value="3">[[=admin:opt:ThirdPartyComment]]</option>
 </select>
 <br/><span class="adminExplain">[[=admin:msg:CommentOpt]]</span></p>
-<!-- <p>
+<p>
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentFrequency]]<br/><input type="text" class="inputLine inputLarge" name="smt[comFrequency]" value="[[::comFrequency]]" /><br/><span class="adminExplain">[[=admin:msg:CommentFrequency]]</span>
 </p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentBreak]]<br/><input type="text" class="inputLine inputLarge" name="smt[comPerLoad]" value="[[::comPerLoad]]" />
-</p> -->
+</p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:AutoSave]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst autoSave" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast autoSave" data-reflect="1"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::autoSave]]" name="smt[autoSave]" id="autoSave"/><br/><span class="adminExplain">[[=admin:msg:AutoSaveNotice]]</span>
 </p>
@@ -59,10 +59,10 @@ if (!defined ('P')) {
 </p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:AuthorSocial]]<br/>
-<span class="icon-sina-weibo"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-sina-weibo]" value="[[::social-sina-weibo]]" placeholder="[[=page:social:Weibo]]" /><br/> 
-<span class="icon-twitter"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-twitter]" value="[[::social-twitter]]" placeholder="[[=page:social:Twitter]]" /><br/> 
-<span class="icon-weixin"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-weixin]" value="[[::social-weixin]]" placeholder="[[=page:social:WeChat]]" /><br/> 
-<span class="icon-facebook"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-facebook]" value="[[::social-facebook]]" placeholder="[[=page:social:Facebook]]" /><br/> 
+<span class="icon-sina-weibo"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-sina-weibo]" value="[[::social-sina-weibo]]" placeholder="[[=page:social:Weibo]]" /><br/>
+<span class="icon-twitter"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-twitter]" value="[[::social-twitter]]" placeholder="[[=page:social:Twitter]]" /><br/>
+<span class="icon-weixin"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-weixin]" value="[[::social-weixin]]" placeholder="[[=page:social:WeChat]]" /><br/>
+<span class="icon-facebook"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-facebook]" value="[[::social-facebook]]" placeholder="[[=page:social:Facebook]]" /><br/>
 <span class="icon-douban"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-douban]" value="[[::social-douban]]" placeholder="[[=page:social:Douban]]" /><br/>
 <span class="icon-instagram"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-instagram]" value="[[::social-instagram]]" placeholder="[[=page:social:Instagram]]" /><br/>
 <span class="icon-renren"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-renren]" value="[[::social-renren]]" placeholder="[[=page:social:Renren]]" /><br/>
@@ -119,6 +119,17 @@ if (!defined ('P')) {
 <span class="icon-arrow-right5"></span> [[=admin:item:URLRewrite]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst linkPrefixIndex" data-reflect="index.php"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast linkPrefixIndex" data-reflect="index"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::linkPrefixIndex]]" name="smt[linkPrefixIndex]" id="linkPrefixIndex"/><input type="hidden" value="[[::linkPrefixCategory]]" name="smt[linkPrefixCategory]" id="linkPrefixCategory"/><input type="hidden" value="[[::linkPrefixArticle]]" name="smt[linkPrefixArticle]" id="linkPrefixArticle"/><input type="hidden" value="[[::linkPrefixTag]]" name="smt[linkPrefixTag]" id="linkPrefixTag"/>
 <br/><span class="adminExplain">[[=admin:msg:URLRewrite]]</span>
 </p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:EmbededSearch]]<br/>
+<select name="smt[searchEngine]" id="searchEngine" class="selectLine">
+<option value="https://www.google.com/search?q=">[[=admin:opt:Google]]</option>
+<option value="https://www.bing.com/search?q=">[[=admin:opt:Bing]]</option>
+<option value="https://www.baidu.com/s?wd=">[[=admin:opt:Baidu]]</option>
+<option value="https://www.sogou.com/web?query=">[[=admin:opt:Sogou]]</option>
+<option value="">[[=admin:opt:Off]]</option>
+</select>
+<br/><span class="adminExplain">[[=admin:msg:EmbededSearch]]</span>
+</p>
 
 <p class="adminCommand"><br/>
 <button type="button" class="buttonLine" id="btnSubmit" onclick="saveConf('smtForm', '[[::siteURL]]/[[::linkPrefixAdmin]]/center/store/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
@@ -139,6 +150,7 @@ if (!defined ('P')) {
 $("#siteTheme").val("[[::siteTheme]]");
 $("#siteLang").val("[[::siteLang]]");
 $("#commentOpt").val("[[::commentOpt]]");
+$("#searchEngine").val("[[::searchEngine]]");
 
 function errorPrompter (inputId)
 {
@@ -158,7 +170,7 @@ $("#siteKey").blur(function() {
 	if ($("#siteKey").val()!='')	{
 		if (!checkPassword($("#siteKey").val())){
 			errorPrompter('siteKey');
-		}		
+		}
 	}
 });
 
@@ -170,7 +182,7 @@ function checkPassword (str){
 	var specialCharacters = "~!@#$%^&*()_+-=[]{}\\|;:'\",.<>/? ";
 	for (var i=0; i<specialCharacters.length-1; i=i+1)
 	{
-	
+
 		if (str.indexOf(specialCharacters.charAt(i)) != -1)
 		{
 			return true;

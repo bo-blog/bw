@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -13,15 +13,12 @@ if (!defined ('P')) {
 
 <div class="adminArea">
 <form id="smtForm" action="post">
-<h2><span class="icon-chat"></span> [[=admin:sect:CommentServices]]</h2> 
-<p>
-<span class="icon-arrow-right5"></span> [[=admin:item:DuoshuoID]]<br/><input type="text" class="inputLine inputSmall" name="smt[duoshuoID]" value="[[::duoshuoID]]" id="duoshuoID" />.duoshuo.com<br/><span class="adminExplain">[[=admin:msg:Duoshuo]]</span>
-</p>
+<h2><span class="icon-chat"></span> [[=admin:sect:CommentServices]]</h2>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:DisqusID]]<br/><input type="text" class="inputLine inputSmall" name="smt[disqusID]" value="[[::disqusID]]" id="disqusID" />.disqus.com<br/><span class="adminExplain">[[=admin:msg:Disqus]]</span>
 </p>
 <p><br/><br/></p>
-<h2><span class="icon-upload2"></span> [[=admin:sect:CloudDrive]]</h2> 
+<h2><span class="icon-upload2"></span> [[=admin:sect:CloudDrive]]</h2>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:CloudUpload]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst qiniuUpload" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup qiniuUpload" data-reflect="1"><span class="icon-cloud2"></span> [[=admin:sect:Qiniu]]</span>  <span class="buttonLine buttonGroup buttonGroupLast qiniuUpload" data-reflect="2"><span class="icon-cloud2"></span> [[=admin:sect:Aliyun]]</span> <input type="hidden" value="[[::qiniuUpload]]" name="smt[qiniuUpload]" id="qiniuUpload"/><br/><span class="adminExplain">[[=admin:msg:CloudUpload]]</span>
 </p>

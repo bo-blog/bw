@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -67,7 +67,7 @@ function checkUpdates () {
 }
 
 function addUpdateBtn (URL, md5) {
-	$("#ins").append("<div><span class='adminGoSync'><a id='dlURL' href='##' onclick=\"gotoUpdate('[[::siteURL]]/[[::linkPrefixAdmin]]/dashboard/update/[[::linkConj]]CSRFCode=[[::updateCSRFCode]]&dlURL=', '"+URL+"', '"+md5+"');\"><span class=\"icon-arrow-right5\"></span> [[=admin:btn:DoUpdate]] </a></span><br/></div>");
+	$("#ins").append("<div><span class='adminGoSync'><a id='dlURL' href='##' onclick=\"gotoUpdate('[[::siteURL]]/[[::linkPrefixAdmin]]/dashboard/update/[[::linkConj]]CSRFCode=[[::updateCSRFCode]]&dlURL=', '"+URL+"', '"+md5+"');\"><span class=\"icon-arrow-right5\"></span> [[=admin:btn:DoUpdate]] </a><br/><a href='"+URL+"'><span class=\"icon-arrow-right5\"></span> [[=admin:btn:DownloadManual]] </a></span></div>");
 }
 
 function gotoUpdate (desAddr, dlURL, md5) {
@@ -93,4 +93,3 @@ if ("[[::lessSQL]]" == "1")
 }
 </script>
 [[::ext_adminDashboardEnding]]
-
