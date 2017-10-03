@@ -36,7 +36,7 @@ class bwComment {
 
 	public function alterPerPage ($num)
 	{
-		bw :: $conf['perPage'] = floor ($num);
+		bw :: $conf['comPerLoad'] = floor ($num);
 	}
 
 	public function showBlocked ($status = false)
@@ -58,7 +58,7 @@ class bwComment {
 			$blockedStr = 'comBlock=0';
 		}
 
-		$qStr = $this -> aID === false ? "SELECT * FROM comments WHERE {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?" : "SELECT * FROM comments WHERE comArtID=? AND {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?";
+		$qStr = $this -> aID === false ? "SELECT articles.aTitle,comments.* FROM comments INNER JOIN articles ON comments.comArtID = articles.aID WHERE {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?" : "SELECT * FROM comments WHERE comArtID=? AND {$blockedStr} ORDER BY comTime DESC LIMIT ?, ?";
 
 		if ($this -> aID === false) {
 			$qBind = array ($currentTitleStart, bw :: $conf['comPerLoad']);
@@ -66,12 +66,13 @@ class bwComment {
 			$qBind = array ($this -> aID, $currentTitleStart, bw :: $conf['comPerLoad']);
 		}
 		$allComs = bw :: $db -> getRows ($qStr, $qBind);
-
 		foreach ($allComs as $comID => $row) {
 			$row['comAvatarAvailable'] = $row['comAvatar'] ? 1 : 0;
 			$row['comAvatar'] = $row['comAvatar'] ? $row['comAvatar'] : bw :: $conf['siteURL'] . '/conf/default.png';
 			$this -> comList[$comID] = $row;
 		}
+
+
 		hook ('getComList', 'Execute', $this);
 		$this -> getTotalComs ();
 	}
@@ -79,15 +80,16 @@ class bwComment {
 	private function getTotalComs ()
 	{
 		if ($this -> listBlocked) {
-			$blockedStr = $this -> listBlocked == 'only' ? 'comBlock=1' : '1=1';
+			$blockedStr = (string) $this -> listBlocked == 'only' ? 'comBlock=1' : '1=1';
 		} else {
 			$blockedStr = 'comBlock=0';
 		}
 		if ($this -> aID === false) {
-			$this -> totalCom = bw :: $db -> countRows ("SELECT comID FROM comments WHERE {$blockedStr}");
+			$this -> totalCom = bw :: $db -> countRows ("SELECT articles.aTitle,comments.comID FROM comments INNER JOIN articles ON comments.comArtID = articles.aID WHERE {$blockedStr}");
 		} else {
-			$this -> totalCom = bw :: $db -> countRows ("SELECT comID FROM comments WHERE comArtID=? AND {$blockedStr}", array ($this -> aID));
+			$this -> totalCom = bw :: $db -> countRows ("SELECT articles.aTitle,comments.comID FROM comments INNER JOIN articles ON comments.comArtID = articles.aID WHERE comArtID=? AND {$blockedStr}", array ($this -> aID));
 		}
+
 		hook ('getTotalComs', 'Execute', $this);
 	}
 
@@ -188,6 +190,23 @@ class bwComment {
 		hook ('blockItem', 'Execute', $comID, $aID);
 	}
 
+	public function blockItemBatch ($comIDList, $comArtIDList = false)
+	{
+		if (is_array ($comIDList)) {
+			$whereIn = str_repeat ("?,", count ($comIDList) -1) . "?";
+			bw :: $db -> dbExec ("UPDATE comments SET comBlock=1 WHERE comID IN ($whereIn)", $comIDList);
+		}
+		if (is_array ($comArtIDList)) {
+			$aIDList = array_count_values ($comArtIDList);
+			foreach ($aIDList as $aID => $num) {
+				bw :: $db -> dbExec ("UPDATE articles SET aComments=aComments-{$num} WHERE aID=?", array ($aID));
+			}
+		}
+		clearCache (); //Clear all cache
+		hook ('blockItemBatch', 'Execute', $comIDList, $comArtIDList);
+		return true;
+	}
+
 	public function blockIP ($comID)
 	{
 		$taID = bw :: $db -> getSingleRow ('SELECT * FROM comments WHERE comID=?', array ($comID));
@@ -206,8 +225,33 @@ class bwComment {
 			foreach ($allAffectedArticles as $affAID => $affCount) {
 				bw :: $db -> dbExec ('UPDATE articles SET aComments=aComments-? WHERE aID=?', array ($affCount, $affAID));
 			}
+			bw :: $db -> dbExec ('UPDATE articles SET aComments=0 WHERE aComments<0'); //Fix a bug causing comments less than zero
 			clearCache (); //Clear all cache
 		}
 		hook ('blockIP', 'Execute', $comID);
+	}
+
+	public function delBlockedBatch ($comIDList)
+	{
+		$allAffectedComments = '(' . implode (',', array_unique ($comIDList)) . ')';
+		bw :: $db -> dbExec ('DELETE FROM comments WHERE comID IN ' . $allAffectedComments .' AND comBlock=1');
+		hook ('delBlockedBatch', 'Execute', $comIDList);
+	}
+
+	public function restoreItemBatch ($comIDList, $comArtIDList = false)
+	{
+		if (is_array ($comIDList)) {
+			$whereIn = str_repeat ("?,", count ($comIDList) -1) . "?";
+			bw :: $db -> dbExec ("UPDATE comments SET comBlock=0 WHERE comID IN ($whereIn)", $comIDList);
+		}
+		if (is_array ($comArtIDList)) {
+			$aIDList = array_count_values ($comArtIDList);
+			foreach ($aIDList as $aID => $num) {
+				bw :: $db -> dbExec ("UPDATE articles SET aComments=aComments+{$num} WHERE aID=?", array ($aID));
+			}
+		}
+		clearCache (); //Clear all cache
+		hook ('resoreItemBatch', 'Execute', $comIDList, $comArtIDList);
+		return true;
 	}
 }

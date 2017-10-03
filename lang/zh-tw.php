@@ -101,6 +101,7 @@ $conf['l'] = array(
 	'admin:sect:Pages' => '管理單頁',
 	'admin:sect:API' => '管理API',
 	'admin:sect:Aliyun' => '阿里雲',
+	'admin:sect:Comments' => '管理評論',
 
 	'admin:item:SiteName' => '網站名',
 	'admin:item:SiteURL' => '根網址',
@@ -174,6 +175,8 @@ $conf['l'] = array(
 	'admin:opt:Google' => 'Google',
 	'admin:opt:Bing' => 'Bing',
 	'admin:opt:Sogou' => '搜狗',
+	'admin:opt:Blocked' => '已屏蔽的',
+	'admin:opt:NonBlocked' => '未屏蔽的',
 
 	'admin:msg:SiteURL' => '例如：http://name.com/path。除非你知道在修改什麼，請勿改動。',
 	'admin:msg:BlankPsw' => '不填即不修改',
@@ -250,6 +253,11 @@ $conf['l'] = array(
 	'admin:msg:AliyunRegion' => '請參考 <a href="https://help.aliyun.com/document_detail/31837.html" target="_blank">此頁面</a> 設置Region英文名。',
 	'admin:msg:LessSQL' => '通過關閉流覽及文章閱讀數統計，降低資料庫寫入次數。適合訪問量較大的情況。',
 	'admin:msg:EmbededSearch' => '建議在建站一段時間後再開啓，幷選擇一個收錄本站內容較多的搜索引擎。',
+	'admin:msg:Regarding' => '響應了',
+	'admin:msg:ConfirmBlock' => '是否要屏蔽所選的評論？',
+	'admin:msg:ConfirmUnBlock' => '是否要恢復所選的評論？',
+	'admin:msg:ConfirmDeleteComments' => '是否要徹底清除所選的評論？刪除后將不可恢復！',
+	'admin:msg:EndDropToUpload' => '釋放滑鼠后開始上載',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',
@@ -282,6 +290,7 @@ $conf['l'] = array(
 	'admin:btn:AddKey' => '添加一個API Key',
 	'admin:btn:APIAddr' => 'API接口地址',
 	'admin:btn:DownloadManual' => '下載以手動更新',
+	'admin:btn:Restore' => '恢復',
 
 	'admin:msg:NeedLogin' => '請先登錄。',
 	'admin:msg:ChangeSaved' => '保存成功。',

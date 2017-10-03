@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -185,7 +185,7 @@ $("#aTitle").blur(function() {
 	if ($("#aTitle").val()=='')
 	{
 		$("#aTitle").addClass("inputLineWarn");
-	} 
+	}
 	else {
 		if ("[[::aID]]" == '') {
 			$.post ("[[::siteURL]]/admin.php/articles/getpinyin/[[::linkConj]]ajax=1", {str: $("#aTitle").val()}, function(data){
@@ -316,7 +316,7 @@ function doPicUp2() {
 
 function doPicUp3() {
 	if($("#uploadPicFile").val() != '') {
-		var f = document.getElementById("uploadPicFile").files;  
+		var f = document.getElementById("uploadPicFile").files;
 		var fn = f[0].name;
 		$('#success_action_redirect').val("[[::siteURL]]/[[::linkPrefixAdmin]]/articles/aliyunuploader/[[::linkConj]]CSRFCode=[[::upCSRFCode]]&filename="+encodeURIComponent(fn));
 		$("#UI-loading").fadeIn(500);
@@ -525,7 +525,7 @@ function addCategory(smtURL) {
 
 	var newList=$("#adminSCInputNewItemID").val()+'='+$("#adminSCInputNewItemName").val();
 	var nList=newList.split('=');
-	var smtURL=smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::cateCSRFCode]]";	
+	var smtURL=smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::cateCSRFCode]]";
 	var sVal=encodeURI("smt[aCateURLName]="+nList[0]+"&smt[aCateDispName]="+nList[1]);
 	$.post(smtURL, sVal, function(data) {
 		if (data.error==1) {
@@ -568,6 +568,37 @@ if ("[[::autoSave]]" == '1') {
 	$('body').everyTime('60s', autosave);
 }
 
+//Drag files
+$(document).on({
+	dragleave:function(e){e.preventDefault();},
+	drop:function(e){e.preventDefault();},
+	dragenter:function(e){e.preventDefault();},
+	dragover:function(e){e.preventDefault();}
+});
+
+var box = document.getElementById('editorBody');
+box.addEventListener("drop", function(e) {
+	e.preventDefault();
+  var fileList = e.dataTransfer.files;
+  if (fileList.length == 0) {
+    return false;
+  }
+
+	else {
+		$("#editorBody").css ('background', 'none');
+		$("#uploadPicFile").prop ("files", fileList);
+	}
+}, false);
+box.addEventListener("dragenter", function(e) {
+	e.preventDefault();
+	$("#editorBody").css ('background', '#eee');
+	$("#adminUpAdd").html ("[[=admin:msg:EndDropToUpload]]");
+}, false);
+box.addEventListener("dragleave", function(e) {
+	e.preventDefault();
+	$("#editorBody").css ('background', 'none');
+	$("#adminUpAdd").html ("[[=admin:btn:AddPic]]");
+}, false);
 </script>
 
 </div>

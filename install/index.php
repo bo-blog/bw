@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -10,7 +10,7 @@ if (file_exists ('../conf/info.php')) {
 	die ('Already installed.');
 }
 
-if (!isset ($_COOKIE['bwInstallLang'])) {
+if (!isset ($_REQUEST['bwInstallLang'])) {
 	initiate ();
 } else {
 	output ();
@@ -21,8 +21,9 @@ function output ()
 {
 	$PHPver=PHP_VERSION >= '5.3.0' ? 1 : 0;
 	$debug=isset ($_REQUEST['debug']) ? 1 : 0;
-	$ln='./' . basename ($_COOKIE['bwInstallLang']) . '.lang.php';
+	$ln='./' . basename ($_REQUEST['bwInstallLang']) . '.lang.php';
 	file_exists ($ln) ? include_once ($ln) : include_once ('./en.lang.php');
+	setcookie ('bwInstallLang', $_REQUEST['bwInstallLang']);
 
 	print<<<eot
 <!DOCTYPE html>
@@ -30,7 +31,7 @@ function output ()
 <head>
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="robots" content="none" />
 <title>Welcome to bW</title>
 <script src="../inc/script/jquery.min.js"></script>
@@ -224,7 +225,7 @@ function doSetup ()
 </body>
 </html>
 eot;
-} 
+}
 
 function initiate ()
 {
@@ -235,7 +236,7 @@ function initiate ()
 <head>
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="robots" content="none" />
 <title>Welcome to bW</title>
 <script src="../inc/script/jquery.min.js"></script>
@@ -246,21 +247,17 @@ function initiate ()
 <div id="layer2" class="layer">
 <p class="wL"><span class="icon-newicon"></span></p>
 <p class="wS">
-<br/><br/><span class="wM wBox btn1" data-lang="en">English</span>&nbsp;&nbsp; 
-<span class="wM wBox btn1" data-lang="zh-cn">中文（简体）</span>&nbsp;&nbsp; 
-<span class="wM wBox btn1" data-lang="zh-tw">中文（繁體）</span>&nbsp;&nbsp; 
+<br/><br/><span class="wM wBox btn1" data-lang="en">English</span>&nbsp;&nbsp;
+<span class="wM wBox btn1" data-lang="zh-cn">中文（简体）</span>&nbsp;&nbsp;
+<span class="wM wBox btn1" data-lang="zh-tw">中文（繁體）</span>&nbsp;&nbsp;
 </p>
 </div>
 <script>
 $('.btn1').click (function(){
-	setCookie ('bwInstallLang', $(this).data('lang'));
-	window.location='index.php';
+	window.location='index.php?bwInstallLang=' + $(this).data('lang');
 });
-function setCookie (c_name, value) {
-	document.cookie=c_name+ "=" +escape(value);
-}
 </script>
 </body>
 </html>
 eot;
-} 
+}

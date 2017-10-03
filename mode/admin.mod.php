@@ -886,17 +886,60 @@ if ($canonical -> currentArgs['mainAction'] == 'comments') {
 		ajaxSuccess($conf['l']['admin:msg:ChangeSaved']);
 	}
 	elseif ($canonical -> currentArgs['subAction'] == 'comments') {
+		if (isset ($_REQUEST['blocked'])) {
+			$filtered = $_REQUEST['blocked'] == 'yes' ? 'yes' : 'no';
+		} else {
+			$filtered = 'no';
+		}
 		$admin -> checkCSRFCode ('navibar');
 		$comment -> alterPerPage (30);
-		$comment -> showBlocked (true);
+		$filtered == 'yes' ? $comment -> showBlockedOnly (true) : $comment -> showBlocked (false);
 		$comment -> getComList ();
+
+
+		// Pagination
+		$canonical -> setPerPage (30);
+		$canonical -> calTotalPages ($comment -> totalCom);
+
+		$canonical -> paginableURL = bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixAdmin'] . '/comments/comments/%d' . bw :: $conf['linkConj'] . 'blocked=' . $filtered . '&CSRFCode=' . $admin -> getCSRFCode ('navibar');
+		$view -> doPagination ();
+
+
 		$view -> setMaster ('admin');
-		$view -> setPassData (array ('newCSRFCode' => $admin -> getCSRFCode ('newext'), 'extCSRFCode' => $admin -> getCSRFCode ('extensions')));
+		$view -> setPassData (array ('filtered' => $filtered, 'newCSRFCode' => $admin -> getCSRFCode ('newext'), 'extCSRFCode' => $admin -> getCSRFCode ('extensions'), 'navCSRFCode' => $admin -> getCSRFCode ('navibar')));
 		$view -> setPassData (array ('comments' => $comment -> comList));
 
 		$view -> setWorkFlow (array ('admincomments', 'admin'));
 		$view -> finalize ();
 
+	}
+	elseif ($canonical -> currentArgs['subAction'] == 'batchblockitem') {
+		$admin -> checkCSRFCode ('navibar');
+		$comIDList = @explode ('<', $_REQUEST['comID']);
+		$comArtIDList = @explode ('<', $_REQUEST['comArtID']);
+		$comment -> blockItemBatch ($comIDList, $comArtIDList);
+		ajaxSuccess ('');
+	}
+	elseif ($canonical -> currentArgs['subAction'] == 'batchblockip') {
+		$admin -> checkCSRFCode ('navibar');
+		$comIDList = @explode ('<', $_REQUEST['comID']);
+		foreach ($comIDList as $comID) {
+			$comment -> blockIP ($comID);
+		}
+		ajaxSuccess ('');
+	}
+	elseif ($canonical -> currentArgs['subAction'] == 'batchdel') {
+		$admin -> checkCSRFCode ('navibar');
+		$comIDList = @explode ('<', $_REQUEST['comID']);
+		$comment -> delBlockedBatch ($comIDList);
+		ajaxSuccess ('');
+	}
+	elseif ($canonical -> currentArgs['subAction'] == 'unblock') {
+		$admin -> checkCSRFCode ('navibar');
+		$comIDList = @explode ('<', $_REQUEST['comID']);
+		$comArtIDList = @explode ('<', $_REQUEST['comArtID']);
+		$comment -> restoreItemBatch ($comIDList, $comArtIDList);
+		ajaxSuccess ('');
 	}
 	else {
 		exit ();

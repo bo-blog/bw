@@ -102,6 +102,7 @@ $conf['l'] = array(
 	'admin:sect:Pages' => 'Manage Custom Pages',
 	'admin:sect:API' => 'Manage API',
 	'admin:sect:Aliyun' => 'Aliyun',
+	'admin:sect:Comments' => 'Manage Comments',
 
 	'admin:item:SiteName' => 'Website Name',
 	'admin:item:SiteURL' => 'Website Root URL',
@@ -175,6 +176,8 @@ $conf['l'] = array(
 	'admin:opt:Google' => 'Google',
 	'admin:opt:Bing' => 'Bing',
 	'admin:opt:Sogou' => 'Sogou',
+	'admin:opt:Blocked' => 'Blocked',
+	'admin:opt:NonBlocked' => 'Viewable',
 
 	'admin:msg:SiteURL' => 'Example: http://name.com/path. Do not change unless you know what you\'re doing.',
 	'admin:msg:BlankPsw' => 'Leave blank to keep the current password',
@@ -251,6 +254,11 @@ $conf['l'] = array(
 	'admin:msg:AliyunRegion' => 'Check <a href="https://help.aliyun.com/document_detail/31837.html" target="_blank">this page </a> for Region name.',
 	'admin:msg:LessSQL' => 'Disable counts on page visits and article reads to reduce DB write operations.',
 	'admin:msg:EmbededSearch' => 'Enable only after search engine indexed your website.',
+	'admin:msg:Regarding' => ' regarding ',
+	'admin:msg:ConfirmBlock' => 'Block selected comments?',
+	'admin:msg:ConfirmUnBlock' => 'Restore selected comments?',
+	'admin:msg:ConfirmDeleteComments' => 'Do you want to clear all selected comments? The action is not recoverable!',
+	'admin:msg:EndDropToUpload' => 'Drop here to upload',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',
@@ -283,6 +291,7 @@ $conf['l'] = array(
 	'admin:btn:AddKey' => 'Add a new API Key',
 	'admin:btn:APIAddr' => 'API URL',
 	'admin:btn:DownloadManual' => 'Download for Manual Update',
+	'admin:btn:Restore' => 'Restore',
 
 	'admin:msg:NeedLogin' => 'You need to login first.',
 	'admin:msg:ChangeSaved' => 'Changes have been saved.',

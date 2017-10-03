@@ -84,6 +84,11 @@ $("#searchVal").keydown (function (event) {
 	if(event.which == 13 && $("#searchVal").val()!='') {
 		 var searchPlus = $("#searchVal").data("searchquery").replace(/http%3A%2F%2F/, '');
 		 searchPlus = searchPlus.replace(/https%3A%2F%2F/, '');
+		 var searchURL = $("#searchVal").data("searchurl");
+		 if (searchURL.indexOf ('baidu') != -1) {
+			 var tmp = searchPlus.split('%2F');
+			 searchPlus = tmp[0];
+		 }
 		 window.location = $("#searchVal").data("searchurl")+encodeURI($("#searchVal").val())+searchPlus;
 	}
 });

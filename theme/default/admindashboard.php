@@ -28,7 +28,7 @@ if (!defined ('P')) {
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/center/[[::linkConj]]CSRFCode=[[::navCSRFCode]]">[[=admin:item:ChangeSetting]] </a><br/>
 <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/[[::linkConj]]CSRFCode=[[::navCSRFCode]]#admBackup">[[=admin:item:BackupData]] </a><br/>
 <!-- <span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/market/[[::linkConj]]CSRFCode=[[::navCSRFCode]]">[[=admin:item:GoMarket]] </a><br/>-->
-<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/">[[=admin:item:BackHome]] </a></span><br/>
+<span class="icon-arrow-right5"></span> <a href="[[::siteURL]]/[[::linkPrefixAdmin]]/comments/comments[[::linkConj]]CSRFCode=[[::navCSRFCode]]">[[=admin:sect:Comments]] </a></span><br/>
 </div>
 <div class="admStatBlock3">
 <h2>[[=admin:item:MostPopular]]</h2>

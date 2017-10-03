@@ -13,7 +13,7 @@ if (!defined ('P')) {
 
 <div class="adminArea">
 <form id="smtForm" action="post">
-<h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a> <a href='##' onclick="shBatch();"><span class="icon-wrench"></span> [[=admin:btn:Batch]]</a> <a href='##' onclick="shSearch();"><span class="icon-help"></span> [[=page:Search]]</a> <!-- <a href='[[::siteURL]]/[[::linkPrefixAdmin]]/comments/comments/[[::linkConj]]CSRFCode=[[::navCSRFCode]]'><span class="icon-comment"></span> [[=admin:item:CommentOpt]]</a> --></span></h2>
+<h2><span class="icon-list"></span> [[=admin:sect:Articles]]<span class="adminSANew"><a href='[[::siteURL]]/[[::linkPrefixAdmin]]/articles/new/[[::linkConj]]CSRFCode=[[::newCSRFCode]]'><span class="icon-plus2"></span> [[=admin:btn:NewArticle]]</a> <a href='##' onclick="shBatch();"><span class="icon-wrench"></span> [[=admin:btn:Batch]]</a> <a href='##' onclick="shSearch();"><span class="icon-help"></span> [[=page:Search]]</a> <a href='[[::siteURL]]/[[::linkPrefixAdmin]]/comments/comments/[[::linkConj]]CSRFCode=[[::navCSRFCode]]'><span class="icon-comment"></span> [[=admin:sect:Comments]]</a></span></h2>
 <div id="adminSAB"><a href='##' onclick="shSelAll();">[[=admin:btn:SelectAll]]</a> &nbsp; <a href='##' onclick="shDeSelAll();">[[=admin:btn:DeSelectAll]]</a> &nbsp; <a href='##' onclick="shDel();">[[=admin:btn:Delete]]</a> &nbsp; <a href='##' onclick="shDraft();">[[=admin:btn:MoveDraft]]</a></div>
 <div id="adminSAS"><input type="text" id='eTags' class="inputLine inputMiddle" value="[[::aTags]]" /><div id="taghint"></div></div>
 <p>

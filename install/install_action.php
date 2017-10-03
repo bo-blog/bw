@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2014 bW Development Team
 * @license MIT
@@ -36,10 +36,10 @@ if ($step == 1) {
 	} else {
 		$PDOSupported = PDO :: getAvailableDrivers ();
 		$rslt5 = (in_array ('sqlite', $PDOSupported) || in_array ('mysql', $PDOSupported)) ? 1 : 0;
-	} 
+	}
 	$rslt6 = $rslt2 * $rslt3 * $rslt4 * $rslt5;
 	die (json_encode (array ('rslt2' => $rslt2, 'rslt3' => $rslt3, 'rslt4' => $rslt4, 'rslt5' => $rslt5, 'rslt6' => $rslt6)));
-} 
+}
 
 if ($step == 2) {
 	if (isset ($_POST['instd'])) {
@@ -95,10 +95,10 @@ if ($step == 2) {
   'qiniuUpload' => '0',
   'qiniuDomain' => '',
   'APIOpen' => '0',
-  'basicAPI' => 
+  'basicAPI' =>
   array (
   ),
-  'advancedAPI' => 
+  'advancedAPI' =>
   array (
   ),
   'aliyunAKey' => '',
@@ -112,7 +112,7 @@ if ($step == 2) {
 			$rslt7 = $rslt8 = $rslt9 = 0;
 			$rslt10 = $l['data.error'];
 		} else {
-			$rslt7 = 1; 
+			$rslt7 = 1;
 			define ('P', './');
 			include (P . 'inc/database.inc.php');
 			$db = new bwDatabase;
@@ -129,15 +129,15 @@ if ($step == 2) {
 		}
 		$errorStatus=$rslt7*$rslt8*$rslt9 ? 0 : 1;
 		die (json_encode (array ('error' => $errorStatus, 'rslt7' => $rslt7, 'rslt8' => $rslt8, 'rslt9' => $rslt9, 'rslt10' => $rslt10)));
-	} 
-} 
+	}
+}
 
 function dataFilter ($reservedKeys, $submitData)
 {
 	$reservedArray = array_fill_keys($reservedKeys, null);
 	$returnArray = array_intersect_key ($submitData, $reservedArray);
 	return array_merge ($reservedArray, $returnArray);
-} 
+}
 
 function dbInit ($dbType)
 {
@@ -160,7 +160,7 @@ function dbInit ($dbType)
 			'CREATE TABLE IF NOT EXISTS extensions (extID VARCHAR (255) PRIMARY KEY  NOT NULL , extDesc TEXT, extHooks TEXT NOT NULL , extActivate TINYINT NOT NULL , extOrder INTEGER UNSIGNED, extStorage TEXT , isWidget TINYINT NOT NULL) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 			'CREATE TABLE IF NOT EXISTS statistics (pageURL VARCHAR(255) PRIMARY KEY  NOT NULL , sNum INTEGER UNSIGNED DEFAULT 0, lastView DATETIME) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 			'CREATE TABLE IF NOT EXISTS tags (tValue VARCHAR (255) PRIMARY KEY  NOT NULL  UNIQUE , tList TEXT, tCount INTEGER UNSIGNED  DEFAULT 0) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
-			'CREATE TABLE IF NOT EXISTS comments (comID INTEGER PRIMARY KEY  NOT NULL , comName VARCHAR (255), comTime DATETIME, comIP1 VARCHAR (255), comIP2 VARCHAR (255), comAvatar VARCHAR (255), comContent TEXT, comArtID VARCHAR (255), comParentID INTEGER, comSource VARCHAR (255), comURL VARCHAR (255), comBlock TINYINT) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+			'CREATE TABLE IF NOT EXISTS comments (comID INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT , comName VARCHAR (255), comTime DATETIME, comIP1 VARCHAR (255), comIP2 VARCHAR (255), comAvatar VARCHAR (255), comContent TEXT, comArtID VARCHAR (255), comParentID INTEGER, comSource VARCHAR (255), comURL VARCHAR (255), comBlock TINYINT) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 	);
 	}
 	if ($dbType=='SQLite' || $dbType=='MySQL') {
@@ -230,6 +230,6 @@ function checkWritable () {
 		} elseif (!is_writable ('./' . $aFolder . '/')) {
 			return false;
 		}
-	} 
+	}
 	return true;
 }

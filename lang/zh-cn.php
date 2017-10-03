@@ -27,8 +27,8 @@ $conf['l'] = array(
 	'page:PrevPage' => '上页',
 	'page:ComError1' => '必填项未填写或不符合要求。',
 	'page:ComSuccess' => '评论发布成功。',
-	'page:BlockItem' => '屏蔽此条',
-	'page:BlockIP' => '屏蔽此IP',
+	'page:BlockItem' => '屏蔽',
+	'page:BlockIP' => '屏蔽同IP',
 	'page:AddComment' => '发表评论',
 	'page:NickName' => '名字',
 	'page:URL' => '网站或Email（可选）',
@@ -101,6 +101,7 @@ $conf['l'] = array(
 	'admin:sect:Pages' => '管理单页',
 	'admin:sect:API' => '管理API',
 	'admin:sect:Aliyun' => '阿里云',
+	'admin:sect:Comments' => '管理评论',
 
 	'admin:item:SiteName' => '网站名',
 	'admin:item:SiteURL' => '根网址',
@@ -174,6 +175,8 @@ $conf['l'] = array(
 	'admin:opt:Google' => 'Google',
 	'admin:opt:Bing' => '必应',
 	'admin:opt:Sogou' => '搜狗',
+	'admin:opt:Blocked' => '已屏蔽项',
+	'admin:opt:NonBlocked' => '未屏蔽项',
 
 	'admin:msg:SiteURL' => '例如：http://name.com/path。除非你知道在修改什么，请勿改动。',
 	'admin:msg:BlankPsw' => '不填即不修改',
@@ -250,6 +253,11 @@ $conf['l'] = array(
 	'admin:msg:AliyunRegion' => '请参考 <a href="https://help.aliyun.com/document_detail/31837.html" target="_blank">此页面</a> 确定Region英文表示。',
 	'admin:msg:LessSQL' => '通过关闭浏览及文章阅读数统计，降低数据库写入次数。适合访问量较大的情况。',
 	'admin:msg:EmbededSearch' => '建议在建站一段时间后再开启，并选择一个收录本站内容较多的搜索引擎。',
+	'admin:msg:Regarding' => '回应了',
+	'admin:msg:ConfirmBlock' => '是否要屏蔽所选的评论？',
+	'admin:msg:ConfirmUnBlock' => '是否要恢复所选的评论？',
+	'admin:msg:ConfirmDeleteComments' => '是否要彻底清除所选的评论？删除后不可恢复！',
+	'admin:msg:EndDropToUpload' => '释放鼠标后开始上传',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',
@@ -282,7 +290,7 @@ $conf['l'] = array(
 	'admin:btn:AddKey' => '添加一个API Key',
 	'admin:btn:APIAddr' => 'API接口地址',
 	'admin:btn:DownloadManual' => '下载以手动更新',
-	'admin:btn:SelectAllBlocked' => '全选屏蔽项',
+	'admin:btn:Restore' => '恢复',
 
 	'admin:msg:NeedLogin' => '请先登录。',
 	'admin:msg:ChangeSaved' => '保存成功。',
