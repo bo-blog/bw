@@ -100,6 +100,38 @@ if (!defined ('P')) {
 <a href="##" onclick="newAPIKey('[[::siteURL]]/[[::linkPrefixAdmin]]/services/getnewapikey/', false);"><span class="icon-plus2"></span> [[=admin:btn:AddKey]]</a>
 </p>
 
+<p id="admMailBot"><br/><br/></p>
+<h2><span class="icon-mail5"></span> [[=admin:sect:MailBot]]</h2>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:MailStatus]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst mailNotification" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast mailNotification" data-reflect="1"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::mailNotification]]" name="smt[mailNotification]" id="mailNotification"/>
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:MailAddr]]<br/><input type="text" class="inputLine inputLarge" name="smt[mailAddr]" value="[[::mailAddr]]" id="mailAddr" /><br/><span class="adminExplain">[[=admin:msg:MailAddrSMTP]]</span>
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:MailServer]]<br/><input type="text" class="inputLine inputLarge" name="smt[mailServer]" value="[[::mailServer]]" id="mailServer" />
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:MailPort]]<br/>
+<select name="smt[mailProtocol]" id="mailProtocol" class="inputLine inputSmall" style="height: 34px">
+<option value="TLS">TLS</option>
+<option value="SSL">SSL</option>
+</select>
+<input type="text" class="inputLine inputMiddle" name="smt[mailPort]" value="[[::mailPort]]" id="mailPort" />
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:MailPassword]]<br/><input type="text" class="inputLine inputLarge" name="smt[mailPassword]" value="[[::mailPassword]]" id="mailPassword" />
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:MailReceiver]]<br/><input type="text" class="inputLine inputLarge" name="smt[mailReceiver]" value="[[::mailReceiver]]" id="mailReceiver" />
+</p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:MailOptions]]<br/><input type="checkbox" name="mo1" value="newcomments" id="mo_newcomments" /> <label for="mo_newcomments">[[=admin:opt:NewComments]]</label>  &nbsp; <input type="checkbox" name="mo2" value="changedpsw" id="mo_changedpsw" /> <label for="mo_changedpsw">[[=admin:opt:ChangedPsw]]</label> &nbsp; <input type="checkbox" name="mo3" value="loginfailure" id="mo_loginfailure" /> <label for="mo_loginfailure">[[=admin:opt:LoginFailure]]</label>
+<input type="hidden" value="[[::mailOptions]]" name="smt[mailOptions]" id="mailOptions"/></p>
+<p>
+<span class="icon-arrow-right5"></span> [[=admin:item:MailTest]]<br class="smallBr"/><span class="adminGoSync"><a href="javascript:testMailBot();"><span class="icon-mail5"></span> [[=admin:btn:MailTest]] </a></span>
+</p>
+
 <p id="admBackup"><br/><br/></p>
 <h2><span class="icon-cone"></span> [[=admin:sect:OtherServices]]</h2>
 <p>
@@ -119,6 +151,7 @@ if (!defined ('P')) {
 <script type="text/javascript">
 
 $("#admServices").addClass("activeNav");
+$("#mailProtocol").val("[[::mailProtocol]]");
 
 function goQiniuSync() {
 	var qiniuSyncCD=$("#qiniuSync").val();
@@ -169,6 +202,20 @@ function goAPIOpen() {
 	});
 }
 
+function goMailStatus () {
+	var MailStatusCD=$("#mailNotification").val();
+	$(".mailNotification").each(function(){
+		var MailStatusD=$(this).data('reflect');
+		if (MailStatusD==MailStatusCD)
+		{
+			$(this).addClass("buttonGroupSelected");
+		}
+		else {
+			$(this).removeClass("buttonGroupSelected");
+		}
+	});
+}
+
 $(".qiniuUpload").click(function(){
 	var qiniuUploadD=$(this).data('reflect');
 	$("#qiniuUpload").val(qiniuUploadD);
@@ -181,6 +228,12 @@ $(".APIOpen").click(function(){
 	goAPIOpen();
 });
 goAPIOpen();
+$(".mailNotification").click(function(){
+	var MailStatusD=$(this).data('reflect');
+	$("#mailNotification").val(MailStatusD);
+	goMailStatus();
+});
+goMailStatus();
 
 function saveConf(formID, smtURL) {
 	$("#UI-loading").fadeIn(500);
@@ -194,6 +247,18 @@ function saveConf(formID, smtURL) {
 	});
 	$("#basicAPI").val(basicAPIs.join('<>'));
 	$("#advancedAPI").val(advancedAPIs.join('<>'));
+
+	var saveMailOptions=[];
+	if ($("#mo_newcomments").prop('checked')) {
+		saveMailOptions.push("newcomments");
+	}
+	if ($("#mo_changedpsw").prop('checked')) {
+		saveMailOptions.push("changedpsw");
+	}
+	if ($("#mo_loginfailure").prop('checked')) {
+		saveMailOptions.push("loginfailure");
+	}
+	$("#mailOptions").val(saveMailOptions.join("|"));
 
 	$.post(smtURL+"[[::linkConj]]ajax=1&CSRFCode=[[::serviceCSRFCode]]", $('#'+formID).serialize(), function(data) {
 		$("#UI-loading").fadeOut(200);
@@ -224,6 +289,41 @@ function newAPIKey(smtURL, isbasic) {
 		}
 	}, "json");
 }
+
+function testMailBot() {
+	var mailAddr=$("#mailAddr").val();
+	var mailServer=$("#mailServer").val();
+	var mailReceiver=$("#mailReceiver").val();
+	var mailProtocol=$("#mailProtocol").val();
+	var mailPort=$("#mailPort").val();
+	var mailPassword=$("#mailPassword").val();
+	if (mailAddr=='' || mailServer=='' || mailReceiver=='' || mailPort=='' || mailProtocol=='' || mailPassword=='') {
+		alert ("[[=admin:msg:MailInfoRequired]]");
+		return false;
+	}
+	else if (mailAddr.indexOf('@')==-1 || mailServer.indexOf('.')==-1 || mailReceiver.indexOf('@')==-1 || mailAddr.indexOf('.')==-1 || mailReceiver.indexOf('.')==-1 || mailPort.isNaN) {
+		alert ("[[=admin:msg:MailInfoRequired]]");
+		return false;
+	}
+	else {
+		$("#UI-loading").fadeIn(200);
+		$.post("[[::siteURL]]/[[::linkPrefixAdmin]]/services/testmailbot/[[::linkConj]]ajax=1&CSRFCode=[[::serviceCSRFCode]]", {mailAddr: mailAddr, mailServer: mailServer, mailPort: mailPort, mailProtocol: mailProtocol, mailPassword: mailPassword, mailReceiver: mailReceiver}, function(data) {
+			$("#UI-loading").fadeOut(200);
+			if (data.error==1) {
+				alert (data.returnMsg);
+			}
+			else {
+				alert ("[[=admin:msg:TestPassed]]")
+			}
+		}, "json");
+	}
+}
+
+var MailOptions="[[::mailOptions]]";
+var mailOpt=MailOptions.split("|");
+$.each (mailOpt, function (idx, val) {
+	$("#mo_"+val).attr("checked", "checked");
+});
 
 if (window.location.hash == '#reset')
 {

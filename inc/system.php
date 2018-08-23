@@ -5,9 +5,10 @@
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
-define ('bwVersion', '1.5.0');
-define ('bwInternalVersion', '1500');
+define ('bwVersion', '1.6.0');
+define ('bwInternalVersion', '1600');
 define ('bwUpdate', 'https://bo-blog.github.io/bw-update/');
+define ('notifyLimit', 5);
 
 if (!defined ('P')) {
 	die ('Access Denied.');
@@ -20,6 +21,7 @@ if (!file_exists (P . 'conf/info.php')) {
 
 include_once (P . 'conf/info.php');
 date_default_timezone_set ($conf['timeZone']);
+$conf['pageCache'] = '0'; //Page cache function is deprecated as of v1.6.0
 
 spl_autoload_register (function ($class) {
 	$classFile = P. 'inc/' . strtolower (substr ($class, 2) . '.inc.php');
@@ -124,8 +126,56 @@ function qiniuUpload ($filePath)
 	return $result;
 }
 
+function mailNotify ($subject, $body, $silent=false, $rule)
+{
+	global $mailer, $conf;
+	if (!defined ('S')) {
+		loadServices ();
+	}
+	if ($conf['mailNotification']=='1') {
+		if (false !== strpos ($conf['mailOptions'], $rule)) {
+			if (!is_object ($mailer)) {
+				require_once (P . "inc/script/smtp/email.php");
+				$mailer = new Email($conf['mailServer'], $conf['mailPort']);
+			}
+			$conf['mailProtocol']=="TLS" ? $mailer->setProtocol(Email::TLS) : $mailer->setProtocol(Email::SSL);
+			$mailer->setLogin($conf['mailAddr'], $conf['mailPassword']);
+			$mailer->addTo($conf['mailReceiver'], $conf['mailReceiver']);
+			$mailer->setFrom($conf['mailAddr'], $conf['siteName']);
+			$mailer->setSubject($subject);
+			$mailer->setHtmlMessage($body);
+
+			set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
+				if (0 === error_reporting ()) {
+					return false;
+				}
+				throw new ErrorException ($errstr, 0, $errno, $errfile, $errline);
+			});
+			if ($silent) {
+				$mailer->send ();
+			}
+			else {
+				try {
+					if ($mailer->send ()){
+						ajaxSuccess ("Succeeded.");
+					} else {
+						stopError ($conf['l']['admin:msg:SendFailed']);
+					}
+				}
+				catch (Exception $e) {
+					stopError ($e->getMessage());
+				}
+			}
+		}
+	}
+}
+
 function clearCache ($caID = false, $forced = false)
 {
+	//This feature was abandoned in 1.6.0.
+	//Cache table is now being used to store the mail notification cap, etc.
+
+	/*
 	global $conf;
 	if ($conf['pageCache'] || $forced) {
 		if ($caID) {
@@ -139,6 +189,23 @@ function clearCache ($caID = false, $forced = false)
 			}
 		}
 	}
+	*/
+}
+
+function getCache ($caID)
+{
+	$cacheRS = bw :: $db -> getSingleRow ('SELECT * FROM cache WHERE caID=?', array($caID));
+	if ($cacheRS !== false) {
+		return $cacheRS['caContent'];
+	}
+	else {
+		return false;
+	}
+}
+
+function setCache ($caID, $caContent)
+{
+	bw :: $db -> dbExec ('REPLACE INTO cache (caID, caContent) VALUES (?, ?)', array ($caID, $caContent));
 }
 
 function hook ()
@@ -235,6 +302,19 @@ function curlRetrieve ($URL, $timeOut = 5)
 	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt ($ch, CURLOPT_TIMEOUT, $timeOut);
 	curl_setopt ($ch, CURLOPT_HEADER, false);
+	$fileContents = curl_exec ($ch);
+	curl_close ($ch);
+	return $fileContents;
+}
+
+function curlPost ($url, $postdata, $timeOut = 5)
+{
+	$ch = curl_init();
+	curl_setopt ($ch, CURLOPT_URL, $url);
+	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt ($ch, CURLOPT_POST, 1);
+	curl_setopt ($ch, CURLOPT_POSTFIELDS, $postdata);
+	curl_setopt ($ch, CURLOPT_TIMEOUT, $timeOut);
 	$fileContents = curl_exec ($ch);
 	curl_close ($ch);
 	return $fileContents;

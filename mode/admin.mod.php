@@ -76,9 +76,20 @@ if ($canonical -> currentArgs['mainAction'] == 'login') {
 		exit();
 	} elseif ($canonical -> currentArgs['subAction'] == 'verify') {
 		$s_token = $_REQUEST['s_token'];
-
 		$admin -> verifyToken ($s_token);
 		if (!$admin -> verified) {
+			$caID = 'loginfailure-' . date ('Ymd');
+			$counter = getCache ($caID);
+			if (!$counter) {
+				$counter = 0;
+			}
+			if ($counter < notifyLimit) {
+				$fIP = getIp ();
+				$msgPlus = $counter == notifyLimit -1 ? bw :: $conf['l']['admin:msg:ReachEmailLimit2'] : bw :: $conf['l']['admin:msg:AutoNoReply'];
+				$postdata = array ('subject' => bw :: $conf['l']['admin:msg:RiskNotify'], 'body' => sprintf (bw :: $conf['l']['admin:msg:SomeoneFailed'], date ("Y-m-d H:i"), $fIP[0]) . '<br><br><hr><i>' . $msgPlus . '</i>', 'token' => md5 (bw :: $conf['siteKey'] . bw :: $conf['l']['admin:msg:RiskNotify']), 'rule' => 'loginfailure');
+				curlPost (bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixSend'] . '/mailbot/', $postdata, 1);
+				setCache ($caID, $counter + 1);
+			}
 			stopError ('');
 		} else {
 			$admin -> storeSessionToken ($s_token);
@@ -115,6 +126,8 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		} else {
 			$admin -> storeSessionToken ($smt['siteKey']);
 			$smt['siteKey'] = sha1 ($smt['siteKey']);
+			$postdata = array ('subject' => bw :: $conf['l']['admin:item:ResetPsw'], 'body' => sprintf (bw :: $conf['l']['admin:msg:PswChanged'], date ("Y-m-d H:i")), 'token' => md5 (bw :: $conf['siteKey'] . bw :: $conf['l']['admin:item:ResetPsw']), 'rule' => 'changedpsw');
+			curlPost (bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixSend'] . '/mailbot/', $postdata, 1);
 		}
 		$smt['siteURL'] = substr ($smt['siteURL'], -1) == '/' ? substr ($smt['siteURL'], 0, strlen ($smt['siteURL']) - 1) : $smt['siteURL'];
 		$valString = "<?php\r\n\$conf=" . var_export ($smt, true) . ";";
@@ -489,7 +502,7 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		}
-		$acceptedKeys = array ('duoshuoID', 'disqusID', 'sinaAKey', 'sinaSKey', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain', 'APIOpen', 'basicAPI', 'advancedAPI', 'aliyunAKey', 'aliyunSKey', 'aliyunBucket', 'aliyunRegion');
+		$acceptedKeys = array ('disqusID', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain', 'APIOpen', 'basicAPI', 'advancedAPI', 'aliyunAKey', 'aliyunSKey', 'aliyunBucket', 'aliyunRegion', 'mailNotification', 'mailAddr', 'mailServer', 'mailPort', 'mailProtocol', 'mailPassword', 'mailReceiver', 'mailOptions');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$basicAPI = @explode ('<>', $smt['basicAPI']);
 		$advancedAPI = @explode ('<>', $smt['advancedAPI']);
@@ -517,9 +530,12 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		$ff = 'storage/backup' . date("YmdHis") . '.zip';
 		$archive = new PclZip (P . $ff);
 		if (strtolower (DBTYPE) == 'mysql') {
-			include_once (P. 'inc/script/dbmanage/DbManage.class.php');
-			$db = new DBManage (DBADDR, DBUSERNAME, DBPASSWORD, DBNAME, 'utf8');
-			$db->backup ('', P. 'conf/', '');
+			include_once (P. 'inc/script/mysql-backup/backup.php');
+			$bak = new DatabaseTool();
+			$bakc = $bak -> backup ();
+			if ($bakc) {
+				file_put_contents (P . 'conf/sql' . date('YmdHis'). '.sql', $bakc);
+			}
 		}
 		$v_list = DBTYPE == 'SQLite' ? $archive -> create('conf,' . DBNAME, PCLZIP_OPT_REMOVE_ALL_PATH) : $archive -> create('conf', PCLZIP_OPT_REMOVE_ALL_PATH);
 		if ($v_list == 0) {
@@ -548,6 +564,34 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		$APIKey = 'o_' . sha1 (bw :: $conf['siteKey'] . 'KEY' . rand (10000, 99999));
 		$authSecret = sha1 ($APIKey . bw :: $conf['siteKey'] . "API");
 		ajaxSuccess ($APIKey . '-' . $authSecret);
+	}  elseif ($canonical -> currentArgs['subAction'] == 'testmailbot') {
+		$admin -> checkCSRFCode ('services');
+		include_once (P . "inc/script/smtp/email.php");
+		$mail = new Email($_REQUEST['mailServer'], $_REQUEST['mailPort']);
+		$_REQUEST['mailProtocol']=="TLS" ? $mail->setProtocol(Email::TLS) : $mail->setProtocol(Email::SSL);
+		$mail->setLogin($_REQUEST['mailAddr'], $_REQUEST['mailPassword']);
+		$mail->addTo($_REQUEST['mailReceiver'], $_REQUEST['mailReceiver']);
+		$mail->setFrom($_REQUEST['mailAddr'], $conf['siteName']);
+		$mail->setSubject('Test Email Notification');
+		$mail->setHtmlMessage('This is a test email.<br>If you receive this email, the setting is successful.');
+
+		set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
+    	if (0 === error_reporting()) {
+        return false;
+    	}
+			throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+		});
+		try {
+			if($mail->send()){
+    		ajaxSuccess ('Success');
+			} else {
+    		stopError ($conf['l']['admin:msg:SendFailed']);
+			}
+		}
+		catch (Exception $e) {
+			stopError ($e->getMessage());
+		}
+		exit ();
 	}
 	else {
 		$admin -> checkCSRFCode ('navibar');

@@ -1,13 +1,13 @@
 <?php
 /**
-* 
+*
 * @link http://bw.bo-blog.com
 * @copyright (c) 2015 bW Development Team
 * @license MIT
 */
 if (!defined ('P')) {
 	die ('Access Denied.');
-} 
+}
 
 class bwCanonicalization {
 	private $perPage;
@@ -25,10 +25,10 @@ class bwCanonicalization {
 	{
 		global $conf;
 		$this -> perPage = &$conf['perPage'];
-		
+
 		if (!defined ('M')) {
 			define ('M', 'index');
-		} 
+		}
 		switch (M) {
 			case 'index':
 				$this -> argsPattern = array ('pageNum');
@@ -80,27 +80,27 @@ class bwCanonicalization {
 				$this -> currentScript = $conf['linkPrefixIndex'];
 				hook ('setLoader', 'Execute', $this);
 				stopError ('Requested mode does not exist.');
-		} 
+		}
 
 		$siteURLTmp = parse_url ($conf['siteURL'], PHP_URL_PATH) . '/';
 
-		if (isset ($_REQUEST['go'])) { 
+		if (isset ($_REQUEST['go'])) {
 			$requestedURL = explode ('/', $_REQUEST['go']);
-		} 	
+		}
 		else {
 			if ($siteURLTmp == '/') {
 				$requestedURL = explode ('/', $_SERVER['PHP_SELF']);
 				array_shift ($requestedURL);
 			} else {
 				$requestedURL = explode ('/', str_replace ($siteURLTmp, '', $_SERVER['PHP_SELF']));
-			} 
-		} 
+			}
+		}
 		array_shift ($requestedURL);
 		if (count ($requestedURL) > count ($this -> argsPattern)) {
 			$this -> currentArgs = array_slice ($requestedURL, 0, count ($this -> argsPattern));
 		} else {
 			$this -> currentArgs = array_pad ($requestedURL, count ($this -> argsPattern), 1);
-		} 
+		}
 		$this -> currentArgs = array_combine ($this -> argsPattern, $this -> currentArgs);
 
 		if (array_key_exists ('pageNum', $this -> currentArgs)) {
@@ -110,14 +110,14 @@ class bwCanonicalization {
 		} else {
 			$this -> currentPage = 1;
 			$paginableArgs = $this -> currentArgs;
-		} 
+		}
 
 		$this -> canonicalURL = $conf['canonicalURL'] = $conf['siteURL'] . '/' . $this -> currentScript . '/' . implode ('/', $this -> currentArgs) . '/';
 		$this -> paginableURL = $conf['siteURL'] . '/' . $this -> currentScript . '/' . implode ('/', $paginableArgs) . '/';
 
 		if (isset ($_REQUEST['ajax'])) {
 			define ('ajax', 1);
-		} 
+		}
 
 		$this -> cache = false;
 		if (bw :: $conf['pageCache'] == '1') {
@@ -129,37 +129,37 @@ class bwCanonicalization {
 					$this -> cache = $cached['caContent'];
 				} else {
 					define ('docache', $cacheKey);
-				} 
-			} 
-		} 
+				}
+			}
+		}
 
 		if (!$this -> cache) {
 			bw :: loadLanguage ();
 			bw :: initCategories ();
 			bw :: loadExtensions ();
-		} 
+		}
 
 		if (M != 'admin' && M != 'send') {
 			bw :: pageStat ($this -> canonicalURL, M == 'article' ? $this -> currentArgs['aID'] : false);
-		} 
+		}
 
 		hook ('canonicalized', 'Execute', $this);
-	} 
+	}
 
 	public function setPerPage ($num)
 	{
 		$this -> perPage = floor ($num);
-	} 
+	}
 
 	public function setTotalPages ($num)
 	{
 		$this -> totalPages = floor ($num);
-	} 
+	}
 
 	public function calTotalPages ($totalNum)
 	{
 		$this -> totalPages = ceil ($totalNum / $this -> perPage);
-	} 
+	}
 
 	public function loader ()
 	{
@@ -168,14 +168,14 @@ class bwCanonicalization {
 				die ($this -> cache);
 			} else {
 				die (json_encode (array ('error' => 0, 'returnMsg' => $this -> cache)));
-			} 
+			}
 		} else {
 			hook ('newIndexPage', 'Execute', $this);
 
 			if (!file_exists (P . "mode/{$this -> loaderID}.mod.php")) {
 				stopError ("Invalid parameter.");
-			} 
+			}
 			return P . "mode/{$this -> loaderID}.mod.php";
-		} 
-	} 
-} 
+		}
+	}
+}

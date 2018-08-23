@@ -261,10 +261,11 @@ class bwView {
 		@header ("Content-Type: text/html; charset=UTF-8");
 		$this -> generateOutput ();
 		$this -> outputView ();
+		flush ();
 		hook ('finalize', 'Execute', $this);
-		if (defined ('docache') && $this -> masterMod <> 'error') {
-			bw :: $db -> dbExec ('INSERT INTO cache (caID, caContent) VALUES (?, ?)', array (docache, $this -> outputContent));
-		}
+		// if (defined ('docache') && $this -> masterMod <> 'error') {
+		// 	bw :: $db -> dbExec ('INSERT INTO cache (caID, caContent) VALUES (?, ?)', array (docache, $this -> outputContent));
+		// }
 		exit ();
 	}
 
@@ -482,11 +483,11 @@ class bwView {
 		$text = self :: $markdownParser -> setBreaksEnabled (true) -> text ($text);
 		// Start customized markdown
 		// xiami music loader
-		$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text);
+		//$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text);
 		// Wangyi Yun Yinyue loader
-		$text = preg_replace ("/!~!(.+?)\[wangyiyun]/", "<p><iframe frameborder=\"no\" border=\"0\" marginwidth=\"0\" marginheight=\"0\" width='330' height='86' src=\"http://music.163.com/outchain/player?type=2&id=$1&auto=0&height=66\"></iframe></p>", $text);
+		$text = preg_replace ("/!~!(.+?)\[wangyiyun]/", "<p><iframe frameborder=\"no\" border=\"0\" marginwidth=\"0\" marginheight=\"0\" width='330' height='86' src=\"https://music.163.com/outchain/player?type=2&id=$1&auto=0&height=66\"></iframe></p>", $text);
 		// Youku loader
-		$text = preg_replace ("/!~!(.+?)\[youku\]/", "<iframe src=\"http://player.youku.com/embed/$1\"  frameborder='0' class=\"videoFrame\"></iframe>", $text);
+		$text = preg_replace ("/!~!(.+?)\[youku\]/", "<iframe src=\"https://player.youku.com/embed/$1\"  frameborder='0' class=\"videoFrame\"></iframe>", $text);
 		// Geolocation from Baidu
 		$text = preg_replace ("/!~!(.+?)\[location\]/", "<span class=\"icon-location geoLocator\"></span> <span class=\"geoLocator\">$1</span>", $text);
 		// !!URL = music

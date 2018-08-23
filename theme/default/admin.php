@@ -18,7 +18,7 @@ if (!defined ('P')) {
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="robots" content="none" />
-<link href="[[::siteURL]]/theme/default/style.css?ver=201704222316" media="all" rel="stylesheet" type="text/css" />
+<link href="[[::siteURL]]/theme/default/style.css?ver=201808202303" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/admin.css?ver=201704222316" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
 <title>[[=page:Admin]] | [[::siteName]]</title>

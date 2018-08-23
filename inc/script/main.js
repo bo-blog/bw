@@ -280,20 +280,6 @@ function lightboxLoaderDestroy () {
 	$("#UI-lightbox").unbind();
 }
 
-function changeNav ()
-{
-	var aPos=$(window).scrollTop();
-	var bPos=$("#mainArea").position().top;
-	if (aPos>bPos)
-	{
-		$("header").addClass('headerShrink');
-	}
-	else {
-		$("header").removeClass('headerShrink');
-	}
-	t=setTimeout ("changeNav()", 200);
-}
-
 function makeComUserLink ()
 {
 	$(".comName h6").each (function () {

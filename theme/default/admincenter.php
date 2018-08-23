@@ -23,9 +23,9 @@ if (!defined ('P')) {
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:TimeZone]]<br/><input type="text" class="inputLine inputLarge" name="smt[timeZone]" value="[[::timeZone]]" /><br/><span class="adminExplain">[[=admin:msg:TimeZone]]</span>
 </p>
-<p>
+<!-- <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:Cache]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst pageCache" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup buttonGroupLast pageCache" data-reflect="1"><span class="icon-checkmark"></span> [[=admin:opt:On]]</span> <input type="hidden" value="[[::pageCache]]" name="smt[pageCache]" id="pageCache"/><br/><span class="adminExplain">[[=admin:msg:Cache]]</span>
-</p>
+</p> -->
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:CommentOpt]]<br class="smallBr"/>
 <select name="smt[commentOpt]" id="commentOpt" class="selectLine">
@@ -211,7 +211,7 @@ function goSelector(selID) {
 }
 
 goSelector ('perPage');
-goSelector ('pageCache');
+//goSelector ('pageCache');
 goSelector ('autoSave');
 goSelector ('lessSQL');
 var tmpLinkPrefixIndex = $("#linkPrefixIndex").val().split('?');

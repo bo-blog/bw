@@ -143,6 +143,19 @@ elseif ($canonical -> currentArgs['mainAction'] == 'nasearch') { //Authorize a m
 	stopError ('');
 }
 
+elseif ($canonical -> currentArgs['mainAction'] == 'mailbot') { //Send mail non-blockingly
+	if (isset($_REQUEST['subject']) && isset($_REQUEST['body']) && isset($_REQUEST['token'])) {
+		if ($_REQUEST['token'] == md5 (bw :: $conf['siteKey'] . $_REQUEST['subject'])) {
+			ignore_user_abort (true);
+			set_time_limit (0);
+			mailNotify ($_REQUEST['subject'], $_REQUEST['body'], true, $_REQUEST['rule']);
+		}
+	} else {
+		die ("Access denied.");
+	}
+	exit ();
+}
+
 //Rest is comment
 
 if ($conf['commentOpt']<>0) {

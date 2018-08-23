@@ -159,8 +159,22 @@ class bwComment {
 
 		$_SESSION['OTime_' . $this -> aID] = time ();
 
-		clearCache (); //Clear all cache
 		hook ('addComment', 'Execute', $smt);
+
+		$caID = 'newcomments-' . date ('Ymd');
+		$counter = getCache ($caID);
+		if (!$counter) {
+			$counter = 0;
+		}
+		if ($counter < notifyLimit) {
+			$msgPlus = $counter == notifyLimit -1 ? bw :: $conf['l']['admin:msg:ReachEmailLimit1'] : bw :: $conf['l']['admin:msg:AutoNoReply'];
+			$subject = $smt['userName'] . ' ' . bw :: $conf['l']['admin:msg:AddedCommentTo'] . ' [' . $taID['aTitle'] . ']';
+			$body = date ('Y-m-d H:i:s') . ' | ' . $smt['userName'] . '<br><a href="' . bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixArticle'] . '/' . $smt['aID'] . '/#comWrap-' . bw :: $db -> dbLastInsertId () . '"><b>' . $taID['aTitle']. '</b></a><br><br>' . $smt['userContent'] . '<br><br><hr><i>' . $msgPlus . '</i>';
+			$url = bw :: $conf['siteURL'] . '/' . bw :: $conf['linkPrefixSend'] . '/mailbot/';
+			$postdata = array ('subject' => $subject, 'body' => $body, 'token' => md5 (bw :: $conf['siteKey'] . $subject), 'rule' => 'newcomments');
+			curlPost ($url, $postdata, 1);
+			setCache ($caID, $counter + 1);
+		}
 
 		$smt2 = array ('comID' => bw :: $db -> dbLastInsertId (), 'comName' => $smt['userName'], 'comTime' => date ('Y-m-d H:i:s'), 'comAvatar' => $smt['userAvatar'] ? $smt['userAvatar'] : bw :: $conf['siteURL'] . '/conf/default.png', 'comContent' => $smt['userContent'], 'comArtID' => $smt['aID'], 'comURL' => $smt['userURL'], 'comSource' => $smt['socialkey']);
 		return $smt2;
@@ -174,8 +188,8 @@ class bwComment {
 			stopError (bw :: $conf['l']['admin:msg:NoData']);
 		}
 		$smt['userName'] = htmlspecialchars ($smt['userName'], ENT_QUOTES, 'UTF-8');
-		$smt['userURL'] = htmlspecialchars ($smt['userURL'], ENT_QUOTES, 'UTF-8');
-		if (!strpos ($smt['userURL'], '@') && strpos ($smt['userURL'], 'http') !== 0) {
+		$smt['userURL'] = htmlspecialchars (strtolower($smt['userURL']), ENT_QUOTES, 'UTF-8');
+		if (!strpos ($smt['userURL'], '@') && substr ($smt['userURL'], 0, 4) != "http") {
 			$smt['userURL'] = 'http://' . $smt['userURL'];
 		}
 		$smt['userContent'] = htmlspecialchars ($smt['userContent'], ENT_QUOTES, 'UTF-8');
