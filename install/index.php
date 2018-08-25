@@ -35,7 +35,7 @@ function output ()
 <meta name="robots" content="none" />
 <title>Welcome to bW</title>
 <script src="../inc/script/jquery.min.js"></script>
-<script src="jquery.scrollTo.min.js"></script>
+<script src="jquery.scrollTo.min.js?v=2"></script>
 <link href="../theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
 <link href="install.css" media="all" rel="stylesheet" type="text/css" />
 </head>
