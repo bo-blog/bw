@@ -74,7 +74,6 @@ $('article .xiamiLoader').each (function () {
 	$(this).html("<iframe class='xmLoader' frameborder='0' id='xm-"+xmID+"' name='xm-"+xmID+"' src='"+root+"/inc/script/xiami.php?xmID="+xmID+"' height='50'></iframe>");
 });
 
-changeNav ();
 
 $('#openPageSelector').click (function () {
 	$('#pageSelector').fadeToggle();

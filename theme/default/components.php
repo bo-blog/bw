@@ -74,12 +74,15 @@ $parts['admincommonupload']=<<<eot
 </form>
 eot;
 
+// $parts['adminqiniuupload']=<<<eot
+// <form id="picForm" method="post" action="http://up.qiniu.com/" target="execPicTarget" enctype="multipart/form-data">
+// <input type="file" style="display: none; height: 1px;" name="file" id="uploadPicFile" onchange="doPicUp();"/>
+// <input id="picFormToken" name="token" type="hidden" value="[[::qiniuFileToken]]">
+// <input id="picFormFname"  name="key" type="hidden" value="[[::qiniuKey]]">
+// </form>
+// eot;
+
 $parts['adminqiniuupload']=<<<eot
-<form id="picForm" method="post" action="http://up.qiniu.com/" target="execPicTarget" enctype="multipart/form-data">
-<input type="file" style="display: none; height: 1px;" name="file" id="uploadPicFile" onchange="doPicUp();"/>
-<input id="picFormToken" name="token" type="hidden" value="[[::qiniuFileToken]]">
-<input id="picFormFname"  name="key" type="hidden" value="[[::qiniuKey]]">
-</form>
 eot;
 
 $parts['adminaliyunupload']=<<<eot
@@ -277,6 +280,45 @@ s.setAttribute('data-timestamp', +new Date());
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 <!-- Disqus end -->
 </div>
+eot;
+
+$parts['gitmentarea']=<<<eot
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<div class="commentArea" id="commentArea">
+</div>
+<script>
+const gitment = new Gitment({
+  id: '[[::aID]]',
+  owner: '[[::githubID]]',
+  repo: '[[::githubRepo]]',
+  oauth: {
+    client_id: '[[::githubClient]]',
+    client_secret: '[[::githubSecret]]',
+  },
+})
+gitment.render('commentArea')
+</script>
+eot;
+
+$parts['gittalkarea']=<<<eot
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div class="commentArea" id="commentArea">
+</div>
+<script>
+var gitalk = new Gitalk({
+	clientID: '[[::githubClient]]',
+	clientSecret: '[[::githubSecret]]',
+	repo: '[[::githubRepo]]',
+	owner: '[[::githubID]]',
+	admin: ['[[::githubID]]'],
+	id: '[[::aID]]',
+	distractionFreeMode: false  // Facebook-like distraction free mode
+});
+  
+gitalk.render('commentArea');
+</script>
 eot;
 
 $parts['nocommentarea']='';

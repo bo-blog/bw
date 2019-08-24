@@ -15,18 +15,38 @@ if (!defined ('P')) {
 <form id="smtForm" action="post">
 <h2><span class="icon-chat"></span> [[=admin:sect:CommentServices]]</h2>
 <p>
+<span class="icon-arrow-right5"></span> [[=admin:item:ServiceProvider]]<br/>
+<select name="smt[commentService]" id="commentService" class="selectLine">
+<option value="disqusarea">Disqus</option>
+<option value="gittalkarea">Gittalk</option><option value="gitmentarea">Gitment</option>
+<option value="">[[=admin:opt:Off]]</option>
+</select>
+</p>
+<p>
 <span class="icon-arrow-right5"></span> [[=admin:item:DisqusID]]<br/><input type="text" class="inputLine inputSmall" name="smt[disqusID]" value="[[::disqusID]]" id="disqusID" />.disqus.com<br/><span class="adminExplain">[[=admin:msg:Disqus]]</span>
+</p>
+<p>
+<span class="icon-arrow-right5"></span> GitHub ID<br/><input type="text" class="inputLine inputLarge" name="smt[githubID]" value="[[::githubID]]" id="githubID" /><br/><span class="adminExplain">[[=admin:msg:Gitment]]</span>
+</p>
+<p>
+<span class="icon-arrow-right5"></span> GitHub Repo<br/><input type="text" class="inputLine inputLarge" name="smt[githubRepo]" value="[[::githubRepo]]" id="githubRepo" />
+</p>
+<p>
+<span class="icon-arrow-right5"></span> GitHub Client ID<br/><input type="text" class="inputLine inputLarge" name="smt[githubClient]" value="[[::githubClient]]" id="githubClient" />
+</p>
+<p>
+<span class="icon-arrow-right5"></span> GitHub Client Secret<br/><input type="text" class="inputLine inputLarge" name="smt[githubSecret]" value="[[::githubSecret]]" id="githubSecret" />
 </p>
 <p><br/><br/></p>
 <h2><span class="icon-upload2"></span> [[=admin:sect:CloudDrive]]</h2>
 <p>
-<span class="icon-arrow-right5"></span> [[=admin:item:CloudUpload]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst qiniuUpload" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <span class="buttonLine buttonGroup qiniuUpload" data-reflect="1"><span class="icon-cloud2"></span> [[=admin:sect:Qiniu]]</span>  <span class="buttonLine buttonGroup buttonGroupLast qiniuUpload" data-reflect="2"><span class="icon-cloud2"></span> [[=admin:sect:Aliyun]]</span> <input type="hidden" value="[[::qiniuUpload]]" name="smt[qiniuUpload]" id="qiniuUpload"/><br/><span class="adminExplain">[[=admin:msg:CloudUpload]]</span>
+<span class="icon-arrow-right5"></span> [[=admin:item:CloudUpload]]<br class="smallBr"/><span class="buttonLine buttonGroup buttonGroupFirst qiniuUpload" data-reflect="0"><span class="icon-cross"></span> [[=admin:opt:Off]]</span> <!-- <span class="buttonLine buttonGroup qiniuUpload" data-reflect="1"><span class="icon-cloud2"></span> [[=admin:sect:Qiniu]]</span> --> <span class="buttonLine buttonGroup buttonGroupLast qiniuUpload" data-reflect="2"><span class="icon-cloud2"></span> [[=admin:sect:Aliyun]]</span> <input type="hidden" value="[[::qiniuUpload]]" name="smt[qiniuUpload]" id="qiniuUpload"/><br/><span class="adminExplain">[[=admin:msg:CloudUpload]]</span>
 </p>
 
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:Settings]]<br class="smallBr"/></p>
 
-<div class="admStatBlock1">
+<div class="admStatBlock1" style="display: none;">
 <h3>[[=admin:sect:Qiniu]]</h3>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:QiniuAK]]<br/><input type="text" class="inputLine inputLarge" name="smt[qiniuAKey]" value="[[::qiniuAKey]]" id="qiniuAKey" /><br/><span class="adminExplain">[[=admin:msg:Qiniu]]</span>
@@ -43,7 +63,7 @@ if (!defined ('P')) {
 </div>
 
 <div class="admStatBlock2">
-<h3>[[=admin:sect:Aliyun]] (BETA)</h3>
+<h3>[[=admin:sect:Aliyun]]</h3>
 <p>
 <span class="icon-arrow-right5"></span>AccessKeyId<br/><input type="text" class="inputLine inputLarge" name="smt[aliyunAKey]" value="[[::aliyunAKey]]" id="aliyunAKey" /><br/><span class="adminExplain">[[=admin:msg:Aliyun]]</span>
 </p>
@@ -136,7 +156,7 @@ if (!defined ('P')) {
 <h2><span class="icon-cone"></span> [[=admin:sect:OtherServices]]</h2>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:Backup]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/backup/[[::linkConj]]CSRFCode=[[::serviceCSRFCode]]" target="_blank"><span class="icon-export"></span> [[=admin:btn:Backup]] </a></span>
-<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/sync/[[::linkConj]]CSRFCode=[[::serviceCSRFCode]]"><span class="icon-export"></span> [[=admin:btn:Sync]] </a></span>
+<br class="smallBr"/> </a></span>
 <br/><div id="resetPermission" style="display: none;"><br/>
 <span class="icon-arrow-right5"></span> [[=admin:item:ResetPermission]]<br class="smallBr"/><span class="adminGoSync"><a href="[[::siteURL]]/[[::linkPrefixAdmin]]/services/reset/[[::linkConj]]CSRFCode=[[::serviceCSRFCode]]"><span class="icon-export"></span> [[=admin:btn:DoReset]] </a></span></div>
 </p>
@@ -152,6 +172,7 @@ if (!defined ('P')) {
 
 $("#admServices").addClass("activeNav");
 $("#mailProtocol").val("[[::mailProtocol]]");
+$("#commentService").val("[[::commentService]]");
 
 function goQiniuSync() {
 	var qiniuSyncCD=$("#qiniuSync").val();

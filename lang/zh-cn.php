@@ -162,6 +162,7 @@ $conf['l'] = array(
 	'admin:item:MailReceiver' => '接收邮箱',
 	'admin:item:MailOptions' => '通知选项',
 	'admin:item:MailTest' => '发送测试邮件',
+	'admin:item:ServiceProvider' => '所选第三方评论系统',
 
 	'admin:opt:SimplifiedChinese' => '简体中文',
 	'admin:opt:TraditionalChinese' => '繁体中文',
@@ -283,6 +284,7 @@ $conf['l'] = array(
 	'admin:msg:ReachEmailLimit1' => '今日对于评论的邮件通知已达5次，当今日内再有评论时，机器人不会再提示您。',
 	'admin:msg:ReachEmailLimit2' => '今日对于登陆失败的邮件通知已达5次，机器人不会再提示您。风险较高，请尽早处理！',
 	'admin:msg:PswChanged' => '您已于 %s 修改了密码，今后请使用新密码登陆。',
+	'admin:msg:Gitment' => '【<a href="https://gitalk.github.io/" target="_blank">Gittalk</a> & <a href="https://github.com/imsun/gitment" target="_blank">Gitment</a>】是基于 GitHub Issues 的社会化评论服务。',
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',

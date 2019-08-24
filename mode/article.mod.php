@@ -45,11 +45,14 @@ if ($conf['commentOpt']<>0) {
 		$view -> setWorkFlow (array ('ajaxcommentgroup', 'commentarea', 'article', 'page'));
 
 	} elseif ($conf['commentOpt'] == 3) {
-		if ($conf['disqusID']) {
-			$view -> setWorkFlow (array ('disqusarea', 'article', 'page'));
-		} else {
-			$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));
+		if (isset ($conf['commentService'])) {
+			$getServiceName = $conf['commentService'];
 		}
+		else {
+			$getServiceName = 'nocommentarea';
+		}
+		//die($getServiceName);
+		$view -> setWorkFlow (array ($getServiceName, 'article', 'page'));
 	}
 }  else {
 	$view -> setWorkFlow (array ('nocommentarea', 'article', 'page'));

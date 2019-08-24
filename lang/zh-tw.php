@@ -162,6 +162,7 @@ $conf['l'] = array(
 	'admin:item:MailReceiver' => '接收郵箱',
 	'admin:item:MailOptions' => '通知選項',
 	'admin:item:MailTest' => '發送測試郵件',
+	'admin:item:ServiceProvider' => '所選第三方評論系統',
 
 	'admin:opt:SimplifiedChinese' => '簡體中文',
 	'admin:opt:TraditionalChinese' => '繁體中文',
@@ -283,6 +284,8 @@ $conf['l'] = array(
 	'admin:msg:ReachEmailLimit1' => '今日對於評論的郵件通知已達5次，當今日內再有評論時，機器人不會再提示您。',
 	'admin:msg:ReachEmailLimit2' => '今日對於登陸失敗的郵件通知已達5次，機器人不會再提示您。風險較高，請儘早處理！',
 	'admin:msg:PswChanged' => '您已於 %s 修改了密碼，今後請使用新密碼登陸。',
+	'admin:msg:Gitment' => '【<a href="https://gitalk.github.io/" target="_blank">Gittalk</a> & <a href="https://github.com/imsun/gitment" target="_blank">Gitment</a>】是基於 GitHub Issues 的社會化評論服務。',
+
 
 	'admin:btn:Save' => '保存',
 	'admin:btn:Restore' => '重置',

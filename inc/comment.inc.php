@@ -247,6 +247,9 @@ class bwComment {
 
 	public function delBlockedBatch ($comIDList)
 	{
+		array_walk ($comIDList, function ($comID) {
+			$comID = is_integer ($comID) ? $comID : -1;
+		});
 		$allAffectedComments = '(' . implode (',', array_unique ($comIDList)) . ')';
 		bw :: $db -> dbExec ('DELETE FROM comments WHERE comID IN ' . $allAffectedComments .' AND comBlock=1');
 		hook ('delBlockedBatch', 'Execute', $comIDList);

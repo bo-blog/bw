@@ -52,7 +52,7 @@ if (!defined ('P')) {
 <span class="adminExplain">yyyy-mm-dd hh:mm:ss</span></p>
 
 <p class="adminCommand"><br/>
-<button type="button" class="buttonLine" id="btnSubmit" onclick="saveArticle('smtForm', '[[::siteURL]]/[[::linkPrefixAdmin]]/articles/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]
+<span id="btnSubmitRow"><button type="button" class="buttonLine" id="btnSubmit" onclick="saveArticle('smtForm', '[[::siteURL]]/[[::linkPrefixAdmin]]/articles/');"><span class="icon-disk"></span></button> [[=admin:btn:Save]]</span>
 <button type="button" class="buttonLine" onclick="document.getElementById('smtForm').reset(); $('#aCateURLName').val('[[::aCateURLName]]');"><span class="icon-ccw"></span></button> [[=admin:btn:Restore]]
 <span class="articleOnly"><button type="button" class="buttonLine" onclick="$('#aCateURLName').val('_trash'); $('#btnSubmit').click();"><span class="icon-suitcase"></span></button> [[=admin:btn:SaveAsDraft]]</span>
 <span id="btnDel"><button type="button" class="buttonLine" onclick="deleteArticle('[[::siteURL]]/[[::linkPrefixAdmin]]/articles/delete/');"><span class="icon-cross"></span></button> <span style="color: #FF2626">[[=admin:btn:Delete]]</span></span>
@@ -450,6 +450,7 @@ if ("[[::aID]]")
 	}
 	if ($("#aCateURLName").val()=="_trash") {
 		$("#gotoAID").hide();
+		$('#btnSubmitRow').hide();
 	}
 }
 
@@ -506,6 +507,11 @@ $('#aCateURLName').change (function() {
 		$('#adminSCInputNew').show(300);
 	} else {
 		$('#adminSCInputNew').hide();
+	}
+	if ($('#aCateURLName').val() == '_trash') {
+		$('#btnSubmitRow').hide();
+	} else {
+		$('#btnSubmitRow').show();
 	}
 });
 
@@ -603,3 +609,13 @@ box.addEventListener("dragleave", function(e) {
 
 </div>
 [[::ext_adminWriterEnding]]
+
+<script type="text/javascript">
+if ("[[::qiniuUpload]]"=="1")
+{
+	if (confirm ("Qiniu is not supported any more. Please change your setting in SERVICE. \r不再支持七牛上传，请到系统服务设置中更改上传目的地选项。")) {
+		window.location="[[::siteURL]]/[[::linkPrefixAdmin]]/services/[[::linkConj]]CSRFCode=[[::navCSRFCode]]";
+	}
+}
+
+</script>

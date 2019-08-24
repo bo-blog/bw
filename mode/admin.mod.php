@@ -110,7 +110,7 @@ if ($canonical -> currentArgs['mainAction'] == 'center') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ('No data is submitted.');
 		}
-		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'autoSave', 'lessSQL', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'externalLinks', 'searchEngine');
+		$acceptedKeys = array ('siteName', 'siteURL', 'authorName', 'authorIntro', 'siteKey', 'timeZone', 'pageCache', 'commentOpt', 'comFrequency', 'comPerLoad', 'autoSave', 'lessSQL', 'siteTheme', 'siteLang', 'perPage', 'linkPrefixIndex', 'linkPrefixCategory', 'linkPrefixArticle', 'linkPrefixTag', 'social-sina-weibo', 'social-weixin', 'social-twitter', 'social-facebook', 'social-douban', 'social-instagram', 'social-renren', 'social-linkedin', 'social-github', 'externalLinks', 'searchEngine');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$outputExternal = '';
 		for ($i = 0; $i < count ($smt['externalLinks']['lnkname']); $i++) {
@@ -502,7 +502,7 @@ if ($canonical -> currentArgs['mainAction'] == 'services') {
 		if (!isset ($_REQUEST['smt'])) {
 			stopError ($conf['l']['admin:msg:NoData']);
 		}
-		$acceptedKeys = array ('disqusID', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain', 'APIOpen', 'basicAPI', 'advancedAPI', 'aliyunAKey', 'aliyunSKey', 'aliyunBucket', 'aliyunRegion', 'mailNotification', 'mailAddr', 'mailServer', 'mailPort', 'mailProtocol', 'mailPassword', 'mailReceiver', 'mailOptions');
+		$acceptedKeys = array ('commentService', 'disqusID', 'githubID', 'githubRepo', 'githubClient', 'githubSecret', 'qiniuAKey', 'qiniuSKey', 'qiniuBucket', 'qiniuSync', 'qiniuUpload', 'qiniuDomain', 'APIOpen', 'basicAPI', 'advancedAPI', 'aliyunAKey', 'aliyunSKey', 'aliyunBucket', 'aliyunRegion', 'mailNotification', 'mailAddr', 'mailServer', 'mailPort', 'mailProtocol', 'mailPassword', 'mailReceiver', 'mailOptions');
 		$smt = dataFilter ($acceptedKeys, $_REQUEST['smt']);
 		$basicAPI = @explode ('<>', $smt['basicAPI']);
 		$advancedAPI = @explode ('<>', $smt['advancedAPI']);

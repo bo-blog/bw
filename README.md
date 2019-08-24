@@ -1,4 +1,4 @@
-![](http://xiaofengtest.qiniudn.com/storage/e4438d15?imageView2/2/w/800)
+![](https://i.loli.net/2018/11/18/5bf1027f64cf6.jpg)
 
 2013年底，正当微信朋友圈占据了身边几乎所有人（也包括为自己）的碎片化时间之际，我开始怀念那些在网络上严肃地写字的日子。所谓的严肃，不是指话题有多庄重，而是写帖子的态度。我意识到无论是微信朋友圈还是微博，都无法取代在自己的博客空间里肆意书写的那份自由。朋友圈和微信也许是便捷的，但在使用它们的同时，我们也不得不成为了它们的奴隶，被迫让自己暴露在良莠不齐的嘈杂之下，也无意识地让无数的time killer“晒”走了本该静下心思索的时间。
 
@@ -28,9 +28,9 @@ bW还是为插件、主题留出了相当大的发挥空间，自定义的可能
 PHP 5.3以上，支持MySQL或SQLite数据库。
 
 **官网：**
-http://bw.bo-blog.com
+https://www.bo-blog.com
 
 **演示/日志：**
-http://www.bo-blog.com/bw/
+https://www.bo-blog.com/bw/
 
 *Life is like a wind. It goes wherever your heart wants to.*

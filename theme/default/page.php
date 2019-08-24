@@ -21,7 +21,7 @@ if (!defined ('P')) {
 <meta name="keywords" content="[[::metaData]]" />
 <link rel="icon" type="image/png" href="[[::siteURL]]/theme/default/logo.png" />
 <link rel="canonical" href="[[::canonicalURL]]" />
-<link href="[[::siteURL]]/theme/default/style.css?ver=201808202303" media="all" rel="stylesheet" type="text/css" />
+<link href="[[::siteURL]]/theme/default/style.css?ver=201811192210" media="all" rel="stylesheet" type="text/css" />
 <link href="[[::siteURL]]/theme/default/font.css" media="all" rel="stylesheet" type="text/css" />
 <link  href="[[::siteURL]]/rss.php" rel="alternate" type="application/rss+xml" title="RSS 2.0" />
 <title>[[::pageTitle]][[::siteName]] - [[::authorIntro]]</title>
@@ -65,7 +65,7 @@ var lng={
 [[::loop, articlesummary]][[::load, summary]][[::/loop]]
 [[::load, article]][[::load, singlepage]][[::listContent]]
 [[::pagination]]
-<script src="[[::siteURL]]/inc/script/loader.js?ver=201704222316"></script>
+<script src="[[::siteURL]]/inc/script/loader.js?ver=201808261457"></script>
 </div>
 <!-- end ajax section -->
 [[::ext_mainAreaEnd]]

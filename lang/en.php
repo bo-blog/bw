@@ -163,6 +163,7 @@ $conf['l'] = array(
 	'admin:item:MailReceiver' => 'Receiver Email Address',
 	'admin:item:MailOptions' => 'Notification Options',
 	'admin:item:MailTest' => 'Send a Test Email',
+	'admin:item:ServiceProvider' => 'Selected Comment Service',
 
 	'admin:opt:SimplifiedChinese' => 'Simplified Chinese',
 	'admin:opt:TraditionalChinese' => 'Traditional Chinese',
@@ -248,7 +249,7 @@ $conf['l'] = array(
 	'admin:msg:AuthMobile2' => 'You will need to cancel the authorization before logout.',
 	'admin:msg:AuthMobile3' => 'Scan the QR with your phone. If you are already viewing this page with a phone, please click ',
 	'admin:msg:AuthMobile4' => 'Start Authorization',
-	'admin:msg:Disqus' => 'Disqus is a social comment service provided by <a href="https://disqus.com" target="_blank">disqus.com</a>. Leave Duoshuo Short Name empty if you want to load Disqus by default.',
+	'admin:msg:Disqus' => 'Disqus is a social comment service provided by <a href="https://disqus.com" target="_blank">disqus.com</a>.',
  	'admin:msg:PkgSafety' => 'Third party package could be dangerous and might deteriorate the system. Continue the installation on your own risk. ',
  	'admin:msg:PkgError' => 'Package not uploaded or not valid.',
 	'admin:msg:Select' => 'Select',
@@ -281,6 +282,7 @@ $conf['l'] = array(
 	'admin:msg:ReachEmailLimit1' => 'Email notification for new comments reached the limit of 5 times today. Email bot will not send any more notification until tomorrow.',
 	'admin:msg:ReachEmailLimit2' => 'Email notification for login failure reached the limit of 5 times today. Email bot will not send any more notification until tomorrow.',
 	'admin:msg:PswChanged' => 'You have changed your password on %s. Remember to login with the new password from now on.',
+	'admin:msg:Gitment' => '<a href="https://gitalk.github.io/" target="_blank">Gittalk</a> & <a href="https://github.com/imsun/gitment" target="_blank">Gitment</a> are commentary services based on GitHub Issues.',
 
 	'admin:btn:Save' => 'Save',
 	'admin:btn:Restore' => 'Restore',

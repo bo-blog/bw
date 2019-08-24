@@ -386,6 +386,9 @@
 .icon-github6:before {
 	content: "\e8b4";
 }
+.icon-github:before {
+	content: "\e8b4";
+}
 .icon-flickr5:before {
 	content: "\e8b6";
 }

@@ -477,10 +477,21 @@ class bwView {
 	public static function textFormatter ($text)
 	{
 		if (!is_object (self :: $markdownParser)) {
-			include_once (P . 'inc/script/parsedown/Parsedown.php');
-			self :: $markdownParser = new Parsedown;
+			if (version_compare (PHP_VERSION, '5.4.0') >= 0) { //Use a moderner MD parser
+				include_once (P . 'inc/script/hyperdown/Parser.php');
+				self :: $markdownParser = new HyperDown\Parser;
+			}
+			else {
+				include_once (P . 'inc/script/parsedown/Parsedown.php');
+				self :: $markdownParser = new Parsedown;
+			}
 		}
-		$text = self :: $markdownParser -> setBreaksEnabled (true) -> text ($text);
+		if (version_compare (PHP_VERSION, '5.4.0') >= 0) { //Use a moderner MD parser
+			$text = self :: $markdownParser -> makeHtml ($text);
+		}
+		else {
+			$text = self :: $markdownParser -> setBreaksEnabled (true) -> text ($text);
+		}
 		// Start customized markdown
 		// xiami music loader
 		//$text = preg_replace ("/!~!(.+?)\[xiami\]/", "<span class=\"xiamiLoader\" data-src=\"$1\" data-root=\"" . bw :: $conf['siteURL'] . "\"></span>", $text);

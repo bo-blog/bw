@@ -59,10 +59,11 @@ if (!defined ('P')) {
 </p>
 <p>
 <span class="icon-arrow-right5"></span> [[=admin:item:AuthorSocial]]<br/>
+<span class="icon-weixin"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-weixin]" value="[[::social-weixin]]" placeholder="[[=page:social:WeChat]]" /><br/>
 <span class="icon-sina-weibo"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-sina-weibo]" value="[[::social-sina-weibo]]" placeholder="[[=page:social:Weibo]]" /><br/>
 <span class="icon-twitter"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-twitter]" value="[[::social-twitter]]" placeholder="[[=page:social:Twitter]]" /><br/>
-<span class="icon-weixin"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-weixin]" value="[[::social-weixin]]" placeholder="[[=page:social:WeChat]]" /><br/>
 <span class="icon-facebook"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-facebook]" value="[[::social-facebook]]" placeholder="[[=page:social:Facebook]]" /><br/>
+<span class="icon-github6"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-github]" value="[[::social-github]]" placeholder="GitHub" /><br/>
 <span class="icon-douban"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-douban]" value="[[::social-douban]]" placeholder="[[=page:social:Douban]]" /><br/>
 <span class="icon-instagram"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-instagram]" value="[[::social-instagram]]" placeholder="[[=page:social:Instagram]]" /><br/>
 <span class="icon-renren"></span> <input type="text" class="inputLine inputMiddle" name="smt[social-renren]" value="[[::social-renren]]" placeholder="[[=page:social:Renren]]" /><br/>

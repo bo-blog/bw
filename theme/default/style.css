@@ -504,6 +504,10 @@ color: #356A00;
 list-style: inside circle;
 margin: 16px;
 }
+.details ol {
+list-style: inside decimal;
+margin: 16px;
+}
 .details blockquote {
 width: 95%;
 background: #EFEFEF;

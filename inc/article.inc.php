@@ -78,7 +78,9 @@ class bwArticle {
 			stopError (bw :: $conf['l']['admin:msg:NoContent']);
 		}
 
-		$allIDs = str_replace (']', '', substr ($tagList['tList'], 1));
+		$tagList['tList'] = @json_decode ($tagList['tList'], true);
+		$tagList['tList'] = @array_values ($tagList['tList']);
+		$allIDs = "'" . @implode ("','", $tagList['tList']) . "'";
 
 		$allTitles = bw :: $db -> getRows ("SELECT * FROM articles WHERE aID IN ({$allIDs}) AND aCateURLName<>\"_trash\" AND aCateURLName<>\"_page\" AND aTime<=? AND aTime>? ORDER BY aTime DESC LIMIT ?, ?", array ($this -> cutTime, $this -> sinceTime, $currentTitleStart, bw :: $conf['perPage']));
 
@@ -257,6 +259,7 @@ class bwArticle {
 			$tVal = bw :: $db -> getSingleRow ('SELECT * FROM tags WHERE tValue=? LIMIT 0, 1', array($aTag));
 			if (isset ($tVal['tList'])) {
 				$allArticles = @json_decode ($tVal['tList'], true);
+				$allArticles = @array_values ($allArticles);
 				if (!in_array ($aID, $allArticles)) {
 					$allArticles[] = $aID;
 					bw :: $db -> dbExec ('UPDATE tags SET tList=?, tCount=tCount+1 WHERE tValue=?', array(json_encode($allArticles), $aTag));
@@ -276,11 +279,13 @@ class bwArticle {
 			$tVal = bw :: $db -> getSingleRow ('SELECT * FROM tags WHERE tValue=? LIMIT 0, 1', array($aTag));
 			if (isset ($tVal['tList'])) {
 				$allArticles = @json_decode ($tVal['tList'], true);
+				$allArticles = @array_values ($allArticles);
 				$aIDKey = array_search ($aID, $allArticles);
 
 				if ($aIDKey !== false && $aIDKey !== null) {
 					unset ($allArticles[$aIDKey]);
 					if (count ($allArticles) > 0) {
+						$allArticles = array_values ($allArticles);
 						bw :: $db -> dbExec ('UPDATE tags SET tList=?, tCount=tCount-1 WHERE tValue=?', array(json_encode($allArticles), $aTag));
 					} else {
 						bw :: $db -> dbExec ('DELETE FROM tags WHERE tValue=?', array($aTag));

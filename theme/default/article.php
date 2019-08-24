@@ -27,7 +27,8 @@ if (!defined ('P')) {
 
 <div id="comment-[[::aID]]">
 [[::commentarea]]
-[[::duoshuoarea]]
+[[::gittalkarea]]
+[[::gitmentarea]]
 [[::disqusarea]]
 [[::ext_commentArea]]
 </div>
